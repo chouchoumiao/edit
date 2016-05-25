@@ -1,0 +1,18 @@
+[ 2016-05-19T14:25:42+08:00 ] ::1 /edit/index.php/Admin/Index/reg
+ERR: 非法操作:reg
+
+[ 2016-05-19T14:26:45+08:00 ] ::1 /edit/index.php/Admin/Index/reg
+ERR: 非法操作:reg
+
+[ 2016-05-19T21:44:54+08:00 ] ::1 /edit/index.php/Admin/Register/index
+ERR: 非法操作:index
+
+[ 2016-05-19T21:48:51+08:00 ] ::1 /edit/index.php/Admin/Register/index
+ERR: 非法操作:index
+
+[ 2016-05-19T21:51:09+08:00 ] ::1 /edit/index.php/Admin/Register/index
+ERR: 非法操作:index
+
+[ 2016-05-19T22:00:29+08:00 ] ::1 /edit/index.php/Admin/Register/index
+ERR: 非法操作:index
+

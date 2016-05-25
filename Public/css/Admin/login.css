@@ -1,0 +1,400 @@
+/*@import url(forms.css);*/
+/*@import url(l10n.css);*/
+
+html,
+body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+html {
+	background: #f1f1f1;
+}
+
+body {
+	background: #f1f1f1;
+	min-width: 0;
+	color: #444;
+	font-family: "Open Sans", sans-serif;
+	font-size: 13px;
+	line-height: 1.4em;
+}
+
+a {
+	color: #0073aa;
+	-webkit-transition-property: border, background, color;
+	transition-property: border, background, color;
+	-webkit-transition-duration: .05s;
+	transition-duration: .05s;
+	-webkit-transition-timing-function: ease-in-out;
+	transition-timing-function: ease-in-out;
+}
+
+a {
+	outline: 0;
+}
+
+a:hover,
+a:active {
+	color: #00a0d2;
+}
+
+a:focus {
+	color: #124964;
+	-webkit-box-shadow:
+		0 0 0 1px #5b9dd9,
+		0 0 2px 1px rgba(30, 140, 190, .8);
+	box-shadow:
+		0 0 0 1px #5b9dd9,
+		0 0 2px 1px rgba(30, 140, 190, .8);
+}
+
+.ie8 a:focus {
+	outline: #5b9dd9 solid 1px;
+}
+
+p {
+	line-height: 1.5;
+}
+
+.login .message,
+.login #login_error {
+	border-left: 4px solid #00a0d2;
+	padding: 12px;
+	margin-left: 0;
+	background-color: #fff;
+	-webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,0.1);
+	box-shadow: 0 1px 1px 0 rgba(0,0,0,0.1);
+}
+
+.login #login_error {
+	border-left-color: #dc3232;
+}
+
+#loginform p.submit,
+.login-action-lostpassword p.submit {
+	border: none;
+	margin: -10px 0 20px; /* May want to revisit this */
+}
+
+.login * {
+	margin: 0;
+	padding: 0;
+}
+
+.login form {
+	margin-top: 20px;
+	margin-left: 0;
+	padding: 26px 24px 46px;
+	font-weight: normal;
+	overflow: hidden;
+	background: #fff;
+	-webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.13);
+	box-shadow: 0 1px 3px rgba(0,0,0,0.13);
+}
+
+.login form .forgetmenot {
+	font-weight: normal;
+	float: left;
+	margin-bottom: 0;
+}
+
+.login .button-primary {
+	float: right;
+}
+
+#login form p {
+	margin-bottom: 0;
+}
+
+#login form p.submit {
+	margin: 0;
+	padding: 0;
+}
+
+.login label {
+	color: #72777c;
+	font-size: 14px;
+}
+
+.login form .forgetmenot label {
+	font-size: 12px;
+	line-height: 19px;
+}
+
+.login h1 {
+	text-align: center;
+}
+
+.login h1 a {
+	/*background-image: url(../img/imh/logo.jpg);*/
+	/*background-image: none, url(../images/wordpress-logo.svg?ver=20131107);*/
+	-webkit-background-size: 84px;
+	background-size: 84px;
+	background-position: center top;
+	background-repeat: no-repeat;
+	color: #444;
+	height: 84px;
+	font-size: 20px;
+	font-weight: normal;
+	line-height: 1.3em;
+	margin: 0 auto 25px;
+	padding: 0;
+	text-decoration: none;
+	width: 84px;
+	text-indent: -9999px;
+	outline: none;
+	overflow: hidden;
+	display: block;
+}
+
+#login {
+	width: 320px;
+	padding: 8% 0 0;
+	margin: auto;
+}
+
+.login #nav,
+.login #backtoblog {
+	font-size: 13px;
+	padding: 0 24px 0;
+}
+
+.login #nav {
+	margin: 24px 0 0 0;
+}
+
+#backtoblog {
+	margin: 16px 0;
+}
+
+.login #nav a,
+.login #backtoblog a {
+	text-decoration: none;
+	color: #555d66;
+}
+
+.login #nav a:hover,
+.login #backtoblog a:hover,
+.login h1 a:hover {
+	color: #00a0d2;
+}
+
+.login #nav a:focus,
+.login #backtoblog a:focus,
+.login h1 a:focus {
+	color: #124964;
+}
+
+.login form .input,
+.login input[type="text"] {
+	font-size: 24px;
+	width: 100%;
+	padding: 3px;
+	margin: 2px 6px 16px 0;
+}
+
+.login form .input,
+.login input[type="text"],
+.login form input[type="checkbox"] {
+	background: #fbfbfb;
+}
+
+.ie7 .login form .input,
+.ie8 .login form .input {
+	font-family: sans-serif;
+}
+
+.login-action-rp input[type="text"] {
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	margin: 0;
+}
+
+.login #pass-strength-result {
+	font-weight: 600;
+	margin: -1px 5px 16px 0;
+	padding: 6px 5px;
+	text-align: center;
+	width: 100%;
+}
+
+.mobile #login {
+	padding: 20px 0;
+}
+
+.mobile #login form {
+	margin-left: 0;
+}
+
+.mobile #login #nav,
+.mobile #login #backtoblog {
+	margin-left: 8px;
+}
+
+body.interim-login {
+	height: auto;
+}
+
+.interim-login #login {
+	padding: 0;
+	margin: 5px auto 20px;
+}
+
+.interim-login.login h1 a {
+	width: auto;
+}
+
+.interim-login #login_error,
+.interim-login.login .message {
+	margin: 0 0 16px;
+}
+
+.interim-login.login form {
+	margin: 0;
+}
+
+@-ms-viewport {
+	width: device-width;
+}
+
+@media screen and ( max-width: 782px ) {
+	.interim-login input[type=checkbox] {
+		height: 16px;
+		width: 16px;
+	}
+
+	.interim-login input[type=checkbox]:checked:before {
+		width: 16px;
+		font: normal 21px/1 dashicons;
+		margin: -3px 0 0 -4px;
+	}
+}
+
+/*Zam模板CSS*/
+a{
+    color:#16a085 !important
+}
+
+#menu-dashboard,#reg_passmail{
+    display:none
+}
+
+div.updated,.login .message,.press-this #message{
+    border-left:4px solid #0b445b
+}
+
+input[type="checkbox"]{
+    margin:0
+}
+
+body.login{
+    background-color:#0b445b
+}
+
+#login{
+    padding-top:3% !important
+}
+
+.login form .input{
+    border:2px solid #c1c1c1
+}
+
+.message.register{
+    display:none
+}
+
+.login h1 a{
+    background:url(../../img/Admin/logo.jpg) no-repeat;
+    display:block;
+    text-decoration:none;
+    color:#16a085;
+    width:160px !important;
+    height:160px !important;
+    margin:0 auto;
+    background-color:#16a085;
+    border-radius:50%;
+    border:5px solid #fff;
+    box-shadow:#0a3d52 1px 1px,#0a3d52 2px 2px,#0a3d52 3px 3px,#0a3d52 4px 4px,#0a3d52 5px 5px,#0a3d52 6px 6px,#0a3d52 7px 7px,#0a3d52 8px 8px,#0a3d52 9px 9px,#0a3d52 10px 10px,#0a3d52 11px 11px,#0a3d52 12px 12px,#0a3d52 13px 13px,#0a3d52 14px 14px,#0a3d52 15px 15px,#0a3d52 16px 16px,#0a3d52 17px 17px,#0a3d52 18px 18px,#0a3e53 19px 19px,#0a3e53 20px 20px,#0a3e53 21px 21px,#0a3e54 22px 22px,#0a3f54 23px 23px,#0a3f54 24px 24px,#0a3f55 25px 25px,#0a3f55 26px 26px,#0a4055 27px 27px,#0a4056 28px 28px,#0a4056 29px 29px,#0a4056 30px 30px,#0a4157 31px 31px,#0a4157 32px 32px,#0a4157 33px 33px,#0a4158 34px 34px,#0a4258 35px 35px,#0a4258 36px 36px,#0a4259 37px 37px,#0a4259 38px 38px,#0a4359 39px 39px,#0a435a 40px 40px,#0a435a 41px 41px,#0a435a 42px 42px,#0b445b 43px 43px;
+    background-color:#0b445b
+}
+
+.login h1{
+    text-align:center;
+    margin-bottom:20px
+}
+
+.login #nav a,.login #backtoblog a{
+    color:#0b445b !important;
+    text-shadow:none
+}
+
+.login #nav a:hover,.login #backtoblog a:hover{
+    color:#16a085 !important
+}
+
+#wp-submit{
+    padding:8px 20px;
+    height:auto;
+    color:#fff;
+    background-color:#16a085 !important;
+    border-color:#fff;
+    background-image:none;
+    -webkit-transition:all .3s;
+    -moz-transition:all .3s;
+    transition:all .3s;
+    border-radius:0
+}
+
+.forgetmenot{
+    padding:10px 0
+}
+
+.wp-core-ui .button-primary{
+    box-shadow:none !important
+}
+
+#wp-submit:hover{
+    color:#16a085;
+    background-color:#fff !important;
+    border-color:#16a085;
+    -webkit-transition:all .3s;
+    -moz-transition:all .3s;
+    transition:all .3s
+}
+
+.alert{
+    font-size:12px;
+    padding:5px;
+    margin-right:15px
+}
+
+input[type=checkbox]:focus,.login form .input:focus{
+    border-color:#16a085;
+    outline:0;
+    box-shadow:none
+}
+
+input[type=checkbox]:checked:before{
+    color:#16a085
+}
+
+#wpfooter{
+    display:none
+}
+
+.login #backtoblog{
+    display:none
+}
+
+#login{
+    position:relative
+}
+
+.login #nav{
+    position:absolute;
+    bottom:20px;
+    left:5px;
+    padding:0 16px !important
+}

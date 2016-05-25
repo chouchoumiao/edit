@@ -1,0 +1,78 @@
+[ 2016-05-14T14:40:36+08:00 ] ::1 /edit/Public/js/Common/tendina.min.js?v=20150103
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000024s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000141s ]
+ERR: 无法加载模块:Public
+
+[ 2016-05-14T14:40:36+08:00 ] ::1 /edit/tpl/admin/utilLib/fonts/font_awesome/fontawesome-webfontf77b.woff?v=3.2.1
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000024s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000138s ]
+ERR: 无法加载模块:Tpl
+
+[ 2016-05-14T14:40:36+08:00 ] ::1 /edit/tpl/admin/utilLib/fonts/font_awesome/fontawesome-webfontf77b.ttf?v=3.2.1
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000035s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000213s ]
+ERR: 无法加载模块:Tpl
+
+[ 2016-05-14T14:48:29+08:00 ] ::1 /edit/Public/js/Common/tendina.min.js?v=20150103
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000035s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000221s ]
+ERR: 无法加载模块:Public
+
+[ 2016-05-14T14:48:29+08:00 ] ::1 /edit/tpl/admin/utilLib/fonts/font_awesome/fontawesome-webfontf77b.woff?v=3.2.1
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000035s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000200s ]
+ERR: 无法加载模块:Tpl
+
+[ 2016-05-14T14:48:29+08:00 ] ::1 /edit/tpl/admin/utilLib/fonts/font_awesome/fontawesome-webfontf77b.ttf?v=3.2.1
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000039s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000224s ]
+ERR: 无法加载模块:Tpl
+
+[ 2016-05-14T14:48:57+08:00 ] ::1 /edit/public/IMG/admin/login_btn.jpg
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000024s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000137s ]
+ERR: 无法加载模块:Public
+
+[ 2016-05-14T14:49:19+08:00 ] ::1 /edit/public/IMG/admin/loading.gif
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000029s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000138s ]
+ERR: 无法加载模块:Public
+
+[ 2016-05-14T14:49:37+08:00 ] ::1 /edit/public/IMG/admin/login_btn.jpg
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000023s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000131s ]
+ERR: 无法加载模块:Public
+
+[ 2016-05-14T14:57:39+08:00 ] ::1 /edit/public/css/Admin/__ROOT__/public/img/admin/login_btn.jpg
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000046s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000767s ]
+ERR: 无法加载模块:Public
+
+[ 2016-05-14T15:00:03+08:00 ] ::1 /edit/public/css/img/admin/login_btn.jpg
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000045s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000885s ]
+ERR: 无法加载模块:Public
+
+[ 2016-05-14T16:04:44+08:00 ] ::1 /edit/index.php/index/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000030s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000576s ]
+ERR: 无法加载模块:Index
+
+[ 2016-05-14T16:04:50+08:00 ] ::1 /edit/index.php/index/index
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000029s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000609s ]
+ERR: 无法加载模块:Index
+

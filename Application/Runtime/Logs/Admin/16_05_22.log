@@ -1,0 +1,700 @@
+[ 2016-05-22T12:26:01+08:00 ] ::1 /edit/index.php/Admin/Login/__JS__Admin/login.js
+ERR: 非法操作:__JS__Admin
+
+[ 2016-05-22T12:27:27+08:00 ] ::1 /edit/index.php/Admin/Login/__JS__Admin/login.js
+ERR: 非法操作:__JS__Admin
+
+[ 2016-05-22T13:56:06+08:00 ] ::1 /edit/index.php/Admin/Login/__APP__/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000436s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000535s ]
+ERR: 非法操作:__APP__
+
+[ 2016-05-22T13:58:18+08:00 ] ::1 /edit/index.php/Admin/Login/__APP__/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000435s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000525s ]
+ERR: 非法操作:__APP__
+
+[ 2016-05-22T13:59:10+08:00 ] ::1 /edit/index.php/Admin/Login/__APP__/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000691s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000862s ]
+ERR: 非法操作:__APP__
+
+[ 2016-05-22T14:02:10+08:00 ] ::1 /edit/index.php/Admin/Login/__ROOT__/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000694s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000873s ]
+ERR: 非法操作:__ROOT__
+
+[ 2016-05-22T14:02:47+08:00 ] ::1 /edit/index.php/Admin/Login/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000821s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001013s ]
+ERR: 非法操作:Admin
+
+[ 2016-05-22T14:03:18+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000765s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000959s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0021s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'ddsddddd' OR `email` = 'wu_jy1984@126.com' LIMIT 1   [ RunTime:0.0003s ]
+
+[ 2016-05-22T14:03:49+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000679s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000843s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0021s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'wujiayuwu' OR `email` = 'wu_jy1984@126.com' LIMIT 1   [ RunTime:0.0002s ]
+
+[ 2016-05-22T14:05:32+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000525s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000633s ]
+
+[ 2016-05-22T14:06:26+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000707s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000870s ]
+
+[ 2016-05-22T14:07:42+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001202s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001395s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0020s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'wuwuwuuwuwwu' OR `email` = 'wu_jy1984@126.com' LIMIT 1   [ RunTime:0.0003s ]
+
+[ 2016-05-22T14:08:07+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000961s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001180s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0019s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'wuwuwuuwuwwu' OR `email` = 'wu_jy1984@126.com' LIMIT 1   [ RunTime:0.0003s ]
+
+[ 2016-05-22T14:08:24+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000438s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000529s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0035s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'ddddssss' OR `email` = 'wu_jy1984@126.com' LIMIT 1   [ RunTime:0.0003s ]
+
+[ 2016-05-22T14:09:17+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000747s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000904s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0020s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'ddddwwww' OR `email` = 'wu_jy1984@126.com' LIMIT 1   [ RunTime:0.0002s ]
+
+[ 2016-05-22T14:11:40+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000429s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000521s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0027s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'dnkhdkhwih' OR `email` = 'wu_jy1984@126.com' LIMIT 1   [ RunTime:0.0002s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.000579s ]
+INFO: [ app_end ] --END-- [ RunTime:0.000689s ]
+
+[ 2016-05-22T14:14:14+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000453s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000550s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0034s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'wujiayu1111' OR `email` = 'wu_jy1984@126.com' LIMIT 1   [ RunTime:0.0004s ]
+
+[ 2016-05-22T14:20:44+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000797s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000990s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0019s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'hhdqhdhio' OR `email` = 'wu_jy1984@126.com' LIMIT 1   [ RunTime:0.0002s ]
+
+[ 2016-05-22T14:20:59+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000779s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001043s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0027s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'hhdqhdhio' OR `email` = 'wu_jy1984@126.com' LIMIT 1   [ RunTime:0.0002s ]
+
+[ 2016-05-22T14:21:20+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000736s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000920s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0023s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'slndjndqnwkld' OR `email` = 'wu_jy1984@126.com' LIMIT 1   [ RunTime:0.0002s ]
+
+[ 2016-05-22T14:22:33+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000683s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000857s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0021s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'wuuwuwuwu' OR `email` = 'wu_jy1984@126.com' LIMIT 1   [ RunTime:0.0003s ]
+
+[ 2016-05-22T14:28:41+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000792s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001023s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0021s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = '本季度hi哦吼i' OR `email` = 'wu_jy1984@126.com' LIMIT 1   [ RunTime:0.0006s ]
+
+[ 2016-05-22T14:30:07+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000752s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000968s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0028s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'wuiwhqqq' OR `email` = 'wu_jy1984@126.com' LIMIT 1   [ RunTime:0.0006s ]
+
+[ 2016-05-22T14:30:33+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000832s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001090s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0027s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'asasasasas' OR `email` = 'wu_jy1984@126.com' LIMIT 1   [ RunTime:0.0003s ]
+
+[ 2016-05-22T14:33:00+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000788s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000968s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0030s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'fsffwfwfw' OR `email` = 'wu_jy1984@126.com' LIMIT 1   [ RunTime:0.0002s ]
+
+[ 2016-05-22T14:33:33+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000804s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001074s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0021s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'cznjbkjdk' OR `email` = 'wu_jy1984@126.com' LIMIT 1   [ RunTime:0.0002s ]
+
+[ 2016-05-22T14:33:44+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000553s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000700s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0023s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'sjkbkjfljfklwjf' OR `email` = 'wu_jy1984@126.com' LIMIT 1   [ RunTime:0.0002s ]
+
+[ 2016-05-22T14:34:20+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000697s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000858s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0019s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'fhhfksfkjsje' OR `email` = 'wu_jy1984@126.com' LIMIT 1   [ RunTime:0.0002s ]
+
+[ 2016-05-22T14:35:08+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000429s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000518s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0020s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'sfsifhiwhoihgi' OR `email` = 'wu_jy1984@126.com' LIMIT 1   [ RunTime:0.0002s ]
+
+[ 2016-05-22T14:35:49+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000423s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000512s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0020s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'bdiushiohwiwfpow' OR `email` = 'wu_jy1984@126.com' LIMIT 1   [ RunTime:0.0002s ]
+
+[ 2016-05-22T14:35:59+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000423s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000511s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0026s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'bdiushiohwiwfpow' OR `email` = 'wu_jy1984@126.com' LIMIT 1   [ RunTime:0.0002s ]
+
+[ 2016-05-22T14:36:30+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000748s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000877s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0013s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'diuqhwihdiowhfio' OR `email` = 'wu_jy1984@126.com' LIMIT 1   [ RunTime:0.0003s ]
+
+[ 2016-05-22T14:51:43+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000456s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000553s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0048s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'wujiayu' OR `email` = '' LIMIT 1   [ RunTime:0.0002s ]
+
+[ 2016-05-22T14:51:56+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000434s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000523s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0023s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'wujiayuwu' OR `email` = '' LIMIT 1   [ RunTime:0.0002s ]
+
+[ 2016-05-22T14:51:59+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000437s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000526s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0021s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'wujiayuwuwuwuwuwu' OR `email` = '' LIMIT 1   [ RunTime:0.0002s ]
+
+[ 2016-05-22T14:52:03+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000751s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000923s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0018s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'wujiayuwuwuwuwuwu' OR `email` = '' LIMIT 1   [ RunTime:0.0002s ]
+
+[ 2016-05-22T14:58:09+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000907s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001089s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0019s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'wujiayuwuwuwuwuwu' LIMIT 1   [ RunTime:0.0002s ]
+SQL: INSERT INTO `ccm_m_user` (`username`,`password`,`email`,`token`,`token_exptime`,`regtime`) VALUES ('wujiayuwuwuwuwuwu','abea918ac19f54698b7b0c47619bd08f','','b2c4dd84af0a008e472022587ff4a8fd','1464505089','1463900289') [ RunTime:0.0002s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.000699s ]
+INFO: [ app_end ] --END-- [ RunTime:0.000831s ]
+
+[ 2016-05-22T14:58:15+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000415s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000502s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0020s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'wujiayu' LIMIT 1   [ RunTime:0.0002s ]
+SQL: INSERT INTO `ccm_m_user` (`username`,`password`,`email`,`token`,`token_exptime`,`regtime`) VALUES ('wujiayu','712ecd6584ec9bc420fd8c0ac0891376','','327096bd90c7c78a53bea6be127f1854','1464505095','1463900295') [ RunTime:0.0002s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.000451s ]
+INFO: [ app_end ] --END-- [ RunTime:0.000545s ]
+
+[ 2016-05-22T14:58:32+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000464s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000566s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0019s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'wujiayu' LIMIT 1   [ RunTime:0.0002s ]
+
+[ 2016-05-22T14:58:35+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000532s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000653s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0022s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'wujiayu' LIMIT 1   [ RunTime:0.0002s ]
+
+[ 2016-05-22T14:58:43+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000662s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000814s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0024s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'wujiayu' LIMIT 1   [ RunTime:0.0003s ]
+
+[ 2016-05-22T14:58:54+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000581s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000729s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0021s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'wwwwwwwwww' LIMIT 1   [ RunTime:0.0003s ]
+SQL: INSERT INTO `ccm_m_user` (`username`,`password`,`email`,`token`,`token_exptime`,`regtime`) VALUES ('wwwwwwwwww','43d388b244bfe660e74d67c3cb61ea1b','','99e836a4b3e182fb7e4f6f52f3d66e3d','1464505134','1463900334') [ RunTime:0.0003s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.000612s ]
+INFO: [ app_end ] --END-- [ RunTime:0.000742s ]
+
+[ 2016-05-22T15:00:22+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000672s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000789s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0018s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'wiojiio' LIMIT 1   [ RunTime:0.0002s ]
+SQL: INSERT INTO `ccm_m_user` (`username`,`password`,`email`,`token`,`token_exptime`,`regtime`) VALUES ('wiojiio','9dbe19b1352bb7a4c92471412c52f9ff','','5daa645a57b8a4a551b4fff3a62ce5b6','1464505222','1463900422') [ RunTime:0.0002s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.000685s ]
+INFO: [ app_end ] --END-- [ RunTime:0.000806s ]
+
+[ 2016-05-22T15:01:51+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000583s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000718s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0020s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'wiojiio' LIMIT 1   [ RunTime:0.0002s ]
+
+[ 2016-05-22T15:01:55+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000860s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001041s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0019s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'wiojiio' LIMIT 1   [ RunTime:0.0003s ]
+
+[ 2016-05-22T15:03:23+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000736s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000900s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0033s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'wiojiio' LIMIT 1   [ RunTime:0.0003s ]
+
+[ 2016-05-22T15:03:27+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000868s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001061s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0023s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'wiojiio' LIMIT 1   [ RunTime:0.0004s ]
+
+[ 2016-05-22T15:03:45+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000461s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000559s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0020s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'wiojiio' LIMIT 1   [ RunTime:0.0002s ]
+SQL: INSERT INTO `ccm_m_user` (`username`,`password`,`email`,`token`,`token_exptime`,`regtime`) VALUES ('wiojiio','65be478be4d61af90ba8d04576e786db','','98d52fababa039b5da50528b80768ef7','1464505425','1463900625') [ RunTime:0.0004s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.000482s ]
+INFO: [ app_end ] --END-- [ RunTime:0.000587s ]
+
+[ 2016-05-22T15:03:55+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000834s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000987s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0021s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'wujiayu' LIMIT 1   [ RunTime:0.0002s ]
+SQL: INSERT INTO `ccm_m_user` (`username`,`password`,`email`,`token`,`token_exptime`,`regtime`) VALUES ('wujiayu','8841cd869f596e3c3ac80288b12e528a','','42cba7dac21d4dcdc2ee56f0b1a53fab','1464505435','1463900635') [ RunTime:0.0002s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.000516s ]
+INFO: [ app_end ] --END-- [ RunTime:0.000622s ]
+
+[ 2016-05-22T15:53:57+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000435s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000525s ]
+
+[ 2016-05-22T15:54:24+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000940s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001055s ]
+
+[ 2016-05-22T15:59:04+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000419s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000507s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0019s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'chouchoumiao' OR `email` = '150095425@qq.com' LIMIT 1   [ RunTime:0.0002s ]
+SQL: INSERT INTO `ccm_m_user` (`username`,`password`,`email`,`token`,`token_exptime`,`regtime`) VALUES ('chouchoumiao','65224805391c2f42aa300ddf1f6be6c6','150095425@qq.com','fb327ab7ebfc05b19cd1929a498d84a2','1464508741','1463903941') [ RunTime:0.0003s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001086s ]
+INFO: [ app_end ] --END-- [ RunTime:0.001307s ]
+
+[ 2016-05-22T15:59:04+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000433s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000523s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0020s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'chouchoumiao' OR `email` = '150095425@qq.com' LIMIT 1   [ RunTime:0.0003s ]
+
+[ 2016-05-22T16:00:01+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000490s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000613s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0019s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'wujiayuwujiyua' OR `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0003s ]
+SQL: INSERT INTO `ccm_m_user` (`username`,`password`,`email`,`token`,`token_exptime`,`regtime`) VALUES ('wujiayuwujiyua','98abf6b97cbd336e2ad316d7d4c33c30','right_ring@126.com','025e29c3253f898730dcefc6c8673726','1464508800','1463904000') [ RunTime:0.0002s ]
+
+[ 2016-05-22T16:00:06+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000431s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000547s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0034s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'wujiayuwujiyua' OR `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0002s ]
+
+[ 2016-05-22T16:07:12+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000491s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000603s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0036s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'chenlinli' OR `email` = 'wu_jy1984@126.com' LIMIT 1   [ RunTime:0.0003s ]
+SQL: INSERT INTO `ccm_m_user` (`username`,`password`,`email`,`token`,`token_exptime`,`regtime`) VALUES ('chenlinli','0fdea3418ea98e62413d8e324573b096','wu_jy1984@126.com','7218945647e296e2623ce71007bdef1e','1464509230','1463904430') [ RunTime:0.0002s ]
+
+[ 2016-05-22T16:07:12+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000478s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000594s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0033s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'chenlinli' OR `email` = 'wu_jy1984@126.com' LIMIT 1   [ RunTime:0.0003s ]
+
+[ 2016-05-22T16:07:12+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000422s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000513s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0022s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'chenlinli' OR `email` = 'wu_jy1984@126.com' LIMIT 1   [ RunTime:0.0002s ]
+
+[ 2016-05-22T16:07:12+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000554s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000676s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0021s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'chenlinli' OR `email` = 'wu_jy1984@126.com' LIMIT 1   [ RunTime:0.0003s ]
+
+[ 2016-05-22T16:10:54+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001138s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001387s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0019s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'sgsuuhuifhihi' OR `email` = 'wu_1984@163.com' LIMIT 1   [ RunTime:0.0003s ]
+SQL: INSERT INTO `ccm_m_user` (`username`,`password`,`email`,`token`,`token_exptime`,`regtime`) VALUES ('sgsuuhuifhihi','5daa6e4b4bd858178215a219e3d2203a','wu_1984@163.com','0623e098c5e34d6c709640af5ef8de69','1464509452','1463904652') [ RunTime:0.0004s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000065s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.000170s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.007159s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.007336s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.000178s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.000267s ]
+
+[ 2016-05-22T16:52:08+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000902s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001170s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0022s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'vhwsfhiowjo' OR `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0002s ]
+SQL: INSERT INTO `ccm_m_user` (`username`,`password`,`email`,`token`,`token_exptime`,`regtime`) VALUES ('vhwsfhiowjo','329b1f94f5b3962f4203fa91470037c2','right_ring@126.com','125b6fa76426d38cdf85910ee2d37560','1464511922','1463907122') [ RunTime:0.0002s ]
+INFO: [ view_parse ] --START--
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.000502s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.000698s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.000305s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.000455s ]
+
+[ 2016-05-22T16:53:42+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000644s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000760s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0024s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'lknfkl' OR `email` = 'wu_jy1984@126.com' LIMIT 1   [ RunTime:0.0002s ]
+SQL: INSERT INTO `ccm_m_user` (`username`,`password`,`email`,`token`,`token_exptime`,`regtime`) VALUES ('lknfkl','ee0dfecf3a9e30a94b29c43429ad4628','wu_jy1984@126.com','1f9424228805c170a44653895a08a967','1464512017','1463907217') [ RunTime:0.0003s ]
+INFO: [ view_parse ] --START--
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.000449s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.000632s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.000300s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.000448s ]
+
+[ 2016-05-22T16:58:10+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000688s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000867s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0019s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'hefweifiowjop' OR `email` = 'wu_jy1984@126.com' LIMIT 1   [ RunTime:0.0004s ]
+SQL: INSERT INTO `ccm_m_user` (`username`,`password`,`email`,`token`,`token_exptime`,`regtime`) VALUES ('hefweifiowjop','a9e5d436e205f4ee9c5fe032106a622a','wu_jy1984@126.com','7fea151fbf05f2428330c1563707751a','1464512290','1463907490') [ RunTime:0.0003s ]
+
+[ 2016-05-22T17:02:39+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000525s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000713s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0021s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'chouchoumiao' OR `email` = 'wu_jy1984@126.com' LIMIT 1   [ RunTime:0.0002s ]
+
+[ 2016-05-22T17:02:46+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000687s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000850s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0021s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'chouchoumiao' OR `email` = 'wu_jy1984@126.com' LIMIT 1   [ RunTime:0.0003s ]
+
+[ 2016-05-22T17:02:55+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000437s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000527s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0022s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'chouchoumiao' OR `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0003s ]
+SQL: INSERT INTO `ccm_m_user` (`username`,`password`,`email`,`token`,`token_exptime`,`regtime`) VALUES ('chouchoumiao','efbc1a964d14ab46793f375a28049294','right_ring@126.com','c57612774cb08a6511c9f3be9be4d92b','1464512573','1463907773') [ RunTime:0.0003s ]
+
+[ 2016-05-22T17:05:05+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000465s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000564s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0021s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'chouchou' OR `email` = 'wu_jy1984@126.com' LIMIT 1   [ RunTime:0.0002s ]
+SQL: INSERT INTO `ccm_m_user` (`username`,`password`,`email`,`token`,`token_exptime`,`regtime`) VALUES ('chouchou','d471c56d6dd3848bb2615cfe68b4be5f','wu_jy1984@126.com','a79f152b1adf113c29cd6d17308f6405','1464512704','1463907904') [ RunTime:0.0002s ]
+
+[ 2016-05-22T17:05:21+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000491s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000597s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0026s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'sflkfljwl;gjlwq' OR `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0004s ]
+SQL: INSERT INTO `ccm_m_user` (`username`,`password`,`email`,`token`,`token_exptime`,`regtime`) VALUES ('sflkfljwl;gjlwq','1d51b43ef0bcdf08ee35e5453168af48','right_ring@126.com','857032cac7d0c960b4c464f875b06dd8','1464512720','1463907920') [ RunTime:0.0003s ]
+
+[ 2016-05-22T17:06:05+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000764s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000972s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0018s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'wefjkwkln' OR `email` = 'wu_jy1984@126.com' LIMIT 1   [ RunTime:0.0001s ]
+SQL: INSERT INTO `ccm_m_user` (`username`,`password`,`email`,`token`,`token_exptime`,`regtime`) VALUES ('wefjkwkln','a323de1f1d1e21a427a723a100f3e946','wu_jy1984@126.com','15df4b0bd1b70183cb46348581fecabb','1464512764','1463907964') [ RunTime:0.0002s ]
+
+[ 2016-05-22T17:06:42+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000476s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000591s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0024s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = '是否健康我看了法律' OR `email` = 'wu_1984@163.com' LIMIT 1   [ RunTime:0.0002s ]
+SQL: INSERT INTO `ccm_m_user` (`username`,`password`,`email`,`token`,`token_exptime`,`regtime`) VALUES ('是否健康我看了法律','fd2db6464194814c1a86cae775a381ee','wu_1984@163.com','ff09f717b1f576a71b8e5807c8208b79','1464512801','1463908001') [ RunTime:0.0002s ]
+
+[ 2016-05-22T17:14:12+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000424s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000512s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0024s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'wujiayu' OR `email` = 'wu_jy1984@126.com' LIMIT 1   [ RunTime:0.0002s ]
+SQL: INSERT INTO `ccm_m_user` (`username`,`password`,`email`,`token`,`token_exptime`,`regtime`) VALUES ('wujiayu','4c22068c4fb00cf35122ce232212239c','wu_jy1984@126.com','a097f090ba849d150bb9a9e3103fc28b','1464513250','1463908450') [ RunTime:0.0002s ]
+
+[ 2016-05-22T17:15:35+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000890s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001029s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0020s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'wujiaiodio' OR `email` = 'wu_jy1984@126.com' LIMIT 1   [ RunTime:0.0001s ]
+SQL: INSERT INTO `ccm_m_user` (`username`,`password`,`email`,`token`,`token_exptime`,`regtime`) VALUES ('wujiaiodio','12aeadf482826f4134e19ff0c87e9c6b','wu_jy1984@126.com','0273ecc2683d25ad2165f1e4447be3eb','1464513334','1463908534') [ RunTime:0.0002s ]
+
+[ 2016-05-22T17:18:39+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000921s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001139s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0026s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'fwfwlklnk' OR `email` = 'wu_jy1984@126.com' LIMIT 1   [ RunTime:0.0005s ]
+SQL: INSERT INTO `ccm_m_user` (`username`,`password`,`email`,`token`,`token_exptime`,`regtime`) VALUES ('fwfwlklnk','b51b2e60c00a2d45df9befcebae9fe2c','wu_jy1984@126.com','27990239a92f57370656cd517bdb186f','1464513519','1463908719') [ RunTime:0.0003s ]
+
+[ 2016-05-22T17:19:41+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000425s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000514s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0021s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'eeeesds' OR `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0001s ]
+SQL: INSERT INTO `ccm_m_user` (`username`,`password`,`email`,`token`,`token_exptime`,`regtime`) VALUES ('eeeesds','0588690f5b6f0f13ad69139056ebd99c','right_ring@126.com','0cdb377ee5ea5dedaf1ab666b7dd4373','1464513581','1463908781') [ RunTime:0.0002s ]
+
+[ 2016-05-22T17:25:26+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000648s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000873s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0019s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'wujiayuwujiayu' OR `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0002s ]
+SQL: INSERT INTO `ccm_m_user` (`username`,`password`,`email`,`token`,`token_exptime`,`regtime`) VALUES ('wujiayuwujiayu','63acc1b1ebbaafbaa82deae96301cf7a','right_ring@126.com','2b0dcadc062edb0a236411066d4bb32e','1464513924','1463909124') [ RunTime:0.0002s ]
+
+[ 2016-05-22T17:32:54+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000419s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000507s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0020s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'ewbwhhi' OR `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0002s ]
+SQL: INSERT INTO `ccm_m_user` (`username`,`password`,`email`,`token`,`token_exptime`,`regtime`) VALUES ('ewbwhhi','e78f8f208ce5a2b943e103bb42e20edb','right_ring@126.com','a304ccbcc7889df5903a16d9ee972290','1464514374','1463909574') [ RunTime:0.0002s ]
+
+[ 2016-05-22T17:34:08+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000719s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000894s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0019s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'fknkllk' OR `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0002s ]
+SQL: INSERT INTO `ccm_m_user` (`username`,`autoPass`,`password`,`email`,`token`,`token_exptime`,`regtime`) VALUES ('fknkllk','fIMRY7:/','55691f1d16ab2cf7915761204ae47ee7','right_ring@126.com','23a6adc16d9394a5592f2b46c8e17c56','1464514448','1463909648') [ RunTime:0.0002s ]
+
+[ 2016-05-22T17:37:43+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000422s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000510s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0020s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'sfkjskf' OR `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0002s ]
+SQL: INSERT INTO `ccm_m_user` (`username`,`autoPass`,`password`,`email`,`token`,`token_exptime`,`regtime`) VALUES ('sfkjskf','dxFQ[,/|','9a0681aaec89df758da268b065ea896c','right_ring@126.com','5258de7bdae6c332586514c1f0e09819','1464514662','1463909862') [ RunTime:0.0002s ]
+
+[ 2016-05-22T17:39:51+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000429s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000517s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0023s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'nshifuheoihoi' OR `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0002s ]
+SQL: INSERT INTO `ccm_m_user` (`username`,`autopass`,`password`,`email`,`token`,`token_exptime`,`regtime`) VALUES ('nshifuheoihoi','jlsDEZ8%','86f7855bbc51993ce421bca63895c257','right_ring@126.com','80533757f26abe8d05ebb476dc08194c','1464514791','1463909991') [ RunTime:0.0005s ]
+
+[ 2016-05-22T17:41:19+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000433s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000522s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0021s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'wujiayu' OR `email` = 'wu_jy1984@126.com' LIMIT 1   [ RunTime:0.0002s ]
+SQL: INSERT INTO `ccm_m_user` (`username`,`autopass`,`password`,`email`,`token`,`token_exptime`,`regtime`) VALUES ('wujiayu','itBEO5^?','7239b9c1054f0543192fbcc24afc8370','wu_jy1984@126.com','b51fac4976762483c55133c81b925134','1464514879','1463910079') [ RunTime:0.0002s ]
+
+[ 2016-05-22T17:58:43+08:00 ] ::1 /edit/index.php/Admin/Register/reg
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000421s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000507s ]
+ERR: 非法操作:reg
+
+[ 2016-05-22T17:59:25+08:00 ] ::1 /edit/index.php/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000436s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000527s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.000446s ]
+INFO: [ app_end ] --END-- [ RunTime:0.000536s ]
+
+[ 2016-05-22T18:01:15+08:00 ] ::1 /edit/index.php/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000662s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000809s ]
+
+[ 2016-05-22T18:02:08+08:00 ] ::1 /edit/index.php/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000693s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000851s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.000730s ]
+INFO: [ app_end ] --END-- [ RunTime:0.000905s ]
+
+[ 2016-05-22T18:03:18+08:00 ] ::1 /edit/index.php/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000666s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000831s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.000649s ]
+INFO: [ app_end ] --END-- [ RunTime:0.000761s ]
+
+[ 2016-05-22T18:03:19+08:00 ] ::1 /edit/index.php/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000441s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000530s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.000447s ]
+INFO: [ app_end ] --END-- [ RunTime:0.000536s ]
+
+[ 2016-05-22T18:04:05+08:00 ] ::1 /edit/index.php/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000419s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000505s ]
+
+[ 2016-05-22T18:04:46+08:00 ] ::1 /edit/index.php/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000415s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000503s ]
+
+[ 2016-05-22T18:05:18+08:00 ] ::1 /edit/index.php/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000419s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000507s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0019s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'badiqoqo' OR `email` = 'wu_jy1984@126.com' LIMIT 1   [ RunTime:0.0002s ]
+SQL: INSERT INTO `ccm_m_user` (`username`,`autopass`,`password`,`email`,`token`,`token_exptime`,`regtime`) VALUES ('badiqoqo','ptDHV7),','889e0f4bb21d41245b461a773396dd33','wu_jy1984@126.com','bdc269ebbce4120f1c91c12363826ba4','1464516311','1463911511') [ RunTime:0.0002s ]
+
+[ 2016-05-22T18:05:28+08:00 ] ::1 /edit/index.php/Admin/Register/activeEamil/verify/bdc269ebbce4120f1c91c12363826ba4
+ERR: 非法操作:activeEamil
+
+[ 2016-05-22T18:08:53+08:00 ] ::1 /edit/index.php/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000834s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000986s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0018s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'uhhcioshoo' OR `email` = 'wu_jy1984@126.com' LIMIT 1   [ RunTime:0.0002s ]
+SQL: INSERT INTO `ccm_m_user` (`username`,`autopass`,`password`,`email`,`token`,`token_exptime`,`regtime`) VALUES ('uhhcioshoo','huGL-[}>','83d5b4c0f65cc80fc488d426e7a5a0ac','wu_jy1984@126.com','708b6cfb4b92b961fc8344f645db4131','1464516532','1463911732') [ RunTime:0.0002s ]
+
+[ 2016-05-22T18:10:33+08:00 ] ::1 /edit/index.php/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000983s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001168s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0021s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'isfhwifiowjoi' OR `email` = 'wu_jy1984@126.com' LIMIT 1   [ RunTime:0.0002s ]
+SQL: INSERT INTO `ccm_m_user` (`username`,`autopass`,`password`,`email`,`token`,`token_exptime`,`regtime`) VALUES ('isfhwifiowjoi','guNWZ)-}','64047bff4ac3d2c23f1c303164883f40','wu_jy1984@126.com','adbdff0e12403a10e9baebc356f0695e','1464516632','1463911832') [ RunTime:0.0003s ]
+
+[ 2016-05-22T18:11:31+08:00 ] ::1 /edit/index.php/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000431s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000521s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0021s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'fwlwgowgojwojgop' OR `email` = 'wu_jy1984@126.com' LIMIT 1   [ RunTime:0.0002s ]
+SQL: INSERT INTO `ccm_m_user` (`username`,`autopass`,`password`,`email`,`token`,`token_exptime`,`regtime`) VALUES ('fwlwgowgojwojgop','lxCOX9>`','6e05376e976ab10e757648b7e7a92f8c','wu_jy1984@126.com','c0185a5a1edd07ead5280fd2ccf1b365','1464516690','1463911890') [ RunTime:0.0002s ]
+

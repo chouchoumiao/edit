@@ -1,0 +1,16 @@
+[ 2016-05-17T21:49:39+08:00 ] ::1 /edit/index.php/Admin/Register/index
+ERR: 1146:Table 'editsystem.m_register' doesn't exist
+ [ SQL语句 ] : SHOW COLUMNS FROM `m_register`
+
+[ 2016-05-17T21:50:29+08:00 ] ::1 /edit/index.php/Admin/Register/index
+ERR: Think\Model:error方法不存在！
+
+[ 2016-05-17T21:50:57+08:00 ] ::1 /edit/index.php/Admin/Register/index
+ERR: Think\Model:error方法不存在！
+
+[ 2016-05-17T22:35:08+08:00 ] ::1 /edit/index.php/Admin/%20Register/activeEamil/verify/7922f8ca44d9478017bf6416d9c15d8d
+ERR: 无法加载控制器: Register
+
+[ 2016-05-17T23:57:01+08:00 ] ::1 /edit/index.php/Admin/%20Register/activeEamil/verify/7922f8ca44d9478017bf6416d9c15d8d
+ERR: 无法加载控制器: Register
+

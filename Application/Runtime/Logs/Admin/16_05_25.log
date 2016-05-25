@@ -1,0 +1,27 @@
+[ 2016-05-25T09:52:16+08:00 ] ::1 /edit/index.php/Admin/Login/login.htm
+ERR: 非法操作:login.htm
+
+[ 2016-05-25T09:52:25+08:00 ] ::1 /edit/index.php/Admin/Login/login.htm
+ERR: 非法操作:login.htm
+
+[ 2016-05-25T14:38:10+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0110s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'adwdqwd' OR `email` = 'wu_jy198@126.com' LIMIT 1   [ RunTime:0.0000s ]
+SQL: INSERT INTO `ccm_m_user` (`username`,`autopass`,`password`,`email`,`token`,`token_exptime`,`regtime`) VALUES ('adwdqwd','ALTX246.','a0a9e9cc131936388221d3656287324f','wu_jy198@126.com','f89f56a070caaa2e3581d5ded89605cc','1464763088','1464158288') [ RunTime:0.0370s ]
+
+[ 2016-05-25T15:01:39+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+ERR: SQLSTATE[HY000] [1045] Access denied for user 'root'@'localhost' (using password: YES)
+
+[ 2016-05-25T15:04:22+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0760s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'casadawd' OR `email` = 'wu_jy1984@126.com' LIMIT 1   [ RunTime:0.0000s ]
+

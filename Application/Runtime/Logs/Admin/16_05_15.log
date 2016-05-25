@@ -1,0 +1,131 @@
+[ 2016-05-15T00:03:04+08:00 ] ::1 /edit/index.php/Admin/Index/login
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001197s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001591s ]
+NOTIC: [8] A session had already been started - ignoring session_start() /Applications/MAMP/htdocs/edit/Application/Admin/Controller/IndexController.class.php 第 5 行.
+SQL: SHOW COLUMNS FROM `adminuser` [ RunTime:0.0024s ]
+SQL: SELECT * FROM `adminuser` WHERE `username` = 'gokayuwu' LIMIT 1   [ RunTime:0.0003s ]
+SQL: UPDATE `adminuser` SET `login_ip`='0.0.0.0',`login_counts`='65',`loginTime`='2016-05-15 00:03:04' WHERE `username` = 'gokayuwu' [ RunTime:0.0006s ]
+
+[ 2016-05-15T00:05:25+08:00 ] ::1 /edit/index.php/Admin/Index/login
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000693s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001311s ]
+NOTIC: [8] A session had already been started - ignoring session_start() /Applications/MAMP/htdocs/edit/Application/Admin/Controller/IndexController.class.php 第 5 行.
+SQL: SHOW COLUMNS FROM `adminuser` [ RunTime:0.0020s ]
+SQL: SELECT * FROM `adminuser` WHERE `username` = 'gokayuwu' LIMIT 1   [ RunTime:0.0002s ]
+SQL: UPDATE `adminuser` SET `login_ip`='0.0.0.0',`login_counts`='66',`loginTime`='2016-05-15 00:05:25' WHERE `username` = 'gokayuwu' [ RunTime:0.0002s ]
+
+[ 2016-05-15T00:06:24+08:00 ] ::1 /edit/index.php/Admin/Index/login
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001102s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001775s ]
+NOTIC: [8] A session had already been started - ignoring session_start() /Applications/MAMP/htdocs/edit/Application/Admin/Controller/IndexController.class.php 第 5 行.
+SQL: SHOW COLUMNS FROM `adminuser` [ RunTime:0.0021s ]
+SQL: SELECT * FROM `adminuser` WHERE `username` = 'gokayuwu' LIMIT 1   [ RunTime:0.0003s ]
+SQL: UPDATE `adminuser` SET `login_ip`='0.0.0.0',`login_counts`='67',`loginTime`='2016-05-15 00:06:24' WHERE `username` = 'gokayuwu' [ RunTime:0.0003s ]
+
+[ 2016-05-15T00:07:21+08:00 ] ::1 /edit/index.php/Admin/Index/login
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000506s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000890s ]
+NOTIC: [8] A session had already been started - ignoring session_start() /Applications/MAMP/htdocs/edit/Application/Admin/Controller/IndexController.class.php 第 5 行.
+SQL: SHOW COLUMNS FROM `adminuser` [ RunTime:0.0026s ]
+SQL: SELECT * FROM `adminuser` WHERE `username` = 'gokayuwu' LIMIT 1   [ RunTime:0.0002s ]
+SQL: UPDATE `adminuser` SET `login_ip`='0.0.0.0',`login_counts`='68',`loginTime`='2016-05-15 00:07:21' WHERE `username` = 'gokayuwu' [ RunTime:0.0002s ]
+
+[ 2016-05-15T00:08:13+08:00 ] ::1 /edit/index.php/Admin/Index/login
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000515s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000938s ]
+NOTIC: [8] A session had already been started - ignoring session_start() /Applications/MAMP/htdocs/edit/Application/Admin/Controller/IndexController.class.php 第 5 行.
+SQL: SHOW COLUMNS FROM `adminuser` [ RunTime:0.0018s ]
+SQL: SELECT * FROM `adminuser` WHERE `username` = 'gokayuwu' LIMIT 1   [ RunTime:0.0002s ]
+
+[ 2016-05-15T00:08:19+08:00 ] ::1 /edit/index.php/Admin/Index/login
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000414s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000755s ]
+NOTIC: [8] A session had already been started - ignoring session_start() /Applications/MAMP/htdocs/edit/Application/Admin/Controller/IndexController.class.php 第 5 行.
+SQL: SHOW COLUMNS FROM `adminuser` [ RunTime:0.0036s ]
+SQL: SELECT * FROM `adminuser` WHERE `username` = 'gokayuwu' LIMIT 1   [ RunTime:0.0002s ]
+
+[ 2016-05-15T00:08:30+08:00 ] ::1 /edit/index.php/Admin/Index/login
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000488s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000912s ]
+NOTIC: [8] A session had already been started - ignoring session_start() /Applications/MAMP/htdocs/edit/Application/Admin/Controller/IndexController.class.php 第 5 行.
+SQL: SHOW COLUMNS FROM `adminuser` [ RunTime:0.0022s ]
+SQL: SELECT * FROM `adminuser` WHERE `username` = 'gokayuwu' LIMIT 1   [ RunTime:0.0002s ]
+SQL: UPDATE `adminuser` SET `login_ip`='0.0.0.0',`login_counts`='69',`loginTime`='2016-05-15 00:08:30' WHERE `username` = 'gokayuwu' [ RunTime:0.0002s ]
+
+[ 2016-05-15T00:10:07+08:00 ] ::1 /edit/index.php/Admin/Index/login
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000964s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001692s ]
+NOTIC: [8] A session had already been started - ignoring session_start() /Applications/MAMP/htdocs/edit/Application/Admin/Controller/IndexController.class.php 第 5 行.
+SQL: SHOW COLUMNS FROM `adminuser` [ RunTime:0.0022s ]
+SQL: SELECT * FROM `adminuser` WHERE `username` = 'gokayuwu' LIMIT 1   [ RunTime:0.0005s ]
+SQL: UPDATE `adminuser` SET `login_ip`='0.0.0.0',`login_counts`='70',`loginTime`='2016-05-15 00:10:07' WHERE `username` = 'gokayuwu' [ RunTime:0.0004s ]
+
+[ 2016-05-15T11:58:21+08:00 ] ::1 /edit/index.php/Admin/Index/index
+ERR: 1146:Table 'app_zglqxwwtest.login' doesn't exist
+ [ SQL语句 ] : SHOW COLUMNS FROM `login`
+
+[ 2016-05-15T11:59:46+08:00 ] ::1 /edit/index.php/Admin/Index/index
+ERR: 1146:Table 'app_zglqxwwtest.login' doesn't exist
+ [ SQL语句 ] : SHOW COLUMNS FROM `login`
+
+[ 2016-05-15T12:10:53+08:00 ] ::1 /edit/index.php/Admin/Index/index]
+ERR: 非法操作:index]
+
+[ 2016-05-15T12:38:16+08:00 ] ::1 /edit/index.php/Admin/Index/
+ERR: 1146:Table 'app_zglqxwwtest.admintowei_i_d' doesn't exist
+ [ SQL语句 ] : SHOW COLUMNS FROM `admintowei_i_d`
+
+[ 2016-05-15T12:39:04+08:00 ] ::1 /edit/index.php/Admin/Index/
+ERR: 模板不存在:./Application/Admin/View/Index/index.html.html
+
+[ 2016-05-15T12:39:20+08:00 ] ::1 /edit/index.php/Admin/Index/tpl/admin/main.html
+ERR: 非法操作:tpl
+
+[ 2016-05-15T12:45:39+08:00 ] ::1 /edit/index.php/Admin/Index/login
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000418s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000764s ]
+NOTIC: [8] A session had already been started - ignoring session_start() /Applications/MAMP/htdocs/edit/Application/Admin/Controller/IndexController.class.php 第 5 行.
+SQL: SHOW COLUMNS FROM `adminuser` [ RunTime:0.0021s ]
+SQL: SELECT * FROM `adminuser` WHERE `username` = 'lqfabu' LIMIT 1   [ RunTime:0.0002s ]
+SQL: UPDATE `adminuser` SET `login_ip`='0.0.0.0',`login_counts`='352',`loginTime`='2016-05-15 12:45:39' WHERE `username` = 'lqfabu' [ RunTime:0.0002s ]
+
+[ 2016-05-15T21:53:24+08:00 ] ::1 /edit/index.php/Admin/Index/login
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000687s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001289s ]
+NOTIC: [8] A session had already been started - ignoring session_start() /Applications/MAMP/htdocs/edit/Application/Admin/Controller/IndexController.class.php 第 5 行.
+SQL: SHOW COLUMNS FROM `adminuser` [ RunTime:0.0033s ]
+SQL: SELECT * FROM `adminuser` WHERE `username` = 'lqfabu' LIMIT 1   [ RunTime:0.0002s ]
+SQL: UPDATE `adminuser` SET `login_ip`='0.0.0.0',`login_counts`='353',`loginTime`='2016-05-15 21:53:24' WHERE `username` = 'lqfabu' [ RunTime:0.0003s ]
+
+[ 2016-05-15T21:54:20+08:00 ] ::1 /edit/index.php/Admin/Index/login
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000671s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002008s ]
+SQL: SHOW COLUMNS FROM `adminuser` [ RunTime:0.0034s ]
+SQL: SELECT * FROM `adminuser` WHERE `username` = 'lqfabu' LIMIT 1   [ RunTime:0.0002s ]
+SQL: UPDATE `adminuser` SET `login_ip`='0.0.0.0',`login_counts`='354',`loginTime`='2016-05-15 21:54:20' WHERE `username` = 'lqfabu' [ RunTime:0.0002s ]
+
+[ 2016-05-15T21:54:47+08:00 ] ::1 /edit/index.php/Admin/Index/login
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000435s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000825s ]
+SQL: SHOW COLUMNS FROM `adminuser` [ RunTime:0.0025s ]
+SQL: SELECT * FROM `adminuser` WHERE `username` = 'lqfabu' LIMIT 1   [ RunTime:0.0002s ]
+SQL: UPDATE `adminuser` SET `login_ip`='0.0.0.0',`login_counts`='355',`loginTime`='2016-05-15 21:54:47' WHERE `username` = 'lqfabu' [ RunTime:0.0002s ]
+
+[ 2016-05-15T21:55:44+08:00 ] ::1 /edit/index.php/Admin/Index/tpl/admin/main.html
+ERR: 非法操作:tpl
+
+[ 2016-05-15T21:55:52+08:00 ] ::1 /edit/index.php/Admin/forWexinID/weixinIDAddNew.php
+ERR: 无法加载控制器:ForWexinID
+
