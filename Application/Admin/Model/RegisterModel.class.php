@@ -81,8 +81,8 @@ class RegisterModel {
         //邮件主体内容
 
         $emailContent = "亲爱的".$username."：<br/>感谢您在我站注册了新帐号。<br/>请点击链接激活您的帐号。<br/>
-    <a href='http://localhost/edit/index.php/Admin/Login/activeEamil/verify/".$token."' target=
-'_blank'>http://www.helloweba.com/demo/register/active.php?verify=".$token."</a><br/>
+    <a href='http://".MY_SITE."/edit/index.php/Admin/Login/activeEamil/verify/".$token."' target=
+'_blank'>http://".MY_SITE."/edit/index.php/Admin/Login/activeEamil/verify/".$token."</a><br/>
     如果以上链接无法点击，请将它复制到你的浏览器地址栏中进入访问，该链接一周内有效。";
 
         return SendMail($email,$emailTitle,$emailContent)?  true: false;

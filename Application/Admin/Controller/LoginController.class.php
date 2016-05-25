@@ -84,7 +84,7 @@ class LoginController extends Controller{
         //将新注册的用户信息追加入数据表User，并且生成Session
         if (!$register->addToUser()) {
             $arr['success'] = 'NG';
-            $arr['msg'] = '新用户追击到数据库失败';
+            $arr['msg'] = '新用户追加到数据库失败';
             echo json_encode($arr);
             exit;
         }
@@ -115,14 +115,32 @@ class LoginController extends Controller{
     /***********************************************忘记密码***********************************************/
     private function lostPass(){
 
+        //检查Form表单
         $msg = checkForm( 'lostpass' );
         if('' != $msg ){
+            if( ('username' == $msg) ||('email' == $msg) ){
 
-            $arr['success'] = 'NG';
-            $arr['msg'] = $msg;
-            echo json_encode($arr);
-            exit;
+                //print_r(D('Lostpass')->isUserExist( $msg ));exit;
+
+                $arr = D('Lostpass')->isUserExist( $msg );
+                echo ($arr[0]);exit;
+
+                if( 1 == count($arr)){
+                    echo '存在';
+                    exit;
+                }else{
+                    echo '不存在';
+                    exit;
+                }
+
+            }else{
+                $arr['success'] = 'NG';
+                $arr['msg'] = $msg;
+                echo json_encode($arr);
+                exit;
+            }
         }
+
     }
     /***********************************************忘记密码***********************************************/
 }

@@ -1668,10 +1668,11 @@ function checkForm( $flag ){
                 if(strlen($userLogin) < 6){
                     return '用户名长度不能小于六位';
                 }
+                return 'username';
+            }else{
+                return 'email';
             }
-
         }
-
     }
 
     return '';

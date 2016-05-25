@@ -25,3 +25,342 @@ INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
 SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0760s ]
 SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'casadawd' OR `email` = 'wu_jy1984@126.com' LIMIT 1   [ RunTime:0.0000s ]
 
+[ 2016-05-25T16:06:31+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:1.3451s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'wujiayuwujiyau' OR `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0830s ]
+SQL: INSERT INTO `ccm_m_user` (`username`,`autopass`,`password`,`email`,`token`,`token_exptime`,`regtime`) VALUES ('wujiayuwujiyau','sAY9^-],','964e2dbf734b6842f52b7df39c27f581','right_ring@126.com','5aaf56f7b2dba76d0cc603ecd9f49480','1464768388','1464163588') [ RunTime:0.0970s ]
+
+[ 2016-05-25T16:14:19+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002000s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0100s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'admin1' OR `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0000s ]
+SQL: INSERT INTO `ccm_m_user` (`username`,`autopass`,`password`,`email`,`token`,`token_exptime`,`regtime`) VALUES ('admin1','exMPQS9.','72ff7ee58aed9a50e17339c71072b12d','right_ring@126.com','c3b34b031f03c2ad920e810466aabb46','1464768858','1464164058') [ RunTime:0.0000s ]
+
+[ 2016-05-25T16:22:34+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0000s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'cdasdasd' OR `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0000s ]
+SQL: INSERT INTO `ccm_m_user` (`username`,`autopass`,`password`,`email`,`token`,`token_exptime`,`regtime`) VALUES ('cdasdasd','gGQ13(,:','dbcb83630c0670d5f1a138f3b9147300','right_ring@126.com','7f78bf9397d59f7a671c3f1c1b89ed54','1464769352','1464164552') [ RunTime:0.0000s ]
+NOTIC: [8] Use of undefined constant __URL__ - assumed '__URL__' D:\phpStudy\WWW\edit\Application\Admin\Model\RegisterModel.class.php 第 85 行.
+
+[ 2016-05-25T16:24:35+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0090s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'ssdasaasa' OR `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0000s ]
+SQL: INSERT INTO `ccm_m_user` (`username`,`autopass`,`password`,`email`,`token`,`token_exptime`,`regtime`) VALUES ('ssdasaasa','kAY9!%=/','1e4dec31307f463ec0b5a9ba8e805dca','right_ring@126.com','45de47438a33081bdaeee6f91e72a69c','1464769474','1464164674') [ RunTime:0.0000s ]
+NOTIC: [8] Use of undefined constant __URL__ - assumed '__URL__' D:\phpStudy\WWW\edit\Application\Admin\Model\RegisterModel.class.php 第 84 行.
+NOTIC: [8] Use of undefined constant __URL__ - assumed '__URL__' D:\phpStudy\WWW\edit\Application\Admin\Model\RegisterModel.class.php 第 85 行.
+
+[ 2016-05-25T16:26:38+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001001s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001001s ]
+NOTIC: [8] Use of undefined constant __URL__ - assumed '__URL__' D:\phpStudy\WWW\edit\Application\Admin\Controller\LoginController.class.php 第 64 行.
+
+[ 2016-05-25T16:30:17+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+NOTIC: [8] Use of undefined constant __URL__ - assumed '__URL__' D:\phpStudy\WWW\edit\Application\Admin\Controller\LoginController.class.php 第 64 行.
+
+[ 2016-05-25T16:30:46+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0000s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'wdddqdqd' OR `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0000s ]
+SQL: INSERT INTO `ccm_m_user` (`username`,`autopass`,`password`,`email`,`token`,`token_exptime`,`regtime`) VALUES ('wdddqdqd','corwG3@<','031fd1f7d3678b56729e8cc3ebb4b34f','right_ring@126.com','ff54dafc4778180bc1fd776f0e1c3e3d','1464769844','1464165044') [ RunTime:0.0000s ]
+
+[ 2016-05-25T16:32:14+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0000s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'aadasdas' OR `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0000s ]
+SQL: INSERT INTO `ccm_m_user` (`username`,`autopass`,`password`,`email`,`token`,`token_exptime`,`regtime`) VALUES ('aadasdas','fpyADO3.','f77b386b44cd9bb01e9c855ad19a9bf2','right_ring@126.com','57bf6494be32b23cd596c18cb858efcc','1464769932','1464165132') [ RunTime:0.0000s ]
+
+[ 2016-05-25T16:35:10+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+
+[ 2016-05-25T16:42:06+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0110s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'adqadqwdqw' OR `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0000s ]
+SQL: INSERT INTO `ccm_m_user` (`username`,`autopass`,`password`,`email`,`token`,`token_exptime`,`regtime`) VALUES ('adqadqwdqw','jmuAC-.;','df05de3820c5704de6ed982f451e851c','right_ring@126.com','b82240cdc93016914880c7b5a55e163e','1464770524','1464165724') [ RunTime:0.0010s ]
+NOTIC: [8] Use of undefined constant MY_SITE - assumed 'MY_SITE' D:\phpStudy\WWW\edit\Application\Admin\Model\RegisterModel.class.php 第 84 行.
+NOTIC: [8] Use of undefined constant MY_SITE - assumed 'MY_SITE' D:\phpStudy\WWW\edit\Application\Admin\Model\RegisterModel.class.php 第 85 行.
+
+[ 2016-05-25T16:43:35+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.002001s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002001s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0050s ]
+SQL: SELECT `id` FROM `ccm_m_user` WHERE `username` = 'sfsfffF' OR `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0010s ]
+SQL: INSERT INTO `ccm_m_user` (`username`,`autopass`,`password`,`email`,`token`,`token_exptime`,`regtime`) VALUES ('sfsfffF','OY09#(_+','301d6c82d416f31257a47978c8dd8632','right_ring@126.com','3a75dc9e9ae7355316e8e5ff55849ff3','1464770613','1464165813') [ RunTime:0.0000s ]
+
+[ 2016-05-25T17:13:46+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001001s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001001s ]
+
+[ 2016-05-25T17:13:53+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+ERR: 1146:Table 'editsystem.ccm_lostpass' doesn't exist
+ [ SQL语句 ] : SHOW COLUMNS FROM `ccm_lostpass`
+ERR: 1146:Table 'editsystem.ccm_lostpass' doesn't exist
+ [ SQL语句 ] : SHOW COLUMNS FROM `ccm_lostpass`
+
+[ 2016-05-25T17:15:00+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.1540s ]
+SQL: SELECT * FROM `ccm_m_user` WHERE `username` = 'adqdqdqwdq' LIMIT 1   [ RunTime:0.0010s ]
+
+[ 2016-05-25T17:15:25+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000000s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0000s ]
+SQL: SELECT * FROM `ccm_m_user` WHERE `email` = '' LIMIT 1   [ RunTime:0.0010s ]
+
+[ 2016-05-25T17:17:27+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0000s ]
+SQL: SELECT * FROM `ccm_m_user` WHERE `email` = '' LIMIT 1   [ RunTime:0.0000s ]
+
+[ 2016-05-25T17:18:47+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001001s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001001s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0110s ]
+SQL: SELECT * FROM `ccm_m_user` WHERE `email` = '' LIMIT 1   [ RunTime:0.0010s ]
+
+[ 2016-05-25T17:19:57+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0100s ]
+SQL: SELECT * FROM `ccm_m_user` WHERE `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0010s ]
+
+[ 2016-05-25T17:20:26+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0090s ]
+SQL: SELECT * FROM `ccm_m_user` WHERE `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0010s ]
+
+[ 2016-05-25T17:20:52+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0100s ]
+SQL: SELECT * FROM `ccm_m_user` WHERE `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0000s ]
+NOTIC: [8] Array to string conversion D:\phpStudy\WWW\edit\Application\Admin\Controller\LoginController.class.php 第 123 行.
+
+[ 2016-05-25T17:21:12+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0050s ]
+SQL: SELECT * FROM `ccm_m_user` WHERE `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0000s ]
+
+[ 2016-05-25T17:22:47+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0000s ]
+SQL: SELECT * FROM `ccm_m_user` WHERE `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0000s ]
+
+[ 2016-05-25T17:23:06+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0110s ]
+SQL: SELECT * FROM `ccm_m_user` WHERE `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0000s ]
+
+[ 2016-05-25T17:23:27+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0000s ]
+SQL: SELECT * FROM `ccm_m_user` WHERE `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0000s ]
+
+[ 2016-05-25T17:23:31+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0080s ]
+SQL: SELECT * FROM `ccm_m_user` WHERE `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0010s ]
+
+[ 2016-05-25T17:24:00+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0040s ]
+SQL: SELECT * FROM `ccm_m_user` WHERE `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0000s ]
+
+[ 2016-05-25T17:24:25+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0080s ]
+SQL: SELECT * FROM `ccm_m_user` WHERE `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0010s ]
+
+[ 2016-05-25T17:25:11+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0040s ]
+SQL: SELECT * FROM `ccm_m_user` WHERE `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0000s ]
+NOTIC: [8] Use of undefined constant id - assumed 'id' D:\phpStudy\WWW\edit\Application\Admin\Controller\LoginController.class.php 第 126 行.
+NOTIC: [8] Array to string conversion D:\phpStudy\WWW\edit\Application\Admin\Controller\LoginController.class.php 第 126 行.
+
+[ 2016-05-25T17:25:17+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0000s ]
+SQL: SELECT * FROM `ccm_m_user` WHERE `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0000s ]
+NOTIC: [8] Use of undefined constant id - assumed 'id' D:\phpStudy\WWW\edit\Application\Admin\Controller\LoginController.class.php 第 126 行.
+NOTIC: [8] Array to string conversion D:\phpStudy\WWW\edit\Application\Admin\Controller\LoginController.class.php 第 126 行.
+
+[ 2016-05-25T17:25:36+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0040s ]
+SQL: SELECT * FROM `ccm_m_user` WHERE `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0000s ]
+
+[ 2016-05-25T17:26:02+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0060s ]
+SQL: SELECT * FROM `ccm_m_user` WHERE `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0010s ]
+NOTIC: [8] Use of undefined constant id - assumed 'id' D:\phpStudy\WWW\edit\Application\Admin\Controller\LoginController.class.php 第 126 行.
+
+[ 2016-05-25T17:26:29+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001001s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001001s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0060s ]
+SQL: SELECT * FROM `ccm_m_user` WHERE `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0000s ]
+
+[ 2016-05-25T17:26:33+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0090s ]
+SQL: SELECT * FROM `ccm_m_user` WHERE `email` = 'right_ring@126.co' LIMIT 1   [ RunTime:0.0010s ]
+
+[ 2016-05-25T17:27:36+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0250s ]
+SQL: SELECT * FROM `ccm_m_user` WHERE `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0010s ]
+
+[ 2016-05-25T17:27:41+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0000s ]
+SQL: SELECT * FROM `ccm_m_user` WHERE `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0000s ]
+
+[ 2016-05-25T17:28:08+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0080s ]
+SQL: SELECT * FROM `ccm_m_user` WHERE `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0010s ]
+
+[ 2016-05-25T17:28:12+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000000s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0090s ]
+SQL: SELECT * FROM `ccm_m_user` WHERE `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0010s ]
+
+[ 2016-05-25T17:28:13+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000000s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0100s ]
+SQL: SELECT * FROM `ccm_m_user` WHERE `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0000s ]
+
+[ 2016-05-25T17:28:14+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0000s ]
+SQL: SELECT * FROM `ccm_m_user` WHERE `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0000s ]
+
+[ 2016-05-25T17:28:15+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0140s ]
+SQL: SELECT * FROM `ccm_m_user` WHERE `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0010s ]
+
+[ 2016-05-25T17:28:16+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000000s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0090s ]
+SQL: SELECT * FROM `ccm_m_user` WHERE `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0000s ]
+
+[ 2016-05-25T17:28:18+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000000s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0110s ]
+SQL: SELECT * FROM `ccm_m_user` WHERE `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0000s ]
+
+[ 2016-05-25T17:28:39+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0100s ]
+SQL: SELECT * FROM `ccm_m_user` WHERE `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0000s ]
+
+[ 2016-05-25T17:29:12+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001001s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001001s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0110s ]
+SQL: SELECT * FROM `ccm_m_user` WHERE `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0010s ]
+
+[ 2016-05-25T17:29:33+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0000s ]
+SQL: SELECT * FROM `ccm_m_user` WHERE `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0000s ]
+NOTIC: [8] Undefined offset: 0 D:\phpStudy\WWW\edit\Application\Admin\Controller\LoginController.class.php 第 126 行.
+
+[ 2016-05-25T17:29:55+08:00 ] ::1 /edit/Admin/Login/index
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+SQL: SHOW COLUMNS FROM `ccm_m_user` [ RunTime:0.0100s ]
+SQL: SELECT * FROM `ccm_m_user` WHERE `email` = 'right_ring@126.com' LIMIT 1   [ RunTime:0.0000s ]
+NOTIC: [8] Undefined offset: 0 D:\phpStudy\WWW\edit\Application\Admin\Controller\LoginController.class.php 第 126 行.
+
