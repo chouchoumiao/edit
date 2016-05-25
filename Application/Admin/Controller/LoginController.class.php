@@ -107,40 +107,19 @@ class LoginController extends Controller{
     public function activeEamil(){
 
         echo D('Register')->activeUserEamil();
+        exit;
 
     }
 
     /***********************************************用户注册***********************************************/
 
     /***********************************************忘记密码***********************************************/
+    /**
+     * 忘记密码时候执行操作
+     */
     private function lostPass(){
-
-        //检查Form表单
-        $msg = checkForm( 'lostpass' );
-        if('' != $msg ){
-            if( ('username' == $msg) ||('email' == $msg) ){
-
-                //print_r(D('Lostpass')->isUserExist( $msg ));exit;
-
-                $arr = D('Lostpass')->isUserExist( $msg );
-                echo ($arr[0]);exit;
-
-                if( 1 == count($arr)){
-                    echo '存在';
-                    exit;
-                }else{
-                    echo '不存在';
-                    exit;
-                }
-
-            }else{
-                $arr['success'] = 'NG';
-                $arr['msg'] = $msg;
-                echo json_encode($arr);
-                exit;
-            }
-        }
-
+        echo json_encode(D('Lostpass')->lostPassDo());
+        exit;
     }
     /***********************************************忘记密码***********************************************/
 }

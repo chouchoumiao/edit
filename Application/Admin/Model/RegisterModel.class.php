@@ -41,6 +41,7 @@ class RegisterModel {
         $password =  md5(trim($autopass));//加密密码
         $email = trim($_POST['user_email']); //邮箱
         $regtime = time();
+        $updateTime = time();
 
         $token = md5($username.$password.$regtime); //创建用于激活识别码
         $token_exptime = time()+60*60*24*7;//过期时间为24小时后
@@ -52,7 +53,8 @@ class RegisterModel {
             'email' => $email,
             'token' => $token,
             'token_exptime' => $token_exptime,
-            'regtime' => $regtime
+            'regtime' => $regtime,
+            'updateTime' => $updateTime
         );
 
 
