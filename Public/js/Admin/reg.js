@@ -4,9 +4,6 @@ $(function(){
     try{document.getElementById('user_login').focus();}catch(e){}
     if(typeof wpOnload=='function')wpOnload();
 
-    /**
-     * 点击注册时做检查
-     */
     $("#wp-submit").click(function(){
 
         var msg = checkForm( 'login' );
@@ -18,7 +15,7 @@ $(function(){
             return false;
         }
 
-        if(!ajaxMsg('login')){
+        if(!ajaxMsg('reg')){
             return false;
         }
 
@@ -34,22 +31,21 @@ $(function(){
             ,data:{
                     'action':action,
                     'user_login':cTrim($('#user_login').val(),0),
-                    'user_pass':cTrim($('#user_pass').val(),0)
+                    'user_email':cTrim($('#user_email').val(),0)
                 }//调用json.js类库将json对象转换为对应的JSON结构字符串
             ,dataType: "json"
             ,beforeSend:function(XMLHttpRequest){
-                    $("#wp-submit").val('正在登录...');
+                    $("#wp-submit").val('正在提交...');
                 }
             ,success:function(json){
                 if(json.success == "NG"){
                     showError( json.msg );
                     wp_shake_js();
-                    $("#wp-submit").val('登录');
+                    $("#wp-submit").val('注册');
 
                     return false;
                 }else{
-                    //登录成功跳转到后台首页
-                    location = '../Index/index';
+                    $("html").html(json.msg);
 
                 }
             }

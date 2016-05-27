@@ -528,7 +528,36 @@ function wp_shake_js(){
  */
 function checkForm( flag ){
 
+    //登录
     if( 'login' == flag){
+        var user  = $('#user_login');
+        var pass = $('#user_pass');
+
+        if( user.length > 0){
+
+            userval = user.val();
+
+            if( isNull( userval ) ){
+                return '用户名不能为空！';
+            }
+
+            if( userval.length < 6){
+                return '用户名必须大于等于6位！';
+            }
+        }
+
+        if( pass.length > 0){
+
+            passval = pass.val();
+
+            if( (isNull( passval )) || ('' == cTrim(passval,0)) ){
+                return '密码不能为空！';
+            }
+        }
+        return '';
+    }
+    //注册
+    if( 'reg' == flag){
         var user  = $('#user_login');
         var email = $('#user_email');
 
@@ -558,6 +587,8 @@ function checkForm( flag ){
         }
         return '';
     }
+
+
 
     if( 'lostpass' == flag ){
         var userORemail  = $('#user_login').val();

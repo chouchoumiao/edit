@@ -1632,7 +1632,27 @@ function is_mail($mail)
  */
 function checkForm( $flag ){
 
+
     if( 'login' == $flag){
+        if(isset($_POST['user_login'])){
+            $user = trim($_POST['user_login']);
+            if('' == $user){
+                return '用户名不能为空';
+            }
+            if(strlen($user) < 6){
+                return '用户名长度不能小于六位';
+            }
+        }
+
+        if(isset($_POST['user_pass'])){
+            $pass = trim($_POST['user_pass']);
+            if('' == $pass){
+                return '密码不能为空';
+            }
+        }
+    }
+
+    if( 'reg' == $flag){
         if(isset($_POST['user_login'])){
             $user = trim($_POST['user_login']);
             if('' == $user){

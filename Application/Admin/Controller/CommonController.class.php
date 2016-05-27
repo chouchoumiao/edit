@@ -13,32 +13,32 @@ use Think\Controller;
 class CommonController extends Controller{
 
     /**
-     * ¹¹Ôì·½·¨
+     * æž„é€ æ–¹æ³•
      */
     public function __construct(){
 
-        //Ê¹ÓÃ__construct·½·¨Ê±£¬ÐèÏÈµ÷ÓÃ¸¸ÀàµÄ__construct·½·¨ÏÈ
+        //ä½¿ç”¨__constructæ–¹æ³•æ—¶ï¼Œéœ€å…ˆè°ƒç”¨çˆ¶ç±»çš„__constructæ–¹æ³•å…ˆ
         parent::__construct();
 
-        //Èç¹ûÃ»ÓÐsession»òÕßsessionÎª0£¬²¢ÇÒ·½·¨Ãû²»ÊÇ login ºÍ reg µÄÇé¿öÔòÌø×ªµ½µÇÂ¼Ò³Ãæ
+        //å¦‚æžœæ²¡æœ‰sessionæˆ–è€…sessionä¸º0ï¼Œå¹¶ä¸”æ–¹æ³•åä¸æ˜¯ login å’Œ reg çš„æƒ…å†µåˆ™è·³è½¬åˆ°ç™»å½•é¡µé¢
         if( ( (!isset($_SESSION['username'])) || ('' == $_SESSION['username']) ) && ( 'login') != ACTION_NAME && ( 'reg') != ACTION_NAME){
             $this->redirect('Login/login');
         }
     }
 
     /**
-     * ¿Õ·½·¨
-     * Èç¹ûÃ»ÓÐsession»òÕßsessionÎª0£¬Ã»ÓÐ¶ÔÓ¦µÄ·½·¨ÃûµÄÇé¿öÏÂÄ¬ÈÏ½øÈ¥µÇÂ¼Ò³Ãæ£¬
-     * Èç¹ûÓÐsession£¬Ã»ÓÐ¶ÔÓ¦µÄ·½·¨ÃûµÄÇé¿öÏÂÄ¬ÈÏ½øÈ¥ºóÌ¨Ö÷Ò³
+     * ç©ºæ–¹æ³•
+     * å¦‚æžœæ²¡æœ‰sessionæˆ–è€…sessionä¸º0ï¼Œæ²¡æœ‰å¯¹åº”çš„æ–¹æ³•åçš„æƒ…å†µä¸‹é»˜è®¤è¿›åŽ»ç™»å½•é¡µé¢ï¼Œ
+     * å¦‚æžœæœ‰sessionï¼Œæ²¡æœ‰å¯¹åº”çš„æ–¹æ³•åçš„æƒ…å†µä¸‹é»˜è®¤è¿›åŽ»åŽå°ä¸»é¡µ
      *
      */
-    public function _empty(){
-        if( (!isset($_SESSION['username'])) || ('' == $_SESSION['username']) ){
-            //ÎÞsessionÔò½øÈëºóÌ¨Ö÷Ò³Ãæ
-            $this->redirect('Login/login');
-        }else{
-            //ÓÐsessionÔò½øÈëºóÌ¨Ö÷Ò³Ãæ
-            $this->redirect('Index/index');
-        }
-    }
+    //public function _empty(){
+    //    if( (!isset($_SESSION['username'])) || ('' == $_SESSION['username']) ){
+    //        //æ— sessionåˆ™è¿›å…¥åŽå°ä¸»é¡µé¢
+    //        $this->redirect('Login/login');
+    //    }else{
+    //        //æœ‰sessionåˆ™è¿›å…¥åŽå°ä¸»é¡µé¢
+    //        $this->redirect('Index/index');
+    //    }
+    //}
 }

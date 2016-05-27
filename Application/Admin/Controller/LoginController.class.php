@@ -33,17 +33,41 @@ class LoginController extends Controller{
                     break;
 
             }
+        }else{
+            //$this->display('login');
         }
 
     }
     private function login(){
-        if( ( !isset($_POST['username']) ) || ('' != $_POST['username']) ){
-            $this->display('login');
-        }else{
-            $arr = D('login')->checklogin();
+
+        //检查表单
+        $msg = checkForm( $this->actionName );
+
+        if( '' != $msg ){
+
+            $arr['success'] = 'NG';
+            $arr['msg'] = $msg;
             echo json_encode($arr);
             exit;
         }
+
+        //检查登录用户名密码是否正确
+        if(D('login')->checklogin()){
+            //进入后台主页
+            //$this->redirect('Index/index');
+            //exit;
+            $arr['success'] = 'OK';
+            echo json_encode($arr);
+            exit;
+
+
+        }else{
+            $arr['success'] = 'NG';
+            $arr['msg'] = '用户名或密码错误，请重新输入！';
+            echo json_encode($arr);
+            exit;
+        }
+
     }
 
     /**
@@ -61,7 +85,9 @@ class LoginController extends Controller{
      */
     private function reg()
     {
-        $msg = checkForm( 'login' );
+
+
+        $msg = checkForm( $this->actionName );
         if( '' != $msg ){
 
             $arr['success'] = 'NG';

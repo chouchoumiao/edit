@@ -23,7 +23,11 @@
             <label for="user_pass">密码<br>
             <input type="password" size="20" value="" class="input" id="user_pass" name="pwd"></label>
         </p>
-            <p class="forgetmenot"><label for="rememberme"><input type="checkbox" value="forever" id="rememberme" name="rememberme"> 记住我的登录信息</label></p>
+            <p class="forgetmenot">
+                <label for="rememberme">
+                    <input type="checkbox" value="forever" id="rememberme" name="rememberme"> 记住我的登录信息
+                </label>
+            </p>
         <p class="submit">
             <input type="submit" value="登录" class="button button-primary button-large" id="wp-submit" name="wp-submit">
             <input type="hidden" value="http://localhost/NewWordpress/wp-admin/" name="redirect_to">
@@ -50,9 +54,9 @@
         if(typeof wpOnload=='function')wpOnload();
     </script>
 
-    <p id="backtoblog"><a href="http://localhost/NewWordpress/">← 回到稿库系统</a></p>
-	
-	</div>
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/common.js?v=20160101"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/Admin/login.js?v=20160104"></script>
     
     <div class="clear"></div>
 	
