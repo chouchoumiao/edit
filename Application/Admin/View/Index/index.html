@@ -1,223 +1,391 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  	<head>
+	    <meta charset="utf-8">
+	    <title>稿库系统后台管理</title>
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	    <meta name="description" content="">
+	    <meta name="author" content="">
 
-    <title>微信管理后台-测试环境</title>
-    <link rel="stylesheet" href="__ROOT__/Public/css/admin/index.css?v=20150436" type="text/css" media="screen" />
+	    <!-- Bootstrap core CSS -->
+	    <link href="__PUBLIC__/css/Admin/bootstrap.min.css" rel="stylesheet">
+		
+		<!-- Font Awesome -->
+		<link href="__PUBLIC__/css/Admin/font-awesome.min.css" rel="stylesheet">
 
-    <!-- script标签放在底下，刷新时候会有跳动，所以需要放在页面加载前-->
-    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.8.3/jquery.min.js"></script>
-    <script type="text/javascript" src="__ROOT__/Public/js/Common/tendina.min.js?v=20150103"></script>
-    <script type="text/javascript" src="__ROOT__/Public/js/Admin/index.js?v=20150123" charset="utf-8"></script>
-</head>
-<body>
+		<!-- ionicons -->
+		<link href="__PUBLIC__/css/Admin/ionicons.min.css" rel="stylesheet">
+		
+		<!-- Datepicker -->
+		<link href="__PUBLIC__/css/Admin/datepicker.css" rel="stylesheet"/>	
 
-<!--顶部-->
-<header>
-    <div class="layout_top_header">
-        <div style="float: left">
-            <span style="font-size:20px;line-height:45px;padding-left:20px;color:#8d8d8d">微信管理后台</span>
-        </div>
+		<!-- Animate -->
+		<link href="__PUBLIC__/css/Admin/animate.min.css" rel="stylesheet">
 
-        <div id = "ad_setting" class="ad_setting2">
-            <a class="ad_setting_a">
-                <i class="icon-user glyph-icon" style="font-size: 20px"></i>
-                <span>管理员: &nbsp {$aaa}</span>
-                <i class="icon-chevron-down glyph-icon"></i>
-            </a>
-            <ul class="dropdown-menu-uu" style="display: none" id="ad_setting_ul">
-                <li class="ad_setting_ul_li"> <a href="tpl/admin/adminEdit.html" target="menuFrame">
-                        <i class="icon-user glyph-icon"></i> 修改密码 </a> </li>
-                <li class="ad_setting_ul_li"> <a href="admin.php?controller=admin&method=logout">
-                        <i class="icon-signout glyph-icon" ></i>
-                        <span class="font-bold" id='logout'>退出</span></a>
-                </li>
-            </ul>
-        </div>
-        <div class="ad_setting">
-            <a class="ad_setting_a" >
-                <span>
-                <select style="font-size:15px;color:#8d8d8d" id = "weiIDSelect" onchange="getWeiID();">
-                    {foreach from=$weixinInfo item = foo}
-                    <option value={$foo.id}>{$foo.weixinName}</option>
-                    {/foreach}
-                </select>
-                </span>
-            </a>
-        </div>
-        <div class="ad_setting">
-            <a class="ad_setting_a" href="javascript:; ">
-                <i style="font-size: 16px"></i>
-                <span >当前公众号:</span>
-            </a>
-        </div>
-    </div>
-</header>
-<!--顶部结束-->
-<!--菜单-->
-<div class="layout_left_menu">
-    <ul id="menu">
-        <li class="childUlLi">
-            <a href="tpl/admin/main.html"  target="menuFrame"><i class="glyph-icon icon-home"></i>首页</a>
-            <ul>
-                <li><a target="menuFrame" href="javascript:void(0)"><i class="glyph-icon icon-chevron-right"></i>管理公众号</a>
-                    <ul>
-                        {if $weixinID}
-                        <li><a target="menuFrame" href="javascript:void(0)">
-                                <i class="glyph-icon icon-chevron-right2"></i>{$weixinName}
-                            </a>
-                            <ul>
-                                <li><a href="../../Admin/forWexinID/weixinIDAddNew.php?weixinID=<?php echo $weiInfo['id'];?>" target="menuFrame">
-                                        <i class="glyph-icon icon-chevron-right3"></i>编辑公众号基本设置</a>
-                                </li>
-                                <li><a href="../../Admin/forEventReply/eventReplySet.php?weixinID=<?php echo $weiInfo['id'];?>" target="menuFrame">
-                                        <i class="glyph-icon icon-chevron-right3"></i>进入活动相关设置</a>
-                                </li>
-                                <li><a href="../../Admin/forWexinID/menuSet.php?weixinID=<?php echo $weiInfo['id'];?>" target="menuFrame">
-                                        <i class="glyph-icon icon-chevron-right3"></i>自定义菜单设置</a>
-                                </li>
-                            </ul>
-                        </li>
-                        {else}
-                                <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;尚未设置公众号信息!</a></li>
-                        {/if}
-                    </ul>
-                    <li><a href="../../Admin/forWexinID/weixinIDAddNew.php" target="menuFrame">
-                            <i class="glyph-icon icon-chevron-right"></i><font color="#FF0000">添加新公众号</font> </a>
-                    </li>
-                    <li><a href="../../Admin/forWexinID/editWeixinID.php" target="menuFrame">
-                            <i class="glyph-icon icon-chevron-right"></i>编辑公众号</a>
-                    </li>
+		<!-- Owl Carousel -->
+		<link href="__PUBLIC__/css/Admin/owl.carousel.min.css" rel="stylesheet">
+		<link href="__PUBLIC__/css/Admin/owl.theme.default.min.css" rel="stylesheet">
 
-                    <li><a href="tpl/admin/adminSetMuneClass.html" target="menuFrame"><i class="glyph-icon icon-chevron-right"></i>菜单分类设置</a>
-                    </li>
-            </ul>
-        </li>
-        <li class="childUlLi">
-            <a target="menuFrame" href="javascript:void(0)"> <i class="glyph-icon icon-reorder"></i>会员管理</a>
-            <ul>
-                {if $isEventListExist }
+		<!-- Simplify -->
+		<link href="__PUBLIC__/css/Admin/simplify.min.css" rel="stylesheet">
+	
+  	</head>
 
-                    <li><a href="admin.php?controller=weixin&method=showVipBaseInfo" target="menuFrame">
-                            <i class="glyph-icon icon-chevron-right"></i>初始化设置</a></li>
-                    <li><a href="admin.php?controller=weixin&method=showBaseInfo" target="menuFrame">
-                            <i class="glyph-icon icon-chevron-right"></i>签到{$weixinName}</a></li>
+  	<body class="overflow-hidden">
+		<div class="wrapper preload">
+			<header class="top-nav">
+				<div class="top-nav-inner">
+					<div class="nav-header">
+						<button type="button" class="navbar-toggle pull-left sidebar-toggle" id="sidebarToggleSM">
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<!-- 移动端使用 start-->
+						<ul class="nav-notification pull-right">
+							<li>
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog fa-lg"></i></a>
+								<span class="badge badge-danger bounceIn">1</span>
+								<ul class="dropdown-menu dropdown-sm pull-right user-dropdown">
+									<li class="user-avatar">
+										<img src="__PUBLIC__/img/Admin/profile/profile1.jpg" alt="" class="img-circle">
+										<div class="user-content">
 
-                {else}
+											<h5 class="no-m-bottom">Jane Doe</h5>
+											
+											<div class="m-top-xs">
+												<div class="divider"></div>
+												<a href="profile.html" class="m-right-sm">个人资料</a>
+												<div class="divider"></div>
+												<a href="signin.html">退出登录</a>
+											</div>
+										</div>
+									</li>	  
+										  	  
+								</ul>
+							</li>
+						</ul>
+						<!-- 移动端使用 end-->
+						<a href="index.html" class="brand">
+							<i class="fa fa-database"></i><span class="brand-name">稿库系统后台管理</span>
+						</a>
+					</div>
+					<div class="nav-container">
+						<button type="button" class="navbar-toggle pull-left sidebar-toggle" id="sidebarToggleLG">
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<ul class="nav-notification">	
+							<li class="search-list">
+								<div class="search-input-wrapper">
+									<div class="search-input">
+										<input type="text" class="form-control input-sm inline-block">
+										<a href="#" class="input-icon text-normal"><i class="ion-ios7-search-strong"></i></a>
+									</div>
+								</div>
+							</li>
+						</ul>
+						<div class="pull-right m-right-sm">
+							<div class="user-block hidden-xs">
+								<a href="#" id="userToggle" data-toggle="dropdown">
+									<img src="__PUBLIC__/img/Admin/profile/profile1.jpg" alt="" class="img-circle inline-block user-profile-pic">
+									<div class="user-detail inline-block">
+										Jane Doe
+										<i class="fa fa-angle-down"></i>
+									</div>
+								</a>
+								<div class="panel border dropdown-menu user-panel">
+									<div class="panel-body paddingTB-sm">
+										<ul>
+											<li>
+												<a href="profile.html">
+													<i class="fa fa-edit fa-lg"></i><span class="m-left-xs">个人资料</span>
+												</a>
+											</li>
+											<li>
+												<a href="signin.html">
+													<i class="fa fa-power-off fa-lg"></i><span class="m-left-xs">退出登录</span>
+												</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div><!-- ./top-nav-inner -->	
+			</header>
+			<aside class="sidebar-menu fixed">
+				<div class="sidebar-inner scrollable-sidebar">
+					<div class="main-menu">
+						<ul class="accordion">
+							<li class="menu-header">
+								Main Menu
+							</li>
+							<li class="bg-palette1 active">
+								<a href="index.html">
+									<span class="menu-content block">
+										<span class="menu-icon"><i class="block fa fa-home fa-lg"></i></span>
+										<span class="text m-left-sm">后台主页</span>
+									</span>
+									<span class="menu-content-hover block">
+										Home
+									</span>
+								</a>
+							</li>
+							<li class="openable bg-palette3">
+								<a href="#">
+									<span class="menu-content block">
+										<span class="menu-icon"><i class="block fa fa-list fa-lg"></i></span>
+										<span class="text m-left-sm">文章</span>
+										<span class="submenu-icon"></span>
+									</span>
+									<span class="menu-content-hover block">
+										文章
+									</span>
+								</a>
+								<ul class="submenu bg-palette4">
+									<li><a href="**.html"><span class="submenu-label">发布文章</span></a></li>
+									<li><a href="**.html"><span class="submenu-label">文章一览</span></a></li>
+								</ul>
+							</li>
+							<li class="openable bg-palette4">
+								<a href="#">
+									<span class="menu-content block">
+										<span class="menu-icon"><i class="block fa fa-tags fa-lg"></i></span>
+										<span class="text m-left-sm">媒体库</span>
+										<span class="submenu-icon"></span>
+									</span>
+									<span class="menu-content-hover block">
+										媒体库
+									</span>
+								</a>
+								<ul class="submenu">
+									<li><a href="**.html"><span class="submenu-label">媒体库</span></a></li>
+									<li><a href="**.html"><span class="submenu-label">添加</span></a></li>
+								</ul>
+							</li>
+							<li class="bg-palette2">
+								<a href="timeline.html">
+									<span class="menu-content block">
+										<span class="menu-icon"><i class="block fa fa-clock-o fa-lg"></i></span>
+										<span class="text m-left-sm">用户管理</span>
+									</span>
+									<span class="menu-content-hover block">
+										用户
+									</span>
+								</a>
+							</li>
+							<li class="bg-palette2">
+								<a href="timeline.html">
+									<span class="menu-content block">
+										<span class="menu-icon"><i class="block fa fa-clock-o fa-lg"></i></span>
+										<span class="text m-left-sm">评分管理</span><!-- 
+										<small class="badge badge-warning badge-square bounceIn animation-delay6 m-left-xs pull-right">7</small> -->
+									</span>
+									<span class="menu-content-hover block">
+										评分
+									</span>
+								</a>
+							</li>
+							<li class="bg-palette2">
+								<a href="timeline.html">
+									<span class="menu-content block">
+										<span class="menu-icon"><i class="block fa fa-clock-o fa-lg"></i></span>
+										<span class="text m-left-sm">通知管理</span>
+									</span>
+									<span class="menu-content-hover block">
+										通知
+									</span>
+								</a>
+							</li>
+							<li class="bg-palette1">
+								<a href="inbox.html">
+									<span class="menu-content block">
+										<span class="menu-icon"><i class="block fa fa-envelope fa-lg"></i></span>
+										<span class="text m-left-sm">个人资料</span>
+									</span>
+									<span class="menu-content-hover block">
+										个人
+									</span>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div><!-- sidebar-inner -->
+			</aside>
+			
+			<div class="main-container">
+				<div class="padding-md">
+					<div class="row m-top-md">
+						<div class="col-lg-3 col-sm-6">
+							<div class="statistic-box bg-danger m-bottom-md">
+								<div class="statistic-title">
+									当前共有
+								</div>
 
-                    <li><a target="menuFrame">
-                            <i class="glyph-icon icon-chevron-right"></i>尚未设置活动，请设置！</a></li>
-                {/if}
+								<div class="statistic-value">
+									X
+								</div>
 
-            </ul>
-        </li>
-        <li class="childUlLi">
-            <a target="menuFrame" href="javascript:void(0)"> <i class="glyph-icon  icon-location-arrow"></i>活动设置</a>
-            <ul>
-                {if $isEventListExist}
-                    {foreach from=$eventNameArr item = foo}
-                        {if strstr($foo,"答题") }
-                            <li><a target="menuFrame" href="javascript:void(0)">
-                                    <i class="glyph-icon icon-chevron-right"></i>{$foo}</a>
-                                    <ul>
-                                        <li><a href="../../Admin/forAnswer/question_search.php" target="menuFrame">
-                                                <i class="glyph-icon icon-chevron-right2"></i>结果查询</a>
-                                        </li>
-                                        <li><a href="../../Admin/forAnswer/question_master_manager.php" target="menuFrame">
-                                                <i class="glyph-icon icon-chevron-right2"></i>主题信息</a>
-                                        </li>
-                                        <li><a href="../../Admin/forAnswer/question_manager.php" target="menuFrame">
-                                                <i class="glyph-icon icon-chevron-right2"></i>题目信息</a>
-                                        </li>
-                                    </ul>
-                            </li>
-                        {else}
-                        {$index = $smarty.foreach.foo.index}
-                        <li><a href={$smarty.foreach.foo.index} target="menuFrame">
-                                <i class="glyph-icon icon-chevron-right"></i>{$foo}</a>
-                        </li>
-                        {/if}
-                    {/foreach}
-                {else}
-                    <li><a target="menuFrame" href="javascript:void(0)">
-                            <i class="glyph-icon icon-chevron-right"></i>尚未设置活动，请设置！</a>
-                    </li>
-                {/if}
-            </ul>
-        </li>
-        <li class="childUlLi">
-            <a target="menuFrame" href="javascript:void(0)"> <i class="glyph-icon icon-reorder"></i>用户管理</a>
-            <ul>
-                {if $userName eq "gokayuwu"}
-                    <li><a href="admin.php?controller=admin&method=showUserInfo" target="menuFrame">
-                        <i class="glyph-icon icon-chevron-right"></i>管理员权限用户查询</a>
-                    </li>
-                    <li><a href="tpl/admin/addUserByAdmin.html" target="menuFrame">
-                        <i class="glyph-icon icon-chevron-right"></i>管理员权限用户添加</a>
-                    </li>
-                {/if}
-                <li><a href="tpl/admin/adminEdit.html" target="menuFrame">
-                        <i class="glyph-icon icon-chevron-right"></i>修改密码</a></li>
-            </ul>
-        </li>
-        <li class="childUlLi">
-            <a target="menuFrame" href="javascript:void(0)"> <i class="glyph-icon icon-reorder"></i>查询功能</a>
-            <ul>
-                {if $isEventListExist}
-                    <li><a href="admin.php?controller=forSearchInfo&method=showVipInfoList" target="menuFrame">
-                            <i class="glyph-icon icon-chevron-right"></i>会员信息查询</a></li>
-                    <li><a href="tpl/admin/forWeixin/getDailyCode.html" target="menuFrame">
-                            <i class="glyph-icon icon-chevron-right"></i>查询签到码</a></li>
-                    <li><a href="admin.php?controller=forSearchInfo&method=showQAClassInfoList" target="menuFrame">
-                        <i class="glyph-icon icon-chevron-right"></i>答题分类查询</a></li>
-                    <li><a href="admin.php?controller=forSearchInfo&method=showQuestionOkCountList" target="menuFrame">
-                            <i class="glyph-icon icon-chevron-right"></i>全答对时间排行</a></li>
-                    <li><a href="admin.php?controller=forSearchInfo&method=getExchangeListCon" target="menuFrame">
-                            <i class="glyph-icon icon-chevron-right"></i>奖品兑换情况查询</a>
-                    <li><a href="tpl/admin/forExchange/exchange.html" target="menuFrame">
-                            <i class="glyph-icon icon-chevron-right"></i>兑奖信息查询</a>
-                    <li><a href="../../Admin/forForwardingGift/forwardingGiftInfoSearch.php" target="menuFrame">
-                            <i class="glyph-icon icon-chevron-right"></i>转发有礼查询</a>
-                    <li><a href="../../Admin/forHongbao/hongbaoInfoSearch.php" target="menuFrame">
-                            <i class="glyph-icon icon-chevron-right"></i>红包测试</a>
-                    <li><a href="../../Admin/forFlowerCity/flowerCityManger.php" target="menuFrame">
-                            <i class="glyph-icon icon-chevron-right"></i>印章商城</a>
-                    </li>
-                {else}
-                    <li><a target="menuFrame" href="javascript:void(0)">
-                            <i class="glyph-icon icon-chevron-right"></i>尚未设置活动，请设置！</a>
-                    </li>
-                {/if}
-            </ul>
-        </li>
-    </ul>
-</div>
-<!--菜单-->
-<div id="layout_right_content" class="layout_right_content">
-    <div class="mian_content">
-        <div id="page_content">
-            <iframe id="menuFrame" name="menuFrame" src="tpl/admin/main.html" style="overflow:visible;"
-                scrolling="yes" frameborder="no" width="100%" height="100%"></iframe>
-        </div>
-    </div>
-</div>
-<footer>
-    <div class="layout_footer">
-        <p>Copyright © 2015-2016 - 臭臭喵工作室</p>
-    </div>
-</footer>
+								<div class="m-top-md">篇文章</div>
 
-<script>
-$(document).ready(function(){
-    var weiID = "{$weixinID}";
-    if (weiID){
-        $("#weiIDSelect ").val(weiID);
-    }
-});
-</script>
-</body>
+								<div class="statistic-icon-background">
+									<i class="ion-eye"></i>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-lg-3 col-sm-6">
+							<div class="statistic-box bg-info m-bottom-md">
+								<div class="statistic-title">
+									当前有
+								</div>
+
+								<div class="statistic-value">
+									X
+								</div>
+
+								<div class="m-top-md">篇文章待审</div>
+
+								<div class="statistic-icon-background">
+									<i class="ion-ios7-cart-outline"></i>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-lg-3 col-sm-6">
+							<div class="statistic-box bg-purple m-bottom-md">
+								<div class="statistic-title">
+									当前共有
+								</div>
+
+								<div class="statistic-value">
+									X
+								</div>
+
+								<div class="m-top-md">个资源文件</div>
+
+								<div class="statistic-icon-background">
+									<i class="ion-person-add"></i>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-lg-3 col-sm-6">
+							<div class="statistic-box bg-success m-bottom-md">
+								<div class="statistic-title">
+									 &nbsp
+								</div>
+
+								<div class="statistic-value">
+									用户管理
+								</div>
+								<br />
+								<div class="m-top-md"></div>
+
+								<div class="statistic-icon-background">
+									<i class="ion-person-add"></i>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-lg-3 col-sm-6">
+							<div class="statistic-box bg-warning m-bottom-md">
+								<div class="statistic-title">
+									 &nbsp
+								</div>
+
+								<div class="statistic-value">
+									评分管理
+								</div>
+								<br />
+								<div class="m-top-md"></div>
+
+								<div class="statistic-icon-background">
+									<i class="ion-person-add"></i>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-lg-3 col-sm-6">
+							<div class="statistic-box bg-info m-bottom-md">
+								<div class="statistic-title">
+									 &nbsp
+								</div>
+
+								<div class="statistic-value">
+									通知信息
+								</div>
+								<br />
+								<div class="m-top-md"></div>
+
+								<div class="statistic-icon-background">
+									<i class="ion-person-add"></i>
+								</div>
+							</div>
+						</div>
+
+
+						<div class="col-lg-3 col-sm-6">
+							<div class="statistic-box bg-success m-bottom-md">
+								<div class="statistic-title">
+									&nbsp
+								</div>
+
+								<div class="statistic-value">
+									个人资料
+								</div>
+								<br />
+								<div class="m-top-md"></div>
+
+								<div class="statistic-icon-background">
+									<i class="ion-stats-bars"></i>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div><!-- ./padding-md -->
+			</div><!-- /main-container -->
+
+			<footer class="footer">
+				<span class="footer-brand">
+					<strong class="text-danger">稿件管理</strong> 系统
+				</span>
+				<p class="no-margin">
+					&copy; 2016 <strong>chouchoumiao.com</strong>. ALL Rights Reserved. 
+				</p>	
+			</footer>
+		</div><!-- /wrapper -->
+
+		<a href="#" class="scroll-to-top hidden-print"><i class="fa fa-chevron-up fa-lg"></i></a>
+		
+	    <!-- Le javascript
+	    ================================================== -->
+	    <!-- Placed at the end of the document so the pages load faster -->
+		
+		<!-- Jquery -->
+		<script src="__PUBLIC__/js/Admin/jquery-1.11.1.min.js"></script>
+		
+		<!-- Bootstrap -->
+	    <script src="__PUBLIC__/js/Admin/bootstrap.min.js"></script>
+	  
+		<!-- Slimscroll -->
+		<script src='__PUBLIC__/js/Admin/jquery.slimscroll.min.js'></script>
+
+		<!-- Skycons -->
+		<script src='__PUBLIC__/js/Admin/uncompressed/skycons.js'></script>
+
+		<!-- 幻灯片轮播 -->
+		<script src='__PUBLIC__/js/Admin/owl.carousel.min.js'></script>
+
+		<!-- 为检测浏览器的css3和HTML5的属性而生,从而通过CSS来解决兼容性问题 -->
+		<script src='__PUBLIC__/js/Admin/modernizr.min.js'></script>
+		
+		<!-- Simplify -->
+		<script src="__PUBLIC__/js/Admin/simplify/simplify.js"></script>
+		<script src="__PUBLIC__/js/Admin/simplify/simplify_dashboard.js"></script>
+	
+  	</body>
 </html>
