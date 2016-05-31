@@ -76,6 +76,7 @@ class LoginController extends Controller{
      */
     public function logout(){
         unset($_SESSION['username']);
+        unset($_SESSION['uid']);
         $this->display('login');
     }
 

@@ -9,14 +9,19 @@ class IndexController extends CommonController {
      * 显示主页面
      */
     public function index(){
+        //取得当前用户的信息
+        $userInfo = D('User')->getTheUserInfo();
+        //根据用户的权限来分别显示对应功能
+        if($userInfo){
 
-        ////将用户信息写入session（已经在CommonController中判定没有session跳转登录也操作了）
-        //$this->username = isset($_SESSION['$username'])?$_SESSION['$username']:array();
-        //
-        ////显示后台主页面
-        //$this->assign('data',D('Login')->showMain($this->auth['username']));
-        //$this->display();
-        $this->display();
+            //将需要显示的img信息给放入session中，方便前台调用
+            $_SESSION['img'] = $userInfo['udi_img'];
+
+            $this->assign('userInfo',$userInfo);
+            $this->display();
+        }else{
+            $this->error('取得当前用户信息失败,请重新登录','Login/login');
+        }
     }
 
 

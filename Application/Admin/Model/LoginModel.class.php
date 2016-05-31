@@ -19,7 +19,7 @@ class LoginModel {
 
 		if( $this->checkauth() ){
 			//存在对应用户后将用户名放入session中，并返回真
-			$_SESSION['username'] = I('post.user_login','');
+
             return true;
 		}else{
 			return false;
@@ -36,7 +36,10 @@ class LoginModel {
         $where['username'] = I('post.user_login','');
 		$where['password'] = md5(I('post.user_pass',''));
 
-		if( M('m_user')->where( $where )->find() ){
+		$userInfo = M('m_user')->where( $where )->find();
+		if( $userInfo ){
+			$_SESSION['username'] = $userInfo['username'];
+			$_SESSION['uid'] = $userInfo['id'];
 			return true;
 		}else{
 			return false;
