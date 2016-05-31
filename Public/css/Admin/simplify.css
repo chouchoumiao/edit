@@ -324,7 +324,7 @@ a.list-group-item.active:focus {
 }
 .top-nav .nav-header .brand {
   display: block;
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 600;
   padding: 0 10px;
   padding-left: 20px;
@@ -804,7 +804,7 @@ a.list-group-item.active:focus {
   position: relative;
   display: block;
   padding: 12px 15px 12px 2px;
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 600;
   background: transparent;
   color: #8dacc4;

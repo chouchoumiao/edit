@@ -24,5 +24,20 @@ class IndexController extends CommonController {
         }
     }
 
+    public function doAction(){
+
+        $action = $_GET['action'];
+        if( isset($action) && '' != $action ){
+            switch($action){
+                case 'editUserInfo':
+                    $userInfo = D('User')->getTheUserInfo();
+                    $this->assign('userInfo',$userInfo);
+                    $this->display('profile');
+                    break;
+            }
+        }
+
+    }
+
 
 }

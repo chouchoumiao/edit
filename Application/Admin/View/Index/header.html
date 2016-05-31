@@ -13,10 +13,10 @@
 					<span class="badge badge-danger bounceIn">1</span>
 					<ul class="dropdown-menu dropdown-sm pull-right user-dropdown">
 						<li class="user-avatar">
-							<img src="__PUBLIC__/img/Admin/profile/{$Think.session}" alt="" class="img-circle">
+							<img src="__PUBLIC__/img/Admin/profile/{$Think.session.img}" alt="" class="img-circle">
 							<div class="user-content">
 
-								<h5 class="no-m-bottom">{$Think.session['username']}</h5>
+								<h5 class="no-m-bottom">{$Think.session.username}</h5>
 
 								<div class="m-top-xs">
 									<div class="divider"></div>
@@ -31,7 +31,7 @@
 				</li>
 			</ul>
 			<!-- 移动端使用 end-->
-			<a href="index.html" class="brand">
+			<a href="__URL__/index" class="brand">
 				<i class="fa fa-database"></i><span class="brand-name">稿库系统后台管理</span>
 			</a>
 		</div>
@@ -54,9 +54,9 @@
 			<div class="pull-right m-right-sm">
 				<div class="user-block hidden-xs">
 					<a href="#" id="userToggle" data-toggle="dropdown">
-						<img src="__PUBLIC__/img/Admin/profile/{$Think.session}" alt="" class="img-circle inline-block user-profile-pic">
+						<img src="__PUBLIC__/img/Admin/profile/{$Think.session.img}" alt="" class="img-circle inline-block user-profile-pic">
 						<div class="user-detail inline-block">
-							{$Think.session['username']}
+							{$Think.session.username}
 							<i class="fa fa-angle-down"></i>
 						</div>
 					</a>
@@ -64,7 +64,7 @@
 						<div class="panel-body paddingTB-sm">
 							<ul>
 								<li>
-									<a href="profile.html">
+									<a href="__URL__/doAction/action/editUserInfo">
 										<i class="fa fa-edit fa-lg"></i><span class="m-left-xs">个人资料</span>
 									</a>
 								</li>
