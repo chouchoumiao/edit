@@ -32,13 +32,13 @@ class CommonController extends Controller{
      * 如果有session，没有对应的方法名的情况下默认进去后台主页
      *
      */
-    //public function _empty(){
-    //    if( (!isset($_SESSION['username'])) || ('' == $_SESSION['username']) ){
-    //        //无session则进入后台主页面
-    //        $this->redirect('Login/login');
-    //    }else{
-    //        //有session则进入后台主页面
-    //        $this->redirect('Index/index');
-    //    }
-    //}
+    public function _empty(){
+        if( (!isset($_SESSION['username'])) || ('' == $_SESSION['username']) ){
+            //无session则进入后台主页面
+            $this->redirect('Login/login');
+        }else{
+            //有session则进入后台主页面
+            $this->redirect('Index/index');
+        }
+    }
 }

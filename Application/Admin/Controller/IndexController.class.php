@@ -29,7 +29,9 @@ class IndexController extends CommonController {
         $action = $_GET['action'];
         if( isset($action) && '' != $action ){
             switch($action){
-                case 'editUserInfo':
+
+                //
+                case 'getTheUserInfo':
                     $userInfo = D('User')->getTheUserInfo();
                     $this->assign('userInfo',$userInfo);
                     $this->display('profile');

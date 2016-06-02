@@ -34,7 +34,13 @@ class LoginController extends Controller{
 
             }
         }else{
-            //$this->display('login');
+            if( (!isset($_SESSION['username'])) || ('' == $_SESSION['username']) ){
+                //无session则进入后台主页面
+                $this->redirect('Login/login');
+            }else{
+                //有session则进入后台主页面
+                $this->redirect('Index/index');
+            }
         }
 
     }
