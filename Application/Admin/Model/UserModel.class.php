@@ -12,8 +12,8 @@ namespace Admin\Model;
 		 * 公有方法
 		 * @return mixed
 		 */
-		public function getTheUserInfo(){
-			return $this->getTheUser();
+		public function getTheUserInfo($id){
+			return $this->getTheUser($id);
 		}
 
 		/**
@@ -25,17 +25,19 @@ namespace Admin\Model;
 			return $this->getAllUser();
 		}
 
+        public function delTheUserInfo($id){
+            return $this->delTheUser($id);
+        }
 
 		/**
 		 * 取得当前用户的详细信息(多表查询)
 		 * 私有方法
 		 * @return mixed
 		 */
-		private function getTheUser(){
+		private function getTheUser($id){
 			//多表联合查询
-			$where['ccm_m_user.id'] = $_SESSION['uid'];
+            $where['ccm_m_user.id'] = $id;
 			return M('m_user')->join('RIGHT JOIN ccm_user_detail_info ON ccm_user_detail_info.uid = ccm_m_user.id')->where($where)->find();
-
 		}
 
 		/**
@@ -48,4 +50,17 @@ namespace Admin\Model;
 			return M('m_user')->join('RIGHT JOIN ccm_user_detail_info ON ccm_user_detail_info.uid = ccm_m_user.id')->select();
 		}
 
+        private function delTheUser($id){
+
+            //新删除主表，成功的情况下删除明细表
+            if(M('m_user')->where("id=$id")->delete()){
+                //返回删除明细表的结果
+                return M('user_detail_info')->where("uid=$id")->delete();
+            }else{
+                return false;
+            }
+
+
+
+        }
 	}

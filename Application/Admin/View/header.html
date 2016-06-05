@@ -20,9 +20,9 @@
 
 								<div class="m-top-xs">
 									<div class="divider"></div>
-									<a href="profile.html" class="m-right-sm">个人资料</a>
+									<a href="User/profile.html" class="m-right-sm">个人资料</a>
 									<div class="divider"></div>
-									<a href="signin.html">退出登录</a>
+									<a href="Index/signin.html">退出登录</a>
 								</div>
 							</div>
 						</li>
@@ -31,7 +31,7 @@
 				</li>
 			</ul>
 			<!-- 移动端使用 end-->
-			<a href="__URL__/index" class="brand">
+			<a href="__ROOT__/Admin/Index/index" class="brand">
 				<i class="fa fa-database"></i><span class="brand-name">稿库系统后台管理</span>
 			</a>
 		</div>
@@ -64,12 +64,12 @@
 						<div class="panel-body paddingTB-sm">
 							<ul>
 								<li>
-									<a href="__URL__/doAction/action/getTheUserInfo">
-										<i class="fa fa-edit fa-lg"></i><span class="m-left-xs">个人资料</span>
+									<a href="__URL__/doAction/action/the">
+										<i class="fa fa-edit fa-lg"></i><span class="m-left-xs">个人资料{$Think.session.username}</span>
 									</a>
 								</li>
 								<li>
-									<a href="signin.html">
+									<a href="Index/signin.html">
 										<i class="fa fa-power-off fa-lg"></i><span class="m-left-xs">退出登录</span>
 									</a>
 								</li>

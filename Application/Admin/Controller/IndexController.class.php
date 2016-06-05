@@ -10,7 +10,7 @@ class IndexController extends CommonController {
      */
     public function index(){
         //取得当前用户的信息
-        $userInfo = D('User')->getTheUserInfo();
+        $userInfo = D('User')->getAllUserInfo();
         //根据用户的权限来分别显示对应功能
         if($userInfo){
 
@@ -23,23 +23,23 @@ class IndexController extends CommonController {
             $this->error('取得当前用户信息失败,请重新登录','Login/login');
         }
     }
-
-    public function doAction(){
-
-        $action = $_GET['action'];
-        if( isset($action) && '' != $action ){
-            switch($action){
-
-                //
-                case 'getTheUserInfo':
-                    $userInfo = D('User')->getTheUserInfo();
-                    $this->assign('userInfo',$userInfo);
-                    $this->display('profile');
-                    break;
-            }
-        }
-
-    }
+//
+//    public function doAction(){
+//
+//        $action = $_GET['action'];
+//        if( isset($action) && '' != $action ){
+//            switch($action){
+//
+//                //
+//                case 'the':
+//                    $userInfo = D('User')->the();
+//                    $this->assign('userInfo',$userInfo);
+//                    $this->display('profile');
+//                    break;
+//            }
+//        }
+//
+//    }
 
 
 }
