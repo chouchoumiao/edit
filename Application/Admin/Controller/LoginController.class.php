@@ -59,14 +59,9 @@ class LoginController extends Controller{
 
         //检查登录用户名密码是否正确
         if(D('login')->checklogin()){
-            //进入后台主页
-            //$this->redirect('Index/index');
-            //exit;
             $arr['success'] = 'OK';
             echo json_encode($arr);
             exit;
-
-
         }else{
             $arr['success'] = 'NG';
             $arr['msg'] = '用户名或密码错误，请重新输入！';
@@ -83,7 +78,8 @@ class LoginController extends Controller{
     public function logout(){
         unset($_SESSION['username']);
         unset($_SESSION['uid']);
-        $this->display('login');
+        unset($_SESSION['img']);
+        $this->redirect('Login/login');
     }
 
     /***********************************************用户注册***********************************************/
@@ -92,8 +88,6 @@ class LoginController extends Controller{
      */
     private function reg()
     {
-
-
         $msg = checkForm( $this->actionName );
         if( '' != $msg ){
 

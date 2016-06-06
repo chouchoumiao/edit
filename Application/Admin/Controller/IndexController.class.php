@@ -9,14 +9,13 @@ class IndexController extends CommonController {
      * 显示主页面
      */
     public function index(){
+
+        //dump($_SESSION);exit;
         //取得当前用户的信息
-        $userInfo = D('User')->getAllUserInfo();
+        $userInfo = D('User')->getTheUserInfo($_SESSION['uid']);
+
         //根据用户的权限来分别显示对应功能
         if($userInfo){
-
-            //将需要显示的img信息给放入session中，方便前台调用
-            $_SESSION['img'] = $userInfo['udi_img'];
-
             $this->assign('userInfo',$userInfo);
             $this->display();
         }else{

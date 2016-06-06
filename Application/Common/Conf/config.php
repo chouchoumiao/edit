@@ -1,6 +1,6 @@
 <?php
 
-define(MY_SITE, 'localhost');				//发送邮件附带地址的时候需要  本地环境
+define(MY_SITE, $_SERVER['SERVER_NAME']);				//发送邮件附带地址的时候需要  本地环境
 //define(MY_SITE, 'www.chouchoumiao.com');  //发送邮件附带地址的时候需要  正式环境使用
 
 
