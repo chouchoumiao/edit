@@ -98,10 +98,11 @@ class LoginController extends Controller{
         }
 
         //判断新注册的用户名和邮箱地址是否已经存在
-        $register = D('Register');
+        $user = D('User');
+
 
         //判断数据库中是否已经存在对应的用户和邮箱地址
-        if (!$register->checkUserIsExist()) {
+        if (!$user->checkUserIsExist()) {
             $arr['success'] = 'NG';
             $arr['msg'] = '用户名或者邮箱地址已存在，请换个其他的用户名或者邮箱地址';
             echo json_encode($arr);
@@ -109,7 +110,7 @@ class LoginController extends Controller{
         }
 
         //将新注册的用户信息追加入数据表User，并且生成Session
-        if (!$register->addToUser()) {
+        if (!$user->addToUser()) {
             $arr['success'] = 'NG';
             $arr['msg'] = '新用户追加到数据库失败';
             echo json_encode($arr);
@@ -117,7 +118,7 @@ class LoginController extends Controller{
         }
 
         //发送邮件给注册用户的邮箱地址
-        if($register->sendMailToUser()){
+        if($user->sendMailToUser()){
             $arr['success'] = 'OK';
             $arr['msg'] = '恭喜您，注册成功！<br/>请登录到您的邮箱及时激活您的帐号！！';
         }else{
@@ -133,7 +134,7 @@ class LoginController extends Controller{
      */
     public function activeEamil(){
 
-        echo D('Register')->activeUserEamil();
+        echo D('User')->activeUserEamil();
         exit;
 
     }

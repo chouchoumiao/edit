@@ -19,7 +19,7 @@ class IndexController extends CommonController {
             $this->assign('userInfo',$userInfo);
             $this->display();
         }else{
-            $this->error('取得当前用户信息失败,请重新登录','Login/login');
+            $this->error('取得当前用户信息失败,请重新登录');
         }
     }
 //

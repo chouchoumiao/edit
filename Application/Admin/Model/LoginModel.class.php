@@ -32,8 +32,8 @@ class LoginModel {
 	private function checkauth(){
 
 		//使用I内置函数过滤，如果
-        $where['login_name'] = I('post.user_login','');
-		$where['password'] = md5(I('post.user_pass',''));
+        $where['login_name'] = I('post.user_login');
+		$where['password'] = md5(I('post.user_pass'));
 
 		$userInfo = M('m_user')->where( $where )->find();
 		if( $userInfo ){

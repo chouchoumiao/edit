@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+  	<head>
+	    <meta charset="utf-8">
+	    <title>稿库系统后台管理</title>
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	    <meta name="description" content="">
+	    <meta name="author" content="">
+
+	    <!-- Bootstrap core CSS -->
+	    <link href="__PUBLIC__/css/Admin/bootstrap.min.css" rel="stylesheet">
+
+		<!-- Font Awesome -->
+		<link href="__PUBLIC__/css/Admin/font-awesome.min.css" rel="stylesheet">
+
+		<!-- ionicons -->
+		<link href="__PUBLIC__/css/Admin/ionicons.min.css" rel="stylesheet">
+
+		<!-- Simplify -->
+		<link href="__PUBLIC__/css/Admin/simplify.min.css" rel="stylesheet">
+	
+  	</head>
+
+  	<body class="overflow-hidden">
+		<div class="wrapper preload">
+			<!-- 导入 nav-->
+			<include file='./header' />
+
+			<!-- 导入左边栏-->
+			<include file='./aside'/>
+			
+			<div class="main-container">
+                <div class="padding-md">
+                    <div class="row user-profile-wrapper">
+                        <!-- 显示所有用户一览-->
+                        <notempty name = "all">
+                            <div class="col-md-12">
+                                <ul class="breadcrumb">
+                                <li>用户</li>
+                                <li>用户一览表</li>
+                            </ul>
+                                <div class="smart-widget">
+                                    <div class="smart-widget-header">
+                                        用户 信息
+                                            <span class="smart-widget-option">
+                                                <span class="refresh-icon-animated">
+                                                    <i class="fa fa-circle-o-notch fa-spin"></i>
+                                                </span>
+                                                <a href="#" class="widget-toggle-hidden-option">
+                                                    <i class="fa fa-cog"></i>
+                                                </a>
+                                                <a href="#" class="widget-collapse-option" data-toggle="collapse">
+                                                    <i class="fa fa-chevron-up"></i>
+                                                </a>
+                                            </span>
+                                    </div>
+                                    <div class="smart-widget-inner">
+                                        <div class="smart-widget-hidden-section">
+                                            <ul class="widget-color-list clearfix">
+                                                <li style="background-color:#20232b;" data-color="widget-dark"></li>
+                                                <li style="background-color:#4c5f70;" data-color="widget-dark-blue"></li>
+                                                <li style="background-color:#23b7e5;" data-color="widget-blue"></li>
+                                                <li style="background-color:#2baab1;" data-color="widget-green"></li>
+                                                <li style="background-color:#edbc6c;" data-color="widget-yellow"></li>
+                                                <li style="background-color:#fbc852;" data-color="widget-orange"></li>
+                                                <li style="background-color:#e36159;" data-color="widget-red"></li>
+                                                <li style="background-color:#7266ba;" data-color="widget-purple"></li>
+                                                <li style="background-color:#f5f5f5;" data-color="widget-light-grey"></li>
+                                                <li style="background-color:#fff;" data-color="reset"></li>
+                                            </ul>
+                                        </div>
+                                        <div class="smart-widget-body">
+                                            <table class="table table-hover">
+                                                <thead>
+                                                <tr>
+                                                    <th>id</th>
+                                                    <th>用户名</th>
+                                                    <th>性别</th>
+                                                    <th>邮箱地址</th>
+                                                    <th>地址</th>
+                                                    <th>部门</th>
+                                                    <th>权限</th>
+                                                    <th>操作</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <foreach name="allUser" item="vo" key ="k">
+                                                    <tr>
+                                                        <td>{$k+1}</td>
+                                                        <td>{$vo.username}</td>
+                                                        <td>{$vo.udi_sex}</td>
+                                                        <td>{$vo.email}</td>
+                                                        <td>{$vo.udi_address}</td>
+                                                        <td>{$vo.udi_dep_id}</td>
+                                                        <td>{$vo.udi_auto_id}</td>
+                                                        <td>
+                                                            <a href="__ROOT__/Admin/User/doAction/action/the/id/{$vo.uid}">
+                                                                <i class="fa fa-edit"></i>编辑
+                                                            </a>
+                                                            <if condition="$vo['uid'] eq $_SESSION['uid']">
+                                                                不能删除
+                                                            <else />
+                                                                <a href="javascript:delUser({$vo['uid']});">
+                                                                    &nbsp <i class="fa fa-trash">删除</i>
+                                                                </a>
+                                                            </if>
+                                                        </td>
+                                                    </tr>
+                                                </foreach>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div><!-- ./smart-widget-inner -->
+                                </div><!-- ./smart-widget -->
+                            </div>
+                        </notempty>
+
+                        <!-- 显示选择的用户信息-->
+                        <notempty name = "the">
+                            <div class="col-md-3 user-profile-sidebar m-bottom-md">
+                                <div class="row">
+                                    <div class="col-sm-4 col-md-12">
+                                        <div class="user-profile-pic">
+                                            <img src="__PUBLIC__/img/Admin/profile/{$_SESSION['img']}" alt="">
+                                            <div class="ribbon-wrapper">
+                                                <div class="ribbon-inner shadow-pulse bg-success">
+                                                    Elite
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-12">
+                                        <div class="user-name m-top-sm">{$userInfo.username}<i class="fa fa-circle text-success m-left-xs font-14"></i></div>
+
+                                        <div class="m-top-sm">
+
+                                            <div class="m-top-xs">
+                                                <i class="fa fa-briefcase user-profile-icon"></i>
+                                                部门:{$userInfo.udi_dep_id}
+                                            </div>
+
+                                            <div class="m-top-xs">
+                                                <i class="fa fa-external-link user-profile-icon"></i>
+                                                职位:{$userInfo.udi_auto_id}
+                                            </div>
+                                        </div>
+
+                                        <div class="m-top-sm text-centers">
+                                            <a class="btn btn-success"><i class="fa fa-edit m-right-xs"></i>右侧修改</a>
+                                        </div>
+
+                                        <h4 class="m-top-md m-bottom-sm">个人描述</h4>
+                                        <p class="m-top-sm">
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales at.
+                                        <p>
+
+                                        <h4 class="m-top-md m-bottom-sm">点击分享</h4>
+
+                                        <a class="social-link facebook-hover"><i class="fa fa-weibo"></i></a>
+                                        <a class="social-link twitter-hover"><i class="fa fa-wechat"></i></a>
+                                        <a class="social-link pinterest-hover"><i class="fa fa-qq"></i></a>
+
+                                    </div>
+                                </div><!-- ./row -->
+                            </div>
+                            <div class="col-md-9">
+                                <div class="smart-widget">
+                                    <div class="smart-widget-inner">
+                                        <ul class="nav nav-tabs tab-style2 tab-right bg-grey">
+
+                                            <li>
+                                                <a href="#" data-toggle="tab">
+                                                    <span class="icon-wrapper"><i class="fa fa-book"></i></span>
+                                                    <span class="text-wrapper">个人信息</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                        <div class="smart-widget-body">
+                                            <div class="tab-content">
+                                                <div class="tab-pane fade in active">
+                                                    <h4 class="header-text m-top-md">General Information</h4>
+                                                    <form class="form-horizontal m-top-md">
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">登录ID</label>
+                                                            <div class="col-sm-9">
+                                                                <input type="text" readonly class="form-control" value="{$userInfo.login_name}">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">昵称</label>
+                                                            <div class="col-sm-9">
+                                                                <input type="text" class="form-control" value="{$userInfo.username}">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">性别</label>
+                                                            <div class="col-sm-9">
+                                                                <div class="radio inline-block">
+                                                                    <div class="custom-radio m-right-xs">
+                                                                        <if condition = "$userInfo.udi_sex eq 1">
+                                                                            <input type="radio" id="inlineRadio1" checked name="profileGender">
+                                                                            <else />
+                                                                            <input type="radio" id="inlineRadio1"  name="profileGender">
+                                                                        </if>
+
+                                                                        <label for="inlineRadio1"></label>
+                                                                    </div>
+                                                                    <div class="inline-block vertical-top">男</div>
+                                                                </div>
+                                                                <div class="radio inline-block m-left-sm">
+                                                                    <div class="custom-radio m-right-xs">
+                                                                        <if condition = "$userInfo.udi_sex eq 0">
+                                                                            <input type="radio" id="inlineRadio2" checked name="profileGender">
+                                                                            <else />
+                                                                            <input type="radio" id="inlineRadio2" name="profileGender">
+                                                                        </if>
+                                                                        <label for="inlineRadio2"></label>
+
+                                                                    </div>
+                                                                    <div class="inline-block vertical-top">女</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">头像</label>
+                                                            <div class="col-sm-9">
+                                                                <input type="file">
+                                                            </div>
+                                                        </div><!-- /form-group -->
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label"></label>
+                                                            <div class="col-sm-9">
+                                                                <img src="__PUBLIC__/img/Admin/profile/{$_SESSION['img']}" width="120"/>
+                                                            </div>
+
+                                                        </div><!-- /form-group -->
+
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">地址</label>
+                                                            <div class="col-sm-9">
+                                                                <textarea rows="4" class="form-control">{$userInfo.udi_address}</textarea>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">手机</label>
+                                                            <div class="col-sm-9">
+                                                                <input type="text" class="form-control" value="{$userInfo.udi_tel}">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">个人描述</label>
+                                                            <div class="col-sm-9">
+                                                                <textarea rows="4" class="form-control">{$userInfo.udi_description}</textarea>
+                                                            </div>
+                                                        </div>
+
+
+                                                        <!--<h4 class="header-text m-top-lg"></h4>-->
+
+                                                        <div class="form-group m-top-lg">
+                                                            <label class="col-sm-3 control-label"></label>
+                                                            <div class="col-sm-9">
+                                                                <a class="btn btn-default">提交</a>
+                                                                <a class="btn btn-info m-left-xs">取消</a>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div><!-- ./tab-pane -->
+                                            </div><!-- ./tab-content -->
+                                        </div><!-- ./smart-widget-body -->
+                                    </div><!-- ./smart-widget-inner -->
+                                </div><!-- ./smart-widget -->
+                            </div>
+                        </notempty>
+
+                        <!-- 新增用户信息-->
+                        <notempty name = "add">
+                            <div class="col-md-3 user-profile-sidebar m-bottom-md">
+                            <div class="row">
+                                <div class="col-sm-4 col-md-12">
+                                    <div class="user-profile-pic">
+                                        <img src="__PUBLIC__/img/Admin/profile/{$_SESSION['img']}" alt="">
+                                        <div class="ribbon-wrapper">
+                                            <div class="ribbon-inner shadow-pulse bg-success">
+                                                Elite
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-md-12">
+                                    <div class="user-name m-top-sm">{$userInfo.username}<i class="fa fa-circle text-success m-left-xs font-14"></i></div>
+
+                                    <div class="m-top-sm">
+
+                                        <div class="m-top-xs">
+                                            <i class="fa fa-briefcase user-profile-icon"></i>
+                                            部门:{$userInfo.udi_dep_id}
+                                        </div>
+
+                                        <div class="m-top-xs">
+                                            <i class="fa fa-external-link user-profile-icon"></i>
+                                            职位:{$userInfo.udi_auto_id}
+                                        </div>
+                                    </div>
+
+                                    <div class="m-top-sm text-centers">
+                                        <a class="btn btn-success"><i class="fa fa-edit m-right-xs"></i>右侧修改</a>
+                                    </div>
+
+                                    <h4 class="m-top-md m-bottom-sm">个人描述</h4>
+                                    <p class="m-top-sm">
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales at.
+                                    <p>
+
+                                    <h4 class="m-top-md m-bottom-sm">点击分享</h4>
+
+                                    <a class="social-link facebook-hover"><i class="fa fa-weibo"></i></a>
+                                    <a class="social-link twitter-hover"><i class="fa fa-wechat"></i></a>
+                                    <a class="social-link pinterest-hover"><i class="fa fa-qq"></i></a>
+
+                                </div>
+                            </div><!-- ./row -->
+                        </div>
+                            <div class="col-md-9">
+                                <div class="smart-widget">
+                                    <div class="smart-widget-inner">
+                                        <ul class="nav nav-tabs tab-style2 tab-right bg-grey">
+
+                                            <li>
+                                                <a href="#" data-toggle="tab">
+                                                    <span class="icon-wrapper"><i class="fa fa-book"></i></span>
+                                                    <span class="text-wrapper">个人信息</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                        <div class="smart-widget-body">
+                                            <div class="tab-content">
+                                                <div class="tab-pane fade in active">
+                                                    <h4 class="header-text m-top-md">General Information</h4>
+                                                    <form action="__ROOT__/Admin/User/doAction/action/addNew" class="form-horizontal m-top-md" enctype="multipart/form-data" method="post">
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">用户名（必填）</label>
+                                                            <div class="col-sm-8">
+                                                                <input type="text" class="form-control" value="" name="user_login">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">昵称</label>
+                                                            <div class="col-sm-8">
+                                                                <input type="text" class="form-control" value="" name="user_name">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">电子邮件（必填）</label>
+                                                            <div class="col-sm-8">
+                                                                <input type="text" class="form-control" value="" name="user_email">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">性别</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="radio inline-block">
+                                                                    <div class="custom-radio m-right-xs">
+                                                                        <input type="radio" checked id="sex1"  name="sex">
+                                                                        <label for="sex1"></label>
+                                                                    </div>
+                                                                    <div class="inline-block vertical-top">男</div>
+                                                                </div>
+                                                                <div class="radio inline-block m-left-sm">
+                                                                    <div class="custom-radio m-right-xs">
+                                                                        <input type="radio" id="sex2" name="sex">
+                                                                        <label for="sex2"></label>
+
+                                                                    </div>
+                                                                    <div class="inline-block vertical-top">女</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">密码</label>
+                                                            <div class="col-sm-8">
+                                                                <input type="text" class="form-control" value="{$autopass}" name="pass">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">头像</label>
+                                                            <div class="col-sm-8">
+                                                                <input type="file">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label"></label>
+                                                            <div class="col-sm-8">
+                                                                <img src="__PUBLIC__/img/Admin/profile/profile1.jpg" width="120"/>
+                                                            </div>
+
+                                                        </div><!-- /form-group -->
+
+                                                        <!--<div class="form-group">-->
+                                                            <!--<label class="col-sm-3 control-label">地址</label>-->
+                                                            <!--<div class="col-sm-8">-->
+                                                                <!--<textarea rows="4" class="form-control"></textarea>-->
+                                                            <!--</div>-->
+                                                        <!--</div>-->
+
+                                                        <!--<div class="form-group">-->
+                                                            <!--<label class="col-sm-3 control-label">个人描述</label>-->
+                                                            <!--<div class="col-sm-8">-->
+                                                                <!--<textarea rows="4" class="form-control"></textarea>-->
+                                                            <!--</div>-->
+                                                        <!--</div>-->
+
+                                                        <!--<div class="form-group">-->
+                                                            <!--<label class="col-sm-3 control-label">手机</label>-->
+                                                            <!--<div class="col-sm-8">-->
+                                                                <!--<input type="text" class="form-control" value="">-->
+                                                            <!--</div>-->
+                                                        <!--</div>-->
+
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">发送用户通知</label>
+                                                            <div class="col-sm-8">
+
+                                                                <div class="checkbox inline-block">
+                                                                    <div class="custom-checkbox">
+                                                                        <input type="checkbox" id="isSend" class="checkbox-blue" checked>
+                                                                        <label for="isSend"></label>
+                                                                    </div>
+                                                                    <div class="inline-block vertical-top">
+                                                                        向新用户发送有关账户详情的电子邮件
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+
+
+                                                        <!--<h4 class="header-text m-top-lg"></h4>-->
+
+                                                        <div class="form-group m-top-lg">
+                                                            <label class="col-sm-3 control-label"></label>
+                                                            <div class="col-sm-8">
+                                                                <input type="submit" class="btn btn-default" value="提交">
+                                                                <input type="reset" class="btn btn-info m-left-xs" value="取消">
+                                                                <!--<a class="btn btn-default">提交</a>-->
+                                                                <!--<a class="btn btn-info m-left-xs">取消</a>-->
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div><!-- ./tab-pane -->
+                                            </div><!-- ./tab-content -->
+                                        </div><!-- ./smart-widget-body -->
+                                    </div><!-- ./smart-widget-inner -->
+                                </div><!-- ./smart-widget -->
+                            </div>
+                        </notempty>
+                    </div>
+                </div>
+			</div><!-- /main-container -->
+            <!-- 导入footer -->
+            <include file = 'Index/footer'/>
+		</div><!-- /wrapper -->
+
+		<a href="#" class="scroll-to-top hidden-print"><i class="fa fa-chevron-up fa-lg"></i></a>
+
+        <!-- Jquery -->
+        <script src="__PUBLIC__/js/Admin/jquery-1.11.1.min.js"></script>
+
+        <!-- Bootstrap -->
+        <script src="__PUBLIC__/js/Admin/bootstrap.min.js"></script>
+
+        <!-- Slimscroll -->
+        <script src='__PUBLIC__/js/Admin/jquery.slimscroll.min.js'></script>
+
+        <!-- Popup Overlay -->
+        <script src='__PUBLIC__/js/Admin/jquery.popupoverlay.min.js'></script>
+
+        <!-- Modernizr -->
+        <script src='__PUBLIC__/js/Admin/modernizr.min.js'></script>
+
+        <!-- Simplify -->
+        <script src="__PUBLIC__/js/Admin/simplify/simplify.js"></script>
+
+        <!-- 删除用户 -->
+        <script src="__PUBLIC__/js/Admin/user.js"></script>
+
+  	</body>
+</html>
