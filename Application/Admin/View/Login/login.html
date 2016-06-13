@@ -5,14 +5,17 @@
     <meta content="noindex,follow" name="robots">
     
 	<title>稿库系统 ‹ 登录</title>
+
     
-    <link href="__PUBLIC__/css/Admin/login.css?v=20160103" type="text/css" rel="stylesheet">
-    
+    <!-- <link href="__PUBLIC__/css/Admin/bootstrap.min.css?v=20160121" type="text/css" rel="stylesheet"> -->
+    <link href="__PUBLIC__/css/Admin/login.css?v=20160121" type="text/css" rel="stylesheet">
+
+
 </head>
 <body class="login login-action-login wp-core-ui  locale-zh-cn">
 <div id="login">
     <h1>
-        <a tabindex="-1" title="ZanBlog" href="http://localhost/NewWordpress">稿库系统</a>
+        <a tabindex="-1" title="edit" href="http://localhost/NewWordpress">稿库系统</a>
     </h1>
 	
     <form method="post" action="__APP__/Admin/Login/login" id="loginform" name="loginform">
@@ -41,25 +44,24 @@
         <a href="lostpassword.html">忘记密码？</a>
     </p>
 
-    <script type="text/javascript">
-        function wp_attempt_focus(){
-            setTimeout( function(){ try{
-                d = document.getElementById('user_login');
-                d.focus();
-                d.select();
-                } catch(e){}
-            }, 200);
-        }
+<script type="text/javascript">
+    function wp_attempt_focus(){
+        setTimeout( function(){ try{
+            d = document.getElementById('user_login');
+            d.focus();
+            d.select();
+            } catch(e){}
+        }, 200);
+    }
 
-        wp_attempt_focus();
-        if(typeof wpOnload=='function')wpOnload();
-    </script>
+    wp_attempt_focus();
+    if(typeof wpOnload=='function')wpOnload();
+</script>
 
-    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
-    <script type="text/javascript" src="__PUBLIC__/js/common.js?v=20160101"></script>
-    <script type="text/javascript" src="__PUBLIC__/js/Admin/login.js?v=20160104"></script>
-    
-    <div class="clear"></div>
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/common.js?v=20160101"></script>
+<script type="text/javascript" src="__PUBLIC__/js/Admin/login.js?v=20160104"></script>
 </div>
+<div class="clear"></div>
 </body>
 </html>
