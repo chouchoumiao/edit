@@ -1,3 +1,42 @@
+$(function(){
+
+    $('#upload').change(function(){
+
+        //alert($('#upload').val());
+        //$('#upload-img').src = '/edit/Public/img/Admin/profile/profile2.jpg';
+        $("#upload-img").attr("src",$('#upload').val());
+    });
+
+});
+
+function checkForm(){
+
+    var userval = $('#user_login').val();
+    if( isNull( userval ) ){
+        return '用户名不能为空！';
+    }
+
+    if( userval.length < 6){
+        return '用户名必须大于等于6位！';
+    }
+
+    var emailval = $('#user_email').val();
+    if( (isNull( emailval )) || ('' == cTrim(emailval,0)) ){
+        return '邮箱地址不能为空！';
+    }
+    if( !isEmail( emailval ) ){
+        return '请输入正确的邮箱地址！';
+    }
+
+    var passval = $('#user_pass').val();
+
+    if( (isNull( passval )) || ('' == cTrim(passval,0)) ){
+        return '密码不能为空！';
+    }
+
+    return '';
+}
+
 function delUser(id){
 
     if (!confirm('确定要删除吗？')){
@@ -25,5 +64,5 @@ function delUser(id){
         }
         ,error:function(xhr){alert('PHP页面有错误！'+url+xhr.responseText);}
     });
-
 }
+

@@ -18,7 +18,8 @@
 
 		<!-- Simplify -->
 		<link href="__PUBLIC__/css/Admin/simplify.min.css" rel="stylesheet">
-	
+        <!-- 删除用户 -->
+        <script src="__PUBLIC__/js/Admin/user.js"></script>
   	</head>
 
   	<body class="overflow-hidden">
@@ -281,7 +282,7 @@
                             <div class="row">
                                 <div class="col-sm-4 col-md-12">
                                     <div class="user-profile-pic">
-                                        <img src="__PUBLIC__/img/Admin/profile/{$_SESSION['img']}" alt="">
+                                        <img src="__PUBLIC__/img/Admin/profile/profile1.jpg" alt="">
                                         <div class="ribbon-wrapper">
                                             <div class="ribbon-inner shadow-pulse bg-success">
                                                 Elite
@@ -341,21 +342,21 @@
                                                     <h4 class="header-text m-top-md">General Information</h4>
                                                     <form action="__ROOT__/Admin/User/doAction/action/addNew" class="form-horizontal m-top-md" enctype="multipart/form-data" method="post">
                                                         <div class="form-group">
-                                                            <label class="col-sm-3 control-label">用户名（必填）</label>
+                                                            <label class="col-sm-3 control-label">用户名（必填大于六位）</label>
                                                             <div class="col-sm-8">
-                                                                <input type="text" class="form-control" value="" name="user_login">
+                                                                <input type="text" class="form-control" value="" name="user_login" id="user_login">
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="col-sm-3 control-label">昵称</label>
                                                             <div class="col-sm-8">
-                                                                <input type="text" class="form-control" value="" name="user_name">
+                                                                <input type="text" class="form-control" value="" name="user_name" id="user_name">
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="col-sm-3 control-label">电子邮件（必填）</label>
                                                             <div class="col-sm-8">
-                                                                <input type="text" class="form-control" value="" name="user_email">
+                                                                <input type="text" class="form-control" value="" name="user_email" id="user_email">
                                                             </div>
                                                         </div>
 
@@ -364,14 +365,14 @@
                                                             <div class="col-sm-8">
                                                                 <div class="radio inline-block">
                                                                     <div class="custom-radio m-right-xs">
-                                                                        <input type="radio" checked id="sex1"  name="sex">
+                                                                        <input type="radio" checked id="sex1" value="1" name="sex">
                                                                         <label for="sex1"></label>
                                                                     </div>
                                                                     <div class="inline-block vertical-top">男</div>
                                                                 </div>
                                                                 <div class="radio inline-block m-left-sm">
                                                                     <div class="custom-radio m-right-xs">
-                                                                        <input type="radio" id="sex2" name="sex">
+                                                                        <input type="radio" id="sex2" value="0" name="sex">
                                                                         <label for="sex2"></label>
 
                                                                     </div>
@@ -380,53 +381,45 @@
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
-                                                            <label class="col-sm-3 control-label">密码</label>
+                                                            <label class="col-sm-3 control-label">初始密码(可修改)</label>
                                                             <div class="col-sm-8">
-                                                                <input type="text" class="form-control" value="{$autopass}" name="pass">
+                                                                <input type="text" class="form-control" value="{$autopass}" name="user_pass" id = "user_pass">
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="col-sm-3 control-label">头像</label>
                                                             <div class="col-sm-8">
-                                                                <input type="file">
+                                                                <input type="file" id="upload" name="upload">
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="col-sm-3 control-label"></label>
                                                             <div class="col-sm-8">
-                                                                <img src="__PUBLIC__/img/Admin/profile/profile1.jpg" width="120"/>
+                                                                <img src="__PUBLIC__/img/Admin/profile/profile1.jpg" width="120" id="upload-img" name="upload-img"/>
                                                             </div>
 
-                                                        </div><!-- /form-group -->
+                                                        </div>
 
-                                                        <!--<div class="form-group">-->
-                                                            <!--<label class="col-sm-3 control-label">地址</label>-->
-                                                            <!--<div class="col-sm-8">-->
-                                                                <!--<textarea rows="4" class="form-control"></textarea>-->
-                                                            <!--</div>-->
-                                                        <!--</div>-->
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">部门</label>
+                                                            <div class="col-sm-8">
+                                                                {$dept}
+                                                            </div>
+                                                        </div>
 
-                                                        <!--<div class="form-group">-->
-                                                            <!--<label class="col-sm-3 control-label">个人描述</label>-->
-                                                            <!--<div class="col-sm-8">-->
-                                                                <!--<textarea rows="4" class="form-control"></textarea>-->
-                                                            <!--</div>-->
-                                                        <!--</div>-->
-
-                                                        <!--<div class="form-group">-->
-                                                            <!--<label class="col-sm-3 control-label">手机</label>-->
-                                                            <!--<div class="col-sm-8">-->
-                                                                <!--<input type="text" class="form-control" value="">-->
-                                                            <!--</div>-->
-                                                        <!--</div>-->
-
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">角色</label>
+                                                            <div class="col-sm-8">
+                                                                {$auto}
+                                                            </div>
+                                                        </div>
                                                         <div class="form-group">
                                                             <label class="col-sm-3 control-label">发送用户通知</label>
                                                             <div class="col-sm-8">
 
                                                                 <div class="checkbox inline-block">
                                                                     <div class="custom-checkbox">
-                                                                        <input type="checkbox" id="isSend" class="checkbox-blue" checked>
+                                                                        <input type="checkbox" id="isSend" name="isSend" class="checkbox-blue" checked>
                                                                         <label for="isSend"></label>
                                                                     </div>
                                                                     <div class="inline-block vertical-top">
@@ -443,10 +436,9 @@
                                                         <div class="form-group m-top-lg">
                                                             <label class="col-sm-3 control-label"></label>
                                                             <div class="col-sm-8">
-                                                                <input type="submit" class="btn btn-default" value="提交">
+                                                                <input type="submit" class="btn btn-default" onclick="return checkForm();" value="提交">
                                                                 <input type="reset" class="btn btn-info m-left-xs" value="取消">
-                                                                <!--<a class="btn btn-default">提交</a>-->
-                                                                <!--<a class="btn btn-info m-left-xs">取消</a>-->
+
                                                             </div>
                                                         </div>
                                                     </form>
@@ -484,8 +476,7 @@
         <!-- Simplify -->
         <script src="__PUBLIC__/js/Admin/simplify/simplify.js"></script>
 
-        <!-- 删除用户 -->
-        <script src="__PUBLIC__/js/Admin/user.js"></script>
+
 
   	</body>
 </html>

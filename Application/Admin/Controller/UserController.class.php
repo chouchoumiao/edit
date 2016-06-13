@@ -74,15 +74,27 @@ class UserController extends CommonController {
                     break;
                 //追加用户
                 case 'add':
+
+                    $this->assign('add',true);
+
                     $autopass = make_password();
                     $this->assign('autopass',$autopass);
-                    $this->assign('add',true);
+
+                    //追加部门设置
+                    $this->assign('dept',$this->dept());
+
+                    //追加角色设置
+                    $this->assign('auto',$this->auto());
+
                     $this->display('user');
                     break;
 
                 //追加用户
                 case 'addNew':
 
+//                    dump($_POST);exit;
+
+                    dump($_FILES['upload']);exit;
                     //检查提交的文本框格式
                     $msg = ValidateModel::CheckAddUser();
                     if('' != $msg){
@@ -102,6 +114,56 @@ class UserController extends CommonController {
             }
         }
 
+    }
+
+    /**
+     * 拼接部门列表显示
+     * @return string
+     */
+    private function dept(){
+
+        $obj = D('Dept')->getAllDept();
+        $html = '';
+        for($i=0;$i<count($obj);$i++){
+
+            $html .= '<div class="checkbox inline-block">';
+            $html .= '<div class="custom-checkbox">';
+            $html .= '<input type="checkbox" id="dept'.$obj[$i]['id'].'" value="'.$obj[$i]['name'].'" name="dept'.$obj[$i]['id'].'" class="checkbox-purple" checked>';
+            $html .= '<label for="dept'.$obj[$i]['id'].'"></label>';
+            $html .= '</div>';
+            $html .= '<div class="inline-block vertical-top">'.$obj[$i]['name'];
+            $html .= '</div> &nbsp &nbsp';
+            $html .= '</div>';
+        }
+
+        return $html;
+
+    }
+
+    private function auto(){
+
+        $obj = D('Auto')->getAllAuto();
+        $html = '';
+        for($i=0;$i<count($obj);$i++){
+
+            $html .= '<div class="radio inline-block">';
+            $html .= '<div class="custom-radio m-right-xs">';
+
+            if( 1 == $obj[$i]['id']){
+                $html .= '<input type="radio" id="auto'.$obj[$i]['id'].'" value="'.$obj[$i]['name'].'" checked name="auto">';
+            }else{
+                $html .= '<input type="radio" id="auto'.$obj[$i]['id'].'" value="'.$obj[$i]['name'].'" name="auto">';
+            }
+            $html .= '<label for="auto'.$obj[$i]['id'].'"></label>';
+            $html .= '</div>';
+            $html .= '<div class="inline-block vertical-top">'.$obj[$i]['name'];
+
+            $html .= '</div> &nbsp &nbsp';
+            $html .= '</div>';
+
+        }
+
+        return $html;
     }
 
     //public function doAction(){
