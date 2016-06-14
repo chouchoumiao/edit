@@ -12,8 +12,18 @@ namespace Admin\Model;
  */
 	class DeptModel {
 
+        private $_model;
+
+        public function __construct(){
+            $this->_model = M('dept');
+        }
+
         public function getAllDept(){
-            return M('dept')->select();
+            return $this->_model->select();
+        }
+
+        public function getDeptCount(){
+            return $this->_model->count();
         }
 
 	}

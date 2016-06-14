@@ -92,22 +92,21 @@ class UserController extends CommonController {
                 //追加用户
                 case 'addNew':
 
-//                    dump($_POST);exit;
+//                    $deptList = array();
+//                    //$deptCount = D('Dept')->getDeptCount();
+//                    for($i = 1;$i<=4;$i++){
+//                        $name = 'dept'.$i;
+//                        if($_POST[$name]){
+//                            $deptList[] = I("post.a");
+//                        }
+//                    }
+//                    $dept = json_encode($deptList);
+//                    echo empty(array_filter(json_decode(dept)));exit;
+//
+                    //D('User')->checkAddNewUser();
+                    //dump($_POST);exit;
 
-                    dump($_FILES['upload']);exit;
-                    //检查提交的文本框格式
-                    $msg = ValidateModel::CheckAddUser();
-                    if('' != $msg){
-                        $this->error($msg);
-                    }
-
-                    if(D('User')->addToUser(I('post.pass'))){
-
-                        $this->redirect('Admin/User/doAction/action/all');
-                    }else{
-                        $this->error('新用户追加失败');
-                    }
-
+                    D('User')->addNewUser();
                     break;
 
 
@@ -128,7 +127,7 @@ class UserController extends CommonController {
 
             $html .= '<div class="checkbox inline-block">';
             $html .= '<div class="custom-checkbox">';
-            $html .= '<input type="checkbox" id="dept'.$obj[$i]['id'].'" value="'.$obj[$i]['name'].'" name="dept'.$obj[$i]['id'].'" class="checkbox-purple" checked>';
+            $html .= '<input type="checkbox" id="dept'.$obj[$i]['id'].'" value="'.$obj[$i]['id'].'" name="dept'.$obj[$i]['id'].'" class="checkbox-purple" checked>';
             $html .= '<label for="dept'.$obj[$i]['id'].'"></label>';
             $html .= '</div>';
             $html .= '<div class="inline-block vertical-top">'.$obj[$i]['name'];
@@ -150,9 +149,9 @@ class UserController extends CommonController {
             $html .= '<div class="custom-radio m-right-xs">';
 
             if( 1 == $obj[$i]['id']){
-                $html .= '<input type="radio" id="auto'.$obj[$i]['id'].'" value="'.$obj[$i]['name'].'" checked name="auto">';
+                $html .= '<input type="radio" id="auto'.$obj[$i]['id'].'" value="'.$obj[$i]['id'].'" checked name="auto">';
             }else{
-                $html .= '<input type="radio" id="auto'.$obj[$i]['id'].'" value="'.$obj[$i]['name'].'" name="auto">';
+                $html .= '<input type="radio" id="auto'.$obj[$i]['id'].'" value="'.$obj[$i]['id'].'" name="auto">';
             }
             $html .= '<label for="auto'.$obj[$i]['id'].'"></label>';
             $html .= '</div>';
