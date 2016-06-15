@@ -20,6 +20,7 @@ namespace Admin\Model;
 		private $updateTime;
         private $dept;
         private $auto;
+        private $img;
 
         private $isSend; //新增用户是是否发送邮件通知
 
@@ -303,6 +304,12 @@ namespace Admin\Model;
                 exit;
             }
 
+            //追加明细表后将session中的新图片信息清空
+            if((isset($_SESSION['newImg'])) && ( '' != $_SESSION['newImg'])){
+                $_SESSION['newImg'] = '';
+                unset($_SESSION['newImg']);
+            }
+
             //向新用户发送邮件
             if( 'on' == $this->isSend ){
                 if(!$this->sendMailToUser()){
@@ -359,7 +366,6 @@ namespace Admin\Model;
                 'username' => $this->username,	//注册时候默认昵称和用户名设置为一样
                 'autopass' => $this->autopass,
                 'password'=> $this->password,
-                'head_img'=> 'profile8.jpg',
                 'email' => $this->email,
                 'token' => $this->token,
                 'token_exptime' => $this->token_exptime,
@@ -371,11 +377,19 @@ namespace Admin\Model;
 
 
         private function setNewUserDetailData(){
+
+            if((isset($_SESSION['newImg'])) && ( '' != $_SESSION['newImg'])){
+                $this->img = $_SESSION['newImg'];
+            }else{
+                $this->img = 'default.jpg';
+            }
+
             $this->detailDataArray = array(
                 'uid' => $this->id,
                 'udi_sex'=>$this->sex,
                 'udi_tel' => '',
                 'udi_address' => '',
+                'udi_img'=> $this->img,
                 'udi_dep_id'=>$this->dept,
                 'udi_auto_id'=>$this->auto,
                 'udi_description'=> '',

@@ -341,7 +341,7 @@
                                         <div class="smart-widget-body">
                                             <div class="tab-content">
                                                 <div class="tab-pane fade in active">
-                                                    <h4 class="header-text m-top-md">General Information</h4>
+                                                    <h4 class="header-text m-top-md">新增 用户</h4>
                                                     <form action="__ROOT__/Admin/User/doAction/action/addNew" class="form-horizontal m-top-md" enctype="multipart/form-data" method="post">
                                                         <div class="form-group">
                                                             <label class="col-sm-3 control-label">用户名（必填大于六位）</label>
@@ -391,7 +391,7 @@
                                                         <div class="form-group">
                                                             <label class="col-sm-3 control-label">头像</label>
                                                             <div class="col-sm-8">
-                                                                <input id="file_upload" name="file_upload" type="file" multiple="true" value="">
+                                                                <input type="file" accept="image/*" id="file_upload" name="file_upload"  multiple="true" value="">
                                                             </div>
                                                         </div>
 
@@ -487,14 +487,43 @@
         <script>
             var img = '';
             $('#file_upload').uploadify({
+                    'queueID'  : 'some_file_queue',
                     'swf'      : '__PUBLIC__/uploadify.swf',
-                    'uploader' : '{:U("Index/upload")}',   //上传的方法
-                    'buttonText' : '缩略图上传',
+                    'uploader' : './Admin/User/doAction/action/upload',   //上传的方法
+                    'buttonText' : '头像上传',
                     'onUploadSuccess' : function(file, data, response) {
-                     //把所有上传的图片都放入DIV中
-                     img += "<img width='200px' src='__PUBLIC__/Uploads/"+data+"'>";
-                    $('#imgs').html(img);
-                }
+
+                        var isOk = false;
+                        if(data.indexOf("jpg") > -1){
+                            isOk = true;
+                        }
+
+                        if(data.indexOf("png") > -1){
+                            isOk = true;
+                        }
+
+                        if(data.indexOf("jpeg") > -1){
+                            isOk = true;
+                        }
+
+                        //$('.uploadify-queue').hide(); //不显示进度条
+
+                        if(isOk){
+                            $("#upload-img").attr("src",'__PUBLIC__/Uploads/profile/'+data);
+                        }else{
+                            alert(data);
+                            return false;
+                        }
+//                        if(data.success == 1){
+//                            //把上传上传的图片都放入DIV中
+
+//                        }else{
+//                            alert(data.msg);
+//                            return false;
+//                        }
+
+
+                    }
             });
         </script>
 

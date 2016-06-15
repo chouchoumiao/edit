@@ -21,4 +21,5 @@ namespace Admin\Model;
             echo "<script>alert('$msg');location='$url'</script>";
             exit;
         }
+
 	}

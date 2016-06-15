@@ -1,16 +1,8 @@
 <?php
 namespace Admin\Controller;
-use Admin\Model\ValidateModel;
 use Think\Controller;
 
 class UserController extends CommonController {
-    /**
-     * 显示主页面
-     */
-    public function index(){
-
-    }
-
 
     public function doAction(){
 
@@ -36,14 +28,7 @@ class UserController extends CommonController {
                     }
 
                     $userInfo = D('User')->getTheUserInfo($userId);
-                    //
-                    //if($userInfo['udi_sex'] == 1){
-                    //    $userInfo['udi_sex'] = '男';
-                    //}elseif($userInfo['udi_sex'] == 0){
-                    //    $userInfo['udi_sex'] = '女';
-                    //}else{
-                    //    $userInfo['udi_sex'] = '未知';
-                    //}
+
                     $this->assign('the',true);
                     $this->assign('userInfo',$userInfo);
                     $this->display('user');
@@ -92,23 +77,28 @@ class UserController extends CommonController {
                 //追加用户
                 case 'addNew':
 
-//                    $deptList = array();
-//                    //$deptCount = D('Dept')->getDeptCount();
-//                    for($i = 1;$i<=4;$i++){
-//                        $name = 'dept'.$i;
-//                        if($_POST[$name]){
-//                            $deptList[] = I("post.a");
-//                        }
-//                    }
-//                    $dept = json_encode($deptList);
-//                    echo empty(array_filter(json_decode(dept)));exit;
-//
-                    //D('User')->checkAddNewUser();
-                    //dump($_POST);exit;
-
                     D('User')->addNewUser();
                     break;
 
+                //选择上传图片
+                case 'upload':
+
+                    //图片上传设置
+                    $config = array(
+                        'maxSize'    =>    3145728,
+                        'rootPath'	 =>    'Public',
+                        'savePath'   =>    '/Uploads/profile/',
+                        'saveName'   =>    array('uniqid',''),
+                        'exts'       =>    array('jpg','png','jpeg'),
+                        'autoSub'    =>    false,
+                        'subName'    =>    array('date','Ymd'),
+                    );
+
+                    echo $this->upload($config);
+                    exit;
+                    break;
+                default:
+                    break;
 
             }
         }
@@ -165,70 +155,27 @@ class UserController extends CommonController {
         return $html;
     }
 
-    //public function doAction(){
-    //
-    //    $action = $_GET['action'];
-    //    if( isset($action) && '' != $action ){
-    //        switch($action){
-    //
-    //            //取得所有用户
-    //            case 'all':
-    //                $this->assign('allUser',D('User')->getAllUserInfo());
-    //                $this->display('all');
-    //                break;
-    //
-    //            //取得当前用户
-    //            case 'the':
-    //                //如果有传值过来用查询传值的用户
-    //                if(isset($_GET['id']) && '' != $_GET['id']){
-    //                    $userId = I('get.id');
-    //                }else{  //没有传值的话就查询本登录的用户信息
-    //                    $userId = $_SESSION['uid'];
-    //                }
-    //
-    //                $userInfo = D('User')->getTheUserInfo($userId);
-    //                //
-    //                //if($userInfo['udi_sex'] == 1){
-    //                //    $userInfo['udi_sex'] = '男';
-    //                //}elseif($userInfo['udi_sex'] == 0){
-    //                //    $userInfo['udi_sex'] = '女';
-    //                //}else{
-    //                //    $userInfo['udi_sex'] = '未知';
-    //                //}
-    //
-    //                $this->assign('userInfo',$userInfo);
-    //                $this->display('profile');
-    //                break;
-    //
-    //            //删除用户
-    //            case 'del':
-    //
-    //                //如果有传值过来用查询传值的用户
-    //                if(isset($_GET['id']) && '' != $_GET['id']){
-    //
-    //                    if(D('User')->delTheUserInfo(I('get.id'))){
-    //                        $arr['success'] = 1;
-    //                    }else{
-    //                        $arr['success'] = 0;
-    //                    }
-    //
-    //                    echo $arr['success'];exit;
-    //                    echo json_encode($arr);
-    //                    break;
-    //                }else{
-    //                    $this->error('无法取得要删除的用户id');
-    //                }
-    //            //追加用户
-    //            case 'add':
-    //
-    //                $this->display('add');
-    //                break;
-    //
-    //
-    //        }
-    //    }
-    //
-    //}
+    private function upload($config){
+        if (!empty($_FILES)) {
+
+            $upload = new \Think\Upload($config);// 实例化上传类
+            $images = $upload->upload();
+            //判断是否有图
+            if($images){
+
+                $name = $images['Filedata']['savename'];
+                $_SESSION['newImg'] = $name;    //如果传上传图成功则将图片路径写入Session，方便写入数据库
+
+                return $name;
+            }
+            else{
+                $_SESSION['newImg'] = '';       //上传失败则清空session中的新图片信息
+                return $upload->getError();
+            }
+        }
+    }
+
+
 
 
 }
