@@ -10,6 +10,8 @@ class IndexController extends CommonController {
      */
     public function index(){
 
+        //$this->display('upload');
+
         //dump($_SESSION);exit;
         //取得当前用户的信息
         $userInfo = D('User')->getTheUserInfo($_SESSION['uid']);
