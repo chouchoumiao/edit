@@ -27,26 +27,163 @@ namespace Admin\Model;
         private $dataArray; //整合后主表数据
         private $detailDataArray; //整合后明细数据
 
+
+        /**
+         * 登录用户名密码判定
+         * @return mixed
+         */
+        public function checklogin(){
+            //使用I内置函数过滤，如果
+            $where['login_name'] = I('post.user_login');
+            $where['password'] = md5(I('post.user_pass'));
+
+            return M('m_user')->where($where)->find();
+        }
+
+        /**
+         * 也显示所有用户一览表使用后(管理员)
+         * 取得关联表的用户数据，并通过转化生出页面可显示的数据
+
+         * @return mixed
+         */
+        public function showUserList($limit){
+
+            //取得用户信息
+            $obj = $this->allUser($limit);
+
+            //返回格式化好的数据，用于显示
+            return $this->dataFormart($obj);
+
+        }
+
+
+        /**
+         * 性别需要转化
+         * 部门需要转化
+         * 角色需要转化
+         * 时间戳转化为时间
+         * @param $obj
+         * @return mixed
+         */
+        private function dataFormart($obj)
+        {
+
+            $sexArr = C('SEX_ARRAY');    //取得自定义常量性别数组
+            $deptArr = C('DEPT_ARRAY');   //取得自定义常量部门数组
+            $autoArr = C('AUTO_ARRAY');   //取得自定义常量角色数组
+            $statusArr = C('STATUS_ARRAY'); //取得自定义常量激活状态数组
+
+            //二维数组(取得多条数据)
+            if(ToolModel::isTwoArray($obj)){
+                for ($i = 0; $i < count($obj); $i++) {
+
+                    $obj[$i]['udi_sex'] = $sexArr[$obj[$i]['udi_sex']];     //处理sex数字转为为文字
+
+                    //处理部门数字转化为文字 start
+                    $dept = json_decode($obj[$i]['udi_dep_id']);            //json转化为数字
+
+                    $obj[$i]['udi_dep_id'] = '';                            //先清空原来的数组
+
+                    //将json转化的数组循环判断并显示名称
+                    for ($j = 0; $j < count($dept); $j++) {
+
+                        //为空则不输出
+                        if ('' != $dept[$j]) {
+                            //最后一个不需要输出间隔符
+                            if ((count($dept) - 1) == $j) {
+                                $obj[$i]['udi_dep_id'] .= $deptArr[$dept[$j]];
+                            } else {
+                                $obj[$i]['udi_dep_id'] .= $deptArr[$dept[$j]] . '，';
+                            }
+                        }
+                    }
+                    //处理部门数字转化为文字 end
+
+                    //处理角色数字转为为文字
+                    $obj[$i]['udi_auto_id'] = $autoArr[$obj[$i]['udi_auto_id']];
+
+                    //处理激活状态数字转为为文字
+                    $obj[$i]['status'] = $statusArr[$obj[$i]['status']];
+
+                    //创建时间戳转化为时间
+                    $obj[$i]['regtime'] = ToolModel::formartTime($obj[$i]['regtime']) ;
+
+                    //更新时间戳转化为时间
+                    $obj[$i]['udi_update_time'] = ToolModel::formartTime($obj[$i]['udi_update_time']);
+                }
+            }else{      //一维数组(取得一条数据)
+
+                $obj['udi_sex'] = $sexArr[$obj['udi_sex']];     //处理sex数字转为为文字
+
+                //处理部门数字转化为文字 start
+                $dept = json_decode($obj['udi_dep_id']);            //json转化为数字
+
+                $obj['udi_dep_id'] = '';                            //先清空原来的数组
+
+                //将json转化的数组循环判断并显示名称
+                for ($j = 0; $j < count($dept); $j++) {
+
+                    //为空则不输出
+                    if ('' != $dept[$j]) {
+                        //最后一个不需要输出间隔符
+                        if ((count($dept) - 1) == $j) {
+                            $obj['udi_dep_id'] .= $deptArr[$dept[$j]];
+                        } else {
+                            $obj['udi_dep_id'] .= $deptArr[$dept[$j]] . '，';
+                        }
+                    }
+                }
+                //处理部门数字转化为文字 end
+
+                //处理角色数字转为为文字
+                $obj['udi_auto_id'] = $autoArr[$obj['udi_auto_id']];
+
+                //处理激活状态数字转为为文字
+                $obj['status'] = $statusArr[$obj['status']];
+
+                //创建时间戳转化为时间
+                $obj['regtime'] = ToolModel::formartTime($obj['regtime']) ;
+
+                //更新时间戳转化为时间
+                $obj['udi_update_time'] = ToolModel::formartTime($obj['udi_update_time']);
+
+            }
+
+            return $obj;
+        }
 		/**
 		 * 取得当前用户详细信息
 		 * 公有方法
 		 * @return mixed
 		 */
 		public function getTheUserInfo($id){
-			return $this->getTheUser($id);
+			$obj = $this->theUser($id);
+            return $this->dataFormart($obj);
 		}
 
-		/**
-		 * 取得所有用户
-		 * 公用方法
-		 * @return mixed
-		 */
-		public function getAllUserInfo(){
-			return $this->getAllUser();
-		}
+
+        /**
+         * 取得所有用户总数
+         * 公用方法
+         * @return mixed
+         */
+        public function getAllUserCount(){
+            return $this->getCount();
+        }
 
         public function delTheUserInfo($id){
             return $this->delTheUser($id);
+        }
+
+
+        /**
+         * 取得所有用户信息总数(多表查询)
+         * 私有方法
+         * @return mixed
+         */
+        private function getCount(){
+            //多表联合查询
+            return M('m_user')->join('INNER JOIN ccm_user_detail_info ON ccm_user_detail_info.uid = ccm_m_user.id')->count();
         }
 
 		/**
@@ -54,10 +191,10 @@ namespace Admin\Model;
 		 * 私有方法
 		 * @return mixed
 		 */
-		private function getTheUser($id){
+		private function theUser($id){
 			//多表联合查询
             $where['ccm_m_user.id'] = $id;
-			return M('m_user')->join('RIGHT JOIN ccm_user_detail_info ON ccm_user_detail_info.uid = ccm_m_user.id')->where($where)->find();
+			return M('m_user')->join('INNER JOIN ccm_user_detail_info ON ccm_user_detail_info.uid = ccm_m_user.id')->where($where)->find();
 		}
 
 		/**
@@ -65,9 +202,14 @@ namespace Admin\Model;
 		 * 私有方法
 		 * @return mixed
 		 */
-		private function getAllUser(){
+		private function allUser($limit){
 			//多表联合查询
-			return M('m_user')->join('RIGHT JOIN ccm_user_detail_info ON ccm_user_detail_info.uid = ccm_m_user.id')->select();
+            if('' == $limit){
+                return M('m_user')->join('INNER JOIN ccm_user_detail_info ON ccm_user_detail_info.uid = ccm_m_user.id')->select();
+            }else{
+                return M('m_user')->join('INNER JOIN ccm_user_detail_info ON ccm_user_detail_info.uid = ccm_m_user.id')->limit($limit)->select();
+            }
+
 		}
 
         private function delTheUser($id){
@@ -112,11 +254,7 @@ namespace Admin\Model;
 
             }else{
                 return 100;                   //成功
-
             }
-
-
-
         }
 
 
@@ -361,11 +499,18 @@ namespace Admin\Model;
             $this->token = md5($this->username.$this->password.$this->regtime); //创建用于激活识别码
             $this->token_exptime = time()+60*60*24*7;//过期时间为一周后
 
+            if((isset($_SESSION['newImg'])) && ( '' != $_SESSION['newImg'])){
+                $this->img = $_SESSION['newImg'];
+            }else{
+                $this->img = 'default.jpg';
+            }
+
             $this->dataArray  = array(
                 'login_name' => $this->loginName,
                 'username' => $this->username,	//注册时候默认昵称和用户名设置为一样
                 'autopass' => $this->autopass,
                 'password'=> $this->password,
+                'img'=> $this->img,
                 'email' => $this->email,
                 'token' => $this->token,
                 'token_exptime' => $this->token_exptime,
@@ -377,19 +522,11 @@ namespace Admin\Model;
 
 
         private function setNewUserDetailData(){
-
-            if((isset($_SESSION['newImg'])) && ( '' != $_SESSION['newImg'])){
-                $this->img = $_SESSION['newImg'];
-            }else{
-                $this->img = 'default.jpg';
-            }
-
             $this->detailDataArray = array(
                 'uid' => $this->id,
                 'udi_sex'=>$this->sex,
                 'udi_tel' => '',
                 'udi_address' => '',
-                'udi_img'=> $this->img,
                 'udi_dep_id'=>$this->dept,
                 'udi_auto_id'=>$this->auto,
                 'udi_description'=> '',

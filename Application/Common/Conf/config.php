@@ -1,8 +1,9 @@
 <?php
 
-define(MY_SITE, $_SERVER['SERVER_NAME']);				//发送邮件附带地址的时候需要  本地环境
-//define(MY_SITE, 'www.chouchoumiao.com');  //发送邮件附带地址的时候需要  正式环境使用
+header("Content-type: text/html;charset=utf-8");
 
+define(MY_SITE, $_SERVER['SERVER_NAME']);   //发送邮件附带地址的时候需要  本地环境
+define(PAGE_SHOW_COUNT,3);
 
 return array(
 
@@ -24,6 +25,40 @@ return array(
     'MAIL_SMTP'=>'smtp.126.com', // 邮箱SMTP服务器
     'MAIL_PASSWORD'=>'84112326Wujiayu', // 邮箱密码
 	/********************邮件设置(管理员邮箱)**************************/
+
+
+    'DEFAULT_CHARSET'       => 'utf-8', // 默认输出编码
+
+    //性别数组
+    'SEX_ARRAY' => array(
+        0=>'女',
+        1=>'男'
+    ),
+
+    //部门数组
+    'DEPT_ARRAY' => array(
+        1=>'路桥发布',
+        2=>'路桥新闻',
+        3=>'台州新闻',
+        4=>'五水共治'
+    ),
+
+    //角色数组
+    'AUTO_ARRAY' => array(
+        1=>'爆料者',
+        2=>'小编',
+        3=>'总编',
+        4=>'管理员',
+        5=>'超级管理员',
+    ),
+
+    //激活状态数组
+    'STATUS_ARRAY' => array(
+        0=>'未激活',
+        1=>'已激活'
+    ),
+
+
 
 
 

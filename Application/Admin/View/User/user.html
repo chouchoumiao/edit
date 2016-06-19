@@ -20,9 +20,9 @@
 		<link href="__PUBLIC__/css/Admin/simplify.min.css" rel="stylesheet">
 
         <link rel="stylesheet" href="__PUBLIC__/css/Admin/uploadify.css">
+        <link rel="stylesheet" href="__PUBLIC__/css/Admin/user.css">
 
-
-  	</head>
+    </head>
 
   	<body class="overflow-hidden">
 		<div class="wrapper preload">
@@ -73,29 +73,27 @@
                                             </ul>
                                         </div>
                                         <div class="smart-widget-body">
-                                            <table class="table table-hover">
-                                                <thead>
-                                                <tr>
-                                                    <th>id</th>
-                                                    <th>用户名</th>
-                                                    <th>性别</th>
+                                            <table class="table table-hover center">
+                                                <thead style="text-align: center">
+                                                <tr >
+                                                    <th>用户昵称</th>
                                                     <th>邮箱地址</th>
-                                                    <th>地址</th>
-                                                    <th>部门</th>
-                                                    <th>权限</th>
+                                                    <th>所属部门</th>
+                                                    <th>角色权限</th>
+                                                    <th>是否激活</th>
+                                                    <th>创建时间</th>
                                                     <th>操作</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
                                                 <foreach name="allUser" item="vo" key ="k">
                                                     <tr>
-                                                        <td>{$k+1}</td>
                                                         <td>{$vo.username}</td>
-                                                        <td>{$vo.udi_sex}</td>
                                                         <td>{$vo.email}</td>
-                                                        <td>{$vo.udi_address}</td>
                                                         <td>{$vo.udi_dep_id}</td>
                                                         <td>{$vo.udi_auto_id}</td>
+                                                        <td>{$vo.status}</td>
+                                                        <td>{$vo.regtime}</td>
                                                         <td>
                                                             <a href="__ROOT__/Admin/User/doAction/action/the/id/{$vo.uid}">
                                                                 <i class="fa fa-edit"></i>编辑
@@ -112,6 +110,7 @@
                                                 </foreach>
                                                 </tbody>
                                             </table>
+                                            <div>{$page}</div>
                                         </div>
                                     </div><!-- ./smart-widget-inner -->
                                 </div><!-- ./smart-widget -->
@@ -124,7 +123,7 @@
                                 <div class="row">
                                     <div class="col-sm-4 col-md-12">
                                         <div class="user-profile-pic">
-                                            <img src="__PUBLIC__/img/Admin/profile/{$_SESSION['img']}" alt="">
+                                            <img src="__PUBLIC__/Uploads/profile/{$_SESSION['img']}" alt="">
                                             <div class="ribbon-wrapper">
                                                 <div class="ribbon-inner shadow-pulse bg-success">
                                                     Elite
@@ -195,14 +194,21 @@
                                                                 <input type="text" class="form-control" value="{$userInfo.username}">
                                                             </div>
                                                         </div>
+                                                        <input type="hidden" value="{$userInfo.password}" name="oldMd5Pass"/>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">修改密码(空为不修改)</label>
+                                                            <div class="col-sm-9">
+                                                                <input type="text" class="form-control" value="" name="newPass">
+                                                            </div>
+                                                        </div>
                                                         <div class="form-group">
                                                             <label class="col-sm-3 control-label">性别</label>
                                                             <div class="col-sm-9">
                                                                 <div class="radio inline-block">
                                                                     <div class="custom-radio m-right-xs">
-                                                                        <if condition = "$userInfo.udi_sex eq 1">
+                                                                        <if condition = "$userInfo.udi_sex eq 男">
                                                                             <input type="radio" id="inlineRadio1" checked name="profileGender">
-                                                                            <else />
+                                                                        <else />
                                                                             <input type="radio" id="inlineRadio1"  name="profileGender">
                                                                         </if>
 
@@ -212,9 +218,9 @@
                                                                 </div>
                                                                 <div class="radio inline-block m-left-sm">
                                                                     <div class="custom-radio m-right-xs">
-                                                                        <if condition = "$userInfo.udi_sex eq 0">
+                                                                        <if condition = "$userInfo.udi_sex eq 女">
                                                                             <input type="radio" id="inlineRadio2" checked name="profileGender">
-                                                                            <else />
+                                                                        <else />
                                                                             <input type="radio" id="inlineRadio2" name="profileGender">
                                                                         </if>
                                                                         <label for="inlineRadio2"></label>
@@ -224,19 +230,27 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+
                                                         <div class="form-group">
                                                             <label class="col-sm-3 control-label">头像</label>
                                                             <div class="col-sm-9">
-                                                                <input type="file">
+                                                                <input type="file" accept="image/*" id="file_upload" name="file_upload"  multiple="true" value="">
                                                             </div>
-                                                        </div><!-- /form-group -->
+                                                        </div>
                                                         <div class="form-group">
                                                             <label class="col-sm-3 control-label"></label>
                                                             <div class="col-sm-9">
-                                                                <img src="__PUBLIC__/img/Admin/profile/{$_SESSION['img']}" width="120"/>
+                                                                <div id="imgs">
+                                                                    <img src="__PUBLIC__/Uploads/profile/{$userInfo.img}" width="120" id="upload-img" name="upload-img"/></div>
                                                             </div>
+                                                        </div>
 
-                                                        </div><!-- /form-group -->
+                                                        <div id="sel" style="background:#CCC; height:30px; padding-top:5px; width:60%; margin:0 auto; padding-left:20px; border:#666 solid 2px;">
+                                                            <select onChange="getCity(this)"></select>
+                                                            <select onChange="getCity(this)"></select>
+                                                            <select onChange="getCity(this)"></select>
+                                                            <select></select>
+                                                        </div>
 
                                                         <div class="form-group">
                                                             <label class="col-sm-3 control-label">地址</label>
@@ -258,10 +272,6 @@
                                                                 <textarea rows="4" class="form-control">{$userInfo.udi_description}</textarea>
                                                             </div>
                                                         </div>
-
-
-                                                        <!--<h4 class="header-text m-top-lg"></h4>-->
-
                                                         <div class="form-group m-top-lg">
                                                             <label class="col-sm-3 control-label"></label>
                                                             <div class="col-sm-9">
@@ -281,51 +291,51 @@
                         <!-- 新增用户信息-->
                         <notempty name = "add">
                             <div class="col-md-3 user-profile-sidebar m-bottom-md">
-                            <div class="row">
-                                <div class="col-sm-4 col-md-12">
-                                    <div class="user-profile-pic">
-                                        <img src="__PUBLIC__/img/Admin/profile/profile1.jpg" alt="">
-                                        <div class="ribbon-wrapper">
-                                            <div class="ribbon-inner shadow-pulse bg-success">
-                                                Elite
+                                <div class="row">
+                                    <div class="col-sm-4 col-md-12">
+                                        <div class="user-profile-pic">
+                                            <img src="__PUBLIC__/Uploads/profile/default.jpg" alt="">
+                                            <div class="ribbon-wrapper">
+                                                <div class="ribbon-inner shadow-pulse bg-success">
+                                                    Elite
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-sm-6 col-md-12">
-                                    <div class="user-name m-top-sm">{$userInfo.username}<i class="fa fa-circle text-success m-left-xs font-14"></i></div>
+                                    <div class="col-sm-6 col-md-12">
+                                        <div class="user-name m-top-sm">{$userInfo.username}<i class="fa fa-circle text-success m-left-xs font-14"></i></div>
 
-                                    <div class="m-top-sm">
+                                        <div class="m-top-sm">
 
-                                        <div class="m-top-xs">
-                                            <i class="fa fa-briefcase user-profile-icon"></i>
-                                            部门:{$userInfo.udi_dep_id}
+                                            <div class="m-top-xs">
+                                                <i class="fa fa-briefcase user-profile-icon"></i>
+                                                部门:{$userInfo.udi_dep_id}
+                                            </div>
+
+                                            <div class="m-top-xs">
+                                                <i class="fa fa-external-link user-profile-icon"></i>
+                                                职位:{$userInfo.udi_auto_id}
+                                            </div>
                                         </div>
 
-                                        <div class="m-top-xs">
-                                            <i class="fa fa-external-link user-profile-icon"></i>
-                                            职位:{$userInfo.udi_auto_id}
+                                        <div class="m-top-sm text-centers">
+                                            <a class="btn btn-success"><i class="fa fa-edit m-right-xs"></i>右侧修改</a>
                                         </div>
+
+                                        <h4 class="m-top-md m-bottom-sm">个人描述</h4>
+                                        <p class="m-top-sm">
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales at.
+                                        <p>
+
+                                        <h4 class="m-top-md m-bottom-sm">点击分享</h4>
+
+                                        <a class="social-link facebook-hover"><i class="fa fa-weibo"></i></a>
+                                        <a class="social-link twitter-hover"><i class="fa fa-wechat"></i></a>
+                                        <a class="social-link pinterest-hover"><i class="fa fa-qq"></i></a>
+
                                     </div>
-
-                                    <div class="m-top-sm text-centers">
-                                        <a class="btn btn-success"><i class="fa fa-edit m-right-xs"></i>右侧修改</a>
-                                    </div>
-
-                                    <h4 class="m-top-md m-bottom-sm">个人描述</h4>
-                                    <p class="m-top-sm">
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales at.
-                                    <p>
-
-                                    <h4 class="m-top-md m-bottom-sm">点击分享</h4>
-
-                                    <a class="social-link facebook-hover"><i class="fa fa-weibo"></i></a>
-                                    <a class="social-link twitter-hover"><i class="fa fa-wechat"></i></a>
-                                    <a class="social-link pinterest-hover"><i class="fa fa-qq"></i></a>
-
-                                </div>
-                            </div><!-- ./row -->
-                        </div>
+                                </div><!-- ./row -->
+                            </div>
                             <div class="col-md-9">
                                 <div class="smart-widget">
                                     <div class="smart-widget-inner">
@@ -399,7 +409,7 @@
                                                             <label class="col-sm-3 control-label"></label>
                                                             <div class="col-sm-8">
                                                                 <div id="imgs">
-                                                                    <img src="__PUBLIC__/img/Admin/profile/profile1.jpg" width="120" id="upload-img" name="upload-img"/>
+                                                                    <img src="__PUBLIC__/Uploads/profile/default.jpg" width="120" id="upload-img" name="upload-img"/>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -483,6 +493,7 @@
         <!-- 删除用户 -->
         <script src="__PUBLIC__/js/common.js?v=20160101"></script>
         <script src="__PUBLIC__/js/Admin/user.js?v=20160101"></script>
+        <script src="__PUBLIC__/js/ct.js?v=20160101"></script>
 
         <script>
             var img = '';

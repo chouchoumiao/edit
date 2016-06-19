@@ -1639,6 +1639,8 @@ function checkForm( $flag ){
             if(strlen($user) < 6){
                 return '用户名长度不能小于六位';
             }
+        }else{
+            return '用户名不能为空';
         }
 
         if(isset($_POST['user_pass'])){
@@ -1646,6 +1648,8 @@ function checkForm( $flag ){
             if('' == $pass){
                 return '密码不能为空';
             }
+        }else{
+            return '密码不能为空';
         }
     }
 

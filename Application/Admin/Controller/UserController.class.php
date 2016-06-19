@@ -1,6 +1,9 @@
 <?php
 namespace Admin\Controller;
+use Admin\Model\ToolModel;
 use Think\Controller;
+
+header("Content-type: text/html;charset=utf-8");
 
 class UserController extends CommonController {
 
@@ -10,20 +13,42 @@ class UserController extends CommonController {
         if( isset($action) && '' != $action ){
             switch($action){
 
-                //取得所有用户
+                //取得所有用户(分页)
                 case 'all':
-
                     $this->assign('all',true);
-                    $this->assign('allUser',D('User')->getAllUserInfo());
+
+
+                    $userObj = D('User');
+
+                    //取得所有用户信息总条数，用于分页
+                    $count = $userObj->getAllUserCount();
+
+                    //分页
+                    import('ORG.Util.Page');// 导入分页类
+                    $Page = new \Org\Util\Page($count,PAGE_SHOW_COUNT);// 实例化分页类 传入总记录数
+                    $limit = $Page->firstRow.','.$Page->listRows;
+
+                    //取得指定条数的信息
+                    
+
+                    $user = $userObj->showUserList($limit);
+
+                    $show = $Page->show();// 分页显示输出
+
+
+                    $this->assign('allUser',$user); //用户信息注入模板
+                    $this->assign('page',$show);    //赋值分页输出
+
                     $this->display('user');
                     break;
 
                 //取得当前用户
                 case 'the':
+
                     //如果有传值过来用查询传值的用户
                     if(isset($_GET['id']) && '' != $_GET['id']){
                         $userId = I('get.id');
-                    }else{  //没有传值的话就查询本登录的用户信息
+                    }else{
                         $userId = $_SESSION['uid'];
                     }
 
@@ -99,6 +124,42 @@ class UserController extends CommonController {
                     break;
                 default:
                     break;
+                case 'city':
+
+//                    echo 'ddddfgg';
+                    echo D('City')->get4thCity();
+
+//                    if(isset($_POST['parentid'])) {
+//                        $sql1 = "select areaid,areaname,parentid,arrparentid,child,arrchildid,listorder  from  destoon_area  where parentid=" . $_POST['parentid'] . "  order by  areaid asc ";
+//                        $result = M('area')->query($sql1);
+//
+//
+//                        $str = "";
+//
+//                        for ($i = 0; $i < count($result); $i++) {
+//                            $str .= $result[$i]['arrchildid'] . "|" . $result[$i]['areaname'] . "-";
+//                        }
+//
+//                        echo $str;
+//                    }
+//                    if(isset($_POST['arrchildid'])) {
+//
+//                        $arrchildid = $_POST['arrchildid'];
+//                        $str="";
+//                        $idarr=rtrim($arrchildid,",");
+//                        $idarrs=explode(",",$idarr);
+//
+//                        $sql2 = "select areaid ,areaname , arrchildid from destoon_area where parentid=$idarrs[0] and areaid in (".$arrchildid.") order by areaid ";
+//                        $result = M('area')->query($sql2);
+//
+//
+//                        for ($i = 0; $i < count($result); $i++) {
+//                            $str .= $result[$i]['arrchildid'] . "|" . $result[$i]['areaname'] . "-";
+//                        }
+//
+//                        echo $str;
+//                    }
+                    break;
 
             }
         }
@@ -129,6 +190,10 @@ class UserController extends CommonController {
 
     }
 
+    /**
+     * 拼接角色列表显示
+     * @return string
+     */
     private function auto(){
 
         $obj = D('Auto')->getAllAuto();
@@ -155,6 +220,12 @@ class UserController extends CommonController {
         return $html;
     }
 
+
+    /**
+     * 新增用户是上传头像后操作
+     * @param $config
+     * @return string
+     */
     private function upload($config){
         if (!empty($_FILES)) {
 

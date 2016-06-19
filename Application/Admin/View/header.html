@@ -13,7 +13,8 @@
 					<span class="badge badge-danger bounceIn">1</span>
 					<ul class="dropdown-menu dropdown-sm pull-right user-dropdown">
 						<li class="user-avatar">
-							<img src="__PUBLIC__/img/Admin/profile/{$Think.session.img}" alt="" class="img-circle">
+                            __PUBLIC__/Uploads/profile/{$userInfo.img}
+							<img src="__PUBLIC__/Uploads/profile/{$_SESSION['img']}" alt="头像" class="img-circle">
 							<div class="user-content">
 
 								<h5 class="no-m-bottom">{$Think.session.username}</h5>
@@ -54,7 +55,7 @@
 			<div class="pull-right m-right-sm">
 				<div class="user-block hidden-xs">
 					<a href="#" id="userToggle" data-toggle="dropdown">
-						<img src="__PUBLIC__/img/Admin/profile/{$Think.session.img}" alt="" class="img-circle inline-block user-profile-pic">
+						<img src="__PUBLIC__/Uploads/profile/{$_SESSION['img']}" alt="头像" class="img-circle inline-block user-profile-pic">
 						<div class="user-detail inline-block">
 							{$Think.session.username}
 							<i class="fa fa-angle-down"></i>

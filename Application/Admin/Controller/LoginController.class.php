@@ -44,6 +44,8 @@ class LoginController extends Controller{
         }
 
     }
+
+
     private function login(){
 
         //检查表单
@@ -58,7 +60,14 @@ class LoginController extends Controller{
         }
 
         //检查登录用户名密码是否正确
-        if(D('login')->checklogin()){
+        $userInfo = D('User')->checklogin();
+
+        if( $userInfo ){
+            //将用户信息中用户名 id 头像路径放入session中
+            $_SESSION['uid']      = $userInfo['id'];
+            $_SESSION['username'] = $userInfo['username'];
+            $_SESSION['img']      = $userInfo['img'];
+
             $arr['success'] = 'OK';
             echo json_encode($arr);
             exit;

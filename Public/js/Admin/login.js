@@ -49,8 +49,9 @@ $(function(){
                     return false;
                 }else{
                     //登录成功跳转到后台首页
-                    location = '../Index/index';
+                    location.href = '../Index/index';
 
+                    //location.href = 'www.baidu.com';
                 }
             }
             ,error:function(xhr){alert('PHP页面有错误！'+xhr.responseText);}

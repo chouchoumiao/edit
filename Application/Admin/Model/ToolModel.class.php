@@ -22,4 +22,27 @@ namespace Admin\Model;
             exit;
         }
 
+        /**
+         * 将时间戳转化为正常时间格式
+         * @param $data
+         * @return bool|string
+         */
+        static function formartTime($data){
+            return date('Y-m-d H:i:s', $data);
+        }
+
+        /**
+         * 简单判定是否为二维数组
+         * @param $arr
+         * @return bool
+         */
+        static function isTwoArray($arr){
+
+            if(is_array($arr[0])){
+                return true;
+            }
+            return false;
+        }
+
+
 	}
