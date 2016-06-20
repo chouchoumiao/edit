@@ -7,6 +7,9 @@ header("Content-type: text/html;charset=utf-8");
 
 class UserController extends CommonController {
 
+    private $dept;
+    private $auto;
+
     public function doAction(){
 
         $action = $_GET['action'];
@@ -54,6 +57,21 @@ class UserController extends CommonController {
 
                     $userInfo = D('User')->getTheUserInfo($userId);
 
+                    //如果是管理员则显示可以选择变换角色和部门
+                    if(D('User')->isAdmin()){
+                        $this->assign('admin',true);
+
+                        $this->dept = $userInfo['udi_dep_id'];
+                        $this->auto = $userInfo['udi_auto_id'];
+
+                        // dump($userInfo);exit;
+                        //追加部门设置
+                        $this->assign('theDept',$this->theDept());
+                        //追加角色设置
+                        $this->assign('theAuto',$this->theAuto());
+                    }
+
+
                     $this->assign('the',true);
                     $this->assign('userInfo',$userInfo);
                     $this->display('user');
@@ -61,10 +79,6 @@ class UserController extends CommonController {
 
                 //删除用户
                 case 'del':
-
-                    //$arr['success'] = 'OK';
-                    //$arr['msg'] = 'DDAA';
-                    //echo json_encode($arr);exit;
 
                     //如果有传值过来用查询传值的用户
                     if(isset($_POST['id']) && '' != $_POST['id']){
@@ -125,45 +139,95 @@ class UserController extends CommonController {
                 default:
                     break;
                 case 'city':
-
-//                    echo 'ddddfgg';
                     echo D('City')->get4thCity();
-
-//                    if(isset($_POST['parentid'])) {
-//                        $sql1 = "select areaid,areaname,parentid,arrparentid,child,arrchildid,listorder  from  destoon_area  where parentid=" . $_POST['parentid'] . "  order by  areaid asc ";
-//                        $result = M('area')->query($sql1);
-//
-//
-//                        $str = "";
-//
-//                        for ($i = 0; $i < count($result); $i++) {
-//                            $str .= $result[$i]['arrchildid'] . "|" . $result[$i]['areaname'] . "-";
-//                        }
-//
-//                        echo $str;
-//                    }
-//                    if(isset($_POST['arrchildid'])) {
-//
-//                        $arrchildid = $_POST['arrchildid'];
-//                        $str="";
-//                        $idarr=rtrim($arrchildid,",");
-//                        $idarrs=explode(",",$idarr);
-//
-//                        $sql2 = "select areaid ,areaname , arrchildid from destoon_area where parentid=$idarrs[0] and areaid in (".$arrchildid.") order by areaid ";
-//                        $result = M('area')->query($sql2);
-//
-//
-//                        for ($i = 0; $i < count($result); $i++) {
-//                            $str .= $result[$i]['arrchildid'] . "|" . $result[$i]['areaname'] . "-";
-//                        }
-//
-//                        echo $str;
-//                    }
+                    break;
+                case 'update':
+                    //D('User')->updateUser();
+                    dump($_POST);
                     break;
 
             }
         }
 
+    }
+
+
+    /**
+     * 取得对应用户的部门信息并进行判断输出
+     * @return string
+     */
+    private function theDept(){
+
+        //取得数据库中的deptjson格式后，转化为数组格式
+        $deptArr = json_decode($this->dept);
+
+        //取得数据库中的部门表
+        $deptDefineArr = D('Dept')->getAllDept();
+
+        //拼接成html
+        $html = '';
+
+        //显示所有的部门信息，如果该用户选过的则显示打勾，不然则不打勾
+        for($i=1;$i<=count($deptDefineArr);$i++){
+
+            $html .= '<div class="checkbox inline-block">';
+            $html .= '<div class="custom-checkbox">';
+
+            //用于判断没有选择的次数（如果没有选择的次数等于总部门数，则表示没有选中）
+            $x = 0;
+
+            //循环判断数据库中部门表在该用户的数组中是否存在，存在则表示选中状态
+            for($j=0;$j<count($deptArr);$j++){
+                //如果该用户的部门id在数据表中存在，则改部门为选中状态
+                if($deptArr[$j] == $i){
+                    $html .= '<input type="checkbox" id="dept'.$i.'" value="'.$i.'" name="dept'.$i.'" class="checkbox-purple" checked>';
+                }else{
+                    //不存在数据表，数值加一
+                    $x++;
+
+                }
+            }
+            //都不存在，则表示该用户没有选中该部门
+            if($x == count($deptArr)){
+                $html .= '<input type="checkbox" id="dept'.$i.'" value="'.$i.'" name="dept'.$i.'" class="checkbox-purple">';
+            }
+            $html .= '<label for="dept'.$i.'"></label>';
+            $html .= '</div>';
+            $html .= '<div class="inline-block vertical-top">'.$deptDefineArr[$i]['name'];
+            $html .= '</div> &nbsp &nbsp';
+            $html .= '</div>';
+        }
+
+        return $html;
+
+    }
+
+    private function theAuto(){
+
+        $obj = D('Auto')->getAllAuto();
+        $html = '';
+
+        //count($obj) - 2 最后两个是管理员和超级管理员，不予显示
+        for($i=0;$i<(count($obj) - 2);$i++){
+
+            $html .= '<div class="radio inline-block">';
+            $html .= '<div class="custom-radio m-right-xs">';
+
+            if( $this->auto == $obj[$i]['id']){
+                $html .= '<input type="radio" id="auto'.$obj[$i]['id'].'" value="'.$obj[$i]['id'].'" checked name="auto">';
+            }else{
+                $html .= '<input type="radio" id="auto'.$obj[$i]['id'].'" value="'.$obj[$i]['id'].'" name="auto">';
+            }
+            $html .= '<label for="auto'.$obj[$i]['id'].'"></label>';
+            $html .= '</div>';
+            $html .= '<div class="inline-block vertical-top">'.$obj[$i]['name'];
+
+            $html .= '</div> &nbsp &nbsp';
+            $html .= '</div>';
+
+        }
+
+        return $html;
     }
 
     /**
@@ -173,6 +237,7 @@ class UserController extends CommonController {
     private function dept(){
 
         $obj = D('Dept')->getAllDept();
+
         $html = '';
         for($i=0;$i<count($obj);$i++){
 
@@ -198,7 +263,8 @@ class UserController extends CommonController {
 
         $obj = D('Auto')->getAllAuto();
         $html = '';
-        for($i=0;$i<count($obj);$i++){
+        //(count($obj) - 1) 超级管理员不予显示
+        for($i=0;$i<(count($obj) - 1);$i++){
 
             $html .= '<div class="radio inline-block">';
             $html .= '<div class="custom-radio m-right-xs">';

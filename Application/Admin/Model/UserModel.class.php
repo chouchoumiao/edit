@@ -21,6 +21,10 @@ namespace Admin\Model;
         private $dept;
         private $auto;
         private $img;
+        private $sel4;  //地区四级内容
+        private $address;
+        private $tel;
+        private $description;
 
         private $isSend; //新增用户是是否发送邮件通知
 
@@ -28,6 +32,15 @@ namespace Admin\Model;
         private $detailDataArray; //整合后明细数据
 
 
+
+        public function isAdmin(){
+            $where['uid'] = $_SESSION['uid'];
+            return $ret =  M('user_detail_info')->field('udi_auto_id')->where($where)->find();
+            if(($ret['udi_auto_id'] == ADMIN) || ($ret['udi_auto_id'] == SUPPER_ADMIN)){
+                return true;
+            }
+            return false;
+        }
         /**
          * 登录用户名密码判定
          * @return mixed
@@ -113,39 +126,39 @@ namespace Admin\Model;
                 }
             }else{      //一维数组(取得一条数据)
 
-                $obj['udi_sex'] = $sexArr[$obj['udi_sex']];     //处理sex数字转为为文字
-
-                //处理部门数字转化为文字 start
-                $dept = json_decode($obj['udi_dep_id']);            //json转化为数字
-
-                $obj['udi_dep_id'] = '';                            //先清空原来的数组
-
-                //将json转化的数组循环判断并显示名称
-                for ($j = 0; $j < count($dept); $j++) {
-
-                    //为空则不输出
-                    if ('' != $dept[$j]) {
-                        //最后一个不需要输出间隔符
-                        if ((count($dept) - 1) == $j) {
-                            $obj['udi_dep_id'] .= $deptArr[$dept[$j]];
-                        } else {
-                            $obj['udi_dep_id'] .= $deptArr[$dept[$j]] . '，';
-                        }
-                    }
-                }
-                //处理部门数字转化为文字 end
-
-                //处理角色数字转为为文字
-                $obj['udi_auto_id'] = $autoArr[$obj['udi_auto_id']];
-
-                //处理激活状态数字转为为文字
-                $obj['status'] = $statusArr[$obj['status']];
-
-                //创建时间戳转化为时间
-                $obj['regtime'] = ToolModel::formartTime($obj['regtime']) ;
-
-                //更新时间戳转化为时间
-                $obj['udi_update_time'] = ToolModel::formartTime($obj['udi_update_time']);
+                //$obj['udi_sex'] = $sexArr[$obj['udi_sex']];     //处理sex数字转为为文字
+                //
+                ////处理部门数字转化为文字 start
+                //$dept = json_decode($obj['udi_dep_id']);            //json转化为数字
+                //
+                //$obj['udi_dep_id'] = '';                            //先清空原来的数组
+                //
+                ////将json转化的数组循环判断并显示名称
+                //for ($j = 0; $j < count($dept); $j++) {
+                //
+                //    //为空则不输出
+                //    if ('' != $dept[$j]) {
+                //        //最后一个不需要输出间隔符
+                //        if ((count($dept) - 1) == $j) {
+                //            $obj['udi_dep_id'] .= $deptArr[$dept[$j]];
+                //        } else {
+                //            $obj['udi_dep_id'] .= $deptArr[$dept[$j]] . '，';
+                //        }
+                //    }
+                //}
+                ////处理部门数字转化为文字 end
+                //
+                ////处理角色数字转为为文字
+                //$obj['udi_auto_id'] = $autoArr[$obj['udi_auto_id']];
+                //
+                ////处理激活状态数字转为为文字
+                //$obj['status'] = $statusArr[$obj['status']];
+                //
+                ////创建时间戳转化为时间
+                //$obj['regtime'] = ToolModel::formartTime($obj['regtime']) ;
+                //
+                ////更新时间戳转化为时间
+                //$obj['udi_update_time'] = ToolModel::formartTime($obj['udi_update_time']);
 
             }
 
@@ -355,9 +368,6 @@ namespace Admin\Model;
 			return true;
 		}
 
-
-
-
 		/**
 		 * 发送邮件到新注册用户邮箱
 		 * @return string
@@ -410,7 +420,6 @@ namespace Admin\Model;
 			return $msg;
 		}
 		/*********************************************注册相关***************************************************/
-
 
         /*********************************************新增用户***************************************************/
 
@@ -481,7 +490,7 @@ namespace Admin\Model;
             //取得所有的dept个数，然后根据上传的dept进行确认，做成数组
             for($i = 1;$i<=$deptCount;$i++){
                 $name = 'dept'.$i;
-                if($_POST[$name]){
+                if(I("post.$name")){
                     $deptList[] = I("post.$name");
                 }
             }
