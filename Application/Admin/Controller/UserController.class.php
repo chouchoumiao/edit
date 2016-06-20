@@ -59,6 +59,7 @@ class UserController extends CommonController {
 
                     //如果是管理员则显示可以选择变换角色和部门
                     if(D('User')->isAdmin()){
+
                         $this->assign('admin',true);
 
                         $this->dept = $userInfo['udi_dep_id'];
@@ -70,7 +71,6 @@ class UserController extends CommonController {
                         //追加角色设置
                         $this->assign('theAuto',$this->theAuto());
                     }
-
 
                     $this->assign('the',true);
                     $this->assign('userInfo',$userInfo);
@@ -142,8 +142,8 @@ class UserController extends CommonController {
                     echo D('City')->get4thCity();
                     break;
                 case 'update':
-                    //D('User')->updateUser();
-                    dump($_POST);
+                    D('updateUser')->updateUser();
+                    //dump($_POST);
                     break;
 
             }

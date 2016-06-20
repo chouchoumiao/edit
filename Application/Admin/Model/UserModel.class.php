@@ -32,10 +32,13 @@ namespace Admin\Model;
         private $detailDataArray; //整合后明细数据
 
 
-
+        /**
+         * 判断是否是管理员和超级管理员
+         * @return bool
+         */
         public function isAdmin(){
             $where['uid'] = $_SESSION['uid'];
-            return $ret =  M('user_detail_info')->field('udi_auto_id')->where($where)->find();
+            $ret =  M('user_detail_info')->field('udi_auto_id')->where($where)->find();
             if(($ret['udi_auto_id'] == ADMIN) || ($ret['udi_auto_id'] == SUPPER_ADMIN)){
                 return true;
             }
