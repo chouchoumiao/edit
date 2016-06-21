@@ -3,7 +3,7 @@
 header("Content-type: text/html;charset=utf-8");
 
 define(MY_SITE, $_SERVER['SERVER_NAME']);   //发送邮件附带地址的时候需要  本地环境
-define(PAGE_SHOW_COUNT,3);
+define(PAGE_SHOW_COUNT,6);
 define(ADMIN,'88');
 define(SUPPER_ADMIN,'99');
 

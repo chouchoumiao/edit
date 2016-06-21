@@ -35,461 +35,24 @@
 			<div class="main-container">
                 <div class="padding-md">
                     <div class="row user-profile-wrapper">
-                        <!-- 显示所有用户一览-->
+
                         <notempty name = "all">
-                            <div class="col-md-12">
-                                <ul class="breadcrumb">
-                                <li>用户</li>
-                                <li>用户一览表</li>
-                            </ul>
-                                <div class="smart-widget">
-                                    <div class="smart-widget-header">
-                                        用户 信息
-                                            <span class="smart-widget-option">
-                                                <span class="refresh-icon-animated">
-                                                    <i class="fa fa-circle-o-notch fa-spin"></i>
-                                                </span>
-                                                <a href="#" class="widget-toggle-hidden-option">
-                                                    <i class="fa fa-cog"></i>
-                                                </a>
-                                                <a href="#" class="widget-collapse-option" data-toggle="collapse">
-                                                    <i class="fa fa-chevron-up"></i>
-                                                </a>
-                                            </span>
-                                    </div>
-                                    <div class="smart-widget-inner">
-                                        <div class="smart-widget-hidden-section">
-                                            <ul class="widget-color-list clearfix">
-                                                <li style="background-color:#20232b;" data-color="widget-dark"></li>
-                                                <li style="background-color:#4c5f70;" data-color="widget-dark-blue"></li>
-                                                <li style="background-color:#23b7e5;" data-color="widget-blue"></li>
-                                                <li style="background-color:#2baab1;" data-color="widget-green"></li>
-                                                <li style="background-color:#edbc6c;" data-color="widget-yellow"></li>
-                                                <li style="background-color:#fbc852;" data-color="widget-orange"></li>
-                                                <li style="background-color:#e36159;" data-color="widget-red"></li>
-                                                <li style="background-color:#7266ba;" data-color="widget-purple"></li>
-                                                <li style="background-color:#f5f5f5;" data-color="widget-light-grey"></li>
-                                                <li style="background-color:#fff;" data-color="reset"></li>
-                                            </ul>
-                                        </div>
-                                        <div class="smart-widget-body">
-                                            <table class="table table-hover center">
-                                                <thead style="text-align: center">
-                                                <tr >
-                                                    <th>用户昵称</th>
-                                                    <th>邮箱地址</th>
-                                                    <th>所属部门</th>
-                                                    <th>角色权限</th>
-                                                    <th>是否激活</th>
-                                                    <th>创建时间</th>
-                                                    <th>操作</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <foreach name="allUser" item="vo" key ="k">
-                                                    <tr>
-                                                        <td>{$vo.username}</td>
-                                                        <td>{$vo.email}</td>
-                                                        <td>{$vo.udi_dep_id}</td>
-                                                        <td>{$vo.udi_auto_id}</td>
-                                                        <td>{$vo.status}</td>
-                                                        <td>{$vo.regtime}</td>
-                                                        <td>
-                                                            <a href="__ROOT__/Admin/User/doAction/action/the/id/{$vo.uid}">
-                                                                <i class="fa fa-edit"></i>编辑
-                                                            </a>
-                                                            <if condition="$vo['uid'] eq $_SESSION['uid']">
-                                                                不能删除
-                                                            <else />
-                                                                <a href="javascript:delUser({$vo['uid']});">
-                                                                    &nbsp <i class="fa fa-trash">删除</i>
-                                                                </a>
-                                                            </if>
-                                                        </td>
-                                                    </tr>
-                                                </foreach>
-                                                </tbody>
-                                            </table>
-                                            <div>{$page}</div>
-                                        </div>
-                                    </div><!-- ./smart-widget-inner -->
-                                </div><!-- ./smart-widget -->
-                            </div>
+                            <include file='./User/allUser' />  <!-- 导入 所有用户-->
                         </notempty>
 
-                        <!-- 显示选择的用户信息-->
                         <notempty name = "the">
-                            <div class="col-md-3 user-profile-sidebar m-bottom-md">
-                                <div class="row">
-                                    <div class="col-sm-4 col-md-12">
-                                        <div class="user-profile-pic">
-                                            <img src="__PUBLIC__/Uploads/profile/{$_SESSION['img']}" alt="">
-                                            <div class="ribbon-wrapper">
-                                                <div class="ribbon-inner shadow-pulse bg-success">
-                                                    Elite
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6 col-md-12">
-                                        <div class="user-name m-top-sm">{$userInfo.username}<i class="fa fa-circle text-success m-left-xs font-14"></i></div>
-
-                                        <div class="m-top-sm">
-
-                                            <div class="m-top-xs">
-                                                <i class="fa fa-briefcase user-profile-icon"></i>
-                                                部门:{$userInfo.udi_dep_id}
-                                            </div>
-
-                                            <div class="m-top-xs">
-                                                <i class="fa fa-external-link user-profile-icon"></i>
-                                                职位:{$userInfo.udi_auto_id}
-                                            </div>
-                                        </div>
-
-                                        <div class="m-top-sm text-centers">
-                                            <a class="btn btn-success"><i class="fa fa-edit m-right-xs"></i>右侧修改</a>
-                                        </div>
-
-                                        <h4 class="m-top-md m-bottom-sm">个人描述</h4>
-                                        <p class="m-top-sm">
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales at.
-                                        <p>
-
-                                        <h4 class="m-top-md m-bottom-sm">点击分享</h4>
-
-                                        <a class="social-link facebook-hover"><i class="fa fa-weibo"></i></a>
-                                        <a class="social-link twitter-hover"><i class="fa fa-wechat"></i></a>
-                                        <a class="social-link pinterest-hover"><i class="fa fa-qq"></i></a>
-
-                                    </div>
-                                </div><!-- ./row -->
-                            </div>
-                            <div class="col-md-9">
-                                <div class="smart-widget">
-                                    <div class="smart-widget-inner">
-                                        <ul class="nav nav-tabs tab-style2 tab-right bg-grey">
-
-                                            <li>
-                                                <a href="#" data-toggle="tab">
-                                                    <span class="icon-wrapper"><i class="fa fa-book"></i></span>
-                                                    <span class="text-wrapper">个人信息</span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                        <div class="smart-widget-body">
-                                            <div class="tab-content">
-                                                <div class="tab-pane fade in active">
-                                                    <h4 class="header-text m-top-md">General Information</h4>
-                                                    <form action="__ROOT__/Admin/User/doAction/action/update" class="form-horizontal m-top-md" enctype="multipart/form-data" method="post">
-
-                                                        <input type="hidden" value="{$userInfo.uid}" name="id"/>
-                                                        <input type="hidden" value="{$userInfo.password}" name="oldMd5Pass"/>
-                                                        <input type="hidden" value="{$userInfo.udi_auto_id}" name="auto_id"/>
-
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label">登录ID</label>
-                                                            <div class="col-sm-9">
-                                                                <input type="text" readonly class="form-control" value="{$userInfo.login_name}" name="user_login">
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label">昵称</label>
-                                                            <div class="col-sm-9">
-                                                                <input type="text" class="form-control" value="{$userInfo.username}" name="user_name">
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label">修改密码(空为不修改)</label>
-                                                            <div class="col-sm-9">
-                                                                <input type="text" class="form-control" value="" name="user_pass">
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label">性别</label>
-                                                            <div class="col-sm-9">
-                                                                <div class="radio inline-block">
-                                                                    <div class="custom-radio m-right-xs">
-                                                                        <if condition = "$userInfo.udi_sex eq 1">
-                                                                            <input type="radio" id="inlineRadio1" value="1" checked name="sex">
-                                                                        <else />
-                                                                            <input type="radio" id="inlineRadio1"  value="1" name="sex">
-                                                                        </if>
-
-                                                                        <label for="inlineRadio1"></label>
-                                                                    </div>
-                                                                    <div class="inline-block vertical-top">男</div>
-                                                                </div>
-                                                                <div class="radio inline-block m-left-sm">
-                                                                    <div class="custom-radio m-right-xs">
-                                                                        <if condition = "$userInfo.udi_sex eq 0">
-                                                                            <input type="radio" id="inlineRadio2" value="0" checked name="sex">
-                                                                        <else />
-                                                                            <input type="radio" id="inlineRadio2" value="0" name="sex">
-                                                                        </if>
-                                                                        <label for="inlineRadio2"></label>
-
-                                                                    </div>
-                                                                    <div class="inline-block vertical-top">女</div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label">头像</label>
-                                                            <div class="col-sm-9">
-                                                                <input type="file" accept="image/*" id="file_upload" name="file_upload"  multiple="true" value="">
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label"></label>
-                                                            <div class="col-sm-9">
-                                                                <div id="imgs">
-                                                                    <img src="__PUBLIC__/Uploads/profile/{$userInfo.img}" width="120" id="upload-img" name="upload-img"/></div>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label">选择地区</label>
-                                                            <div class="col-sm-9 form-inline" id="sel" name = "sel">
-                                                                <select id="sel1" name = "sel1" onChange="getCity(this)" class="form-control col-sm-2" style="margin-right: 10px"></select>
-                                                                <select id="sel2" name = "sel2" onChange="getCity(this)" class="form-control col-sm-2" style="margin-right: 10px"></select>
-                                                                <select id="sel3" name = "sel3" onChange="getCity(this)" class="form-control col-sm-2" style="margin-right: 10px"></select>
-                                                                <select id="sel4" name = "sel4" class="form-control col-sm-2"></select>
-                                                            </div>
-                                                        </div>
-                                                        <notempty name = "admin">
-                                                            <div class="form-group">
-                                                                <label class="col-sm-3 control-label">部门</label>
-                                                                <div class="col-sm-8">
-                                                                    {$theDept}
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="form-group" >
-                                                                <label class="col-sm-3 control-label">角色</label>
-                                                                <div class="col-sm-8">
-                                                                    {$theAuto}
-                                                                </div>
-                                                            </div>
-                                                        </notempty>
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label">地址</label>
-                                                            <div class="col-sm-9">
-                                                                <textarea rows="4" class="form-control" id="address" name="address">{$userInfo.udi_address}</textarea>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label">手机</label>
-                                                            <div class="col-sm-9">
-                                                                <input type="text" class="form-control" value="{$userInfo.udi_tel}" id="tel" name="tel">
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label">个人描述</label>
-                                                            <div class="col-sm-9">
-                                                                <textarea rows="4" id="description" name="description" class="form-control">{$userInfo.udi_description}</textarea>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group m-top-lg">
-                                                            <label class="col-sm-3 control-label"></label>
-                                                            <div class="col-sm-9">
-                                                                <input type="submit" class="btn btn-default" onclick="return checkUpdateUser();" value="提交">
-                                                                <input type="reset" class="btn btn-info m-left-xs" value="取消">
-
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </div><!-- ./tab-pane -->
-                                            </div><!-- ./tab-content -->
-                                        </div><!-- ./smart-widget-body -->
-                                    </div><!-- ./smart-widget-inner -->
-                                </div><!-- ./smart-widget -->
-                            </div>
+                            <include file='./User/theUser' />   <!-- 导入 修改用户-->
                         </notempty>
 
-                        <!-- 新增用户信息-->
                         <notempty name = "add">
-                            <div class="col-md-3 user-profile-sidebar m-bottom-md">
-                                <div class="row">
-                                    <div class="col-sm-4 col-md-12">
-                                        <div class="user-profile-pic">
-                                            <img src="__PUBLIC__/Uploads/profile/default.jpg" alt="">
-                                            <div class="ribbon-wrapper">
-                                                <div class="ribbon-inner shadow-pulse bg-success">
-                                                    Elite
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6 col-md-12">
-                                        <div class="user-name m-top-sm">{$userInfo.username}<i class="fa fa-circle text-success m-left-xs font-14"></i></div>
-
-                                        <div class="m-top-sm">
-
-                                            <div class="m-top-xs">
-                                                <i class="fa fa-briefcase user-profile-icon"></i>
-                                                部门:{$userInfo.udi_dep_id}
-                                            </div>
-
-                                            <div class="m-top-xs">
-                                                <i class="fa fa-external-link user-profile-icon"></i>
-                                                职位:{$userInfo.udi_auto_id}
-                                            </div>
-                                        </div>
-
-                                        <div class="m-top-sm text-centers">
-                                            <a class="btn btn-success"><i class="fa fa-edit m-right-xs"></i>右侧修改</a>
-                                        </div>
-
-                                        <h4 class="m-top-md m-bottom-sm">个人描述</h4>
-                                        <p class="m-top-sm">
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales at.
-                                        <p>
-
-                                        <h4 class="m-top-md m-bottom-sm">点击分享</h4>
-
-                                        <a class="social-link facebook-hover"><i class="fa fa-weibo"></i></a>
-                                        <a class="social-link twitter-hover"><i class="fa fa-wechat"></i></a>
-                                        <a class="social-link pinterest-hover"><i class="fa fa-qq"></i></a>
-
-                                    </div>
-                                </div><!-- ./row -->
-                            </div>
-                            <div class="col-md-9">
-                                <div class="smart-widget">
-                                    <div class="smart-widget-inner">
-                                        <ul class="nav nav-tabs tab-style2 tab-right bg-grey">
-
-                                            <li>
-                                                <a href="#" data-toggle="tab">
-                                                    <span class="icon-wrapper"><i class="fa fa-book"></i></span>
-                                                    <span class="text-wrapper">个人信息</span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                        <div class="smart-widget-body">
-                                            <div class="tab-content">
-                                                <div class="tab-pane fade in active">
-                                                    <h4 class="header-text m-top-md">新增 用户</h4>
-                                                    <form action="__ROOT__/Admin/User/doAction/action/addNew" class="form-horizontal m-top-md" enctype="multipart/form-data" method="post">
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label">用户名（必填大于六位）</label>
-                                                            <div class="col-sm-8">
-                                                                <input type="text" class="form-control" value="" name="user_login" id="user_login">
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label">昵称</label>
-                                                            <div class="col-sm-8">
-                                                                <input type="text" class="form-control" value="" name="user_name" id="user_name">
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label">电子邮件（必填）</label>
-                                                            <div class="col-sm-8">
-                                                                <input type="text" class="form-control" value="" name="user_email" id="user_email">
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label">性别</label>
-                                                            <div class="col-sm-8">
-                                                                <div class="radio inline-block">
-                                                                    <div class="custom-radio m-right-xs">
-                                                                        <input type="radio" checked id="sex1" value="1" name="sex">
-                                                                        <label for="sex1"></label>
-                                                                    </div>
-                                                                    <div class="inline-block vertical-top">男</div>
-                                                                </div>
-                                                                <div class="radio inline-block m-left-sm">
-                                                                    <div class="custom-radio m-right-xs">
-                                                                        <input type="radio" id="sex2" value="0" name="sex">
-                                                                        <label for="sex2"></label>
-
-                                                                    </div>
-                                                                    <div class="inline-block vertical-top">女</div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label">初始密码(可修改)</label>
-                                                            <div class="col-sm-8">
-                                                                <input type="text" class="form-control" value="{$autopass}" name="user_pass" id = "user_pass">
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label">头像</label>
-                                                            <div class="col-sm-8">
-                                                                <input type="file" accept="image/*" id="file_upload" name="file_upload"  multiple="true" value="">
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label"></label>
-                                                            <div class="col-sm-8">
-                                                                <div id="imgs">
-                                                                    <img src="__PUBLIC__/Uploads/profile/default.jpg" width="120" id="upload-img" name="upload-img"/>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="form-group" id="dept">
-                                                            <label class="col-sm-3 control-label">部门</label>
-                                                            <div class="col-sm-8">
-                                                                {$dept}
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label">角色</label>
-                                                            <div class="col-sm-8">
-                                                                {$auto}
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="col-sm-3 control-label">发送用户通知</label>
-                                                            <div class="col-sm-8">
-
-                                                                <div class="checkbox inline-block">
-                                                                    <div class="custom-checkbox">
-                                                                        <input type="checkbox" id="isSend" name="isSend" class="checkbox-blue" checked>
-                                                                        <label for="isSend"></label>
-                                                                    </div>
-                                                                    <div class="inline-block vertical-top">
-                                                                        向新用户发送有关账户详情的电子邮件
-                                                                    </div>
-                                                                </div>
-
-                                                            </div>
-                                                        </div>
-
-
-                                                        <!--<h4 class="header-text m-top-lg"></h4>-->
-
-                                                        <div class="form-group m-top-lg">
-                                                            <label class="col-sm-3 control-label"></label>
-                                                            <div class="col-sm-8">
-                                                                <input type="submit" class="btn btn-default" onclick="return checkNewUser();" value="提交">
-                                                                <input type="reset" class="btn btn-info m-left-xs" value="取消">
-
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </div><!-- ./tab-pane -->
-                                            </div><!-- ./tab-content -->
-                                        </div><!-- ./smart-widget-body -->
-                                    </div><!-- ./smart-widget-inner -->
-                                </div><!-- ./smart-widget -->
-                            </div>
+                            <include file='./User/addUser' />   <!-- 导入 追加用户-->
                         </notempty>
+
                     </div>
                 </div>
 			</div><!-- /main-container -->
             <!-- 导入footer -->
-            <include file = 'Index/footer'/>
+            <include file = './footer'/>
 		</div><!-- /wrapper -->
 
 		<a href="#" class="scroll-to-top hidden-print"><i class="fa fa-chevron-up fa-lg"></i></a>
@@ -502,7 +65,6 @@
 
         <!-- Slimscroll -->
         <script src='__PUBLIC__/js/Admin/jquery.slimscroll.min.js'></script>
-
 
         <!-- Modernizr -->
         <script src='__PUBLIC__/js/Admin/modernizr.min.js'></script>
@@ -518,11 +80,50 @@
         <script src="__PUBLIC__/js/ct.js?v=20160101"></script>
 
         <script>
-            var img = '';
             $('#file_upload').uploadify({
                     'queueID'  : 'some_file_queue',
                     'swf'      : '__PUBLIC__/uploadify.swf',
                     'uploader' : './Admin/User/doAction/action/upload',   //上传的方法
+                    'buttonText' : '头像上传',
+                    'onUploadSuccess' : function(file, data, response) {
+
+                        var isOk = false;
+                        if(data.indexOf("jpg") > -1){
+                            isOk = true;
+                        }
+
+                        if(data.indexOf("png") > -1){
+                            isOk = true;
+                        }
+
+                        if(data.indexOf("jpeg") > -1){
+                            isOk = true;
+                        }
+
+                        //$('.uploadify-queue').hide(); //不显示进度条
+
+                        if(isOk){
+                            $("#upload-img").attr("src",'__PUBLIC__/Uploads/profile/'+data);
+                        }else{
+                            alert(data);
+                            return false;
+                        }
+//                        if(data.success == 1){
+//                            //把上传上传的图片都放入DIV中
+
+//                        }else{
+//                            alert(data.msg);
+//                            return false;
+//                        }
+
+
+                    }
+            });
+
+            $('#edit_file_upload').uploadify({
+                    'queueID'  : 'some_file_queue',
+                    'swf'      : '__PUBLIC__/uploadify.swf',
+                    'uploader' : './Admin/User/doAction/action/editimg',   //上传的方法
                     'buttonText' : '头像上传',
                     'onUploadSuccess' : function(file, data, response) {
 

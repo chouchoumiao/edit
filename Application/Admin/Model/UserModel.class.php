@@ -21,15 +21,243 @@ namespace Admin\Model;
         private $dept;
         private $auto;
         private $img;
+        private $status;
+        private $area;  //地区四级内容
+        private $sel3;  //地区四级内容
         private $sel4;  //地区四级内容
         private $address;
         private $tel;
         private $description;
 
-        private $isSend; //新增用户是是否发送邮件通知
-
         private $dataArray; //整合后主表数据
         private $detailDataArray; //整合后明细数据
+
+
+        //更新用户
+        public function updateUser(){
+
+            //判断是否有取到修改用户的id
+            if( (isset($_POST['uid'])) && ('' != $_POST['uid'])){
+                $this->id = I('post.uid');
+            }else{
+                ToolModel::goBack('传值错误');
+            }
+
+            //取得该用户的昵称
+            $this->username = I('post.user_name');      //昵称
+
+            //取得该用户的性别
+            $this->sex = I('post.sex');      //性别
+
+            //取得密码 如果没有设置新密码，则使用旧密码，否则使用md5加密新密码
+            if('' == I('post.user_pass')){
+                $this->password = I('post.oldMd5Pass');
+            }else{
+                $this->password = md5(I('post.user_pass'));     //密码加密
+            }
+
+            //做成地区数据
+            $sel1 = I('post.sel1');
+            $sel2 = I('post.sel2');
+            $sel3 = I('post.sel3');
+            $sel4 = I('post.sel4');
+
+            //都是空则表明没有选择，地址为空
+            if(($sel3 == '') && ($sel4 == '') && ($sel2 == '') && ($sel1 == '')){
+                $this->sel = '';
+            }else{
+                //四级有数据
+                if($sel4 != ''){
+                    $this->sel4 = $sel4;
+                    $this->sel =  $this->get3thSelName();exit;
+                }else{
+                    //四级为空，三级有值，继续判断三级是否为末尾(只有一个数字)
+                    if( ($sel3 != '') && !strpos($sel3,',')){
+                        $this->sel3 = $sel3;
+                        $this->area = $this->get2thSelName();exit;
+                    }else{
+                        $this->area = '';
+                    }
+                }
+            }
+
+            $this->address = I('post.address');
+
+            //取得手机号码
+            $this->tel = I('post.tel');
+            //如果输入了手机号码则判断格式是否正确
+            if( '' != $this->tel){
+                if( ValidateModel::isMobile(I('post.tel'))){
+                    $this->tel = I('post.tel');
+                }else{
+                    ToolModel::goBack('手机格式错误');
+                }
+            }
+
+            //取得部门信息组成json格式
+           if ( '' != I('post.dept1')){
+                $deptArr[] = I('post.dept1');
+            }
+            if ( '' != I('post.dept2')){
+                $deptArr[] = I('post.dept2');
+            }
+            if ( '' != I('post.dept3')){
+                $deptArr[] = I('post.dept3');
+            }
+            if ( '' != I('post.dept4')){
+                $deptArr[] = I('post.dept4');
+            }
+
+            $this->dept = json_encode($deptArr);
+
+
+            //取得角色信息
+            $this->auto = I('post.auto');
+
+
+            $this->description = I('post.description');
+
+            if((isset($_SESSION['editImg'])) && ( '' != $_SESSION['editImg'])){
+                $this->img = $_SESSION['editImg'];
+            }else{
+                $this->img = '';
+            }
+
+            if( '' != $this->username ){
+                $data['username'] = $this->username;
+            }
+
+            if('' != $this->password){
+                $data['password'] = $this->password;
+            }
+
+            if('' != $this->img){
+                $data['img'] = $this->img;
+            }
+
+
+            //明细表数据做成
+            if('' != $this->sex){
+                $detailData['udi_sex'] = $this->sex;
+            }
+
+            if('' != $this->tel){
+                $detailData['udi_tel'] = $this->tel;
+            }
+
+            if('' != $this->area){
+                $detailData['udi_area'] = $this->area;
+            }
+
+            if('' != $this->address){
+                $detailData['udi_address'] = $this->address;
+            }
+
+            if('' != $this->dept){
+                $detailData['udi_dep_id'] = $this->dept;
+            }
+            if('' != $this->auto){
+                $detailData['udi_auto_id'] = $this->auto;
+            }
+
+            return M('m_user')->where("id=$this->id")->save($data);
+            //更新主表内容
+            if(M('m_user')->where("id=$this->id")->save($data)){
+
+                //删除upload文件夹中原先用户设置的头像，避免脏数据
+
+                //如果是不是默认图片则删除原图
+                if( 'default.jpg' != I('post.oldImg' )){
+                    $oldImgPath = '/Uploads/profile/'.I('post.oldImg');
+                    if(file_exists($oldImgPath)){
+                        unlink($oldImgPath);
+                    }
+                }
+
+
+                //成功后更新明细表内容
+                if(!M('user_detail_info')->where("uid=$this->id")->save($detailData)){
+                    ToolModel::goBack('修改明细表出错');
+                }
+                return true;
+            }else{
+                ToolModel::goBack('修改用户信息出错');
+            }
+
+        }
+
+
+        //根据sel4数值取得前三级的值
+        private function get3thSelName(){
+
+            //根据四级内容取得四级的父级ID
+            $sel4 = M('area')->where("areaid = $this->sel4")->find();
+
+            //四级的名称
+            $sel4name = $sel4['areaname'];
+
+            //父级ID转化为数组
+            $sel4iArr = explode(',',$sel4['arrparentid']);
+
+            //取得数组个数
+            $count = count($sel4iArr);
+
+            //数组的最后一个为三级的ID
+            $sel3id = $sel4iArr[$count-1];
+
+            //根据三级ID取得三级的名称
+            $sel3 = M('area')->field('areaname')->where("areaid = $sel3id")->find();
+            $sel3name = $sel3['areaname'];
+
+            //数组的最后二个为二级的ID
+            $sel2id = $sel4iArr[$count - 2];
+            //根据三级ID取得二级的名称
+            $sel2 = M('area')->field('areaname')->where("areaid = $sel2id")->find();
+            $sel2name = $sel2['areaname'];
+
+            //数组的最后二个为一级的ID
+            $sel1id = $sel4iArr[$count - 3];
+            //根据三级ID取得一级的名称
+            $sel1 = M('area')->field('areaname')->where("areaid = $sel1id")->find();
+            $sel1name = $sel1['areaname'];
+
+            //返回拼接的地址
+            return $sel1name.'(省)'.$sel2name.'(市)'.$sel3name.'(镇)'.$sel4name.'(乡)';
+        }
+
+        //根据sel3数值取得前两级的值
+        private function get2thSelName(){
+
+            //根据四级内容取得三级的父级ID
+            $sel3 = M('area')->where("areaid = $this->sel3")->find();
+
+            //三级的名称
+            $sel3name = $sel3['areaname'];
+
+            //父级ID转化为数组
+            $sel3iArr = explode(',',$sel3['arrparentid']);
+
+            //取得数组个数
+            $count = count($sel3iArr);
+
+            //数组的最后二个为二级的ID
+            $sel2id = $sel3iArr[$count - 1];
+            //根据三级ID取得二级的名称
+            $sel2 = M('area')->field('areaname')->where("areaid = $sel2id")->find();
+            $sel2name = $sel2['areaname'];
+
+            //数组的最后二个为一级的ID
+            $sel1id = $sel3iArr[$count - 2];
+            //根据三级ID取得一级的名称
+            $sel1 = M('area')->field('areaname')->where("areaid = $sel1id")->find();
+            $sel1name = $sel1['areaname'];
+
+            //返回拼接的地址
+            return $sel1name.'(省)'.$sel2name.'(市)'.$sel3name.'(镇)';
+
+        }
+
+
 
 
         /**
@@ -297,7 +525,7 @@ namespace Admin\Model;
                 'username' => $this->username,	//注册时候默认昵称和用户名设置为一样
                 'autopass' => $this->autopass,
                 'password'=> $this->password,
-                'head_img'=> 'profile8.jpg',
+                'img'=> 'default.jpg',
                 'email' => $this->email,
                 'token' => $this->token,
                 'token_exptime' => $this->token_exptime,
@@ -322,13 +550,25 @@ namespace Admin\Model;
          * 整合明细表数据
          */
         private function setDetailData(){
+
+            //默认注册者都是爆料者，默认对所有部门都可以爆料
+            $idArr = D('Dept')->getAllID();
+
+            $arr = array();
+
+            for($i =0;$i<count($idArr);$i++){
+                $arr[] = $idArr[$i]['id'];
+            }
+
+            $jsoID = json_encode($arr);
+
             $this->detailDataArray = array(
                 'uid' => $this->id,
                 'udi_sex'=>1,
                 'udi_tel' => '',
                 'udi_address' => '',
-                'udi_dep_id'=>0,
-                'udi_auto_id'=>0,
+                'udi_dep_id'=>$jsoID,
+                'udi_auto_id'=>1,
                 'udi_description'=> '',
                 'udi_update_time'=> time()
             );
@@ -461,7 +701,7 @@ namespace Admin\Model;
             }
 
             //向新用户发送邮件
-            if( 'on' == $this->isSend ){
+            if( 0 == $this->status ){
                 if(!$this->sendMailToUser()){
                     ToolModel::goBack('发生邮件失败,请联系wu_jy1984@126.com');
                     exit;
@@ -469,6 +709,9 @@ namespace Admin\Model;
                     ToolModel::goToUrl('新增用户成功,邮件已发送给新用户邮箱地址！','all');
                     exit;
                 }
+            }else{
+                ToolModel::goToUrl('新增用户成功,请联系新用户！','all');
+                exit;
             }
 
 
@@ -503,7 +746,13 @@ namespace Admin\Model;
             //部门需要特殊处理 end
 
             $this->auto = I('post.auto');               //角色
-            $this->isSend = I('post.isSend');           //是否发生邮件
+
+            //是否发生邮件(如果需要发送邮件则将状态设置为未激活状态，反正则未激活状态，不用邮件激活)
+            if ( 'on' == I('post.isSend')){
+                $this->status = 0;
+            }else{
+                $this->status = 1;
+            }
 
             $this->regtime = time();
             $this->updateTime = $this->regtime;
@@ -525,6 +774,7 @@ namespace Admin\Model;
                 'img'=> $this->img,
                 'email' => $this->email,
                 'token' => $this->token,
+                'status' => $this->status,
                 'token_exptime' => $this->token_exptime,
                 'regtime' => $this->regtime,
                 'updateTime' => $this->updateTime

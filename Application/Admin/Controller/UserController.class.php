@@ -9,6 +9,7 @@ class UserController extends CommonController {
 
     private $dept;
     private $auto;
+    private $uploadImgName;
 
     public function doAction(){
 
@@ -57,8 +58,8 @@ class UserController extends CommonController {
 
                     $userInfo = D('User')->getTheUserInfo($userId);
 
-                    //如果是管理员则显示可以选择变换角色和部门
-                    if(D('User')->isAdmin()){
+                    //如果是管理员,并且当前不是管理员则显示可以选择变换角色和部门（管理员默认对所有部门有效，所以不必显示）
+                    if(D('User')->isAdmin() && ($userId != $_SESSION['uid'])){
 
                         $this->assign('admin',true);
 
@@ -134,6 +135,8 @@ class UserController extends CommonController {
                     );
 
                     echo $this->upload($config);
+                    //如果传上传图成功则将图片路径写入Session，方便写入数据库
+                    $_SESSION['newImg'] = $this->uploadImgName;
                     exit;
                     break;
                 default:
@@ -142,8 +145,25 @@ class UserController extends CommonController {
                     echo D('City')->get4thCity();
                     break;
                 case 'update':
-                    D('updateUser')->updateUser();
+                   // dump(D('User')->updateUser());exit;
+                    echo D('User')->updateUser();exit;
                     //dump($_POST);
+                    break;
+                case 'editimg':
+                    //图片上传设置
+                    $config = array(
+                        'maxSize'    =>    3145728,
+                        'rootPath'	 =>    'Public',
+                        'savePath'   =>    '/Uploads/profile/',
+                        'saveName'   =>    array('uniqid',''),
+                        'exts'       =>    array('jpg','png','jpeg'),
+                        'autoSub'    =>    false,
+                        'subName'    =>    array('date','Ymd'),
+                    );
+
+                    echo $this->upload($config);
+                    $_SESSION['editImg'] = $this->uploadImgName;
+                    exit;
                     break;
 
             }
@@ -193,7 +213,7 @@ class UserController extends CommonController {
             }
             $html .= '<label for="dept'.$i.'"></label>';
             $html .= '</div>';
-            $html .= '<div class="inline-block vertical-top">'.$deptDefineArr[$i]['name'];
+            $html .= '<div class="inline-block vertical-top">'.$deptDefineArr[$i -1 ]['name'];
             $html .= '</div> &nbsp &nbsp';
             $html .= '</div>';
         }
@@ -301,7 +321,7 @@ class UserController extends CommonController {
             if($images){
 
                 $name = $images['Filedata']['savename'];
-                $_SESSION['newImg'] = $name;    //如果传上传图成功则将图片路径写入Session，方便写入数据库
+                $this->uploadImgName = $name;
 
                 return $name;
             }

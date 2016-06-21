@@ -1,0 +1,172 @@
+<div class="col-md-3 user-profile-sidebar m-bottom-md">
+    <div class="row">
+        <div class="col-sm-4 col-md-12">
+            <div class="user-profile-pic">
+                <img src="__PUBLIC__/Uploads/profile/default.jpg" alt="">
+                <div class="ribbon-wrapper">
+                    <div class="ribbon-inner shadow-pulse bg-success">
+                        Elite
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-12">
+            <div class="user-name m-top-sm">{$userInfo.username}<i class="fa fa-circle text-success m-left-xs font-14"></i></div>
+
+            <div class="m-top-sm">
+
+                <div class="m-top-xs">
+                    <i class="fa fa-briefcase user-profile-icon"></i>
+                    部门:{$userInfo.udi_dep_id}
+                </div>
+
+                <div class="m-top-xs">
+                    <i class="fa fa-external-link user-profile-icon"></i>
+                    职位:{$userInfo.udi_auto_id}
+                </div>
+            </div>
+
+            <div class="m-top-sm text-centers">
+                <a class="btn btn-success"><i class="fa fa-edit m-right-xs"></i>右侧修改</a>
+            </div>
+
+            <h4 class="m-top-md m-bottom-sm">个人描述</h4>
+            <p class="m-top-sm">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales at.
+            <p>
+
+            <h4 class="m-top-md m-bottom-sm">点击分享</h4>
+
+            <a class="social-link facebook-hover"><i class="fa fa-weibo"></i></a>
+            <a class="social-link twitter-hover"><i class="fa fa-wechat"></i></a>
+            <a class="social-link pinterest-hover"><i class="fa fa-qq"></i></a>
+
+        </div>
+    </div><!-- ./row -->
+</div>
+<div class="col-md-9">
+    <div class="smart-widget">
+        <div class="smart-widget-inner">
+            <ul class="nav nav-tabs tab-style2 tab-right bg-grey">
+
+                <li>
+                    <a href="#" data-toggle="tab">
+                        <span class="icon-wrapper"><i class="fa fa-book"></i></span>
+                        <span class="text-wrapper">个人信息</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="smart-widget-body">
+                <div class="tab-content">
+                    <div class="tab-pane fade in active">
+                        <h4 class="header-text m-top-md">新增 用户</h4>
+                        <form action="__ROOT__/Admin/User/doAction/action/addNew" class="form-horizontal m-top-md" enctype="multipart/form-data" method="post">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">用户名（必填大于六位）</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" value="" name="user_login" id="user_login">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">昵称</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" value="" name="user_name" id="user_name">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">电子邮件（必填）</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" value="" name="user_email" id="user_email">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">性别</label>
+                                <div class="col-sm-8">
+                                    <div class="radio inline-block">
+                                        <div class="custom-radio m-right-xs">
+                                            <input type="radio" checked id="sex1" value="1" name="sex">
+                                            <label for="sex1"></label>
+                                        </div>
+                                        <div class="inline-block vertical-top">男</div>
+                                    </div>
+                                    <div class="radio inline-block m-left-sm">
+                                        <div class="custom-radio m-right-xs">
+                                            <input type="radio" id="sex2" value="0" name="sex">
+                                            <label for="sex2"></label>
+
+                                        </div>
+                                        <div class="inline-block vertical-top">女</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">初始密码(可修改)</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" value="{$autopass}" name="user_pass" id = "user_pass">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">头像</label>
+                                <div class="col-sm-8">
+                                    <input type="file" accept="image/*" id="file_upload" name="file_upload"  multiple="true" value="">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label"></label>
+                                <div class="col-sm-8">
+                                    <div id="imgs">
+                                        <img src="__PUBLIC__/Uploads/profile/default.jpg" width="120" id="upload-img" name="upload-img"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group" id="dept">
+                                <label class="col-sm-3 control-label">部门</label>
+                                <div class="col-sm-8">
+                                    {$dept}
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">角色</label>
+                                <div class="col-sm-8">
+                                    {$auto}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">发送用户通知</label>
+                                <div class="col-sm-8">
+
+                                    <div class="checkbox inline-block">
+                                        <div class="custom-checkbox">
+                                            <input type="checkbox" id="isSend" name="isSend" class="checkbox-blue" checked>
+                                            <label for="isSend"></label>
+                                        </div>
+                                        <div class="inline-block vertical-top">
+                                            向新用户发送有关账户详情的电子邮件
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            <!--<h4 class="header-text m-top-lg"></h4>-->
+
+                            <div class="form-group m-top-lg">
+                                <label class="col-sm-3 control-label"></label>
+                                <div class="col-sm-8">
+                                    <input type="submit" class="btn btn-default" onclick="return checkNewUser();" value="提交">
+                                    <input type="reset" class="btn btn-info m-left-xs" value="取消">
+
+                                </div>
+                            </div>
+                        </form>
+                    </div><!-- ./tab-pane -->
+                </div><!-- ./tab-content -->
+            </div><!-- ./smart-widget-body -->
+        </div><!-- ./smart-widget-inner -->
+    </div><!-- ./smart-widget -->
+</div>

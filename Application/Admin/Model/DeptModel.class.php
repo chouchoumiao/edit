@@ -18,6 +18,14 @@ namespace Admin\Model;
             $this->_model = M('dept');
         }
 
+        /**
+         * 返回所有的id一览
+         * @return mixed
+         */
+        public function getAllID(){
+            return $this->_model->field('id')->select();
+        }
+
         public function getAllDept(){
             return $this->_model->select();
         }

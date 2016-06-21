@@ -1697,5 +1697,4 @@ function checkForm( $flag ){
     }
 
     return '';
-    
 }
