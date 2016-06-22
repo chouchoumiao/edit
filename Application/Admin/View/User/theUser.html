@@ -62,10 +62,19 @@
                         <h4 class="header-text m-top-md">General Information</h4>
                         <form action="__ROOT__/Admin/User/doAction/action/update" class="form-horizontal m-top-md" enctype="multipart/form-data" method="post">
 
-                            <input type="hidden" value="{$userInfo.uid}" name="uid"/>
                             <input type="hidden" value="{$userInfo.password}" name="oldMd5Pass"/>
-                            <input type="hidden" value="{$userInfo.udi_auto_id}" name="auto_id"/>
+                            <input type="hidden" value="{$userInfo.username}" name="oldUsername"/>
                             <input type="hidden" value="{$userInfo.img}" name="oldImg"/>
+
+                            <input type="hidden" value="{$userInfo.uid}" name="uid"/>
+                            <input type="hidden" value="{$userInfo.udi_sex}" name="oldSex"/>
+                            <input type="hidden" value="{$userInfo.udi_tel}" name="oldTel"/>
+                            <input type="hidden" value="{$userInfo.udi_area}" name="oldArea"/>
+                            <input type="hidden" value="{$userInfo.udi_address}" name="oldAddress"/>
+                            <input type="hidden" value="{$userInfo.udi_dep_id}" name="olddepID"/>
+                            <input type="hidden" value="{$userInfo.udi_description}" name="oldDescription"/>
+                            <input type="hidden" value="{$userInfo.udi_auto_id}" name="auto_id"/>
+
 
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">登录ID</label>

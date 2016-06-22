@@ -22,8 +22,8 @@ namespace Admin\Model;
         private $auto;
         private $img;
         private $status;
-        private $area;  //地区四级内容
-        private $sel3;  //地区四级内容
+        private $area;  //拼接后地区字符串
+        private $sel3;  //地区三级内容
         private $sel4;  //地区四级内容
         private $address;
         private $tel;
@@ -38,21 +38,38 @@ namespace Admin\Model;
 
             //判断是否有取到修改用户的id
             if( (isset($_POST['uid'])) && ('' != $_POST['uid'])){
-                $this->id = I('post.uid');
+                $this->id = intval(I('post.uid'));
             }else{
                 ToolModel::goBack('传值错误');
             }
 
             //取得该用户的昵称
-            $this->username = I('post.user_name');      //昵称
+            if( I('post.oldUsername') == I('post.user_name') ){
+                $this->username = I('post.oldUsername');      //无修改则取原先的值
+            }else{
+                //判断新昵称长度是否超过30位
+                if(!ValidateModel::length(I('post.user_name'),2,0,30)){
+                    ToolModel::goBack('警告，昵称不能超过30位');
+                }
+                $this->username = I('post.user_name');      //修改了则取新的昵称
+            }
 
             //取得该用户的性别
-            $this->sex = I('post.sex');      //性别
+            if( intval(I('post.oldSex')) == intval(I('post.sex')) ){
+                $this->sex = intval(I('post.oldSex'));      //无修改则取原先的值(int型)
+            }else{
+                $this->sex = intval(I('post.sex'));      //修改了则取新的性别(int型)
+            }
 
             //取得密码 如果没有设置新密码，则使用旧密码，否则使用md5加密新密码
             if('' == I('post.user_pass')){
                 $this->password = I('post.oldMd5Pass');
             }else{
+                ////echo ValidateModel::isPWD(I('post.user_pass'));exit;
+                ////判断新密码格式和长度
+                //if(!ValidateModel::isPWD(I('post.user_pass'))){
+                //    ToolModel::goBack('警告，昵称不能超过30位');
+                //}
                 $this->password = md5(I('post.user_pass'));     //密码加密
             }
 
@@ -62,34 +79,49 @@ namespace Admin\Model;
             $sel3 = I('post.sel3');
             $sel4 = I('post.sel4');
 
-            //都是空则表明没有选择，地址为空
+            //都是空则表明没有选择，地址为数据库取得的老数据
             if(($sel3 == '') && ($sel4 == '') && ($sel2 == '') && ($sel1 == '')){
-                $this->sel = '';
+                $this->area = I('post.oldArea');
             }else{
                 //四级有数据
                 if($sel4 != ''){
                     $this->sel4 = $sel4;
-                    $this->sel =  $this->get3thSelName();exit;
+                    $this->area =  $this->get3thSelName();
                 }else{
                     //四级为空，三级有值，继续判断三级是否为末尾(只有一个数字)
                     if( ($sel3 != '') && !strpos($sel3,',')){
                         $this->sel3 = $sel3;
-                        $this->area = $this->get2thSelName();exit;
+                        $this->area = $this->get2thSelName();
                     }else{
-                        $this->area = '';
+                        $this->area = I('post.oldArea');
                     }
                 }
             }
 
-            $this->address = I('post.address');
+            //取得该用户的具体地址
+            if( intval(I('post.oldAddress')) == intval(I('post.address')) ){
+                $this->address = I('post.oldAddress');      //无修改则取原先的值(int型)
+            }else{
+                $this->address = I('post.address');      //修改了则取新的具体地址(int型)
+            }
 
-            //取得手机号码
-            $this->tel = I('post.tel');
-            //如果输入了手机号码则判断格式是否正确
-            if( '' != $this->tel){
+            //取得该用户的个人描述
+            if( intval(I('post.oldDescription')) == intval(I('post.description')) ){
+                $this->description = I('post.oldDescription');      //无修改则取原先的值(int型)
+            }else{
+                $this->description = I('post.description');      //修改了则取新的个人描述(int型)
+            }
+
+
+            //取得该用户的手机，如果新旧号码一样，则设为旧号码
+            if( intval(I('post.oldTel')) == intval(I('post.tel')) ){
+                $this->tel = I('post.oldDescription');      //无修改则取原先的值(int型)
+            }else{
+                //判断新号码是否是手机格式，如果是则设置为新号码
                 if( ValidateModel::isMobile(I('post.tel'))){
                     $this->tel = I('post.tel');
                 }else{
+                    //不是则弹出对话框并返回
                     ToolModel::goBack('手机格式错误');
                 }
             }
@@ -138,7 +170,7 @@ namespace Admin\Model;
 
             //明细表数据做成
             if('' != $this->sex){
-                $detailData['udi_sex'] = $this->sex;
+                $detailData['udi_sex'] = intval($this->sex);  //转化为数字
             }
 
             if('' != $this->tel){
@@ -153,14 +185,18 @@ namespace Admin\Model;
                 $detailData['udi_address'] = $this->address;
             }
 
+            if('' != $this->description){
+                $detailData['udi_description'] = $this->description;
+            }
+
             if('' != $this->dept){
                 $detailData['udi_dep_id'] = $this->dept;
             }
             if('' != $this->auto){
-                $detailData['udi_auto_id'] = $this->auto;
+                $detailData['udi_auto_id'] = intval($this->auto);
             }
 
-            return M('m_user')->where("id=$this->id")->save($data);
+            //return M('m_user')->where("id=$this->id")->save($data);
             //更新主表内容
             if(M('m_user')->where("id=$this->id")->save($data)){
 
@@ -168,18 +204,23 @@ namespace Admin\Model;
 
                 //如果是不是默认图片则删除原图
                 if( 'default.jpg' != I('post.oldImg' )){
-                    $oldImgPath = '/Uploads/profile/'.I('post.oldImg');
+                    $oldImgPath = PROFILE_PATH.'/'.I('post.oldImg');
+
                     if(file_exists($oldImgPath)){
+
                         unlink($oldImgPath);
                     }
                 }
-
-
+                //echo $this->id.'br />';
+                //dump($detailData);exit;
                 //成功后更新明细表内容
-                if(!M('user_detail_info')->where("uid=$this->id")->save($detailData)){
-                    ToolModel::goBack('修改明细表出错');
+
+
+                if( false === M('user_detail_info')->where(array('uid'=>$this->id))->save($detailData)){
+
+                    ToolModel::goBack('修改明细表出错').M('user_detail_info')->getLastSql();
                 }
-                return true;
+                ToolModel::goToUrl('修改用户信息成功','all');
             }else{
                 ToolModel::goBack('修改用户信息出错');
             }

@@ -145,8 +145,11 @@ class UserController extends CommonController {
                     echo D('City')->get4thCity();
                     break;
                 case 'update':
-                   // dump(D('User')->updateUser());exit;
-                    echo D('User')->updateUser();exit;
+                    //dump (I("info"));exit;
+                    //dump($_POST['info']);exit;
+                    //echo PROFILE_PATH.'576a08b509bca.jpg';exit;
+                    //dump(D('User')->updateUser());exit;
+                    D('User')->updateUser();
                     //dump($_POST);
                     break;
                 case 'editimg':

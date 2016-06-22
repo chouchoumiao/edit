@@ -6,8 +6,14 @@ define(MY_SITE, $_SERVER['SERVER_NAME']);   //发送邮件附带地址的时候�
 define(PAGE_SHOW_COUNT,6);
 define(ADMIN,'88');
 define(SUPPER_ADMIN,'99');
+define(PROFILE_PATH,$_SERVER['DOCUMENT_ROOT'].'/edit/Public/Uploads/profile');
+
+
 
 return array(
+
+    'DB_DEBUG' => true,
+
 
 	'SHOW_PAGE_TRACE'=>true,        //开启追踪调试
 
