@@ -68,7 +68,8 @@ function delUser(id){
             if(json.success == "NG"){
                 alert('删除失败')
                 return false;
-            }else{
+            }else if(json.success == "OK"){
+                alert(json.msg);
                 //登录成功跳转到后台首页
                 location = "./Admin/User/doAction/action/all";
 

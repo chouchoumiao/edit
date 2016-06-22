@@ -21,7 +21,6 @@ class UserController extends CommonController {
                 case 'all':
                     $this->assign('all',true);
 
-
                     $userObj = D('User');
 
                     //取得所有用户信息总条数，用于分页
@@ -51,6 +50,11 @@ class UserController extends CommonController {
 
                     //如果有传值过来用查询传值的用户
                     if(isset($_GET['id']) && '' != $_GET['id']){
+
+                        if(!D('User')->idIsExist(I('get.id'))){
+                            ToolModel::goBack('警告，传值错误');
+                        }
+
                         $userId = I('get.id');
                     }else{
                         $userId = $_SESSION['uid'];
@@ -84,8 +88,17 @@ class UserController extends CommonController {
                     //如果有传值过来用查询传值的用户
                     if(isset($_POST['id']) && '' != $_POST['id']){
 
+                        if(!D('User')->idIsExist(I('post.id'))){
+                            ToolModel::goBack('警告，传值错误');
+                        }
+
                         if(D('User')->delTheUserInfo(I('post.id'))){
+
+                            $img = D('User')->getOldImg(I('post.id'));
+
+
                             $arr['success'] = 'OK';
+                            $arr['msg'] = $img;
                         }else{
                             $arr['success'] = 'NG';
                         }

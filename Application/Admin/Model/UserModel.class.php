@@ -32,6 +32,20 @@ namespace Admin\Model;
         private $dataArray; //整合后主表数据
         private $detailDataArray; //整合后明细数据
 
+        /**
+         * 根据传入的id判读是否存在对应的用户，防止错误的id输入
+         * @param $id
+         * @return bool
+         */
+        public function idIsExist($id){
+            $where['id'] = $id;
+
+            if(M('m_user')->where($where)->count() > 0){
+                return true;
+            }
+            return false;
+
+        }
 
         //更新用户
         public function updateUser(){
@@ -65,11 +79,10 @@ namespace Admin\Model;
             if('' == I('post.user_pass')){
                 $this->password = I('post.oldMd5Pass');
             }else{
-                ////echo ValidateModel::isPWD(I('post.user_pass'));exit;
-                ////判断新密码格式和长度
-                //if(!ValidateModel::isPWD(I('post.user_pass'))){
-                //    ToolModel::goBack('警告，昵称不能超过30位');
-                //}
+                //判断新密码格式和长度
+                if(!ValidateModel::isPWD(I('post.user_pass'),6,20)){
+                    ToolModel::goBack('警告，密码不能含有特殊字符并且大于6位小于20位');
+                }
                 $this->password = md5(I('post.user_pass'));     //密码加密
             }
 
@@ -99,9 +112,15 @@ namespace Admin\Model;
             }
 
             //取得该用户的具体地址
-            if( intval(I('post.oldAddress')) == intval(I('post.address')) ){
+            if( I('post.oldAddress') == I('post.address') ){
+
                 $this->address = I('post.oldAddress');      //无修改则取原先的值(int型)
             }else{
+
+                //判断地址长度是否超过30位
+                if(!ValidateModel::length(I('post.address'),2,0,200)){
+                    ToolModel::goBack('警告，地址不能超过200位');
+                }
                 $this->address = I('post.address');      //修改了则取新的具体地址(int型)
             }
 
@@ -204,18 +223,16 @@ namespace Admin\Model;
 
                 //如果是不是默认图片则删除原图
                 if( 'default.jpg' != I('post.oldImg' )){
-                    $oldImgPath = PROFILE_PATH.'/'.I('post.oldImg');
 
-                    if(file_exists($oldImgPath)){
-
-                        unlink($oldImgPath);
-                    }
+                    //删除就图片，防止垃圾数据
+                    $this->delImg(I('post.oldImg'));
+//                    $oldImgPath = PROFILE_PATH.'/'.I('post.oldImg');
+//
+//                    if(file_exists($oldImgPath)){
+//
+//                        unlink($oldImgPath);
+//                    }
                 }
-                //echo $this->id.'br />';
-                //dump($detailData);exit;
-                //成功后更新明细表内容
-
-
                 if( false === M('user_detail_info')->where(array('uid'=>$this->id))->save($detailData)){
 
                     ToolModel::goBack('修改明细表出错').M('user_detail_info')->getLastSql();
@@ -227,6 +244,21 @@ namespace Admin\Model;
 
         }
 
+        public function getOldImg($id){
+
+            $where['id'] = $id;
+
+            return M('m_user')->field('img')->where($where)->find();
+        }
+
+        public function delImg($img){
+            $oldImgPath = PROFILE_PATH.'/'.$img;
+
+            if(file_exists($oldImgPath)){
+
+                unlink($oldImgPath);
+            }
+        }
 
         //根据sel4数值取得前三级的值
         private function get3thSelName(){
