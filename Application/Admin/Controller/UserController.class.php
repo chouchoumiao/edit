@@ -92,18 +92,23 @@ class UserController extends CommonController {
                             ToolModel::goBack('警告，传值错误');
                         }
 
+                        //删除前先取得该用户的img，如果用户删除成功，则将原先上传的头像也删除，避免垃圾数据
+                        $img = D('User')->getOldImg(I('post.id'));
+                        $imgName = $img['img'];
+
+                        //删除用户
                         if(D('User')->delTheUserInfo(I('post.id'))){
 
-                            $img = D('User')->getOldImg(I('post.id'));
-
+                            //如果是默认图片则不删除，否则则删除
+                            if( 'default.jpg' != $imgName ){
+                                ToolModel::delImg(PROFILE_PATH.'/'.$imgName);
+                            }
 
                             $arr['success'] = 'OK';
-                            $arr['msg'] = $img;
                         }else{
                             $arr['success'] = 'NG';
                         }
 
-                        //echo D('User')->getLastSql();exit;
                         echo json_encode($arr);
 
                     }else{
@@ -129,6 +134,11 @@ class UserController extends CommonController {
 
                 //追加用户
                 case 'addNew':
+
+                    //判断是否是表单发送过来
+                    if( (!isset($_POST['send'])) || ('' ==  $_POST['send']) ){
+                        ToolModel::goBack('非法操作');
+                    }
 
                     D('User')->addNewUser();
                     break;

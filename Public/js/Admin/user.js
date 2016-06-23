@@ -9,6 +9,7 @@ $(function(){
 
 });
 
+//判断用户输入信息(新增时)
 function checkNewUser(){
 
     var userval = $('#user_login').val();
@@ -49,33 +50,31 @@ function checkNewUser(){
 
 }
 
+
+//删除用户
 function delUser(id){
 
     if (!confirm('确定要删除吗？')){
-        return;
+    return;
     }
 
     $.ajax({
-        url:"./Admin/User/doAction/action/del"//改为你的动态页
-        ,type:"POST"
-        ,data:{
+    url:"__ROOT__/Admin/User/doAction/action/del"//改为你的动态页
+    ,type:"POST"
+    ,data:{
             'id':id
-        }//调用json.js类库将json对象转换为对应的JSON结构字符串
-        ,dataType: "json"
-        ,success:function(json){
-
-            //alert(json.msg);return;
-            if(json.success == "NG"){
-                alert('删除失败')
-                return false;
-            }else if(json.success == "OK"){
-                alert(json.msg);
-                //登录成功跳转到后台首页
-                location = "./Admin/User/doAction/action/all";
-
-            }
         }
-        ,error:function(xhr){alert('PHP页面有错误！'+url+xhr.responseText);}
+    ,dataType: "json"
+    ,success:function(json){
+        if(json.success == "OK"){
+            alert('删除成功');
+            location = "__ROOT__/Admin/User/doAction/action/all";
+
+        }else{
+            alert('删除失败');
+            return false;
+        }
+    }
+    ,error:function(xhr){alert('PHP页面有错误！'+xhr.responseText);}
     });
 }
-

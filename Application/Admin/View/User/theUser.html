@@ -139,7 +139,15 @@
                             </div>
 
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">地区</label>
+                                <label class="col-sm-3 control-label">现在地区</label>
+                                <div class="col-sm-9">
+
+                                    <input type="text" class="form-control" value="{$userInfo.udi_area}" disabled>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">地区(不选表示不修改)</label>
                                 <div class="col-sm-9 form-inline" id="sel" name = "sel">
                                     <select id="sel1" name = "sel1" onChange="getCity(this)" class="form-control col-sm-2" style="margin-right: 10px"></select>
                                     <select id="sel2" name = "sel2" onChange="getCity(this)" class="form-control col-sm-2" style="margin-right: 10px"></select>

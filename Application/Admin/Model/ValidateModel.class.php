@@ -70,31 +70,6 @@ namespace Admin\Model;
 			return preg_match('#(http|https|ftp|ftps)://([w-]+.)+[w-]+(/[w-./?%&=]*)?#i',$str) ? true : false;
 		}
 
-
-		/**
-		 * @param $str   			要匹配的字符串
-		 * @param string $charset  编码（默认utf-8,支持gb2312）
-		 * @return bool
-		 */
-		public static function isChinese($str,$charset = 'utf-8'){
-			if(!self::isEmpty($str)) return false;
-			$match = (strtolower($charset) == 'gb2312') ? "/^[".chr(0xa1)."-".chr(0xff)."]+$/"
-				: "/^[x{4e00}-x{9fa5}]+$/u";
-			return preg_match($match,$str) ? true : false;
-		}
-
-
-		/**
-		 * UTF-8验证
-		 */
-		public static function isUtf8($str){
-			if(!self::isEmpty($str)) return false;
-			return (preg_match("/^([".chr(228)."-".chr(233)."]{1}[".chr(128)."-".chr(191)."]{1}[".chr(128)."-".chr(191)."]{1}){1}/",$word)
-				== true || preg_match("/([".chr(228)."-".chr(233)."]{1}[".chr(128)."-".chr(191)."]{1}[".chr(128)."-".chr(191)."]{1}){1}$/",$word)
-				== true || preg_match("/([".chr(228)."-".chr(233)."]{1}[".chr(128)."-".chr(191)."]{1}[".chr(128)."-".chr(191)."]{1}){2,}/",$word)
-				== true) ? true : false;
-		}
-
 		/**
 		 * 验证长度
 		 * @param $str
@@ -154,22 +129,6 @@ namespace Admin\Model;
 			}
 			return preg_match($match,$value);
 		}
-
-		/**
-		 * 验证邮箱
-		 * @param $str
-		 * @return bool
-		 */
-		public static function checkZip($str){
-			if(strlen($str)!=6){
-				return false;
-			}
-			if(substr($str,0,1)==0){
-				return false;
-			}
-			return true;
-		}
-
 		/**
 		 * 匹配日期
 		 * @param $str
@@ -178,7 +137,7 @@ namespace Admin\Model;
 		public static function checkDate($str){
 			$dateArr = explode("-", $str);
 			if (is_numeric($dateArr[0]) && is_numeric($dateArr[1]) && is_numeric($dateArr[2])) {
-				if (($dateArr[0] >= 1000 && $timeArr[0] <= 10000) && ($dateArr[1] >= 0 && $dateArr[1] <= 12) && ($dateArr[2] >= 0 && $dateArr[2] <= 31))
+				if (($dateArr[0] >= 1000 && $dateArr[0] <= 10000) && ($dateArr[1] >= 0 && $dateArr[1] <= 12) && ($dateArr[2] >= 0 && $dateArr[2] <= 31))
 					return true;
 				else
 					return false;

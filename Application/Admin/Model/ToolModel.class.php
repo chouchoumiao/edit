@@ -7,19 +7,44 @@ namespace Admin\Model;
 
 	class ToolModel {
 
+        /**
+         * 错误返回
+         * @param $msg
+         */
 		static function goBack($msg){
             echo "<script>alert('$msg');history.go(-1)</script>";
             exit;
         }
 
+        /**
+         * 错误关闭
+         * @param $msg
+         */
         static function goClose($msg){
             echo "<script>alert('$msg');close()</script>";
             exit;
         }
 
+        /**
+         * 错误跳转
+         * @param $msg
+         * @param $url
+         */
         static function goToUrl($msg,$url){
             echo "<script>alert('$msg');location='$url'</script>";
             exit;
+        }
+
+
+        /**
+         * 删除指定文件
+         * @param $img  绝对路径文件
+         */
+        static function delImg($img){
+            if(file_exists($img)){
+
+                unlink($img);
+            }
         }
 
         /**
@@ -37,11 +62,7 @@ namespace Admin\Model;
          * @return bool
          */
         static function isTwoArray($arr){
-
-            if(is_array($arr[0])){
-                return true;
-            }
-            return false;
+            return (is_array($arr[0])) ? true : false;
         }
 
 

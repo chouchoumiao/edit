@@ -217,7 +217,11 @@ namespace Admin\Model;
 
             //return M('m_user')->where("id=$this->id")->save($data);
             //更新主表内容
-            if(M('m_user')->where("id=$this->id")->save($data)){
+
+            //echo $this->id;
+            //dump($data);exit;
+
+            if( false !== M('m_user')->where(array('id'=>$this->id))->save($data)){
 
                 //删除upload文件夹中原先用户设置的头像，避免脏数据
 
@@ -225,13 +229,8 @@ namespace Admin\Model;
                 if( 'default.jpg' != I('post.oldImg' )){
 
                     //删除就图片，防止垃圾数据
-                    $this->delImg(I('post.oldImg'));
-//                    $oldImgPath = PROFILE_PATH.'/'.I('post.oldImg');
-//
-//                    if(file_exists($oldImgPath)){
-//
-//                        unlink($oldImgPath);
-//                    }
+                    ToolModel::delImg(PROFILE_PATH.'/'.I('post.oldImg'));
+
                 }
                 if( false === M('user_detail_info')->where(array('uid'=>$this->id))->save($detailData)){
 
@@ -249,15 +248,6 @@ namespace Admin\Model;
             $where['id'] = $id;
 
             return M('m_user')->field('img')->where($where)->find();
-        }
-
-        public function delImg($img){
-            $oldImgPath = PROFILE_PATH.'/'.$img;
-
-            if(file_exists($oldImgPath)){
-
-                unlink($oldImgPath);
-            }
         }
 
         //根据sel4数值取得前三级的值
@@ -295,7 +285,7 @@ namespace Admin\Model;
             $sel1name = $sel1['areaname'];
 
             //返回拼接的地址
-            return $sel1name.'(省)'.$sel2name.'(市)'.$sel3name.'(镇)'.$sel4name.'(乡)';
+            return $sel1name.'  (省)  '.$sel2name.'  (市)  '.$sel3name.'  (镇)  '.$sel4name.'  (乡)  ';
         }
 
         //根据sel3数值取得前两级的值
@@ -326,7 +316,7 @@ namespace Admin\Model;
             $sel1name = $sel1['areaname'];
 
             //返回拼接的地址
-            return $sel1name.'(省)'.$sel2name.'(市)'.$sel3name.'(镇)';
+            return $sel1name.'  (省)  '.$sel2name.'  (市)  '.$sel3name.'  (镇)  ';
 
         }
 
@@ -368,9 +358,13 @@ namespace Admin\Model;
             //取得用户信息
             $obj = $this->allUser($limit);
 
+            if(!$obj) ToolModel::goBack('未能取到数据');
             //返回格式化好的数据，用于显示
-            return $this->dataFormart($obj);
 
+            //是二维数组则进行数据格式修正并返回
+            if(ToolModel::isTwoArray($obj)){
+                return $this->dataFormart($obj);
+            }
         }
 
 
@@ -384,86 +378,46 @@ namespace Admin\Model;
          */
         private function dataFormart($obj)
         {
-
             $sexArr = C('SEX_ARRAY');    //取得自定义常量性别数组
             $deptArr = C('DEPT_ARRAY');   //取得自定义常量部门数组
             $autoArr = C('AUTO_ARRAY');   //取得自定义常量角色数组
             $statusArr = C('STATUS_ARRAY'); //取得自定义常量激活状态数组
 
-            //二维数组(取得多条数据)
-            if(ToolModel::isTwoArray($obj)){
-                for ($i = 0; $i < count($obj); $i++) {
+            for ($i = 0; $i < count($obj); $i++) {
 
-                    $obj[$i]['udi_sex'] = $sexArr[$obj[$i]['udi_sex']];     //处理sex数字转为为文字
+                $obj[$i]['udi_sex'] = $sexArr[$obj[$i]['udi_sex']];     //处理sex数字转为为文字
 
-                    //处理部门数字转化为文字 start
-                    $dept = json_decode($obj[$i]['udi_dep_id']);            //json转化为数字
+                //处理部门数字转化为文字 start
+                $dept = json_decode($obj[$i]['udi_dep_id']);            //json转化为数字
 
-                    $obj[$i]['udi_dep_id'] = '';                            //先清空原来的数组
+                $obj[$i]['udi_dep_id'] = '';                            //先清空原来的数组
 
-                    //将json转化的数组循环判断并显示名称
-                    for ($j = 0; $j < count($dept); $j++) {
+                //将json转化的数组循环判断并显示名称
+                for ($j = 0; $j < count($dept); $j++) {
 
-                        //为空则不输出
-                        if ('' != $dept[$j]) {
-                            //最后一个不需要输出间隔符
-                            if ((count($dept) - 1) == $j) {
-                                $obj[$i]['udi_dep_id'] .= $deptArr[$dept[$j]];
-                            } else {
-                                $obj[$i]['udi_dep_id'] .= $deptArr[$dept[$j]] . '，';
-                            }
+                    //为空则不输出
+                    if ('' != $dept[$j]) {
+                        //最后一个不需要输出间隔符
+                        if ((count($dept) - 1) == $j) {
+                            $obj[$i]['udi_dep_id'] .= $deptArr[$dept[$j]];
+                        } else {
+                            $obj[$i]['udi_dep_id'] .= $deptArr[$dept[$j]] . '，';
                         }
                     }
-                    //处理部门数字转化为文字 end
-
-                    //处理角色数字转为为文字
-                    $obj[$i]['udi_auto_id'] = $autoArr[$obj[$i]['udi_auto_id']];
-
-                    //处理激活状态数字转为为文字
-                    $obj[$i]['status'] = $statusArr[$obj[$i]['status']];
-
-                    //创建时间戳转化为时间
-                    $obj[$i]['regtime'] = ToolModel::formartTime($obj[$i]['regtime']) ;
-
-                    //更新时间戳转化为时间
-                    $obj[$i]['udi_update_time'] = ToolModel::formartTime($obj[$i]['udi_update_time']);
                 }
-            }else{      //一维数组(取得一条数据)
+                //处理部门数字转化为文字 end
 
-                //$obj['udi_sex'] = $sexArr[$obj['udi_sex']];     //处理sex数字转为为文字
-                //
-                ////处理部门数字转化为文字 start
-                //$dept = json_decode($obj['udi_dep_id']);            //json转化为数字
-                //
-                //$obj['udi_dep_id'] = '';                            //先清空原来的数组
-                //
-                ////将json转化的数组循环判断并显示名称
-                //for ($j = 0; $j < count($dept); $j++) {
-                //
-                //    //为空则不输出
-                //    if ('' != $dept[$j]) {
-                //        //最后一个不需要输出间隔符
-                //        if ((count($dept) - 1) == $j) {
-                //            $obj['udi_dep_id'] .= $deptArr[$dept[$j]];
-                //        } else {
-                //            $obj['udi_dep_id'] .= $deptArr[$dept[$j]] . '，';
-                //        }
-                //    }
-                //}
-                ////处理部门数字转化为文字 end
-                //
-                ////处理角色数字转为为文字
-                //$obj['udi_auto_id'] = $autoArr[$obj['udi_auto_id']];
-                //
-                ////处理激活状态数字转为为文字
-                //$obj['status'] = $statusArr[$obj['status']];
-                //
-                ////创建时间戳转化为时间
-                //$obj['regtime'] = ToolModel::formartTime($obj['regtime']) ;
-                //
-                ////更新时间戳转化为时间
-                //$obj['udi_update_time'] = ToolModel::formartTime($obj['udi_update_time']);
+                //处理角色数字转为为文字
+                $obj[$i]['udi_auto_id'] = $autoArr[$obj[$i]['udi_auto_id']];
 
+                //处理激活状态数字转为为文字
+                $obj[$i]['status'] = $statusArr[$obj[$i]['status']];
+
+                //创建时间戳转化为时间
+                $obj[$i]['regtime'] = ToolModel::formartTime($obj[$i]['regtime']) ;
+
+                //更新时间戳转化为时间
+                $obj[$i]['udi_update_time'] = ToolModel::formartTime($obj[$i]['udi_update_time']);
             }
 
             return $obj;
@@ -474,8 +428,7 @@ namespace Admin\Model;
 		 * @return mixed
 		 */
 		public function getTheUserInfo($id){
-			$obj = $this->theUser($id);
-            return $this->dataFormart($obj);
+			return $obj = $this->theUser($id);
 		}
 
 
@@ -531,33 +484,34 @@ namespace Admin\Model;
 
         private function delTheUser($id){
 
-            //新删除主表，成功的情况下删除明细表
-            if(M('m_user')->where("id=$id")->delete()){
-                //返回删除明细表的结果
-                return M('user_detail_info')->where("uid=$id")->delete();
-            }else{
+            //删除主表，错误的情况下返回
+            if( false === M('m_user')->where("id=$id")->delete()){
                 return false;
             }
+
+            //继续删除明细表，错误则返回
+            if( false === M('user_detail_info')->where("uid=$id")->delete()){
+                return false;
+            }
+            //都正确删除后返回
+            return true;
         }
 
 
         public function doReg(){
 
+            $this->setData();           //设置主表信息
+
+            $this->setDetailData();     //设置明细表数据
+
             //判断是否已经存在该用户信息
             if(!$this->checkUserIsExist()){
                 return 1;               //存在用户
             }
-
-            //整合表单数据
-
-            $this->setData();           //设置主表信息
-
             //注册新用户
             if($this->addToUser() <= 0){
                 return 2;              //主表追加错误
             }
-
-            $this->setDetailData();     //设置明细表数据
 
             if(!$this->addToUserDetail()){
                 //失败的情况下，要将主表的新增用户也删除，避免脏数据
@@ -673,8 +627,8 @@ namespace Admin\Model;
 		 */
 		private function checkUserIsExist(){
 
-			$where['login_name'] = I('post.user_login');
-			$where['email'] = I('post.user_email');
+			$where['login_name'] = $this->loginName;
+			$where['email'] = $this->email;
 			$where['_logic'] = 'OR';
 
 			if(M('m_user')->field('id')->where($where)->find()){
@@ -748,12 +702,7 @@ namespace Admin\Model;
 
             $this->checkAddNewUser();
 
-            if(!$this->checkUserIsExist()){
-                ToolModel::goBack('已存在相同用户名或者邮箱地址了');
-                exit;
-            }
-
-            $this->setNewUserData();
+            //$this->setNewUserData();
 
             if($this->addToUser() <= 0){
                 ToolModel::goBack('新增用户主表失败！');
@@ -794,6 +743,7 @@ namespace Admin\Model;
          * 获得提交的数据
          */
         private function setNewUserData(){
+
             $this->loginName = I('post.user_login');    //登录用户名
             $this->username = I('post.user_name');      //昵称
             $this->email = I('post.user_email');        //邮件地址
@@ -875,37 +825,29 @@ namespace Admin\Model;
          */
         private function checkAddNewUser(){
 
-            //判断是否存在POST请求发送过来数据
-            if(!isset($_POST)){
-                ToolModel::goBack('警告，非法操作！');
-            }
-
             //判断loginname
-            if('' == $this->loginName){
-                ToolModel::goBack('警告，用户名不能为空！');
-            }
-            if(strlen($this->loginName) < 6){
-                ToolModel::goBack('警告，用户名长度不能小于六位！');
-            }
+            if('' == $this->loginName) ToolModel::goBack('警告，用户名不能为空！');
+
+            if(strlen($this->loginName) < 6) ToolModel::goBack('警告，用户名长度不能小于6位！');
+
+            if(strlen($this->loginName) > 20) ToolModel::goBack('警告，用户名长度不能大于20位！');
 
             //提交的默认生成初始是否为空
-            if('' == $this->autopass){
-                ToolModel::goBack('警告，初始密码不能为空！');
-            }
+            if('' == $this->autopass) ToolModel::goBack('警告，初始密码不能为空！');
+
+            if(strlen($this->autopass) > 20) ToolModel::goBack('警告，密码长度不能大于20位！');
 
             //判断提交的邮件地址正确性
-            if('' == $this->email){
-                ToolModel::goBack('警告，邮箱地址不能为空！');
-            }
-            if(!is_mail($this->email)){
-                ToolModel::goBack('警告，邮箱格式错误！');
-            }
+            if('' == $this->email) ToolModel::goBack('警告，邮箱地址不能为空！');
+
+            if(!is_mail($this->email)) ToolModel::goBack('警告，邮箱格式错误！');
+
+            //判断是否存在相同的用户名或者密码了
+            if(!$this->checkUserIsExist()) ToolModel::goBack('已存在相同用户名或者邮箱地址了');
 
             //判断提交的部门复选框是否都为空
             //array_filter函数是去除数组内空内容，如果剩下为空数组
-            if( empty(array_filter(json_decode($this->dept)))){
-                ToolModel::goBack('警告，至少选择一个部门！');
-            }
+            if( empty(array_filter(json_decode($this->dept)))) ToolModel::goBack('警告，至少选择一个部门！');
 
         }
         /*********************************************新增用户***************************************************/
