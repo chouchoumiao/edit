@@ -74,6 +74,9 @@
 
         <script src='__PUBLIC__/js/Admin/jquery.uploadify.min.js'></script>
 
+        <!-- 前端验证JS插件-->
+        <script src="http://apps.bdimg.com/libs/angular.js/1.4.6/angular.min.js"></script>
+
         <!-- 删除用户 -->
         <script src="__PUBLIC__/js/common.js?v=20160101"></script>
         <script src="__PUBLIC__/js/Admin/user.js?v=20160106"></script>
@@ -160,6 +163,13 @@
                     }
             });
 
+        </script>
+        <script>
+            var app = angular.module('myApp', []);
+            app.controller('validateCtrl', function($scope) {
+                $scope.user = 'John Doe';
+                $scope.email = 'john.doe@gmail.com';
+            });
         </script>
 
 
