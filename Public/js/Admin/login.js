@@ -42,7 +42,10 @@ $(function(){
                 }
             ,success:function(json){
                 if(json.success == "NG"){
-                    showError( json.msg );
+
+                    var msg = json.msg+"<a href='lostpassword.html'>忘记密码？</a>";
+
+                    showError( msg );
                     wp_shake_js();
                     $("#wp-submit").val('登录');
 
@@ -50,8 +53,6 @@ $(function(){
                 }else{
                     //登录成功跳转到后台首页
                     location.href = '../Index/index';
-
-                    //location.href = 'www.baidu.com';
                 }
             }
             ,error:function(xhr){alert('PHP页面有错误！'+xhr.responseText);}

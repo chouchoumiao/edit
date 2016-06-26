@@ -69,7 +69,7 @@ class LostpassModel {
 
                     //发送成功
                     $arr['success'] = 'OK';
-                    $arr['msg'] = '重置密码成功后已发送，请登录邮箱进行查收';
+                    $arr['msg'] = '重置密码已发送，请登录邮箱确认! ';
                     return $arr;
 
                 }else{

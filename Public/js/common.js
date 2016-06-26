@@ -463,8 +463,20 @@ function cTrim(sInputString,iType)
  * @param msg
  */
 function showError( msg ){
+    $(".message").remove();
     $("#login_error").remove();
     $("form").before(" <div id='login_error'><strong>错误</strong>："+msg+ "<br></div>");
+}
+
+
+/**
+ * 显示错误
+ * @param msg
+ */
+function showMSg( msg ){
+    $(".message").remove();
+    $("#login_error").remove();
+    $("form").before(" <p class='message'>	"+msg+ "<br></p>");
 }
 
 /**

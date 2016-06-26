@@ -46,7 +46,12 @@ $(function(){
 
                     return false;
                 }else{
-                    $("html").html(json.msg);
+
+                    $("#wp-submit").val('获取新密码');
+                    var msg = json.msg+'<a href="login.html">点我登录</a>'
+                    showMSg(msg);
+
+                    //$("html").html(json.msg);
 
                 }
             }

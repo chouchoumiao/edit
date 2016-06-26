@@ -126,7 +126,7 @@ class LoginController extends Controller{
                 break;
             case 100:
                 $arr['success'] = 'OK';
-                $arr['msg'] = '恭喜您，注册成功！<br/>请登录到您的邮箱及时激活您的帐号！！';
+                $arr['msg'] = '注册完成，请检查电子邮件。 ';
                 break;
             default;
                 $arr['success'] = 'NG';
