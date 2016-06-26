@@ -123,7 +123,6 @@ class LoginController extends Controller{
             case 4:
                 $arr['success'] = 'NG';
                 $arr['msg'] = '注册失败，请联系wu_jy1984@126.com';
-
                 break;
             case 100:
                 $arr['success'] = 'OK';

@@ -65,5 +65,16 @@ namespace Admin\Model;
             return (is_array($arr[0])) ? true : false;
         }
 
+        /**
+         * 更新session
+         */
+        static function setSession(){
+            $where['id'] = $_SESSION['uid'];
+            $obj = M('m_user')->where($where)->find();
+            $_SESSION['username'] = $obj['username'];
+            $_SESSION['img']      = $obj['img'];
+        }
+
+
 
 	}

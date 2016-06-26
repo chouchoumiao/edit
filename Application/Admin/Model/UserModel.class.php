@@ -70,9 +70,9 @@ namespace Admin\Model;
 
             //取得该用户的性别
             if( intval(I('post.oldSex')) == intval(I('post.sex')) ){
-                $this->sex = intval(I('post.oldSex'));      //无修改则取原先的值(int型)
+                $this->sex = I('post.oldSex');      //无修改则取原先的值
             }else{
-                $this->sex = intval(I('post.sex'));      //修改了则取新的性别(int型)
+                $this->sex = I('post.sex');      //修改了则取新的性别
             }
 
             //取得密码 如果没有设置新密码，则使用旧密码，否则使用md5加密新密码
@@ -134,7 +134,7 @@ namespace Admin\Model;
 
             //取得该用户的手机，如果新旧号码一样，则设为旧号码
             if( intval(I('post.oldTel')) == intval(I('post.tel')) ){
-                $this->tel = I('post.oldDescription');      //无修改则取原先的值(int型)
+                $this->tel = I('post.oldTel');      //无修改则取原先的值(int型)
             }else{
                 //判断新号码是否是手机格式，如果是则设置为新号码
                 if( ValidateModel::isMobile(I('post.tel'))){
@@ -170,6 +170,12 @@ namespace Admin\Model;
 
             if((isset($_SESSION['editImg'])) && ( '' != $_SESSION['editImg'])){
                 $this->img = $_SESSION['editImg'];
+
+                //然后将session清空
+                $_SESSION['editImg'] = '';
+                unset($_SESSION['editImg']);
+
+
             }else{
                 $this->img = '';
             }
@@ -236,6 +242,11 @@ namespace Admin\Model;
 
                     ToolModel::goBack('修改明细表出错').M('user_detail_info')->getLastSql();
                 }
+                
+                
+                //如果修改的是当前用户的信息,则重置session
+                ToolModel::setSession();
+                
                 ToolModel::goToUrl('修改用户信息成功','all');
             }else{
                 ToolModel::goBack('修改用户信息出错');
@@ -502,7 +513,7 @@ namespace Admin\Model;
 
             $this->setData();           //设置主表信息
 
-            $this->setDetailData();     //设置明细表数据
+
 
             //判断是否已经存在该用户信息
             if(!$this->checkUserIsExist()){
@@ -513,9 +524,12 @@ namespace Admin\Model;
                 return 2;              //主表追加错误
             }
 
-            if(!$this->addToUserDetail()){
+            //必须再追加主表后生成新id后才能设置明细数据,不然id无法获取,会出错
+            $this->setDetailData();     //设置明细表数据
+
+            if($this->addToUserDetail()<= 0){
                 //失败的情况下，要将主表的新增用户也删除，避免脏数据
-                $this->delUserDetail();
+                $this->delUserMain();
                 return 3;
             }
 
@@ -614,8 +628,8 @@ namespace Admin\Model;
          * 删除用户主表数据
          * @return mixed
          */
-        private function delUserDetail(){
-            $where['uid'] = $this->id;
+        private function delUserMain(){
+            $where['id'] = $this->id;
             return M('m_user')->where($where)->delete();
         }
 
@@ -716,11 +730,6 @@ namespace Admin\Model;
                 exit;
             }
 
-            //追加明细表后将session中的新图片信息清空
-            if((isset($_SESSION['newImg'])) && ( '' != $_SESSION['newImg'])){
-                $_SESSION['newImg'] = '';
-                unset($_SESSION['newImg']);
-            }
 
             //向新用户发送邮件
             if( 0 == $this->status ){
@@ -785,6 +794,10 @@ namespace Admin\Model;
 
             if((isset($_SESSION['newImg'])) && ( '' != $_SESSION['newImg'])){
                 $this->img = $_SESSION['newImg'];
+
+                //清空session中的新图片信息
+                $_SESSION['newImg'] = '';
+                unset($_SESSION['newImg']);
             }else{
                 $this->img = 'default.jpg';
             }

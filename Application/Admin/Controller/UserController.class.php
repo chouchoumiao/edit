@@ -75,6 +75,9 @@ class UserController extends CommonController {
                         $this->assign('theDept',$this->theDept());
                         //追加角色设置
                         $this->assign('theAuto',$this->theAuto());
+
+                        //追加字段,方面在js段判断是否需要验证部门都没有选择
+                        $this->assign('noShowDeptAndAuto',true);
                     }
 
                     $this->assign('the',true);
@@ -168,6 +171,10 @@ class UserController extends CommonController {
                     echo D('City')->get4thCity();
                     break;
                 case 'update':
+
+                    //echo intval(I('post.oldSex'));
+                    //echo intval(I('post.sex'));exit;
+//                    dump($_POST);exit;
                     //dump (I("info"));exit;
                     //dump($_POST['info']);exit;
                     //echo PROFILE_PATH.'576a08b509bca.jpg';exit;

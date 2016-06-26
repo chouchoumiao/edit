@@ -165,7 +165,7 @@ function isInteger( str ){
  如果通过验证返回true,否则返回false
 
  */
-function checkMobile( s ){
+function isMobile( s ){
 //var regu =/^[1][3][0-9]{9}$/;
     var regu =/^[1][0-9]{10}$/;
     var re = new RegExp(regu);

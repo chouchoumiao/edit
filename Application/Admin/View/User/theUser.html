@@ -60,11 +60,12 @@
                 <div class="tab-content">
                     <div class="tab-pane fade in active">
                         <h4 class="header-text m-top-md">General Information</h4>
-                        <form action="__ROOT__/Admin/User/doAction/action/update" class="form-horizontal m-top-md" enctype="multipart/form-data" method="post">
+                        <form action="__ROOT__/Admin/User/doAction/action/update" id="updateForm" class="form-horizontal m-top-md" enctype="multipart/form-data" method="post">
 
                             <input type="hidden" value="{$userInfo.password}" name="oldMd5Pass"/>
                             <input type="hidden" value="{$userInfo.username}" name="oldUsername"/>
                             <input type="hidden" value="{$userInfo.img}" name="oldImg"/>
+                            <input type="hidden" value="{$noShowDeptAndAuto}" id="isShow"/>
 
                             <input type="hidden" value="{$userInfo.uid}" name="uid"/>
                             <input type="hidden" value="{$userInfo.udi_sex}" name="oldSex"/>
@@ -73,7 +74,7 @@
                             <input type="hidden" value="{$userInfo.udi_address}" name="oldAddress"/>
                             <input type="hidden" value="{$userInfo.udi_dep_id}" name="olddepID"/>
                             <input type="hidden" value="{$userInfo.udi_description}" name="oldDescription"/>
-                            <input type="hidden" value="{$userInfo.udi_auto_id}" name="auto_id"/>
+                            <input type="hidden" value="{$userInfo.udi_auto_id}" name="auto_id" id="auto_id"/>
 
 
                             <div class="form-group">
@@ -85,13 +86,13 @@
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">昵称</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" value="{$userInfo.username}" name="user_name">
+                                    <input type="text" class="form-control" value="{$userInfo.username}" name="user_name" id="user_name">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">修改密码(空为不修改)</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" value="" name="user_pass">
+                                    <input type="text" class="form-control" value="" name="user_pass" id="user_pass">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -155,7 +156,7 @@
                                     <select id="sel4" name = "sel4" class="form-control col-sm-2"></select>
                                 </div>
                             </div>
-                            <notempty name = "admin">
+                            <notempty name = "admin" >
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">部门</label>
                                     <div class="col-sm-8">
@@ -193,8 +194,8 @@
                             <div class="form-group m-top-lg">
                                 <label class="col-sm-3 control-label"></label>
                                 <div class="col-sm-9">
-                                    <input type="submit" class="btn btn-default" onclick="return checkUpdateUser();" value="提交">
-                                    <input type="reset" class="btn btn-info m-left-xs" value="取消">
+                                    <input type="submit" class="btn btn-info" id="updateSend" value="提交">
+                                    <input type="reset" id="updateRes" class="btn btn-default m-left-xs" value="取消">
 
                                 </div>
                             </div>
