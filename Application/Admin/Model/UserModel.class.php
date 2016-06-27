@@ -231,13 +231,16 @@ namespace Admin\Model;
 
                 //删除upload文件夹中原先用户设置的头像，避免脏数据
 
-                //如果是不是默认图片则删除原图
-                if( 'default.jpg' != I('post.oldImg' )){
+                //上传了图片则删除原图
+                if( '' != $this->img ){
+                    if( 'default.jpg' != I('post.oldImg' )){
 
-                    //删除就图片，防止垃圾数据
-                    ToolModel::delImg(PROFILE_PATH.'/'.I('post.oldImg'));
+                        //删除就图片，防止垃圾数据
+                        ToolModel::delImg(PROFILE_PATH.'/'.I('post.oldImg'));
 
+                    }
                 }
+
                 if( false === M('user_detail_info')->where(array('uid'=>$this->id))->save($detailData)){
 
                     ToolModel::goBack('修改明细表出错').M('user_detail_info')->getLastSql();
@@ -607,6 +610,7 @@ namespace Admin\Model;
                 'uid' => $this->id,
                 'udi_sex'=>1,
                 'udi_tel' => '',
+                'udi_area' => '',
                 'udi_address' => '',
                 'udi_dep_id'=>$jsoID,
                 'udi_auto_id'=>1,
@@ -824,6 +828,7 @@ namespace Admin\Model;
                 'uid' => $this->id,
                 'udi_sex'=>$this->sex,
                 'udi_tel' => '',
+                'udi_area' => '',
                 'udi_address' => '',
                 'udi_dep_id'=>$this->dept,
                 'udi_auto_id'=>$this->auto,
@@ -860,7 +865,11 @@ namespace Admin\Model;
 
             //判断提交的部门复选框是否都为空
             //array_filter函数是去除数组内空内容，如果剩下为空数组
-            if( empty(array_filter(json_decode($this->dept)))) ToolModel::goBack('警告，至少选择一个部门！');
+            $dept = json_decode($this->dept);
+            $arr = array_filter($dept);
+            if( empty($arr) ){
+                ToolModel::goBack('警告，至少选择一个部门！');
+            }
 
         }
         /*********************************************新增用户***************************************************/

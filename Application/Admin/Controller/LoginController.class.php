@@ -8,6 +8,7 @@
 
 namespace Admin\Controller;
 
+use Admin\Model\ToolModel;
 use Think\Controller;
 
 class LoginController extends Controller{
@@ -30,6 +31,7 @@ class LoginController extends Controller{
                     $this->lostPass();
                     break;
                 default:
+                    ToolModel::goToUrl('非常操作','Login/login');
                     break;
 
             }
