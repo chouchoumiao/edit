@@ -9,7 +9,7 @@
                         <form action="__ROOT__/Admin/Post/doAction/action/addNew" id="addForm" name="addForm" class="form-horizontal m-top-md" enctype="multipart/form-data" method="post">
                             <div class="form-group">
                                 <!--<label class="col-sm-1 control-label"></label>-->
-                                <div class="col-sm-10 col-sm-offset-1">
+                                <div class="col-sm-12">
                                     <input type="text" class="form-control" value="" placeholder="在此输入标题" name="user_login" id="user_login"
                                            aria-describedby="inputSuccess2Status">
                                 </div>
@@ -17,10 +17,12 @@
                             <br/>
 
 
+
                             <div class="form-group">
-                                <!--<label class="col-sm-3 control-label">头像</label>-->
-                                <div class="col-sm-10 col-sm-offset-1">
-                                    <input type="file" accept="image/*" id="file_upload" name="file_upload"  multiple="true" value="">
+                                <div class="col-sm-12">
+                                    <div id="editor" name = "editor">
+
+                                    </div>
                                 </div>
                             </div>
 
