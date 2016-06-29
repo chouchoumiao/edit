@@ -7,6 +7,35 @@ header("Content-type: text/html;charset=utf-8");
 
 class PostController extends CommonController {
 
+
+    //表单接收
+    public function subform(){
+
+        dump($_POST);exit;
+
+    }
+
+    //关于上传 请参考我的另一篇记录
+    public function upload(){
+
+        //图片上传设置
+        $config = array(
+            'maxSize'    =>    3145728,
+            'rootPath'	 =>    'Public',
+            'savePath'   =>    '/Uploads/post/',
+            'saveName'   =>    array('uniqid',''),
+            'exts'       =>    array('jpg','png','jpeg'),
+            'autoSub'    =>    false,
+            'subName'    =>    array('date','Ymd'),
+        );
+
+        $arr['success'] = 'ok';
+        $arr['msg'] = $this->uploadImg($config);
+        echo json_encode($arr);
+        exit;
+
+    }
+
     public function doAction(){
 
         $action = $_GET['action'];
@@ -43,7 +72,7 @@ class PostController extends CommonController {
                 //追加用户
                 case 'addNew':
 
-                    dump($_FILES);exit;
+                    //dump($_FILES);exit;
                     
                     
 
@@ -79,5 +108,27 @@ class PostController extends CommonController {
         }
 
     }
+
+    private function uploadImg($config){
+
+        if (!empty($_FILES)) {
+
+            $upload = new \Think\Upload($config);// 实例化上传类
+            $info = $upload->upload();
+
+            //判断是否有图
+            $pathName = '';
+            if($info){
+                foreach($info as $file){
+                    $pathName .= $file['savepath'].$file['savename'];
+                }
+                return $pathName;
+            }
+            else{
+                $this->error($upload->getError());
+            }
+        }
+    }
+
 
 }

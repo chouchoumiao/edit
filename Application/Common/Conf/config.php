@@ -15,7 +15,7 @@ return array(
     'DB_DEBUG' => true,
 
 
-	'SHOW_PAGE_TRACE'=>true,        //开启追踪调试
+//	'SHOW_PAGE_TRACE'=>true,        //开启追踪调试
 
 	/********************数据库配置**************************/
 	'DB_TYPE' => 'mysql',

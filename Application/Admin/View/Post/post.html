@@ -25,6 +25,23 @@
 
     <link rel="stylesheet" href="__PUBLIC__/css/Admin/uploadify.css">
 
+    <style>
+        .mybtn{
+            width:100px;
+            height:30px;
+            display:inline-block;
+            background-color:rgb(91,183,91);
+            border:1px solid rgb(91,183,91);
+            border-radius:3px;
+            color:white;
+            font-size:14px;
+            font-family:微软雅黑;
+            cursor:pointer;
+            text-align:center;
+            vertical-align: center;
+            box-shadow:0px 0px 1px 1px rgb(91,160,91);
+        }
+    </style>
 </head>
 
 <body class="overflow-hidden">
@@ -91,49 +108,62 @@
 
     $(function(){
 
-        $( '#editor' ).summernote({
-
+        $( '#summernote' ).summernote({
+            height: 200,
+            width:820,
+            focus:false,
+            lang:'zh-CN',
             callbacks : {
-                onImageUpload: function (files, editor, $editable) {
+                // onImageUpload的参数为files，summernote支持选择多张图片
+                onImageUpload : function(files) {
+                    var $files = $(files);
 
-                    console.log( 'image upload:' , files, editor, $editable);
+                    // 通过each方法遍历每一个file
+                    $files.each(function() {
 
+                        var file = this;
+
+                        var data = new FormData();
+
+                        // 将文件加入到file中，后端可获得到参数名为“file”
+                        data.append("file", file);
+
+                        // ajax上传
+                        $.ajax({
+                            data : data,
+                            type : "POST",
+                            url : "__ROOT__/Admin/Post/upload",// div上的action
+                            cache : false,
+                            contentType : false,
+                            processData : false,
+                            dataType : "json",
+
+                            // 成功时调用方法，后端返回json数据
+                            success : function(response) {
+                                var imgNode = $("<img class='imgpath'>").attr('src',"__PUBLIC__"+response.msg);
+                                $( '#summernote' ).summernote('insertNode', imgNode[0]);
+                            }
+                        });
+                    });
                 }
             }
 
-
-
         });
 
-        // jQuery('#summernote').summernote({
-        //
-        //     height: "300px",
-        //     onImageUpload: function(files, editor, editable) {
-        //
-        //         console.log('sddddd');
-        //         sendFile(files[0],editor,editable);
-        //     }
-        // });
-        // function sendFile(file,editor,editable) {
-        //     var data = new FormData();
-        //     data.append("file", file);
-        //     $.ajax({
-        //         url: "__ROOT__/Public/Uploads/post",
-        //         data: data,
-        //         cache: false,
-        //         contentType: false,
-        //         processData: false,
-        //         type: 'POST',
-        //         success: function(data){
-        //             //alert(data);
-        //             editor.insertImage(editable, data);
-        //         },
-        //         error: function(jqXHR, textStatus, errorThrown) {
-        //             console.log(textStatus+" "+errorThrown);
-        //         }
-        //     });
-        // }
+
+
     });
+
+    function getImg() {
+
+        //alert('ssss');
+
+        alert($(".imgpath")[0].src);
+        alert($(".imgpath")[1].src);
+        alert($(".imgpath")[2].src);
+    }
+
+
 
 </script>
 
