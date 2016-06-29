@@ -109,8 +109,7 @@
     $(function(){
 
         $( '#summernote' ).summernote({
-            height: 200,
-            width:820,
+            minHeight: 400,
             focus:false,
             lang:'zh-CN',
             callbacks : {
@@ -156,11 +155,16 @@
 
     function getImg() {
 
+        alert($("#summernote").summernote('code'));
         //alert('ssss');
 
-        alert($(".imgpath")[0].src);
-        alert($(".imgpath")[1].src);
-        alert($(".imgpath")[2].src);
+//        var imgcount = $(".imgpath").length;
+//        for (var i = 0;i<imgcount;i++){
+//            alert($(".imgpath")[i].src);
+//        }
+//        alert($(".imgpath")[0].src);
+//        alert($(".imgpath")[1].src);
+//        alert($(".imgpath")[2].src);
     }
 
 

@@ -11,7 +11,8 @@ class PostController extends CommonController {
     //表单接收
     public function subform(){
 
-        dump($_POST);exit;
+        dump($_POST);
+        dump($_GET);exit;
 
     }
 
