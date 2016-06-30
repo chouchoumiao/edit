@@ -269,7 +269,7 @@ function delUser(id){
     }
 
     $.ajax({
-    url:"__ROOT__/Admin/User/doAction/action/del"//改为你的动态页
+    url:ROOT+"/Admin/User/doAction/action/del"//改为你的动态页
     ,type:"POST"
     ,data:{
             'id':id
@@ -278,7 +278,7 @@ function delUser(id){
     ,success:function(json){
         if(json.success == "OK"){
             alert('删除成功');
-            location = "__ROOT__/Admin/User/doAction/action/all";
+            location = ROOT+"/Admin/User/doAction/action/all";
 
         }else{
             alert('删除失败');

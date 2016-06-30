@@ -7,8 +7,6 @@ header("Content-type: text/html;charset=utf-8");
 
 class UserController extends CommonController {
 
-    private $dept;
-    private $auto;
     private $uploadImgName;
 
     public function doAction(){
@@ -19,131 +17,29 @@ class UserController extends CommonController {
 
                 //取得所有用户(分页)
                 case 'all':
-                    $this->assign('all',true);
-
-                    $userObj = D('User');
-
-                    //取得所有用户信息总条数，用于分页
-                    $count = $userObj->getAllUserCount();
-
-                    //分页
-                    import('ORG.Util.Page');// 导入分页类
-                    $Page = new \Org\Util\Page($count,PAGE_SHOW_COUNT);// 实例化分页类 传入总记录数
-                    $limit = $Page->firstRow.','.$Page->listRows;
-
-                    //取得指定条数的信息
-                    
-
-                    $user = $userObj->showUserList($limit);
-
-                    $show = $Page->show();// 分页显示输出
-
-
-                    $this->assign('allUser',$user); //用户信息注入模板
-                    $this->assign('page',$show);    //赋值分页输出
-
-                    $this->display('user');
+                    $this->all();
                     break;
 
                 //取得当前用户
                 case 'the':
-
-                    //如果有传值过来用查询传值的用户
-                    if(isset($_GET['id']) && '' != $_GET['id']){
-
-                        if(!D('User')->idIsExist(I('get.id'))){
-                            ToolModel::goBack('警告，传值错误');
-                        }
-
-                        $userId = I('get.id');
-                    }else{
-                        $userId = $_SESSION['uid'];
-                    }
-
-                    $userInfo = D('User')->getTheUserInfo($userId);
-
-                    //如果是管理员,并且当前不是管理员则显示可以选择变换角色和部门（管理员默认对所有部门有效，所以不必显示）
-                    if(D('User')->isAdmin() && ($userId != $_SESSION['uid'])){
-
-                        $this->assign('admin',true);
-
-                        $this->dept = $userInfo['udi_dep_id'];
-                        $this->auto = $userInfo['udi_auto_id'];
-
-                        // dump($userInfo);exit;
-                        //追加部门设置
-                        $this->assign('theDept',$this->theDept());
-                        //追加角色设置
-                        $this->assign('theAuto',$this->theAuto());
-
-                        //追加字段,方面在js段判断是否需要验证部门都没有选择
-                        $this->assign('noShowDeptAndAuto',true);
-                    }
-
-                    $this->assign('the',true);
-                    $this->assign('userInfo',$userInfo);
-                    $this->display('user');
+                    $this->the();
                     break;
 
                 //删除用户
                 case 'del':
 
-                    //如果有传值过来用查询传值的用户
-                    if(isset($_POST['id']) && '' != $_POST['id']){
-
-                        if(!D('User')->idIsExist(I('post.id'))){
-                            ToolModel::goBack('警告，传值错误');
-                        }
-
-                        //删除前先取得该用户的img，如果用户删除成功，则将原先上传的头像也删除，避免垃圾数据
-                        $img = D('User')->getOldImg(I('post.id'));
-                        $imgName = $img['img'];
-
-                        //删除用户
-                        if(D('User')->delTheUserInfo(I('post.id'))){
-
-                            //如果是默认图片则不删除，否则则删除
-                            if( 'default.jpg' != $imgName ){
-                                ToolModel::delImg(PROFILE_PATH.'/'.$imgName);
-                            }
-
-                            $arr['success'] = 'OK';
-                        }else{
-                            $arr['success'] = 'NG';
-                        }
-
-                        echo json_encode($arr);
-
-                    }else{
-                        $this->error('无法取得要删除的用户id');
-                    }
+                    $this->del();
                     break;
                 //追加用户
                 case 'add':
 
-                    $this->assign('add',true);
-
-                    $autopass = make_password();
-                    $this->assign('autopass',$autopass);
-
-                    //追加部门设置
-                    $this->assign('dept',$this->dept());
-
-                    //追加角色设置
-                    $this->assign('auto',$this->auto());
-
-                    $this->display('user');
+                    $this->add();
                     break;
 
                 //追加用户
                 case 'addNew':
+                    $this->addNew();
 
-                    //判断是否是表单发送过来
-                    if( (!isset($_POST['send'])) || ('' ==  $_POST['send']) ){
-                        ToolModel::goBack('非法操作');
-                    }
-
-                    D('User')->addNewUser();
                     break;
 
                 //选择上传图片
@@ -165,22 +61,12 @@ class UserController extends CommonController {
                     $_SESSION['newImg'] = $this->uploadImgName;
                     exit;
                     break;
-                default:
-                    break;
                 case 'city':
                     echo D('City')->get4thCity();
                     break;
                 case 'update':
 
-                    //echo intval(I('post.oldSex'));
-                    //echo intval(I('post.sex'));exit;
-//                    dump($_POST);exit;
-                    //dump (I("info"));exit;
-                    //dump($_POST['info']);exit;
-                    //echo PROFILE_PATH.'576a08b509bca.jpg';exit;
-                    //dump(D('User')->updateUser());exit;
                     D('User')->updateUser();
-                    //dump($_POST);
                     break;
                 case 'editimg':
                     //图片上传设置
@@ -198,147 +84,148 @@ class UserController extends CommonController {
                     $_SESSION['editImg'] = $this->uploadImgName;
                     exit;
                     break;
+                default:
+                    ToolModel::goBack('警告,非法操作!');
+                    break;
 
             }
         }
 
     }
 
-
     /**
-     * 取得对应用户的部门信息并进行判断输出
-     * @return string
+     * 删除指定id的用户信息
      */
-    private function theDept(){
+    private function del(){
+        //如果有传值过来用查询传值的用户
+        if(isset($_POST['id']) && '' != $_POST['id']){
 
-        //取得数据库中的deptjson格式后，转化为数组格式
-        $deptArr = json_decode($this->dept);
+            if(!D('User')->idIsExist(I('post.id'))){
+                ToolModel::goBack('警告，传值错误');
+            }
 
-        //取得数据库中的部门表
-        $deptDefineArr = D('Dept')->getAllDept();
+            //删除前先取得该用户的img，如果用户删除成功，则将原先上传的头像也删除，避免垃圾数据
+            $img = D('User')->getOldImg(I('post.id'));
+            $imgName = $img['img'];
 
-        //拼接成html
-        $html = '';
+            //删除用户
+            if(D('User')->delTheUserInfo(I('post.id'))){
 
-        //显示所有的部门信息，如果该用户选过的则显示打勾，不然则不打勾
-        for($i=1;$i<=count($deptDefineArr);$i++){
-
-            $html .= '<div class="checkbox inline-block">';
-            $html .= '<div class="custom-checkbox">';
-
-            //用于判断没有选择的次数（如果没有选择的次数等于总部门数，则表示没有选中）
-            $x = 0;
-
-            //循环判断数据库中部门表在该用户的数组中是否存在，存在则表示选中状态
-            for($j=0;$j<count($deptArr);$j++){
-                //如果该用户的部门id在数据表中存在，则改部门为选中状态
-                if($deptArr[$j] == $i){
-                    $html .= '<input type="checkbox" id="dept'.$i.'" value="'.$i.'" name="dept'.$i.'" class="checkbox-purple" checked>';
-                }else{
-                    //不存在数据表，数值加一
-                    $x++;
-
+                //如果是默认图片则不删除，否则则删除
+                if( 'default.jpg' != $imgName ){
+                    ToolModel::delImg(PROFILE_PATH.'/'.$imgName);
                 }
-            }
-            //都不存在，则表示该用户没有选中该部门
-            if($x == count($deptArr)){
-                $html .= '<input type="checkbox" id="dept'.$i.'" value="'.$i.'" name="dept'.$i.'" class="checkbox-purple">';
-            }
-            $html .= '<label for="dept'.$i.'"></label>';
-            $html .= '</div>';
-            $html .= '<div class="inline-block vertical-top">'.$deptDefineArr[$i -1 ]['name'];
-            $html .= '</div> &nbsp &nbsp';
-            $html .= '</div>';
-        }
 
-        return $html;
-
-    }
-
-    private function theAuto(){
-
-        $obj = D('Auto')->getAllAuto();
-        $html = '';
-
-        //count($obj) - 2 最后两个是管理员和超级管理员，不予显示
-        for($i=0;$i<(count($obj) - 2);$i++){
-
-            $html .= '<div class="radio inline-block">';
-            $html .= '<div class="custom-radio m-right-xs">';
-
-            if( $this->auto == $obj[$i]['id']){
-                $html .= '<input type="radio" id="auto'.$obj[$i]['id'].'" value="'.$obj[$i]['id'].'" checked name="auto">';
+                $arr['success'] = 'OK';
             }else{
-                $html .= '<input type="radio" id="auto'.$obj[$i]['id'].'" value="'.$obj[$i]['id'].'" name="auto">';
+                $arr['success'] = 'NG';
             }
-            $html .= '<label for="auto'.$obj[$i]['id'].'"></label>';
-            $html .= '</div>';
-            $html .= '<div class="inline-block vertical-top">'.$obj[$i]['name'];
 
-            $html .= '</div> &nbsp &nbsp';
-            $html .= '</div>';
+            echo json_encode($arr);
 
+        }else{
+            $this->error('无法取得要删除的用户id');
+        }
+    }
+    /**
+     * 新用户信息提交后检查并存入数据库
+     */
+    private function addNew(){
+        //判断是否是表单发送过来
+        if( (!isset($_POST['send'])) || ('' ==  $_POST['send']) ){
+            ToolModel::goBack('非法操作');
         }
 
-        return $html;
+        D('User')->addNewUser();
     }
 
     /**
-     * 拼接部门列表显示
-     * @return string
+     * 显示追加新用户画面
      */
-    private function dept(){
+    private function add(){
 
-        $obj = D('Dept')->getAllDept();
+        $this->assign('add',true);
 
-        $html = '';
-        for($i=0;$i<count($obj);$i++){
+        $autopass = make_password();
+        $this->assign('autopass',$autopass);
 
-            $html .= '<div class="checkbox inline-block">';
-            $html .= '<div class="custom-checkbox">';
-            $html .= '<input type="checkbox" id="dept'.$obj[$i]['id'].'" value="'.$obj[$i]['id'].'" name="dept'.$obj[$i]['id'].'" class="checkbox-purple" checked>';
-            $html .= '<label for="dept'.$obj[$i]['id'].'"></label>';
-            $html .= '</div>';
-            $html .= '<div class="inline-block vertical-top">'.$obj[$i]['name'];
-            $html .= '</div> &nbsp &nbsp';
-            $html .= '</div>';
-        }
+        //追加部门设置
+        $this->assign('dept',ToolModel::showAllDept());
 
-        return $html;
+        //追加角色设置
+        $this->assign('auto',ToolModel::showAllAuto());
+
+        $this->display('user');
 
     }
 
     /**
-     * 拼接角色列表显示
-     * @return string
+     * 根据传值过来的id取得用户信息
      */
-    private function auto(){
+    private function the(){
+        //如果有传值过来用查询传值的用户
+        if(isset($_GET['id']) && '' != $_GET['id']){
 
-        $obj = D('Auto')->getAllAuto();
-        $html = '';
-        //(count($obj) - 1) 超级管理员不予显示
-        for($i=0;$i<(count($obj) - 1);$i++){
-
-            $html .= '<div class="radio inline-block">';
-            $html .= '<div class="custom-radio m-right-xs">';
-
-            if( 1 == $obj[$i]['id']){
-                $html .= '<input type="radio" id="auto'.$obj[$i]['id'].'" value="'.$obj[$i]['id'].'" checked name="auto">';
-            }else{
-                $html .= '<input type="radio" id="auto'.$obj[$i]['id'].'" value="'.$obj[$i]['id'].'" name="auto">';
+            if(!D('User')->idIsExist(I('get.id'))){
+                ToolModel::goBack('警告，传值错误');
             }
-            $html .= '<label for="auto'.$obj[$i]['id'].'"></label>';
-            $html .= '</div>';
-            $html .= '<div class="inline-block vertical-top">'.$obj[$i]['name'];
 
-            $html .= '</div> &nbsp &nbsp';
-            $html .= '</div>';
-
+            $userId = I('get.id');
+        }else{
+            $userId = $_SESSION['uid'];
         }
 
-        return $html;
+        $userInfo = D('User')->getTheUserInfo($userId);
+
+        //如果是管理员,并且当前不是管理员则显示可以选择变换角色和部门（管理员默认对所有部门有效，所以不必显示）
+        if(D('User')->isAdmin() && ($userId != $_SESSION['uid'])){
+
+            $this->assign('admin',true);
+
+            //追加部门设置
+            $this->assign('theDept',ToolModel::theDept($userInfo['udi_dep_id']));
+            //追加角色设置
+            $this->assign('theAuto',ToolModel::theAuto($userInfo['udi_auto_id']));
+
+            //追加字段,方面在js段判断是否需要验证部门都没有选择
+            $this->assign('noShowDeptAndAuto',true);
+        }
+
+        $this->assign('the',true);
+        $this->assign('userInfo',$userInfo);
+        $this->display('user');
     }
 
+
+    /**
+     * 显示所有用户信息
+     */
+    private function all(){
+        $this->assign('all',true);
+
+        $userObj = D('User');
+
+        //取得所有用户信息总条数，用于分页
+        $count = $userObj->getAllUserCount();
+
+        //分页
+        import('ORG.Util.Page');// 导入分页类
+        $Page = new \Org\Util\Page($count,PAGE_SHOW_COUNT);// 实例化分页类 传入总记录数
+        $limit = $Page->firstRow.','.$Page->listRows;
+
+        //取得指定条数的信息
+
+
+        $user = $userObj->showUserList($limit);
+
+        $show = $Page->show();// 分页显示输出
+
+
+        $this->assign('allUser',$user); //用户信息注入模板
+        $this->assign('page',$show);    //赋值分页输出
+
+        $this->display('user');
+    }
 
     /**
      * 新增用户是上传头像后操作

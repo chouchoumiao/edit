@@ -17,18 +17,9 @@ $(function(){
         callbacks : {
             //初始化
             onInit: function() {
-
-
-                var title = $('#oldtitle').val();
-
-                if(title != ''){
+                var content = $('#content').val();
+                if(content != ''){
                     $('#summernote').summernote('code', content);
-                }
-                
-                var oldtitle = $('#oldtitle').val();
-
-                if(oldtitle != ''){
-                    $('#title').val(oldtitle);
                 }
             },
             // onImageUpload的参数为files，summernote支持选择多张图片
@@ -41,8 +32,6 @@ $(function(){
                     var file = this;
 
                     var data = new FormData();
-
-                    alert(data.values());
 
                     // 将文件加入到file中，后端可获得到参数名为“file”
                     data.append("file", file);
