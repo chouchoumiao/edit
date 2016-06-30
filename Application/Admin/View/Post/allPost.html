@@ -1,0 +1,76 @@
+<div class="col-md-12">
+    <ul class="breadcrumb">
+        <li>文章</li>
+        <li>文章一览表</li>
+    </ul>
+    <div class="smart-widget">
+        <div class="smart-widget-header">
+            文章 信息
+            <span class="smart-widget-option">
+                <span class="refresh-icon-animated">
+                    <i class="fa fa-circle-o-notch fa-spin"></i>
+                </span>
+                <a href="#" class="widget-toggle-hidden-option">
+                    <i class="fa fa-cog"></i>
+                </a>
+                <a href="#" class="widget-collapse-option" data-toggle="collapse">
+                    <i class="fa fa-chevron-up"></i>
+                </a>
+            </span>
+        </div>
+        <div class="smart-widget-inner">
+            <div class="smart-widget-hidden-section">
+                <ul class="widget-color-list clearfix">
+                    <li style="background-color:#20232b;" data-color="widget-dark"></li>
+                    <li style="background-color:#4c5f70;" data-color="widget-dark-blue"></li>
+                    <li style="background-color:#23b7e5;" data-color="widget-blue"></li>
+                    <li style="background-color:#2baab1;" data-color="widget-green"></li>
+                    <li style="background-color:#edbc6c;" data-color="widget-yellow"></li>
+                    <li style="background-color:#fbc852;" data-color="widget-orange"></li>
+                    <li style="background-color:#e36159;" data-color="widget-red"></li>
+                    <li style="background-color:#7266ba;" data-color="widget-purple"></li>
+                    <li style="background-color:#f5f5f5;" data-color="widget-light-grey"></li>
+                    <li style="background-color:#fff;" data-color="reset"></li>
+                </ul>
+            </div>
+            <div class="smart-widget-body">
+                <table class="table table-hover center">
+                    <thead style="text-align: center">
+                    <tr >
+                        <th>文章标题</th>
+                        <th>作者</th>
+                        <th>所属部门</th>
+                        <th>发布日期</th>
+                        <th>修改时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <foreach name="allPost" item="vo" key ="k">
+                        <tr>
+                            <td>{$vo.post_title}</td>
+                            <td>{$vo.username}</td>
+                            <td>{$vo.post_dept}</td>
+                            <td>{$vo.post_date}</td>
+                            <td>{$vo.post_modified}</td>
+                            <td>
+                                <a href="__ROOT__/Admin/Post/doAction/action/the/id/{$vo.uid}">
+                                    <i class="fa fa-edit"></i>编辑
+                                </a>
+                                <if condition="$vo['uid'] eq $_SESSION['uid']">
+                                    不能删除
+                                    <else />
+                                    <a href="javascript:delUser({$vo['uid']});">
+                                        &nbsp <i class="fa fa-trash">删除</i>
+                                    </a>
+                                </if>
+                            </td>
+                        </tr>
+                    </foreach>
+                    </tbody>
+                </table>
+                <div>{$page}</div>
+            </div>
+        </div><!-- ./smart-widget-inner -->
+    </div><!-- ./smart-widget -->
+</div>

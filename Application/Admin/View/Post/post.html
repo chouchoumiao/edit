@@ -23,25 +23,6 @@
     <!-- Simplify -->
     <link href="__PUBLIC__/css/Admin/simplify.min.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="__PUBLIC__/css/Admin/uploadify.css">
-
-    <style>
-        .mybtn{
-            width:100px;
-            height:30px;
-            display:inline-block;
-            background-color:rgb(91,183,91);
-            border:1px solid rgb(91,183,91);
-            border-radius:3px;
-            color:white;
-            font-size:14px;
-            font-family:微软雅黑;
-            cursor:pointer;
-            text-align:center;
-            vertical-align: center;
-            box-shadow:0px 0px 1px 1px rgb(91,160,91);
-        }
-    </style>
 </head>
 
 <body class="overflow-hidden">
@@ -92,86 +73,19 @@
 <!-- Simplify -->
 <script src="__PUBLIC__/js/Admin/simplify/simplify.js"></script>
 
-<script src='__PUBLIC__/js/Admin/jquery.uploadify.min.js'></script>
-
-<!-- 删除用户 -->
 <script src="__PUBLIC__/js/common.js?v=20160101"></script>
-<!--<script src="__PUBLIC__/js/Admin/post.js?v=20160106"></script>-->
+<script src="__PUBLIC__/js/Admin/post.js?v=20160106"></script>
 
 
 <script src="__PUBLIC__/js/Admin/summernote.min.js"></script>
 <script src="__PUBLIC__/js/Admin/summernote-zh-CN.js"></script>
 
 
-
-<script>
-
-    $(function(){
-
-        $( '#summernote' ).summernote({
-            minHeight: 400,
-            focus:false,
-            lang:'zh-CN',
-            callbacks : {
-                // onImageUpload的参数为files，summernote支持选择多张图片
-                onImageUpload : function(files) {
-                    var $files = $(files);
-
-                    // 通过each方法遍历每一个file
-                    $files.each(function() {
-
-                        var file = this;
-
-                        var data = new FormData();
-
-                        // 将文件加入到file中，后端可获得到参数名为“file”
-                        data.append("file", file);
-
-                        // ajax上传
-                        $.ajax({
-                            data : data,
-                            type : "POST",
-                            url : "__ROOT__/Admin/Post/upload",// div上的action
-                            cache : false,
-                            contentType : false,
-                            processData : false,
-                            dataType : "json",
-
-                            // 成功时调用方法，后端返回json数据
-                            success : function(response) {
-                                var imgNode = $("<img class='imgpath'>").attr('src',"__PUBLIC__"+response.msg);
-                                $( '#summernote' ).summernote('insertNode', imgNode[0]);
-                            }
-                        });
-                    });
-                }
-            }
-
-        });
-
-
-
-    });
-
-    function getImg() {
-
-        alert($("#summernote").summernote('code'));
-        //alert('ssss');
-
-//        var imgcount = $(".imgpath").length;
-//        for (var i = 0;i<imgcount;i++){
-//            alert($(".imgpath")[i].src);
-//        }
-//        alert($(".imgpath")[0].src);
-//        alert($(".imgpath")[1].src);
-//        alert($(".imgpath")[2].src);
-    }
-
-
-
+<script type="text/javascript">
+    var PUBLIC= "__PUBLIC__";
+    var APP = "__APP__";
+    var ROOT = "__ROOT__";
 </script>
-
-
 
 
 </body>
