@@ -8,11 +8,19 @@ header("Content-type: text/html;charset=utf-8");
 class PostController extends CommonController {
 
     private $dept;
+    private $auto;
 
     public function doAction(){
 
         $action = $_GET['action'];
         if( isset($action) && '' != $action ){
+
+
+            $user = D('User')->getNowUserDetailInfo();
+
+            $this->dept = $user['udi_dep_id'];
+            $this->auto = $user['udi_auto_id'];
+
             switch($action){
 
                 //取得所有用户(分页)
@@ -157,12 +165,9 @@ class PostController extends CommonController {
         //追加部门设置
         $this->assign('dept',ToolModel::showAllDept());
 
-        //判断角色
-
-        $auto = D('User')->getTheAuto();
 
         //根据权限来显示按钮，爆料者和小编是提交审核，总编是审核按钮
-        if( ($auto['udi_auto_id'] == BAOLIAOZHE) || ($auto['udi_auto_id'] == XIAOBIAN) ){
+        if( ($this->auto == BAOLIAOZHE) || ($this->auto == XIAOBIAN) ){
             $this->assign('btnValue','提交审核');
         }else{
             $this->assign('btnValue','审核');
@@ -199,33 +204,106 @@ class PostController extends CommonController {
         $obj = D('Post');
         $this->assign('all',true);
 
-        //取得所有用户信息总条数，用于分页
-        $count = $obj->getCount();
+        if( (intval($this->auto) == ADMIN) || ( intval($this->auto) == SUPPER_ADMIN)){
+            //取得所有用户信息总条数，用于分页
+            $count = $obj->getCount();
 
-        //分页
-        import('ORG.Util.Page');// 导入分页类
-        $Page = new \Org\Util\Page($count,PAGE_SHOW_COUNT);// 实例化分页类 传入总记录数
-        $limit = $Page->firstRow.','.$Page->listRows;
+            //分页
+            import('ORG.Util.Page');// 导入分页类
+            $Page = new \Org\Util\Page($count,PAGE_SHOW_COUNT);// 实例化分页类 传入总记录数
+            $limit = $Page->firstRow.','.$Page->listRows;
 
-        //取得指定条数的信息
+            //取得指定条数的信息
 
 
-        $post = $obj->showPostList($limit);
+            $post = $obj->showPostList($limit);
 
-        $show = $Page->show();// 分页显示输出
+            $show = $Page->show();// 分页显示输出
 
-        for ($i=0;$i<count($post);$i++){
+            for ($i=0;$i<count($post);$i++){
 
-            //如果文章标题过长则截取
-            if(  ToolModel::getStrLen($post[$i]['post_title']) > 10){
-                $post[$i]['post_title'] = ToolModel::getSubString($post[$i]['post_title'],10);
+                //如果文章标题过长则截取
+                if(  ToolModel::getStrLen($post[$i]['post_title']) > 10){
+                    $post[$i]['post_title'] = ToolModel::getSubString($post[$i]['post_title'],10);
+                }
+                //如果昵称过长则截取
+                if(  ToolModel::getStrLen($post[$i]['username']) > 20){
+                    $post[$i]['username'] = ToolModel::getSubString($post[$i]['username'],20);
+                }
             }
-            //如果昵称过长则截取
-            if(  ToolModel::getStrLen($post[$i]['username']) > 10){
-                $post[$i]['username'] = ToolModel::getSubString($post[$i]['username'],10);
+
+            $this->assign('editShow','查看');
+
+        //如果是爆料者,则显示所有该爆料者提交的文章
+        }else if( intval($this->auto) == BAOLIAOZHE ){
+
+            $count = $obj->getBaoliaozheCount();
+
+            if($count <= 0){
+                $post = '';
+            }else{
+                //分页
+                import('ORG.Util.Page');// 导入分页类
+                $Page = new \Org\Util\Page($count,PAGE_SHOW_COUNT);// 实例化分页类 传入总记录数
+                $limit = $Page->firstRow.','.$Page->listRows;
+
+                //取得指定条数的信息
+
+
+                $post = $obj->showBaoliaozhePostList($limit);
+
+                $show = $Page->show();// 分页显示输出
+
+                for ($i=0;$i<count($post);$i++){
+
+                    //如果文章标题过长则截取
+                    if(  ToolModel::getStrLen($post[$i]['post_title']) > 10){
+                        $post[$i]['post_title'] = ToolModel::getSubString($post[$i]['post_title'],10);
+                    }
+                    //如果昵称过长则截取
+                    if(  ToolModel::getStrLen($post[$i]['username']) > 20){
+                        $post[$i]['username'] = ToolModel::getSubString($post[$i]['username'],20);
+                    }
+                }
+                $this->assign('editShow','编辑');
             }
+        }else{
+            //取得属于小编或者总编部门文章总条数，用于分页
+            $arr = json_decode($this->dept);
+
+
+            $this->dept = $arr[0];
+
+            $count = $obj->getDeptCount($this->dept);
+
+            //分页
+            import('ORG.Util.Page');// 导入分页类
+            $Page = new \Org\Util\Page($count,PAGE_SHOW_COUNT);// 实例化分页类 传入总记录数
+            $limit = $Page->firstRow.','.$Page->listRows;
+
+            //取得指定条数的信息
+
+
+            $post = $obj->showDeptPostList($this->dept,$limit);
+
+            $show = $Page->show();// 分页显示输出
+
+            for ($i=0;$i<count($post);$i++){
+
+                //如果文章标题过长则截取
+                if(  ToolModel::getStrLen($post[$i]['post_title']) > 10){
+                    $post[$i]['post_title'] = ToolModel::getSubString($post[$i]['post_title'],10);
+                }
+                //如果昵称过长则截取
+                if(  ToolModel::getStrLen($post[$i]['username']) > 20){
+                    $post[$i]['username'] = ToolModel::getSubString($post[$i]['username'],20);
+                }
+            }
+            $this->assign('editShow','审核');
         }
 
+
+//        echo M('posts')->getLastSql();exit;
 
         $this->assign('allPost',$post); //用户信息注入模板
         $this->assign('page',$show);    //赋值分页输出

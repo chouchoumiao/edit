@@ -33,10 +33,10 @@ namespace Admin\Model;
         private $detailDataArray; //整合后明细数据
 
 
-        public function getTheAuto(){
+        public function getNowUserDetailInfo(){
             $where['uid'] = $_SESSION['uid'];
 
-            return M('user_detail_info')->field('udi_auto_id')->where($where)->find();
+            return M('user_detail_info')->where($where)->find();
         }
 
 
@@ -497,9 +497,9 @@ namespace Admin\Model;
 		private function allUser($limit){
 			//多表联合查询
             if('' == $limit){
-                return M('m_user')->join('INNER JOIN ccm_user_detail_info ON ccm_user_detail_info.uid = ccm_m_user.id')->select();
+                return M('m_user')->join('INNER JOIN ccm_user_detail_info ON ccm_user_detail_info.uid = ccm_m_user.id')->order('ccm_m_user.regtime desc')->select();
             }else{
-                return M('m_user')->join('INNER JOIN ccm_user_detail_info ON ccm_user_detail_info.uid = ccm_m_user.id')->limit($limit)->select();
+                return M('m_user')->join('INNER JOIN ccm_user_detail_info ON ccm_user_detail_info.uid = ccm_m_user.id')->order('ccm_m_user.regtime desc')->limit($limit)->select();
             }
 
 		}
@@ -728,7 +728,7 @@ namespace Admin\Model;
 
             $this->checkAddNewUser();
 
-            //$this->setNewUserData();
+            $this->setNewUserData();
 
             if($this->addToUser() <= 0){
                 ToolModel::goBack('新增用户主表失败！');

@@ -110,7 +110,7 @@
                                     <select id="sel4" name = "sel4" class="form-control col-sm-2"></select>
                                 </div>
                             </div>
-                            <notempty name = "admin" >
+                            <if condition = "$admin eq 1" >
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">部门</label>
                                     <div class="col-sm-8">
@@ -124,7 +124,21 @@
                                         {$theAuto}
                                     </div>
                                 </div>
-                            </notempty>
+                            <else/>
+                                <div class="form-group" style="display: none">
+                                    <label class="col-sm-3 control-label">部门</label>
+                                    <div class="col-sm-8">
+                                        {$theDept}
+                                    </div>
+                                </div>
+
+                                <div class="form-group" style="display: none">
+                                    <label class="col-sm-3 control-label">角色</label>
+                                    <div class="col-sm-8">
+                                        {$theAuto}
+                                    </div>
+                                </div>
+                            </if>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">具体地址(选填)</label>
                                 <div class="col-sm-9">

@@ -17,6 +17,90 @@ namespace Admin\Model;
 
 
         /**
+         * 当前用户是爆料者,则取得所有该爆料者提交的文章(只用于爆料者)
+         * @return mixed
+         */
+        public function getBaoliaozheCount(){
+            $id = $_SESSION['uid'];
+            return M('posts')->join("INNER JOIN ccm_m_user ON ccm_posts.post_author = ccm_m_user.id AND ccm_posts.post_author = '$id'" )->count();
+        }
+
+        public function showBaoliaozhePostList($limit){
+
+            //取得用户信息
+            $obj = $this->allBaoliaozhePost($limit);
+            if(!$obj) ToolModel::goBack('未能取到数据');
+            //返回格式化好的数据，用于显示
+
+            //是二维数组则进行数据格式修正并返回
+            if(ToolModel::isTwoArray($obj)){
+                return $this->dataFormart($obj);
+            }
+        }
+
+        private function allBaoliaozhePost($limit){
+            //多表联合查询
+            $id = $_SESSION['uid'];
+            if('' == $limit){
+                return M('posts')->field('ccm_posts.*,ccm_m_user.id as uid,ccm_m_user.username')->join("INNER JOIN ccm_m_user ON ccm_m_user.id = ccm_posts.post_author AND ccm_posts.post_author = '$id'")->select();
+            }else{
+                return M('posts')->field('ccm_posts.*,ccm_m_user.id as uid,ccm_m_user.username')->join("INNER JOIN ccm_m_user ON ccm_m_user.id = ccm_posts.post_author AND ccm_posts.post_author = '$id'")->limit($limit)->select();
+            }
+
+        }
+
+
+        
+
+        /**
+         * 也显示所有文章一览表使用后
+         * 取得关联表的用户数据，并通过转化生出页面可显示的数据
+
+         * @return mixed
+         */
+        public function showDeptPostList($dept,$limit){
+
+            //取得用户信息
+            $obj = $this->allDeptPost($dept,$limit);
+
+            if(!$obj) ToolModel::goBack('未能取到数据');
+            //返回格式化好的数据，用于显示
+
+            //是二维数组则进行数据格式修正并返回
+            if(ToolModel::isTwoArray($obj)){
+                return $this->dataFormart($obj);
+            }
+        }
+
+        /**
+         * 根据传入的部门id,取得属于该部门的文章(用于小编和总编角色,默认只能属于一个部门)
+         * @param $dept
+         * @param $limit
+         * @return mixed
+         */
+        private function allDeptPost($dept,$limit){
+            //多表联合查询
+            if('' == $limit){
+                return M('posts')->field('ccm_posts.*,ccm_m_user.id as uid,ccm_m_user.username')->join("INNER JOIN ccm_m_user ON ccm_m_user.id = ccm_posts.post_author AND ccm_posts.post_dept LIKE '%$dept%'")->select();
+            }else{
+                return M('posts')->field('ccm_posts.*,ccm_m_user.id as uid,ccm_m_user.username')->join("INNER JOIN ccm_m_user ON ccm_m_user.id = ccm_posts.post_author AND ccm_posts.post_dept LIKE '%$dept%'")->limit($limit)->select();
+            }
+
+        }
+
+        /**
+         * 根据传入的部门id,取得属于该部门的文章个数,用于分页(只用于小编和总编角色)
+         * @param $dept
+         * @return mixed
+         */
+        public function getDeptCount($dept){
+            return M('posts')->join("INNER JOIN ccm_m_user ON ccm_posts.post_author = ccm_m_user.id AND ccm_posts.post_dept LIKE '%$dept%'" )->count();
+        }
+
+
+
+
+        /**
          * 根据传入的id删除文章
          * @param $id
          * @return bool

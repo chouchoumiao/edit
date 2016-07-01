@@ -177,20 +177,20 @@ class UserController extends CommonController {
 
         $userInfo = D('User')->getTheUserInfo($userId);
 
+        //追加部门设置
+        $this->assign('theDept',ToolModel::theDept($userInfo['udi_dep_id']));
+        //追加角色设置
+        $this->assign('theAuto',ToolModel::theAuto($userInfo['udi_auto_id']));
+
         //如果是管理员,并且当前不是管理员则显示可以选择变换角色和部门（管理员默认对所有部门有效，所以不必显示）
         if(D('User')->isAdmin() && ($userId != $_SESSION['uid'])){
-
-            $this->assign('admin',true);
-
-            //追加部门设置
-            $this->assign('theDept',ToolModel::theDept($userInfo['udi_dep_id']));
-            //追加角色设置
-            $this->assign('theAuto',ToolModel::theAuto($userInfo['udi_auto_id']));
-
+            $this->assign('admin',1);
             //追加字段,方面在js段判断是否需要验证部门都没有选择
             $this->assign('noShowDeptAndAuto',true);
+        }else{
+            $this->assign('admin',0);
         }
-
+        
         $this->assign('the',true);
         $this->assign('userInfo',$userInfo);
         $this->display('user');
@@ -222,8 +222,8 @@ class UserController extends CommonController {
 
         for ($i=0;$i<count($user);$i++){
             //如果昵称过长则截取
-            if(  ToolModel::getStrLen($user[$i]['username']) > 10){
-                $user[$i]['username'] = ToolModel::getSubString($user[$i]['username'],10);
+            if(  ToolModel::getStrLen($user[$i]['username']) > 20){
+                $user[$i]['username'] = ToolModel::getSubString($user[$i]['username'],20);
             }
             //如果邮箱地址过长则截取
             if(  ToolModel::getStrLen($user[$i]['email']) > 30){
