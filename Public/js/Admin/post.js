@@ -73,6 +73,7 @@ function addFormSubmit() {
 
 
 
+
     var deptArr = [];
     $("#dept [type=checkbox]:checked").each(function(i){
 
@@ -117,4 +118,36 @@ function resetAddForm () {
     $('#title').val('');
     $('#summernote').summernote('code', '');
 
+}
+
+/**
+ * 根据传入的id删除文章
+ * @param id
+ */
+function delPost(id) {
+    if (!confirm('确定要删除吗？')){
+        return;
+    }
+
+    $.ajax({
+        url:ROOT+"/Admin/Post/doAction/action/del"//改为你的动态页
+        ,type:"POST"
+        ,data:{
+            'id':id
+        }
+        ,dataType: "json"
+        ,success:function(json){
+            if(json.success == "OK"){
+                alert('删除成功');
+                location = ROOT+"/Admin/Post/doAction/action/all";
+
+            }else{
+                alert('删除失败');
+                return false;
+            }
+        }
+        ,error:function(xhr){alert('PHP页面有错误！'+xhr.responseText);}
+    });
+
+    
 }

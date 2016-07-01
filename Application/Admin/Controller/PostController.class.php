@@ -27,7 +27,7 @@ class PostController extends CommonController {
 
                 //删除文章
                 case 'del':
-
+                    $this->del();
                     break;
 
                 //追加用户
@@ -51,6 +51,50 @@ class PostController extends CommonController {
         }
 
     }
+
+    /**
+     * 根据id删除对应的文章，并且同时删除该文章中的图片
+     */
+    private function del(){
+        //如果有传值过来用查询传值的用户
+        if(isset($_POST['id']) && '' != $_POST['id']){
+
+            $obj = D('Post');
+            if(!$obj->idIsExist(I('post.id'))){
+                ToolModel::goBack('警告，不存在改文章');
+            }
+
+            //删除该文章中存在的图片
+            $data = $obj->getTheContent(I('post.id'));
+
+            //数据库取出的数据需要转义
+            $content = htmlspecialchars_decode($data['post_content']);
+
+            //取得其中图片的信息(从文章内容code中查找出img)
+            $imgPathArr = ToolModel::getImgPath($content);
+
+            //删除用户
+            if($obj->delThePost(I('post.id'))){
+
+                //删除原先的图片
+                $count = count($imgPathArr);
+                if($count > 0){
+                    for ($i = 0;$i<$count;$i++){
+                        //删除时需要网站绝对路径
+                        ToolModel::delImg(DOCUMENT_ROOT.$imgPathArr[$i]);
+                    }
+                }
+                $arr['success'] = 'OK';
+            }else{
+                $arr['success'] = 'NG';
+            }
+
+            echo json_encode($arr);
+
+        }else{
+            $this->error('无法取得要删除的用户id');
+        }
+}
 
     /**
      * 追加新文章
@@ -113,6 +157,17 @@ class PostController extends CommonController {
         //追加部门设置
         $this->assign('dept',ToolModel::showAllDept());
 
+        //判断角色
+
+        $auto = D('User')->getTheAuto();
+
+        //根据权限来显示按钮，爆料者和小编是提交审核，总编是审核按钮
+        if( ($auto['udi_auto_id'] == BAOLIAOZHE) || ($auto['udi_auto_id'] == XIAOBIAN) ){
+            $this->assign('btnValue','提交审核');
+        }else{
+            $this->assign('btnValue','审核');
+        }
+        
         $this->assign('add',true);
         $this->display('post');
     }
@@ -155,12 +210,24 @@ class PostController extends CommonController {
         //取得指定条数的信息
 
 
-        $user = $obj->showPostList($limit);
+        $post = $obj->showPostList($limit);
 
         $show = $Page->show();// 分页显示输出
 
+        for ($i=0;$i<count($post);$i++){
 
-        $this->assign('allPost',$user); //用户信息注入模板
+            //如果文章标题过长则截取
+            if(  ToolModel::getStrLen($post[$i]['post_title']) > 10){
+                $post[$i]['post_title'] = ToolModel::getSubString($post[$i]['post_title'],10);
+            }
+            //如果昵称过长则截取
+            if(  ToolModel::getStrLen($post[$i]['username']) > 10){
+                $post[$i]['username'] = ToolModel::getSubString($post[$i]['username'],10);
+            }
+        }
+
+
+        $this->assign('allPost',$post); //用户信息注入模板
         $this->assign('page',$show);    //赋值分页输出
 
         $this->display('post');

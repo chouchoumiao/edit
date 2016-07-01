@@ -8,7 +8,7 @@
                         <h4 class="header-text m-top-md">撰 写 新 文 章</h4>
                         <form class="form-horizontal m-top-md" enctype="multipart/form-data" method="post">
                             <textarea style="display: none"  id="content" >{$content}</textarea>
-                            <input style="display: none"  id="oldtitle" >{$title}</input>
+                            <input style="display: none"  id="oldtitle" value={$title} />
                             <div class="form-group">
                                 <!--<label class="col-sm-1 control-label"></label>-->
                                 <div class="col-sm-12">
@@ -36,8 +36,8 @@
                             <div class="form-group m-top-lg">
                                 <label class="col-sm-12  control-label"></label>
                                 <div class="col-sm-3 col-sm-offset-3">
-                                    <input type="button" class="btn btn-info btn-block" onclick="return addFormSubmit();" value="提交" name="send" id="send">
-                               </div>
+                                    <input type="button" class="btn btn-info btn-block" onclick="return addFormSubmit();" value={$btnValue} name="send" id="send">
+                                </div>
                                 <div class="col-sm-3 ">
                                     <input type="button" class="btn  btn-default m-left-xs btn-block" onclick="return resetAddForm();" value="取消" id="res">
                                 </div>

@@ -36,7 +36,7 @@
             <div class="smart-widget-body">
                 <table class="table table-hover center">
                     <thead style="text-align: center">
-                    <tr >
+                    <tr>
                         <th>用户昵称</th>
                         <th>邮箱地址</th>
                         <th>所属部门</th>
@@ -46,29 +46,35 @@
                         <th>操作</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    <foreach name="allUser" item="vo" key ="k">
-                        <tr>
-                            <td>{$vo.username}</td>
-                            <td>{$vo.email}</td>
-                            <td>{$vo.udi_dep_id}</td>
-                            <td>{$vo.udi_auto_id}</td>
-                            <td>{$vo.status}</td>
-                            <td>{$vo.regtime}</td>
-                            <td>
-                                <a href="__ROOT__/Admin/User/doAction/action/the/id/{$vo.uid}">
-                                    <i class="fa fa-edit"></i>编辑
-                                </a>
-                                <if condition="$vo['uid'] eq $_SESSION['uid']">
-                                    不能删除
-                                    <else />
-                                    <a href="javascript:delUser({$vo['uid']});">
-                                        &nbsp <i class="fa fa-trash">删除</i>
+                    <tbody style="text-align: center">
+                    <if condition = "$allUser neq '' ">
+                        <foreach name="allUser" item="vo" key ="k">
+                            <tr>
+                                <td>{$vo.username}</td>
+                                <td>{$vo.email}</td>
+                                <td>{$vo.udi_dep_id}</td>
+                                <td>{$vo.udi_auto_id}</td>
+                                <td>{$vo.status}</td>
+                                <td>{$vo.regtime}</td>
+                                <td>
+                                    <a href="__ROOT__/Admin/User/doAction/action/the/id/{$vo.uid}">
+                                        <i class="fa fa-edit"></i>编辑
                                     </a>
-                                </if>
-                            </td>
+                                    <if condition="$vo['uid'] eq $_SESSION['uid']">
+                                        不能删除
+                                        <else />
+                                        <a href="javascript:delUser({$vo['uid']});">
+                                            &nbsp <i class="fa fa-trash">删除</i>
+                                        </a>
+                                    </if>
+                                </td>
+                            </tr>
+                        </foreach>
+                    <else />
+                        <tr>
+                            <td colspan=7>没有数据</td>
                         </tr>
-                    </foreach>
+                    </if>
                     </tbody>
                 </table>
                 <div>{$page}</div>

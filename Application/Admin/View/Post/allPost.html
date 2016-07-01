@@ -36,7 +36,7 @@
             <div class="smart-widget-body">
                 <table class="table table-hover center">
                     <thead style="text-align: center">
-                    <tr >
+                    <tr>
                         <th>文章标题</th>
                         <th>作者</th>
                         <th>所属部门</th>
@@ -45,28 +45,28 @@
                         <th>操作</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    <foreach name="allPost" item="vo" key ="k">
-                        <tr>
-                            <td>{$vo.post_title}</td>
-                            <td>{$vo.username}</td>
-                            <td>{$vo.post_dept}</td>
-                            <td>{$vo.post_date}</td>
-                            <td>{$vo.post_modified}</td>
-                            <td>
-                                <a href="__ROOT__/Admin/Post/doAction/action/the/id/{$vo.id}">
-                                    <i class="fa fa-edit"></i>编辑
-                                </a>
-                                <if condition="$vo['uid'] eq $_SESSION['uid']">
-                                    不能删除
-                                    <else />
-                                    <a href="javascript:delUser({$vo['uid']});">
+                    <tbody style="text-align: center">
+                    <if condition = "$allPost neq '' ">
+                        <foreach name="allPost" item="vo" key ="k" >
+                            <tr>
+                                <td>{$vo.post_title}</td>
+                                <td>{$vo.username}</td>
+                                <td>{$vo.post_dept}</td>
+                                <td>{$vo.post_date}</td>
+                                <td>{$vo.post_modified}</td>
+                                <td>
+                                    <a href="__ROOT__/Admin/Post/doAction/action/the/id/{$vo.id}">
+                                        <i class="fa fa-edit"></i>编辑
+                                    </a>
+                                    <a href="javascript:delPost({$vo['id']});">
                                         &nbsp <i class="fa fa-trash">删除</i>
                                     </a>
-                                </if>
-                            </td>
-                        </tr>
-                    </foreach>
+                                </td>
+                            </tr>
+                        </foreach>
+                    <else />
+                        <tr><td colspan=6>没有数据</td></tr>
+                    </if>
                     </tbody>
                 </table>
                 <div>{$page}</div>

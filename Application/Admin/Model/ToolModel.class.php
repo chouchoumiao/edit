@@ -7,6 +7,43 @@ namespace Admin\Model;
 
 	class ToolModel {
 
+
+        /**
+         * 解决中文多字符问题，改方式将中文认为一个字符
+         * @param $str
+         * @return int
+         */
+        static function getStrLen($str){
+            preg_match_all('/./us', $str, $match);
+            return count($match[0]);
+        }
+
+        /**
+         * 返回从0开始到指定位数的字符串
+         * @param $str
+         * @param $len
+         * @return string
+         * 中文截取
+         */
+        static function getSubString($str,$len){
+
+            return mb_substr($str,0,$len,'utf-8').'...';
+        }
+
+        /**
+         * 根据传入的字符串，截取图片地址后返回数组
+         * @param $str
+         * @return mixed
+         */
+        static function getImgPath($str){
+
+            $newStr =  str_replace("\"","'",$str);
+
+            $preg = '/<[img|IMG].*?src=[\'|\"](.*?(?:[\.gif|\.jpg]))[\'|\"].*?[\/]?>/i';
+            preg_match_all($preg, $newStr, $imgArr);
+            return $imgArr[1];
+        }
+
         /**
          * 错误返回
          * @param $msg

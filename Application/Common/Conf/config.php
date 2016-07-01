@@ -6,7 +6,14 @@ define(MY_SITE, $_SERVER['SERVER_NAME']);   //发送邮件附带地址的时候�
 define(PAGE_SHOW_COUNT,6);
 define(ADMIN,'88');
 define(SUPPER_ADMIN,'99');
+define(DOCUMENT_ROOT,$_SERVER['DOCUMENT_ROOT']);
 define(PROFILE_PATH,$_SERVER['DOCUMENT_ROOT'].'/edit/Public/Uploads/profile');
+
+//角色设定
+define(BAOLIAOZHE,1);   //爆料者
+define(XIAOBIAN,2);     //小编
+define(ZONGBIAN,3);     //总编
+define(ADMIN,4);        //管理员
 
 
 

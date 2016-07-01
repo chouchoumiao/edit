@@ -220,6 +220,16 @@ class UserController extends CommonController {
 
         $show = $Page->show();// 分页显示输出
 
+        for ($i=0;$i<count($user);$i++){
+            //如果昵称过长则截取
+            if(  ToolModel::getStrLen($user[$i]['username']) > 10){
+                $user[$i]['username'] = ToolModel::getSubString($user[$i]['username'],10);
+            }
+            //如果邮箱地址过长则截取
+            if(  ToolModel::getStrLen($user[$i]['email']) > 30){
+                $user[$i]['email'] = ToolModel::getSubString($user[$i]['email'],30);
+            }
+        }
 
         $this->assign('allUser',$user); //用户信息注入模板
         $this->assign('page',$show);    //赋值分页输出

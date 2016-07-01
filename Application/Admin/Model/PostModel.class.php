@@ -15,6 +15,50 @@ namespace Admin\Model;
         private $post_modified;
         private $post_parent;
 
+
+        /**
+         * 根据传入的id删除文章
+         * @param $id
+         * @return bool
+         */
+        public function delThePost($id){
+            //删除主表，错误的情况下返回
+            if( false === M('posts')->where("id=$id")->delete()){
+                return false;
+            }
+            //都正确删除后返回
+            return true;
+        }
+
+
+        /**
+         * 根据传入的id查询code（用于删除图片）
+         * @param $id
+         * @return mixed
+         */
+        public function getTheContent($id){
+
+            $where['id'] = $id;
+
+            return M('posts')->field('post_content')->where($where)->find();
+        }
+
+        /**
+         * 根据传入的id查找是否存在记录
+         * @param $id
+         * @return bool
+         */
+        public function idIsExist($id){
+            $where['id'] = $id;
+
+            if(M('posts')->where($where)->count() > 0){
+                return true;
+            }
+            return false;
+
+        }
+
+
         /**
          * 根据传入的文章ID取得文章
          * @return mixed
@@ -108,16 +152,20 @@ namespace Admin\Model;
             if(!isset($_POST['dept'])) ToolModel::goBack('警告,部门传参错误!');
             if( '' == $_POST['dept']) ToolModel::goBack('警告,部门参数不能为空!');
 
-            $this->post_dept = I('post.dept');
+            //存入数据库中取出转义（默认I函数会转义）
+            $this->post_dept = htmlspecialchars_decode(I('post.dept'));
 
             if(!isset($_POST['title'])) ToolModel::goBack('警告,文章标题传参错误!');
             if( '' == $_POST['title']) ToolModel::goBack('警告,文章标题不能为空!');
 
-            $this->post_title = I('post.title');
+            //存入数据库中取出转义（默认I函数会转义）
+            $this->post_title = htmlspecialchars_decode(I('post.title'));
 
             if(!isset($_POST['data'])) ToolModel::goBack('警告,文章内容传参错误!');
             if( '' == $_POST['data']) ToolModel::goBack('警告,文章内容不能为空!');
-            $this->post_content = I('post.data');
+
+            //存入数据库中取出转义（默认I函数会转义）
+            $this->post_content = htmlspecialchars_decode(I('post.data'));
 
 
         }

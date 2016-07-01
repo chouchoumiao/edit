@@ -32,6 +32,14 @@ namespace Admin\Model;
         private $dataArray; //整合后主表数据
         private $detailDataArray; //整合后明细数据
 
+
+        public function getTheAuto(){
+            $where['uid'] = $_SESSION['uid'];
+
+            return M('user_detail_info')->field('udi_auto_id')->where($where)->find();
+        }
+
+
         /**
          * 根据传入的id判读是否存在对应的用户，防止错误的id输入
          * @param $id
