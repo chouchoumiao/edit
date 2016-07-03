@@ -35,10 +35,13 @@
 
                             <div class="form-group m-top-lg">
                                 <label class="col-sm-12  control-label"></label>
-                                <div class="col-sm-3 col-sm-offset-3">
-                                    <input type="button" class="btn btn-info btn-block" onclick="return addFormSubmit();" value={$btnValue} name="send" id="send">
+                                <div class="col-sm-2 col-sm-offset-3" >
+                                    <input type="button" class="btn btn-info btn-block" onclick="return addFormSubmit('pending');" value="提交审核">
                                 </div>
-                                <div class="col-sm-3 ">
+                                <div class="col-sm-2" >
+                                    <input type="button" class="btn btn-warning btn-block" onclick="return addFormSubmit('save');" value="保存不审核">
+                                </div>
+                                <div class="col-sm-2 ">
                                     <input type="button" class="btn  btn-default m-left-xs btn-block" onclick="return resetAddForm();" value="取消" id="res">
                                 </div>
                             </div>

@@ -4,8 +4,20 @@
         <li>文章一览表</li>
     </ul>
     <div class="smart-widget">
+        <form action="__ROOT__/Admin/Post/doAction/action/deptSearch" method="post">
         <div class="smart-widget-header">
-            文章 信息
+            <a href="__ROOT__/Admin/Post/doAction/action/all" class="">所有  <span class="badge badge-primary bounceIn animation-delay3 active">{$allCount}</span></a> &nbsp; &nbsp; &nbsp;
+            <a href="__ROOT__/Admin/Post/doAction/action/all/status/pending" class="">待审核  <span class="badge badge-danger bounceIn animation-delay3 active">{$peningCount}</span></a> &nbsp; &nbsp; &nbsp;
+            <a href="__ROOT__/Admin/Post/doAction/action/all/status/pended" class="">已审核  <span class="badge badge-success bounceIn animation-delay3 active">{$pendedCount}</span></a> &nbsp; &nbsp; &nbsp;
+            {$showSave}
+
+            <span class="col-sm-offset-1">
+                {$dept}
+                <!--<a href=" " class="btn btn-sm btn-danger right">&nbsp; &nbsp; 查 &nbsp; 找 &nbsp; &nbsp; </a>&nbsp;-->
+                <button type="submit" class="btn btn-sm btn-danger right" name="deptSearch" id="deptSearch">&nbsp; &nbsp; 查 &nbsp; 找 &nbsp; &nbsp; </button>&nbsp;
+            </span>
+
+
             <span class="smart-widget-option">
                 <span class="refresh-icon-animated">
                     <i class="fa fa-circle-o-notch fa-spin"></i>
@@ -17,7 +29,9 @@
                     <i class="fa fa-chevron-up"></i>
                 </a>
             </span>
+
         </div>
+        </form>
         <div class="smart-widget-inner">
             <div class="smart-widget-hidden-section">
                 <ul class="widget-color-list clearfix">
@@ -37,12 +51,13 @@
                 <table class="table table-hover center">
                     <thead style="text-align: center">
                     <tr>
-                        <th>文章标题</th>
-                        <th>作者</th>
-                        <th>所属部门</th>
-                        <th>发布日期</th>
-                        <th>修改时间</th>
-                        <th>操作</th>
+                        <th><h5>文章标题</h5></th>
+                        <th><h5>作者</h5></th>
+                        <th><h5>所属部门</h5></th>
+                        <th><h5>发布日期</h5></th>
+                        <th><h5>修改时间</h5></th>
+                        <th><h5>状态</h5></th>
+                        <th><h5>操作</h5></th>
                     </tr>
                     </thead>
                     <tbody style="text-align: center">
@@ -54,6 +69,7 @@
                                 <td>{$vo.post_dept}</td>
                                 <td>{$vo.post_date}</td>
                                 <td>{$vo.post_modified}</td>
+                                <td>{$vo.post_status}</td>
                                 <td>
                                     <a href="__ROOT__/Admin/Post/doAction/action/the/id/{$vo.id}">
                                         <i class="fa fa-edit"></i>{$editShow}

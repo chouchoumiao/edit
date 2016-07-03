@@ -5,16 +5,17 @@
 	$STATIC_METHOD_TYPES = [
 
 		\D('') => [
-			'Adv' instanceof Think\Model\AdvModel,
+			'Post' instanceof Admin\Model\PostModel,
 			'Mongo' instanceof Think\Model\MongoModel,
-			'Auto' instanceof Admin\Model\AutoModel,
 			'View' instanceof Think\Model\ViewModel,
+			'Dept' instanceof Admin\Model\DeptModel,
+			'Validate' instanceof Admin\Model\ValidateModel,
+			'Adv' instanceof Think\Model\AdvModel,
+			'Auto' instanceof Admin\Model\AutoModel,
 			'Tool' instanceof Admin\Model\ToolModel,
 			'Relation' instanceof Think\Model\RelationModel,
 			'Lostpass' instanceof Admin\Model\LostpassModel,
-			'Dept' instanceof Admin\Model\DeptModel,
 			'User' instanceof Admin\Model\UserModel,
-			'Validate' instanceof Admin\Model\ValidateModel,
 			'City' instanceof Admin\Model\CityModel,
 			'Merge' instanceof Think\Model\MergeModel,
 		],

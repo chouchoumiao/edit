@@ -155,10 +155,10 @@ namespace Admin\Model;
 
                 $html .= '<div class="checkbox inline-block">';
                 $html .= '<div class="custom-checkbox">';
-                $html .= '<input type="checkbox" id="dept'.$obj[$i]['id'].'" value="'.$obj[$i]['id'].'" name="dept'.$obj[$i]['id'].'" class="checkbox-purple" checked>';
-                $html .= '<label for="dept'.$obj[$i]['id'].'"></label>';
+                $html .= '<input type="checkbox" id="dept'.$obj[$i]['id'].'" value="'.$obj[$i]['id'].'" name="dept'.$obj[$i]['id'].'" class="checkbox-purple"  checked>';
+                $html .= '<label style ="margin-top:5px"  for="dept'.$obj[$i]['id'].'"></label>';
                 $html .= '</div>';
-                $html .= '<div class="inline-block vertical-top">'.$obj[$i]['name'];
+                $html .= '<div class="inline-block vertical-middle">'.$obj[$i]['name'];
                 $html .= '</div> &nbsp &nbsp';
                 $html .= '</div>';
             }

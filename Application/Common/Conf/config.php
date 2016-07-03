@@ -72,6 +72,12 @@ return array(
         1=>'已激活'
     ),
 
+    'POST_STATUS' => array(
+        'save'    => '保存',
+        'pending' => '待审核',
+        'pended'  => '已审核'
+    ),
+
 
 
 

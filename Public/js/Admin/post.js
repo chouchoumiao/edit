@@ -20,6 +20,8 @@ $(function(){
                 var content = $('#content').val();
                 if(content != ''){
                     $('#summernote').summernote('code', content);
+                }else {
+                    $('#summernote').summernote('code', '');
                 }
             },
             // onImageUpload的参数为files，summernote支持选择多张图片
@@ -69,25 +71,38 @@ $(function(){
  * 提交新增画面信息
  * ajax
  */
-function addFormSubmit() {
+function addFormSubmit(flag) {
 
+    //前端验证
+    var title = $("#title").val();
 
+    if(title == ''){
+        alert('文章标题不能空');
+        return;
+    }
 
+    //判断文章内容是否为空
+    if($("#summernote").summernote('isEmpty')){
+        alert('文章内容不能空');
+        return;
+    }
+
+    var data = $("#summernote").summernote('code');
+
+    //判断部门复选框是否都没有选中
+    if( 0 == ($("input[class='checkbox-purple']:checked").length)){
+        alert('至少选中一个部门');
+        return;
+    }
 
     var deptArr = [];
     $("#dept [type=checkbox]:checked").each(function(i){
-
-
         deptArr.push($(this).val());
-
     });
 
 
     //将数组转化为json格式
     var deptJson = JSON.stringify(deptArr);
-
-    var title = $("#title").val();
-    var data = $("#summernote").summernote('code');
 
     $.ajax({
         url:ROOT+"/Admin/Post/doAction/action/addNew"//改为你的动态页
@@ -95,7 +110,8 @@ function addFormSubmit() {
         ,data:{
             'dept':deptJson,
             'title':title,
-            'data':data
+            'data':data,
+            'flag':flag
         }
         ,dataType: "json"
         ,success:function(json){
@@ -149,5 +165,39 @@ function delPost(id) {
         ,error:function(xhr){alert('PHP页面有错误！'+xhr.responseText);}
     });
 
-    
+}
+
+function deptListSearch() {
+
+    //var deptCount = $("input[class='checkbox-purple']:checked").length;
+
+    var deptArr = [];
+    $("input[class='checkbox-purple']:checked").each(function(i){
+        deptArr.push($(this).val());
+    });
+
+
+    //将数组转化为json格式
+    var deptJson = JSON.stringify(deptArr);
+
+    $.ajax({
+        url:ROOT+"/Admin/Post/doAction/action/deptSearch"//改为你的动态页
+        ,type:"POST"
+        ,data:{
+            'deptSearch':deptJson
+        }
+        ,dataType: "json"
+        ,success:function(json){
+            if(json.success){
+                alert(json.msg);
+                location = ROOT+"/Admin/Post/doAction/action/all";
+            }else{
+                alert(json.msg);
+                return false;
+            }
+        }
+        ,error:function(xhr){alert('PHP页面有错误！'+xhr.responseText);}
+    });
+
+    return false;
 }

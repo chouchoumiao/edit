@@ -42,6 +42,9 @@ class PostController extends CommonController {
                 case 'add':
                     $this->add();
                     break;
+                case 'update':
+                    $this->update();
+                    break;
 
                 case 'upload':
                     $this->upload();
@@ -51,12 +54,79 @@ class PostController extends CommonController {
                 case 'addNew':
                     $this->addNew();
                     break;
+                case 'deptSearch':
+                    $this->deptSearch();
+                    break;
 
                 default:
                     ToolModel::goBack('警告,非法操作');
                     break;
             }
         }
+
+    }
+    
+    private function deptSearch(){
+
+        dump($_POST);exit;
+
+        $deptList = I('post.deptSearch');
+
+        $obj = D('Post');
+
+        //小编和总编的情况下,不显示保存的数据
+        if( (intval($this->auto) == XIAOBIAN) || ( intval($this->auto) == ZONGBIAN)){
+            //取得属于小编或者总编部门文章总条数，用于分页
+            $this->dept = $deptList;
+
+            //小编和总编只能看到属于自己部门,并且文章状态为待审的文章一览
+            $count = $obj->getDeptCount($this->dept);
+
+            //分页
+            import('ORG.Util.Page');// 导入分页类
+            $Page = new \Org\Util\Page($count,PAGE_SHOW_COUNT);// 实例化分页类 传入总记录数
+            $limit = $Page->firstRow.','.$Page->listRows;
+
+            //取得指定条数的信息
+
+
+            $post = $obj->showDeptPostList($this->dept,$limit);
+
+            $show = $Page->show();// 分页显示输出
+
+            for ($i=0;$i<count($post);$i++){
+
+                //如果文章标题过长则截取
+                if(  ToolModel::getStrLen($post[$i]['post_title']) > 10){
+                    $post[$i]['post_title'] = ToolModel::getSubString($post[$i]['post_title'],10);
+                }
+                //如果昵称过长则截取
+                if(  ToolModel::getStrLen($post[$i]['username']) > 20){
+                    $post[$i]['username'] = ToolModel::getSubString($post[$i]['username'],20);
+                }
+            }
+
+            //不文章状态取得所有文章个数
+            $allCount = $obj->getAllDeptCount($this->dept);
+            //取得待审核文章个数
+            $peningCount = $obj->getDeptStatusCount($this->dept,'pending');
+            //取得已审核文章个数
+            $pendedCount = $obj->getDeptStatusCount($this->dept,'pended');
+
+            $this->assign('allCount',$allCount);
+            $this->assign('peningCount',$peningCount);
+            $this->assign('pendedCount',$pendedCount);
+
+            $this->assign('editShow','审核');
+        }
+
+        //$getPostsByDept =
+        
+        
+        
+    }
+
+    private function update(){
 
     }
 
@@ -167,11 +237,27 @@ class PostController extends CommonController {
 
 
         //根据权限来显示按钮，爆料者和小编是提交审核，总编是审核按钮
-        if( ($this->auto == BAOLIAOZHE) || ($this->auto == XIAOBIAN) ){
-            $this->assign('btnValue','提交审核');
+
+        if( $this->auto == BAOLIAOZHE){
+            $html= '';
+            $isSave = 'save';
+            $html .= '<div class="col-sm-2  col-sm-offset-3">';
+            $html .= '<input type="button" class="btn btn-info btn-block" onclick="return addFormSubmit('.$isSave.');" value="保存不审核">';
+            $html .='</div>';
+            $html .= '<div class="col-sm-2">';
+            $html .= '<input type="button" class="btn btn-info btn-block" onclick="return addFormSubmit();" value="提交审核">';
+            $html .='</div>';
+
+
+            $this->assign('btn',$html);
         }else{
-            $this->assign('btnValue','审核');
+            $this->assign('btn','审核');
         }
+//        if( ($this->auto == BAOLIAOZHE) || ($this->auto == XIAOBIAN) ){
+//            $this->assign('btnValue','提交审核');
+//        }else{
+//            $this->assign('btnValue','审核');
+//        }
         
         $this->assign('add',true);
         $this->display('post');
@@ -184,12 +270,48 @@ class PostController extends CommonController {
 
         if(!isset($_GET['id'])) ToolModel::goBack('警告,session出错请重新登录');
 
-        $data = D('Post')->getThePost();
+        $data = D('Post')->getThePost(I('get.id'));
 
         if($data){
+            //如果是小编的情况下点击了审核,需要新增同样的文章
+            if( intval($this->auto) == XIAOBIAN ){
+                $now = date('Y/m/d H:i:s',time());
+                
+                
+                $dataArr = array(
+                    'post_author'  => $_SESSION['uid'],
+                    'post_date'    => $now,
+                    'post_content' => $data['post_content'],
+                    'post_title'   => $data['post_title'],
+                    'post_dept'    => $this->dept,
+                    'post_status'  => 'pending',    //待审核
+                    'post_name'    => '',
+                    'post_modified'=> $now,
+                    'post_parent'  => intval(I('get.id'))   //父节点是提交过来的文章ID
+                );
+                
+                //新增小编拷贝文件
+                $newID = M('posts')->add($dataArr);
+                if( false ===  $newID){
+                    ToolModel::goBack('审核时生成拷贝文件失败,请重试');
+                }
+
+                $data = D('Post')->getThePost( $newID );
+
+                if(!$data){
+                    ToolModel::goBack('取得拷贝文章失败');
+                }
+                
+                
+            }
+            
+            
+            
             $this->assign('content',$data['post_content']);
             $this->assign('title',$data['post_title']);
             $this->assign('theDept',ToolModel::theDept($data['post_dept']));
+        }else{
+            ToolModel::goBack('无该文章,请确认');
         }
 
         $this->assign('the',true);
@@ -200,6 +322,8 @@ class PostController extends CommonController {
      * 显示文章列表信息
      */
     private function all(){
+
+        //dump($_POST);exit;
 
         $obj = D('Post');
         $this->assign('all',true);
@@ -231,6 +355,27 @@ class PostController extends CommonController {
                     $post[$i]['username'] = ToolModel::getSubString($post[$i]['username'],20);
                 }
             }
+
+            //重新取得所有状态的文章个数
+            $allCount = $obj->getAllStatusCount();
+            //取得保存文章个数
+            $saveCount = $obj->getStatusCount('save');
+            //取得待审核文章个数
+            $peningCount = $obj->getStatusCount('pending');
+            //取得已审核文章个数
+            $pendedCount = $obj->getStatusCount('pended');
+
+            //因为小编和总编的情况下不显示保存的个数,所有该html文需要判定
+            $html = '';
+            $html .= '<a href='.__ROOT__.'/Admin/Post/doAction/action/all/status/save>保存  <span class="badge badge-warning bounceIn animation-delay3 active">'.$saveCount.'</span></a>';
+
+            $this->assign('showSave',$html);
+
+            
+            $this->assign('allCount',$allCount);
+            $this->assign('peningCount',$peningCount);
+            $this->assign('pendedCount',$pendedCount);
+
 
             $this->assign('editShow','查看');
 
@@ -265,6 +410,29 @@ class PostController extends CommonController {
                         $post[$i]['username'] = ToolModel::getSubString($post[$i]['username'],20);
                     }
                 }
+
+
+                //取得保存文章个数
+                $saveCount = $obj->getBaoliaozheStatusCount('save');
+                //取得待审核文章个数
+                $peningCount = $obj->getBaoliaozheStatusCount('pending');
+                //取得已审核文章个数
+                $pendedCount = $obj->getBaoliaozheStatusCount('pended');
+
+                //因为小编和总编的情况下不显示保存的个数,所有该html文需要判定
+                $html = '';
+                $html .= '<a href='.__ROOT__.'/Admin/Post/doAction/action/all/status/save>保存  <span class="badge badge-warning bounceIn animation-delay3 active">'.$saveCount.'</span></a>';
+
+                $this->assign('showSave',$html);
+
+
+                //重新取得所有状态的文章个数
+                $allCount = $obj->getAllBaoliaozheCount();
+                $this->assign('allCount',$allCount);
+                $this->assign('peningCount',$peningCount);
+                $this->assign('pendedCount',$pendedCount);
+
+
                 $this->assign('editShow','编辑');
             }
         }else{
@@ -274,6 +442,7 @@ class PostController extends CommonController {
 
             $this->dept = $arr[0];
 
+            //小编和总编只能看到属于自己部门,并且文章状态为待审的文章一览
             $count = $obj->getDeptCount($this->dept);
 
             //分页
@@ -299,11 +468,24 @@ class PostController extends CommonController {
                     $post[$i]['username'] = ToolModel::getSubString($post[$i]['username'],20);
                 }
             }
+
+            //不文章状态取得所有文章个数
+            $allCount = $obj->getAllDeptCount($this->dept);
+            //取得待审核文章个数
+            $peningCount = $obj->getDeptStatusCount($this->dept,'pending');
+            //取得已审核文章个数
+            $pendedCount = $obj->getDeptStatusCount($this->dept,'pended');
+
+            $this->assign('allCount',$allCount);
+            $this->assign('peningCount',$peningCount);
+            $this->assign('pendedCount',$pendedCount);
+            
             $this->assign('editShow','审核');
         }
 
+        //追加部门设置
+        $this->assign('dept',ToolModel::showAllDept());
 
-//        echo M('posts')->getLastSql();exit;
 
         $this->assign('allPost',$post); //用户信息注入模板
         $this->assign('page',$show);    //赋值分页输出

@@ -136,16 +136,35 @@ $(function(){
                     doOK($parent,idname);
                 }
             }
-
             //验证密码(可以为空,不修改)
             if( $(this).is('#user_pass') ){
+
                 var idname = 'user_pass';
                 if( (this.value != '') && (this.value.length < 6 || this.value.length > 20) ){
+
+                    $('#comfirm_pass').val('');  //隐藏钱先清空原先输入的确认密码内容
+                    $('#comfirm').hide();   //如果密码不符合规则,则不显示确认密码
+
                     var errorMsg = '密码必须在6-20位之间';
+                    doError($parent,errorMsg,idname);
+                }else if (this.value == ''){
+                    doOK($parent,idname);
+                }else { //如果输入了新密码 则显示出确认密码
+                    $('#comfirm').fadeIn();
+                    doOK($parent,idname);
+                }
+            }
+
+            //验证确认密码(可以为空,不修改)
+            if( $(this).is('#comfirm_pass') ){
+
+                var idname = 'comfirm_pass';
+                if( this.value != $('#user_pass').val() ){
+
+                    var errorMsg = '确认密码必须与修改密码一致';
                     doError($parent,errorMsg,idname);
                 }else{
                     doOK($parent,idname);
-
                 }
             }
 
@@ -190,7 +209,10 @@ $(function(){
             }
 
             $("form :input.required").trigger('blur');
-            var numError = $('#showError').length;
+
+            //通过判定含有错误class的个数来验证是否都通过
+            var numError = $('.glyphicon-remove').length;
+            
             if(numError){
                 return false;
             }
