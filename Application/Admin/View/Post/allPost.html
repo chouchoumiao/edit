@@ -72,15 +72,22 @@
                     </thead>
                     <tbody style="text-align: center">
                     <if condition = "$allPost neq '' ">
-                        <foreach name="allPost" item="vo" key ="k" >
+                        <foreach name="allPost" item="vo">
                             <tr>
                                 <td>{$vo.post_title}</td>
                                 <td>{$vo.username}</td>
                                 <td>
-                                    <foreach name="vo.post_dept_id" item="voo" key ="j" >
-                                    <a href="{j}">{$voo.post_dept_id}</a>
-                                    <!--<a href="#">{$vo.post_dept}</a>-->
-                                    </foreach>
+                                    <if condition = "$isAdmin eq 1 ">
+                                        <foreach name="vo.post_dept" item="voo">
+                                        <a href="__ROOT__/Admin/Post/doAction/action/all/deptSearch/{$voo}">{$voo}</a>
+                                        <!--<a href="#">{$vo.post_dept}</a>-->
+                                        </foreach>
+                                    <else />
+                                        <foreach name="vo.post_dept" item="voo">
+                                            <a href="#">{$voo}</a>
+                                            <!--<a href="#">{$vo.post_dept}</a>-->
+                                        </foreach>
+                                    </if>
                                 </td>
                                 <td>{$vo.post_date}</td>
                                 <td>{$vo.post_modified}</td>

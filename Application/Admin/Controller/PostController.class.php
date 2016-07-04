@@ -54,9 +54,6 @@ class PostController extends CommonController {
                 case 'addNew':
                     $this->addNew();
                     break;
-                case 'deptSearch':
-                    $this->deptSearch();
-                    break;
 
                 default:
                     ToolModel::goBack('警告,非法操作');
@@ -64,66 +61,6 @@ class PostController extends CommonController {
             }
         }
 
-    }
-    
-    private function deptSearch(){
-
-        dump($_POST);exit;
-
-        $deptList = I('post.deptSearch');
-
-        $obj = D('Post');
-
-        //小编和总编的情况下,不显示保存的数据
-        if( (intval($this->auto) == XIAOBIAN) || ( intval($this->auto) == ZONGBIAN)){
-            //取得属于小编或者总编部门文章总条数，用于分页
-            $this->dept = $deptList;
-
-            //小编和总编只能看到属于自己部门,并且文章状态为待审的文章一览
-            $count = $obj->getDeptCount($this->dept);
-
-            //分页
-            import('ORG.Util.Page');// 导入分页类
-            $Page = new \Org\Util\Page($count,PAGE_SHOW_COUNT);// 实例化分页类 传入总记录数
-            $limit = $Page->firstRow.','.$Page->listRows;
-
-            //取得指定条数的信息
-
-
-            $post = $obj->showDeptPostList($this->dept,$limit);
-
-            $show = $Page->show();// 分页显示输出
-
-            for ($i=0;$i<count($post);$i++){
-
-                //如果文章标题过长则截取
-                if(  ToolModel::getStrLen($post[$i]['post_title']) > 10){
-                    $post[$i]['post_title'] = ToolModel::getSubString($post[$i]['post_title'],10);
-                }
-                //如果昵称过长则截取
-                if(  ToolModel::getStrLen($post[$i]['username']) > 20){
-                    $post[$i]['username'] = ToolModel::getSubString($post[$i]['username'],20);
-                }
-            }
-
-            //不文章状态取得所有文章个数
-            $allCount = $obj->getAllDeptCount($this->dept);
-            //取得待审核文章个数
-            $peningCount = $obj->getDeptStatusCount($this->dept,'pending');
-            //取得已审核文章个数
-            $pendedCount = $obj->getDeptStatusCount($this->dept,'pended');
-
-            $this->assign('allCount',$allCount);
-            $this->assign('peningCount',$peningCount);
-            $this->assign('pendedCount',$pendedCount);
-
-            $this->assign('editShow','审核');
-        }
-
-        //$getPostsByDept =
-        
-        
-        
     }
 
     private function update(){
@@ -235,14 +172,14 @@ class PostController extends CommonController {
         //追加部门设置
         $this->assign('dept',ToolModel::showAllDept());
 
-
         //根据权限来显示按钮，爆料者和小编是提交审核，总编是审核按钮
 
         if( $this->auto == BAOLIAOZHE){
             $html= '';
             $isSave = 'save';
             $html .= '<div class="col-sm-2  col-sm-offset-3">';
-            $html .= '<input type="button" class="btn btn-info btn-block" onclick="return addFormSubmit('.$isSave.');" value="保存不审核">';
+            $html .= '<input type="button" class="btn btn-info btn-block" 
+                        onclick="return addFormSubmit('.$isSave.');" value="保存不审核">';
             $html .='</div>';
             $html .= '<div class="col-sm-2">';
             $html .= '<input type="button" class="btn btn-info btn-block" onclick="return addFormSubmit();" value="提交审核">';
@@ -253,11 +190,6 @@ class PostController extends CommonController {
         }else{
             $this->assign('btn','审核');
         }
-//        if( ($this->auto == BAOLIAOZHE) || ($this->auto == XIAOBIAN) ){
-//            $this->assign('btnValue','提交审核');
-//        }else{
-//            $this->assign('btnValue','审核');
-//        }
         
         $this->assign('add',true);
         $this->display('post');
@@ -323,10 +255,62 @@ class PostController extends CommonController {
      */
     private function all(){
 
-        //dump($_POST);exit;
-
         $obj = D('Post');
         $this->assign('all',true);
+        
+        //管理员和超级管理的情况下,文章一览表中 的部门可以点击,点击相对应的部门显示该部门的一览
+        if( (intval($this->auto) == ADMIN) || ( intval($this->auto) == SUPPER_ADMIN) ){
+            if( (isset($_GET['deptSearch'])) && ( '' != I('get.deptSearch')) ){
+
+                $count = $obj->getdeptSearchCount();
+
+                //分页
+                import('ORG.Util.Page');// 导入分页类
+                $Page = new \Org\Util\Page($count,PAGE_SHOW_COUNT);// 实例化分页类 传入总记录数
+                $limit = $Page->firstRow.','.$Page->listRows;
+                $show = $Page->show();// 分页显示输出
+
+                //取得指定条数的信息
+                $post = $obj->showdeptSearchPostList($limit);
+
+                //文章的标题的长度超过10个则街区10个(默认是10)
+                $this->setPostTitleLength($post);
+                //用户昵称超过10个则街区10个(默认是10)
+                $this->setPostNameLength($post);
+
+                //重新取得所有状态的文章个数
+                $allCount = $obj->getAllStatusCount();
+                //取得保存文章个数
+                $saveCount = $obj->getStatusCount('save');
+                //取得待审核文章个数
+                $peningCount = $obj->getStatusCount('pending');
+                //取得已审核文章个数
+                $pendedCount = $obj->getStatusCount('pended');
+
+                //因为小编和总编的情况下不显示保存的个数,所有该html文需要判定
+                $html = '';
+                $html .= '<a href='.__ROOT__.'/Admin/Post/doAction/action/all/status/save>
+                                保存  <span class="badge badge-warning bounceIn 
+                                animation-delay3 active">'.$saveCount.'</span></a>';
+
+                $this->assign('showSave',$html);
+                $this->assign('allCount',$allCount);
+                $this->assign('peningCount',$peningCount);
+                $this->assign('pendedCount',$pendedCount);
+                $this->assign('allPost',$post); //用户信息注入模板
+                $this->assign('page',$show);    //赋值分页输出
+
+                //将管理员的flag设置为1
+                $this->assign('isAdmin',1);
+
+                //文章的按钮显示为查看
+                $this->assign('editShow','查看');
+
+                $this->display('post');
+                exit;
+            }
+        }
+
 
         if( (intval($this->auto) == ADMIN) || ( intval($this->auto) == SUPPER_ADMIN)){
             //取得所有用户信息总条数，用于分页
@@ -338,23 +322,9 @@ class PostController extends CommonController {
             $limit = $Page->firstRow.','.$Page->listRows;
 
             //取得指定条数的信息
-
-
             $post = $obj->showPostList($limit);
 
             $show = $Page->show();// 分页显示输出
-
-            for ($i=0;$i<count($post);$i++){
-
-                //如果文章标题过长则截取
-                if(  ToolModel::getStrLen($post[$i]['post_title']) > 10){
-                    $post[$i]['post_title'] = ToolModel::getSubString($post[$i]['post_title'],10);
-                }
-                //如果昵称过长则截取
-                if(  ToolModel::getStrLen($post[$i]['username']) > 20){
-                    $post[$i]['username'] = ToolModel::getSubString($post[$i]['username'],20);
-                }
-            }
 
             //重新取得所有状态的文章个数
             $allCount = $obj->getAllStatusCount();
@@ -367,14 +337,11 @@ class PostController extends CommonController {
 
             //因为小编和总编的情况下不显示保存的个数,所有该html文需要判定
             $html = '';
-            $html .= '<a href='.__ROOT__.'/Admin/Post/doAction/action/all/status/save>保存  <span class="badge badge-warning bounceIn animation-delay3 active">'.$saveCount.'</span></a>';
+            $html .= '<a href='.__ROOT__.'/Admin/Post/doAction/action/all/status/save>
+                            保存  <span class="badge badge-warning bounceIn 
+                            animation-delay3 active">'.$saveCount.'</span></a>';
 
             $this->assign('showSave',$html);
-
-            
-            $this->assign('allCount',$allCount);
-            $this->assign('peningCount',$peningCount);
-            $this->assign('pendedCount',$pendedCount);
 
 
             $this->assign('editShow','查看');
@@ -384,61 +351,41 @@ class PostController extends CommonController {
 
             $count = $obj->getBaoliaozheCount();
 
-            if($count <= 0){
-                $post = '';
-            }else{
-                //分页
-                import('ORG.Util.Page');// 导入分页类
-                $Page = new \Org\Util\Page($count,PAGE_SHOW_COUNT);// 实例化分页类 传入总记录数
-                $limit = $Page->firstRow.','.$Page->listRows;
+            //分页
+            import('ORG.Util.Page');// 导入分页类
+            $Page = new \Org\Util\Page($count,PAGE_SHOW_COUNT);// 实例化分页类 传入总记录数
+            $limit = $Page->firstRow.','.$Page->listRows;
 
-                //取得指定条数的信息
+            //取得指定条数的信息
+            $post = $obj->showBaoliaozhePostList($limit);
 
+            $show = $Page->show();// 分页显示输出
 
-                $post = $obj->showBaoliaozhePostList($limit);
+            //取得保存文章个数
+            $saveCount = $obj->getBaoliaozheStatusCount('save');
+            //取得待审核文章个数
+            $peningCount = $obj->getBaoliaozheStatusCount('pending');
+            //取得已审核文章个数
+            $pendedCount = $obj->getBaoliaozheStatusCount('pended');
 
-                $show = $Page->show();// 分页显示输出
+            //因为小编和总编的情况下不显示保存的个数,所有该html文需要判定
+            $html = '';
+            $html .= '<a href='.__ROOT__.'/Admin/Post/doAction/action/all/status/save>保存  
+                        <span class="badge badge-warning bounceIn 
+                        animation-delay3 active">'.$saveCount.'</span></a>';
 
-                for ($i=0;$i<count($post);$i++){
-
-                    //如果文章标题过长则截取
-                    if(  ToolModel::getStrLen($post[$i]['post_title']) > 10){
-                        $post[$i]['post_title'] = ToolModel::getSubString($post[$i]['post_title'],10);
-                    }
-                    //如果昵称过长则截取
-                    if(  ToolModel::getStrLen($post[$i]['username']) > 20){
-                        $post[$i]['username'] = ToolModel::getSubString($post[$i]['username'],20);
-                    }
-                }
+            $this->assign('showSave',$html);
 
 
-                //取得保存文章个数
-                $saveCount = $obj->getBaoliaozheStatusCount('save');
-                //取得待审核文章个数
-                $peningCount = $obj->getBaoliaozheStatusCount('pending');
-                //取得已审核文章个数
-                $pendedCount = $obj->getBaoliaozheStatusCount('pended');
-
-                //因为小编和总编的情况下不显示保存的个数,所有该html文需要判定
-                $html = '';
-                $html .= '<a href='.__ROOT__.'/Admin/Post/doAction/action/all/status/save>保存  <span class="badge badge-warning bounceIn animation-delay3 active">'.$saveCount.'</span></a>';
-
-                $this->assign('showSave',$html);
+            //重新取得所有状态的文章个数
+            $allCount = $obj->getAllBaoliaozheCount();
 
 
-                //重新取得所有状态的文章个数
-                $allCount = $obj->getAllBaoliaozheCount();
-                $this->assign('allCount',$allCount);
-                $this->assign('peningCount',$peningCount);
-                $this->assign('pendedCount',$pendedCount);
+            $this->assign('editShow','编辑');
 
-
-                $this->assign('editShow','编辑');
-            }
         }else{
             //取得属于小编或者总编部门文章总条数，用于分页
             $arr = json_decode($this->dept);
-
 
             $this->dept = $arr[0];
 
@@ -451,23 +398,9 @@ class PostController extends CommonController {
             $limit = $Page->firstRow.','.$Page->listRows;
 
             //取得指定条数的信息
-
-
             $post = $obj->showDeptPostList($this->dept,$limit);
 
             $show = $Page->show();// 分页显示输出
-
-            for ($i=0;$i<count($post);$i++){
-
-                //如果文章标题过长则截取
-                if(  ToolModel::getStrLen($post[$i]['post_title']) > 10){
-                    $post[$i]['post_title'] = ToolModel::getSubString($post[$i]['post_title'],10);
-                }
-                //如果昵称过长则截取
-                if(  ToolModel::getStrLen($post[$i]['username']) > 20){
-                    $post[$i]['username'] = ToolModel::getSubString($post[$i]['username'],20);
-                }
-            }
 
             //不文章状态取得所有文章个数
             $allCount = $obj->getAllDeptCount($this->dept);
@@ -476,22 +409,21 @@ class PostController extends CommonController {
             //取得已审核文章个数
             $pendedCount = $obj->getDeptStatusCount($this->dept,'pended');
 
-            $this->assign('allCount',$allCount);
-            $this->assign('peningCount',$peningCount);
-            $this->assign('pendedCount',$pendedCount);
-            
             $this->assign('editShow','审核');
         }
 
+        $this->setPostTitleLength($post);
+        $this->setPostNameLength($post);
 
-        //dump($post[0]['post_dept_id']);exit;
+        if( (intval($this->auto) == ADMIN) || ( intval($this->auto) == SUPPER_ADMIN) ){
+            $this->assign('isAdmin',1);
+        }else{
+            $this->assign('isAdmin',0);
+        }
 
-
-
-
-        //追加部门设置
-        $this->assign('dept',ToolModel::showAllDept());
-
+        $this->assign('allCount',$allCount);
+        $this->assign('peningCount',$peningCount);
+        $this->assign('pendedCount',$pendedCount);
 
         $this->assign('allPost',$post); //用户信息注入模板
         $this->assign('page',$show);    //赋值分页输出
@@ -499,6 +431,37 @@ class PostController extends CommonController {
         $this->display('post');
     }
 
-    
+
+    /**
+     * 设定取得的文章中Title的长度
+     * @param $post
+     * @param int $len
+     */
+    private function setPostTitleLength(&$post,$len=10){
+        for ($i=0;$i<count($post);$i++){
+
+            //如果文章标题过长则截取
+            if(  ToolModel::getStrLen($post[$i]['post_title']) > $len){
+                $post[$i]['post_title'] = ToolModel::getSubString($post[$i]['post_title'],$len);
+            }
+        }
+    }
+
+    /**
+     * 设定取得的用户名的长度
+     * @param $post
+     * @param int $len
+     */
+    private function setPostNameLength(&$post,$len=10){
+        for ($i=0;$i<count($post);$i++){
+            //如果昵称过长则截取
+            if(  ToolModel::getStrLen($post[$i]['username']) > $len){
+                $post[$i]['username'] = ToolModel::getSubString($post[$i]['username'],$len);
+            }
+        }
+    }
+
+
+
 
 }
