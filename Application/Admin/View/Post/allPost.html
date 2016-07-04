@@ -4,19 +4,29 @@
         <li>文章一览表</li>
     </ul>
     <div class="smart-widget">
-        <form action="__ROOT__/Admin/Post/doAction/action/deptSearch" method="post">
+
         <div class="smart-widget-header">
             <a href="__ROOT__/Admin/Post/doAction/action/all" class="">所有  <span class="badge badge-primary bounceIn animation-delay3 active">{$allCount}</span></a> &nbsp; &nbsp; &nbsp;
             <a href="__ROOT__/Admin/Post/doAction/action/all/status/pending" class="">待审核  <span class="badge badge-danger bounceIn animation-delay3 active">{$peningCount}</span></a> &nbsp; &nbsp; &nbsp;
             <a href="__ROOT__/Admin/Post/doAction/action/all/status/pended" class="">已审核  <span class="badge badge-success bounceIn animation-delay3 active">{$pendedCount}</span></a> &nbsp; &nbsp; &nbsp;
             {$showSave}
 
-            <span class="col-sm-offset-1">
-                {$dept}
-                <!--<a href=" " class="btn btn-sm btn-danger right">&nbsp; &nbsp; 查 &nbsp; 找 &nbsp; &nbsp; </a>&nbsp;-->
-                <button type="submit" class="btn btn-sm btn-danger right" name="deptSearch" id="deptSearch">&nbsp; &nbsp; 查 &nbsp; 找 &nbsp; &nbsp; </button>&nbsp;
-            </span>
+            <!--<span class="col-sm-offset-1">-->
+                <!--{$dept}-->
+                <!--&lt;!&ndash;<a href=" " class="btn btn-sm btn-danger right">&nbsp; &nbsp; 查 &nbsp; 找 &nbsp; &nbsp; </a>&nbsp;&ndash;&gt;-->
+                <!--<button type="submit" class="btn btn-sm btn-danger right" name="deptSearch" id="deptSearch">&nbsp; &nbsp; 查 &nbsp; 找 &nbsp; &nbsp; </button>&nbsp;-->
+            <!--</span>-->
 
+
+                <!--<div class="col-sm-3" id="sel" name = "sel">-->
+                    <!--<select id="sel1" name = "sel1" class="form-control col-sm-2"">-->
+                        <!--<option>部门1</option>-->
+                        <!--<option>部门2</option>-->
+                        <!--<option>部门3</option>-->
+                        <!--<option>部门4</option>-->
+                    <!--</select>-->
+
+                <!--</div>-->
 
             <span class="smart-widget-option">
                 <span class="refresh-icon-animated">
@@ -31,7 +41,7 @@
             </span>
 
         </div>
-        </form>
+
         <div class="smart-widget-inner">
             <div class="smart-widget-hidden-section">
                 <ul class="widget-color-list clearfix">
@@ -66,7 +76,12 @@
                             <tr>
                                 <td>{$vo.post_title}</td>
                                 <td>{$vo.username}</td>
-                                <td>{$vo.post_dept}</td>
+                                <td>
+                                    <foreach name="vo.post_dept_id" item="voo" key ="j" >
+                                    <a href="{j}">{$voo.post_dept_id}</a>
+                                    <!--<a href="#">{$vo.post_dept}</a>-->
+                                    </foreach>
+                                </td>
                                 <td>{$vo.post_date}</td>
                                 <td>{$vo.post_modified}</td>
                                 <td>{$vo.post_status}</td>

@@ -283,6 +283,9 @@ namespace Admin\Model;
                     //处理部门数字转化为文字 start
                     $dept = json_decode($obj[$i]['post_dept']);            //json转化为数字
 
+                    //给obj新增dept数组,给文章列表中显示部门可点击用
+                    $obj[$i]['post_dept_id'] = $dept;
+
                     $obj[$i]['post_dept'] = '';                            //先清空原来的数组
 
                     //将json转化的数组循环判断并显示名称

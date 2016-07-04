@@ -483,6 +483,12 @@ class PostController extends CommonController {
             $this->assign('editShow','审核');
         }
 
+
+        //dump($post[0]['post_dept_id']);exit;
+
+
+
+
         //追加部门设置
         $this->assign('dept',ToolModel::showAllDept());
 
