@@ -167,12 +167,32 @@ function delPost(id) {
 
 }
 
-function deptListSearch() {
+function UpdateFormSubmit(flag) {
 
-    //var deptCount = $("input[class='checkbox-purple']:checked").length;
+    //前端验证
+    var title = $("#title").val();
+
+    if(title == ''){
+        alert('文章标题不能空');
+        return;
+    }
+
+    //判断文章内容是否为空
+    if($("#summernote").summernote('isEmpty')){
+        alert('文章内容不能空');
+        return;
+    }
+
+    var data = $("#summernote").summernote('code');
+
+    //判断部门复选框是否都没有选中
+    if( 0 == ($("input[class='checkbox-purple']:checked").length)){
+        alert('至少选中一个部门');
+        return;
+    }
 
     var deptArr = [];
-    $("input[class='checkbox-purple']:checked").each(function(i){
+    $("#dept [type=checkbox]:checked").each(function(i){
         deptArr.push($(this).val());
     });
 
@@ -181,10 +201,14 @@ function deptListSearch() {
     var deptJson = JSON.stringify(deptArr);
 
     $.ajax({
-        url:ROOT+"/Admin/Post/doAction/action/deptSearch"//改为你的动态页
+        url:ROOT+"/Admin/Post/doAction/action/update"//改为你的动态页
         ,type:"POST"
         ,data:{
-            'deptSearch':deptJson
+            'postid':$("#postid").val(),
+            'dept':deptJson,
+            'title':title,
+            'data':data,
+            'flag':flag
         }
         ,dataType: "json"
         ,success:function(json){
@@ -198,6 +222,4 @@ function deptListSearch() {
         }
         ,error:function(xhr){alert('PHP页面有错误！'+xhr.responseText);}
     });
-
-    return false;
 }

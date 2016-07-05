@@ -14,6 +14,13 @@ class IndexController extends CommonController {
 
         //根据用户的权限来分别显示对应功能
         if($userInfo){
+
+            $auto = $userInfo['udi_auto_id'];
+            
+            $autoCon = new ToolController();
+
+            $autoCon->doAuto($auto);
+            
             $this->assign('userInfo',$userInfo);
             $this->display();
         }else{

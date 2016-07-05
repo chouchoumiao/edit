@@ -7,6 +7,7 @@ namespace Admin\Model;
 
 	class PostModel {
 
+        private $post_id;
         private $post_author;
         private $post_content;
         private $post_title ;
@@ -15,12 +16,133 @@ namespace Admin\Model;
         private $post_modified;
         private $post_parent;
         private $object;
+        private $order;         //默认排序
 
         public function __construct(){
             if(!$this->object){
                 $this->object = M('posts');
+                $this->order = 'post_modified DESC';    //默认排序为修改文章的时间降序
             }
         }
+
+
+
+        public function checkAndSetUpdateData(){
+
+            //获取需要修改的文章的id
+            if(!isset($_POST['postid'])) ToolModel::goBack('警告,未能取得本文章的ID!');
+            $this->post_id = I('post.postid');
+
+            if(!isset($_SESSION['uid'])) ToolModel::goBack('警告,session出错,请重新登录!');
+
+            $this->post_author = intval($_SESSION['uid']);
+
+
+//            1 ：保存flag
+//            2 ：提交审核
+//            3 : 继续提交审核
+//            4 : 审核不通过flag
+//            5 : 审核通过flag
+
+            switch (I('post.flag')){
+                case 1:
+                    $this->post_status = 'save';
+                    break;
+                case 2:
+                    $this->post_status = 'pending';
+                    break;
+                case 3:
+                    $this->post_status = 'pending2';
+                    break;
+                case 4:
+                    $this->post_status = 'dismiss';
+                    break;
+                case 5:
+                    $this->post_status = 'pended';
+                    break;
+            }
+
+            if(!isset($_POST['dept'])) ToolModel::goBack('警告,部门传参错误!');
+            if( '' == $_POST['dept']) ToolModel::goBack('警告,部门参数不能为空!');
+
+            //存入数据库中取出转义（默认I函数会转义）
+            $this->post_dept = htmlspecialchars_decode(I('post.dept'));
+
+            if(!isset($_POST['title'])) ToolModel::goBack('警告,文章标题传参错误!');
+            if( '' == $_POST['title']) ToolModel::goBack('警告,文章标题不能为空!');
+
+            //存入数据库中取出转义（默认I函数会转义）
+            $this->post_title = htmlspecialchars_decode(I('post.title'));
+
+            if(!isset($_POST['data'])) ToolModel::goBack('警告,文章内容传参错误!');
+            if( '' == $_POST['data']) ToolModel::goBack('警告,文章内容不能为空!');
+
+            //存入数据库中取出转义（默认I函数会转义）
+            $this->post_content = htmlspecialchars_decode(I('post.data'));
+        }
+
+
+        public function updatePost(){
+            $now = date('Y/m/d H:i:s',time());
+
+            $where['id'] = $this->post_id;
+
+            $dataArr = array(
+                'post_author'  => $this->post_author,
+                'post_content' => $this->post_content,
+                'post_title'   => $this->post_title,
+                'post_dept'    => $this->post_dept,
+                'post_status'  => $this->post_status,
+                'post_modified'=> $now
+            );
+
+            if( false === $this->object->where($where)->save($dataArr)){
+                return false;
+            }else{
+                return true;
+            }
+        }
+
+        /**
+         * 判断是否小编已经点击过改文章生成备份文件了
+         * @param $id
+         * @return mixed
+         */
+        public function isCopiedByXIAOBIAN($id){
+            $where['post_author'] = $_SESSION['uid'];
+            $where['post_parent'] = $id;
+            $field = 'id';
+
+            return $this->object->field($field)->where($where)->find();
+            
+        }
+
+        /**
+         * 小编点击审核后默认生成一份备份文件
+         * @param $data
+         * @param $dept
+         * @return mixed
+         */
+        public function copyPostByXIAOBIAN($data,$dept){
+            $now = date('Y/m/d H:i:s',time());
+            //$id = intval(I('get.id'));
+            $dataArr = array(
+                'post_author'  => $_SESSION['uid'],
+                'post_date'    => $now,
+                'post_content' => $data['post_content'],
+                'post_title'   => $data['post_title'],
+                'post_dept'    => $dept,
+                'post_status'  => 'pending',    //待审核
+                'post_name'    => '',
+                'post_modified'=> $now,
+                'post_parent'  => $data['id'],   //父节点是提交过来的文章ID
+                'post_parent_author'  => $data['post_author']   //父节点是提交过来的文章作者
+            );
+
+            //新增小编拷贝文件
+            return $this->object->add($dataArr);
+        }
+
 
         /**
          * 根据点击的部门名称先取得id,进一步取得该部门的所有文章条数
@@ -30,7 +152,9 @@ namespace Admin\Model;
 
             //传入的是部门名称,需要转化为部门id
             $deptID = $this->getDeptIDByName(I('get.deptSearch'));
-            $join = "INNER JOIN ccm_m_user ON ccm_posts.post_author = ccm_m_user.id AND ccm_posts.post_dept LIKE '%$deptID%'";
+            $join = "INNER JOIN ccm_m_user 
+                        ON ccm_posts.post_author = ccm_m_user.id 
+                        AND ccm_posts.post_dept LIKE '%$deptID%'";
             return $this->object->join($join)->count();
         }
 
@@ -71,9 +195,9 @@ namespace Admin\Model;
                         AND ccm_posts.post_dept LIKE '%$deptID%'";
             //多表联合查询
             if('' == $limit){
-                return $this->object->field($field)->join($join)->select();
+                return $this->object->field($field)->join($join)->order($this->order)->select();
             }else{
-                return $this->object->field($field)->join($join)->limit($limit)->select();
+                return $this->object->field($field)->join($join)->order($this->order)->limit($limit)->select();
             }
 
         }
@@ -209,18 +333,18 @@ namespace Admin\Model;
 
                 if( ( isset($_GET['status'] ) ) && ( '' != I('get.status')) ){
                     $where['post_status'] = I('get.status');
-                    return $this->object->field($field)->join($join)->where($where)->select();
+                    return $this->object->field($field)->join($join)->order($this->order)->where($where)->select();
                 }
 
-                return $this->object->field($field)->join($join)->select();
+                return $this->object->field($field)->join($join)->order($this->order)->select();
             }else{
 
                 if( ( isset($_GET['status'] ) ) && ( '' != I('get.status')) ){
                     $where['post_status'] = I('get.status');
-                    return $this->object->field($field)->join($join)->where($where)->limit($limit)->select();
+                    return $this->object->field($field)->join($join)->where($where)->order($this->order)->limit($limit)->select();
                 }
 
-                return $this->object->field($field)->join($join)->limit($limit)->select();
+                return $this->object->field($field)->join($join)->order($this->order)->limit($limit)->select();
             }
 
         }
@@ -259,21 +383,22 @@ namespace Admin\Model;
                         ON ccm_m_user.id = ccm_posts.post_author 
                         AND ccm_posts.post_status <> 'save' 
                         AND ccm_posts.post_dept LIKE '%$dept%'";
+            
             //多表联合查询
             if('' == $limit){
 
                 if( ( isset($_GET['status'] ) ) && ( '' != I('get.status')) ){
                     $where['post_status'] = I('get.status');
-                    return $this->object->field($field)->join($join)->where($where)->select();
+                    return $this->object->field($field)->join($join)->order($this->order)->where($where)->select();
                 }
 
-                return $this->object->field($field)->join($join)->select();
+                return $this->object->field($field)->join($join)->order($this->order)->select();
             }else{
                 if( ( isset($_GET['status'] ) ) && ( '' != I('get.status')) ){
                     $where['post_status'] = I('get.status');
-                    return $this->object->field($field)->join($join)->where($where)->limit($limit)->select();
+                    return $this->object->field($field)->join($join)->where($where)->order($this->order)->limit($limit)->select();
                 }
-                return $this->object->field($field)->join($join)->limit($limit)->select();
+                return $this->object->field($field)->join($join)->limit($limit)->order($this->order)->select();
             }
 
         }
@@ -429,21 +554,22 @@ namespace Admin\Model;
             $field = 'ccm_posts.*,ccm_m_user.id as uid,ccm_m_user.username';
             $join = 'INNER JOIN ccm_m_user 
                         ON ccm_m_user.id = ccm_posts.post_author';
+            
             //多表联合查询
             if('' == $limit){
 
                 if( ( isset($_GET['status'] ) ) && ( '' != I('get.status')) ){
                     $where['post_status'] = I('get.status');
-                    return $this->object->field($field)->join($join)->where($where)->select();
+                    return $this->object->field($field)->join($join)->order($this->order)->where($where)->select();
                 }
-                return $this->object->field($field)->join($join)->select();
+                return $this->object->field($field)->join($join)->order($this->order)->select();
 
             }else{
                 if( ( isset($_GET['status'] ) ) && ( '' != I('get.status')) ){
                     $where['post_status'] = I('get.status');
-                    return $this->object->field($field)->join($join)->limit($limit)->where($where)->select();
+                    return $this->object->field($field)->join($join)->limit($limit)->order($this->order)->where($where)->select();
                 }
-                return $this->object->field($field)->join($join)->limit($limit)->select();
+                return $this->object->field($field)->join($join)->order($this->order)->limit($limit)->select();
             }
 
         }

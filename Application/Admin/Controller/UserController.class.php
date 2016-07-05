@@ -13,6 +13,13 @@ class UserController extends CommonController {
 
         $action = $_GET['action'];
         if( isset($action) && '' != $action ){
+
+            //用于根据用户权限来显示对应功能
+            $user = D('User')->getNowUserDetailInfo();
+
+            $autoCon = new ToolController();
+            $autoCon->doAuto($user['udi_auto_id']);
+
             switch($action){
 
                 //取得所有用户(分页)
@@ -178,7 +185,8 @@ class UserController extends CommonController {
         $userInfo = D('User')->getTheUserInfo($userId);
 
         //追加部门设置
-        $this->assign('theDept',ToolModel::theDept($userInfo['udi_dep_id']));
+//        $this->assign('theDept',ToolModel::theDept($userInfo['udi_dep_id']));
+        $this->assign('theDept',ToolModel::deptCodeToName($userInfo['udi_dep_id']));
         //追加角色设置
         $this->assign('theAuto',ToolModel::theAuto($userInfo['udi_auto_id']));
 

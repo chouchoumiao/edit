@@ -7,7 +7,6 @@ namespace Admin\Model;
 
 	class ToolModel {
 
-
         /**
          * 解决中文多字符问题，改方式将中文认为一个字符
          * @param $str
@@ -282,5 +281,37 @@ namespace Admin\Model;
             }
 
             return $html;
+        }
+
+
+        /**
+         * 从数据库取得的json对象的部门id，转化为名称并以逗号隔开的字符串
+         * @param $deptCodeJsonList
+         * @return string
+         */
+        static function deptCodeToName($deptCodeJsonList)
+        {
+            $deptArr = C('DEPT_ARRAY');   //取得自定义常量部门数组
+
+            //处理部门数字转化为文字 start
+            $dept = json_decode($deptCodeJsonList);            //json转化为数字
+
+            //给obj新增dept数组,给文章列表中显示部门可点击用
+
+            $str = '';
+            //将json转化的数组循环判断并显示名称
+            for ($j = 0; $j < count($dept); $j++) {
+
+                //为空则不输出
+                if ('' != $dept[$j]) {
+                    if($j != (count($dept) - 1)){
+                        $str .= $deptArr[$dept[$j]].',';
+                    }else{
+                        $str .= $deptArr[$dept[$j]];
+                    }
+
+                }
+            }
+            return $str;
         }
     }

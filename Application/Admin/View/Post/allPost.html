@@ -4,30 +4,23 @@
         <li>文章一览表</li>
     </ul>
     <div class="smart-widget">
-
         <div class="smart-widget-header">
-            <a href="__ROOT__/Admin/Post/doAction/action/all" class="">所有  <span class="badge badge-primary bounceIn animation-delay3 active">{$allCount}</span></a> &nbsp; &nbsp; &nbsp;
-            <a href="__ROOT__/Admin/Post/doAction/action/all/status/pending" class="">待审核  <span class="badge badge-danger bounceIn animation-delay3 active">{$peningCount}</span></a> &nbsp; &nbsp; &nbsp;
-            <a href="__ROOT__/Admin/Post/doAction/action/all/status/pended" class="">已审核  <span class="badge badge-success bounceIn animation-delay3 active">{$pendedCount}</span></a> &nbsp; &nbsp; &nbsp;
+            <a href="__ROOT__/Admin/Post/doAction/action/all">所有
+                <span class="badge badge-primary bounceIn animation-delay3 active">{$allCount}</span>
+            </a> &nbsp; &nbsp; &nbsp;
+            <a href="__ROOT__/Admin/Post/doAction/action/all/status/pending">待审核
+                <span class="badge badge-danger bounceIn animation-delay3 active">{$peningCount}</span>
+            </a> &nbsp; &nbsp; &nbsp;
+            <a href="__ROOT__/Admin/Post/doAction/action/all/status/pending2">待最终审核
+                <span class="badge badge-warning bounceIn animation-delay3 active">{$pening2Count}</span>
+            </a> &nbsp; &nbsp; &nbsp;
+            <a href="__ROOT__/Admin/Post/doAction/action/all/status/pended">审核通过
+                <span class="badge badge-info bounceIn animation-delay3 active">{$pendedCount}</span>
+            </a> &nbsp; &nbsp; &nbsp;
+            <a href="__ROOT__/Admin/Post/doAction/action/all/status/dismiss">审核未通过
+                <span class="badge badge-purple bounceIn animation-delay3 active">{$dismissCount}</span>
+            </a> &nbsp; &nbsp; &nbsp;
             {$showSave}
-
-            <!--<span class="col-sm-offset-1">-->
-                <!--{$dept}-->
-                <!--&lt;!&ndash;<a href=" " class="btn btn-sm btn-danger right">&nbsp; &nbsp; 查 &nbsp; 找 &nbsp; &nbsp; </a>&nbsp;&ndash;&gt;-->
-                <!--<button type="submit" class="btn btn-sm btn-danger right" name="deptSearch" id="deptSearch">&nbsp; &nbsp; 查 &nbsp; 找 &nbsp; &nbsp; </button>&nbsp;-->
-            <!--</span>-->
-
-
-                <!--<div class="col-sm-3" id="sel" name = "sel">-->
-                    <!--<select id="sel1" name = "sel1" class="form-control col-sm-2"">-->
-                        <!--<option>部门1</option>-->
-                        <!--<option>部门2</option>-->
-                        <!--<option>部门3</option>-->
-                        <!--<option>部门4</option>-->
-                    <!--</select>-->
-
-                <!--</div>-->
-
             <span class="smart-widget-option">
                 <span class="refresh-icon-animated">
                     <i class="fa fa-circle-o-notch fa-spin"></i>
@@ -39,9 +32,7 @@
                     <i class="fa fa-chevron-up"></i>
                 </a>
             </span>
-
         </div>
-
         <div class="smart-widget-inner">
             <div class="smart-widget-hidden-section">
                 <ul class="widget-color-list clearfix">
@@ -79,13 +70,11 @@
                                 <td>
                                     <if condition = "$isAdmin eq 1 ">
                                         <foreach name="vo.post_dept" item="voo">
-                                        <a href="__ROOT__/Admin/Post/doAction/action/all/deptSearch/{$voo}">{$voo}</a>
-                                        <!--<a href="#">{$vo.post_dept}</a>-->
+                                            <a href="__ROOT__/Admin/Post/doAction/action/all/deptSearch/{$voo}">{$voo}</a> &nbsp;
                                         </foreach>
                                     <else />
                                         <foreach name="vo.post_dept" item="voo">
-                                            <a href="#">{$voo}</a>
-                                            <!--<a href="#">{$vo.post_dept}</a>-->
+                                            <a href="#">{$voo}</a> &nbsp;
                                         </foreach>
                                     </if>
                                 </td>

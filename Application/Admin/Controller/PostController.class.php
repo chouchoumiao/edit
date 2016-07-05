@@ -7,6 +7,7 @@ header("Content-type: text/html;charset=utf-8");
 
 class PostController extends CommonController {
 
+    private $postObj;
     private $dept;
     private $auto;
 
@@ -15,11 +16,15 @@ class PostController extends CommonController {
         $action = $_GET['action'];
         if( isset($action) && '' != $action ){
 
-
             $user = D('User')->getNowUserDetailInfo();
 
+            $this->postObj = D('Post');
             $this->dept = $user['udi_dep_id'];
             $this->auto = $user['udi_auto_id'];
+
+            //用于根据用户权限来显示对应功能
+            $autoCon = new ToolController();
+            $autoCon->doAuto($this->auto);
 
             switch($action){
 
@@ -65,6 +70,20 @@ class PostController extends CommonController {
 
     private function update(){
 
+        //检查ajax上传的数据,并赋值
+        $this->postObj->checkAndSetUpdateData();
+
+        //追加新文章
+        if( $this->postObj->updatePost() ){
+            $arr['success'] = 1;
+            $arr['msg'] = '更新成功！';
+        }else{
+            $arr['success'] = 0;
+            $arr['msg'] = '更新失败，请重试！';
+        }
+        echo json_encode($arr);
+        exit;
+        
     }
 
     /**
@@ -148,9 +167,7 @@ class PostController extends CommonController {
             'subName'    =>    array('date','Ymd'),
         );
 
-//        $retArr = $this->uploadImg($config);
         $retArr = ToolModel::uploadImg($config);
-
 
         if($retArr['success']){
             $arr['success'] = 1;
@@ -188,7 +205,7 @@ class PostController extends CommonController {
 
             $this->assign('btn',$html);
         }else{
-            $this->assign('btn','审核');
+            ToolModel::goBack('您没有发表文章的功能');
         }
         
         $this->assign('add',true);
@@ -202,43 +219,32 @@ class PostController extends CommonController {
 
         if(!isset($_GET['id'])) ToolModel::goBack('警告,session出错请重新登录');
 
-        $data = D('Post')->getThePost(I('get.id'));
+        $data = $this->postObj->getThePost(I('get.id'));
 
         if($data){
             //如果是小编的情况下点击了审核,需要新增同样的文章
             if( intval($this->auto) == XIAOBIAN ){
-                $now = date('Y/m/d H:i:s',time());
-                
-                
-                $dataArr = array(
-                    'post_author'  => $_SESSION['uid'],
-                    'post_date'    => $now,
-                    'post_content' => $data['post_content'],
-                    'post_title'   => $data['post_title'],
-                    'post_dept'    => $this->dept,
-                    'post_status'  => 'pending',    //待审核
-                    'post_name'    => '',
-                    'post_modified'=> $now,
-                    'post_parent'  => intval(I('get.id'))   //父节点是提交过来的文章ID
-                );
-                
-                //新增小编拷贝文件
-                $newID = M('posts')->add($dataArr);
-                if( false ===  $newID){
-                    ToolModel::goBack('审核时生成拷贝文件失败,请重试');
-                }
 
-                $data = D('Post')->getThePost( $newID );
+                //先判定是否已经拷贝过了，如果拷贝过了，则取得原先拷贝的文章，没有则新增
+                $isCopiedObj = $this->postObj->isCopiedByXIAOBIAN(I('get.id'));
+
+
+                if($isCopiedObj){
+                    $newID = $isCopiedObj['id'];
+                }else{
+                    $newID = $this->postObj->copyPostByXIAOBIAN($data,$this->dept);
+                    if( false ===  $newID){
+                        ToolModel::goBack('审核时生成拷贝文件失败,请重试');
+                    }
+                }
+                $data = $this->postObj->getThePost( $newID );
 
                 if(!$data){
-                    ToolModel::goBack('取得拷贝文章失败');
+                    ToolModel::goBack('取得文章失败');
                 }
-                
-                
             }
-            
-            
-            
+
+            $this->assign('postid',$data['id']);
             $this->assign('content',$data['post_content']);
             $this->assign('title',$data['post_title']);
             $this->assign('theDept',ToolModel::theDept($data['post_dept']));
@@ -246,6 +252,52 @@ class PostController extends CommonController {
             ToolModel::goBack('无该文章,请确认');
         }
 
+        //根据角色来显示不同的按钮
+        $html = '';
+        $save     = 1;        //保存flag
+        $pending  = 2;        //提交审核
+        $pending2 = 3;        //继续提交审核
+        $dismiss  = 4;        //审核不通过flag
+        $pended  = 5;        //审核通过flag
+
+        switch (intval($this->auto)){
+            case ADMIN:
+            case SUPPER_ADMIN:
+            case ZONGBIAN:
+
+                $html .= '<div class="col-sm-2 col-sm-offset-2">';
+                $html .= '<input type="button" class="btn btn-info btn-block" 
+                            onclick="return UpdateFormSubmit('.$pended.');" value="审核通过" name="send">';
+                $html .= '</div>';
+                $html .= '<div class="col-sm-2 col-sm-offset-1">';
+                $html .= '<input type="button" class="btn btn-warning btn-block" 
+                            onclick="return UpdateFormSubmit('.$dismiss.');" value="审核不通过" name="send">';
+                $html .= '</div>';
+                break;
+            case XIAOBIAN:
+                $html .= '<div class="col-sm-2 col-sm-offset-2">';
+                $html .= '<input type="button" class="btn btn-info btn-block" 
+                            onclick="return UpdateFormSubmit('.$pending2.');" value="继续提交审核" name="send">';
+                $html .= '</div>';
+                $html .= '<div class="col-sm-2 col-sm-offset-1">';
+                $html .= '<input type="button" class="btn btn-warning btn-block" 
+                            onclick="return UpdateFormSubmit('.$dismiss.');" value="审核不通过" name="send">';
+                $html .= '</div>';
+                break;
+            case BAOLIAOZHE:
+                $html .= '<div class="col-sm-2 col-sm-offset-2">';
+                $html .= '<input type="button" class="btn btn-info btn-block" 
+                            onclick="return UpdateFormSubmit('.$pending.');" value="提交审核" name="send">';
+                $html .= '</div>';
+                $html .= '<div class="col-sm-2 col-sm-offset-1">';
+                $html .= '<input type="button" class="btn btn-warning btn-block" 
+                            onclick="return UpdateFormSubmit('.$save.');" value="修改并保存" name="send">';
+                $html .= '</div>';
+
+                break;
+
+        }
+        $this->assign('btn',$html);
         $this->assign('the',true);
         $this->display('post');
     }
@@ -284,8 +336,14 @@ class PostController extends CommonController {
                 $saveCount = $obj->getStatusCount('save');
                 //取得待审核文章个数
                 $peningCount = $obj->getStatusCount('pending');
+
+                //取得待最终审核文章个数
+                $pening2Count = $obj->getStatusCount('pending2');
                 //取得已审核文章个数
                 $pendedCount = $obj->getStatusCount('pended');
+
+                //取得未审核通过文章个数
+                $dismissCount = $obj->getStatusCount('dismiss');
 
                 //因为小编和总编的情况下不显示保存的个数,所有该html文需要判定
                 $html = '';
@@ -296,7 +354,10 @@ class PostController extends CommonController {
                 $this->assign('showSave',$html);
                 $this->assign('allCount',$allCount);
                 $this->assign('peningCount',$peningCount);
+                $this->assign('pening2Count',$pening2Count);
                 $this->assign('pendedCount',$pendedCount);
+                $this->assign('dismissCount',$dismissCount);
+                
                 $this->assign('allPost',$post); //用户信息注入模板
                 $this->assign('page',$show);    //赋值分页输出
 
@@ -335,6 +396,9 @@ class PostController extends CommonController {
             //取得已审核文章个数
             $pendedCount = $obj->getStatusCount('pended');
 
+            $pending2Count = $obj->getStatusCount('pending2');
+            $dismissCount = $obj->getStatusCount('dismiss');
+
             //因为小编和总编的情况下不显示保存的个数,所有该html文需要判定
             $html = '';
             $html .= '<a href='.__ROOT__.'/Admin/Post/doAction/action/all/status/save>
@@ -367,6 +431,9 @@ class PostController extends CommonController {
             $peningCount = $obj->getBaoliaozheStatusCount('pending');
             //取得已审核文章个数
             $pendedCount = $obj->getBaoliaozheStatusCount('pended');
+
+            $pending2Count = $obj->getBaoliaozheStatusCount('pending2');
+            $dismissCount = $obj->getBaoliaozheStatusCount('dismiss');
 
             //因为小编和总编的情况下不显示保存的个数,所有该html文需要判定
             $html = '';
@@ -409,6 +476,9 @@ class PostController extends CommonController {
             //取得已审核文章个数
             $pendedCount = $obj->getDeptStatusCount($this->dept,'pended');
 
+            $pending2Count = $obj->getDeptStatusCount($this->dept,'pending2');
+            $dismissCount = $obj->getDeptStatusCount($this->dept,'dismiss');
+
             $this->assign('editShow','审核');
         }
 
@@ -421,9 +491,12 @@ class PostController extends CommonController {
             $this->assign('isAdmin',0);
         }
 
+        $this->assign('showSave',$html);
         $this->assign('allCount',$allCount);
         $this->assign('peningCount',$peningCount);
+        $this->assign('pening2Count',$pending2Count);
         $this->assign('pendedCount',$pendedCount);
+        $this->assign('dismissCount',$dismissCount);
 
         $this->assign('allPost',$post); //用户信息注入模板
         $this->assign('page',$show);    //赋值分页输出
@@ -460,8 +533,5 @@ class PostController extends CommonController {
             }
         }
     }
-
-
-
 
 }

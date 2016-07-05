@@ -28,65 +28,82 @@
                         </span>
                     </a>
                     <ul class="submenu bg-palette4">
-                        <li><a href="__ROOT__/Admin/Post/doAction/action/add"><span class="submenu-label">发布文章</span></a></li>
-                        <li><a href="__ROOT__/Admin/Post/doAction/action/all"><span class="submenu-label">文章一览</span></a></li>
+                        <notempty name="postControl">
+                        <li><a href="__ROOT__/Admin/Post/doAction/action/add">
+                            <span class="submenu-label">发布文章</span></a>
+                        </li>
+                        </notempty>
+                        <li><a href="__ROOT__/Admin/Post/doAction/action/all">
+                            <span class="submenu-label">文章一览</span></a>
+                        </li>
                     </ul>
                 </li>
-                <li class="openable bg-palette4">
-                    <a href="#">
-                        <span class="menu-content block">
-                            <span class="menu-icon"><i class="block fa fa-tags fa-lg"></i></span>
-                            <span class="text m-left-sm">媒体库</span>
-                            <span class="submenu-icon"></span>
-                        </span>
-                        <span class="menu-content-hover block">
-                            媒体库
-                        </span>
-                    </a>
-                    <ul class="submenu">
-                        <li><a href="**.html"><span class="submenu-label">媒体库</span></a></li>
-                        <li><a href="**.html"><span class="submenu-label">添加</span></a></li>
-                    </ul>
-                </li>
-                <li class="openable bg-palette2">
-                    <a href="#">
-                        <span class="menu-content block">
-                            <span class="menu-icon"><i class="block fa fa-clock-o fa-lg"></i></span>
-                            <span class="text m-left-sm">用户管理</span>
-                            <span class="submenu-icon"></span>
-                        </span>
-                        <span class="menu-content-hover block">
-                            用户
-                        </span>
-                    </a>
-                    <ul class="submenu">
-                        <li><a href="__ROOT__/Admin/User/doAction/action/all/"><span class="submenu-label">所有用户</span></a></li>
-                        <li><a href="__ROOT__/Admin/User/doAction/action/add"><span class="submenu-label">添加用户</span></a></li>
-                    </ul>
-                </li>
-                <li class="bg-palette2">
-                    <a href="Index/timeline.html">
-                        <span class="menu-content block">
-                            <span class="menu-icon"><i class="block fa fa-clock-o fa-lg"></i></span>
-                            <span class="text m-left-sm">评分管理</span><!--
-                            <small class="badge badge-warning badge-square bounceIn animation-delay6 m-left-xs pull-right">7</small> -->
-                        </span>
-                        <span class="menu-content-hover block">
-                            评分
-                        </span>
-                    </a>
-                </li>
-                <li class="bg-palette2">
-                    <a href="Index/timeline.html">
-                        <span class="menu-content block">
-                            <span class="menu-icon"><i class="block fa fa-clock-o fa-lg"></i></span>
-                            <span class="text m-left-sm">通知管理</span>
-                        </span>
-                        <span class="menu-content-hover block">
-                            通知
-                        </span>
-                    </a>
-                </li>
+                <notempty name="mediaControl">
+                    <li class="openable bg-palette4">
+                        <a href="#">
+                            <span class="menu-content block">
+                                <span class="menu-icon"><i class="block fa fa-tags fa-lg"></i></span>
+                                <span class="text m-left-sm">媒体库</span>
+                                <span class="submenu-icon"></span>
+                            </span>
+                            <span class="menu-content-hover block">
+                                媒体库
+                            </span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="**.html"><span class="submenu-label">媒体库</span></a></li>
+                            <li><a href="**.html"><span class="submenu-label">添加</span></a></li>
+                        </ul>
+                    </li>
+                </notempty>
+                <notempty name="userControl">
+                    <li class="openable bg-palette2">
+                        <a href="#">
+                            <span class="menu-content block">
+                                <span class="menu-icon"><i class="block fa fa-clock-o fa-lg"></i></span>
+                                <span class="text m-left-sm">用户管理</span>
+                                <span class="submenu-icon"></span>
+                            </span>
+                            <span class="menu-content-hover block">
+                                用户
+                            </span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="__ROOT__/Admin/User/doAction/action/all/">
+                                <span class="submenu-label">所有用户</span></a>
+                            </li>
+                            <li><a href="__ROOT__/Admin/User/doAction/action/add">
+                                <span class="submenu-label">添加用户</span></a>
+                            </li>
+                        </ul>
+                    </li>
+                </notempty>
+                <notempty name="scoreControl">
+                    <li class="bg-palette2">
+                        <a href="Index/timeline.html">
+                            <span class="menu-content block">
+                                <span class="menu-icon"><i class="block fa fa-clock-o fa-lg"></i></span>
+                                <span class="text m-left-sm">评分管理</span>
+                            </span>
+                            <span class="menu-content-hover block">
+                                评分
+                            </span>
+                        </a>
+                    </li>
+                </notempty>
+                <notempty name="noticeControl">
+                    <li class="bg-palette2">
+                        <a href="Index/timeline.html">
+                            <span class="menu-content block">
+                                <span class="menu-icon"><i class="block fa fa-clock-o fa-lg"></i></span>
+                                <span class="text m-left-sm">通知管理</span>
+                            </span>
+                            <span class="menu-content-hover block">
+                                通知
+                            </span>
+                        </a>
+                    </li>
+                </notempty>
                 <li class="bg-palette1">
                     <a href="__ROOT__/Admin/User/doAction/action/the">
                         <span class="menu-content block">
