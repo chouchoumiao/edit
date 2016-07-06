@@ -621,7 +621,7 @@ namespace Admin\Model;
                 'udi_area' => '',
                 'udi_address' => '',
                 'udi_dep_id'=>$jsoID,
-                'udi_auto_id'=>1,
+                'udi_auto_id'=>BAOLIAOZHE,
                 'udi_description'=> '',
                 'udi_update_time'=> time()
             );
@@ -789,7 +789,7 @@ namespace Admin\Model;
             $this->dept = json_encode($deptList);
             //部门需要特殊处理 end
 
-            $this->auto = I('post.auto');               //角色
+            $this->auto = I('post.auto');
 
             //是否发生邮件(如果需要发送邮件则将状态设置为未激活状态，反正则未激活状态，不用邮件激活)
             if ( 'on' == I('post.isSend')){
@@ -877,6 +877,22 @@ namespace Admin\Model;
             $arr = array_filter($dept);
             if( empty($arr) ){
                 ToolModel::goBack('警告，至少选择一个部门！');
+            }
+
+            //如果是小编或者总编,则只能选择一个部门
+            if( ($this->auto == XIAOBIAN) || ($this->auto == ZONGBIAN) ){
+                if(count($dept) > 1){
+                    ToolModel::goBack('该角色只能选择一个部门');
+                }
+            }
+
+            //取得所有部门的个数
+            $deptCount = D('Dept')->getDeptCount();
+            //如果是管理员一定要选择全部部门
+            if( $this->auto == ADMIN ){
+                if(count($dept) != $deptCount){
+                    ToolModel::goBack('管理员需要选择全部部门进行管理');
+                }
             }
 
         }

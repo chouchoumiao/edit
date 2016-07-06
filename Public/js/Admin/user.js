@@ -1,14 +1,6 @@
 $(function(){
 
-
-
-    // alert($('#updateForm').length);
-
     $('#upload').change(function(){
-
-
-        //alert($('#upload').val());
-        //$('#upload-img').src = '/edit/Public/img/Admin/profile/profile2.jpg';
         $("#upload-img").attr("src",$('#upload').val());
     });
 
@@ -75,6 +67,7 @@ $(function(){
 
         //提交，最终验证。
         $('#send').click(function(){
+            
 
             //提交时验证
             if($('#user_login').val() == ''){
@@ -93,9 +86,25 @@ $(function(){
             }
 
             //判断部门复选框是否都没有选中
-            if( 0 == ($("input[class='checkbox-purple']:checked").length)){
+            var deptCount = $("input[class='checkbox-purple']:checked").length; 
+            if( 0 == deptCount){
                 alert('至少选中一个部门');
                 return false;
+            }
+
+            //判断新增的角色为小编或者总编时,只能选择一个部门,管理员必全选部门
+            var auto = $("input[name='auto']:checked").val();
+
+            if( auto == XIAOBIAN || auto == ZONGBIAN ){
+                if(deptCount > 1){
+                    alert('该角色只能选择一个部门');
+                    return false;
+                }
+            }else if( auto == ADMIN ){
+                if(deptCount != ALL_DEPT_COUNT){
+                    alert('管理员需要选择全部部门进行管理');
+                    return false;
+                }
             }
 
             $("form :input.required").trigger('blur');
@@ -107,7 +116,6 @@ $(function(){
 
         //重置
         $('#res').click(function(){
-
 
             $("div").removeClass('glyphicon');
             $("div").removeClass('has-success');

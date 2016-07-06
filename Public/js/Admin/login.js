@@ -43,7 +43,12 @@ $(function(){
             ,success:function(json){
                 if(json.success == "NG"){
 
-                    var msg = json.msg+"<a href='lostpassword.html'>忘记密码？</a>";
+                    if(json.emailErr){
+                        var msg = json.msg;
+                    }else {
+                        var msg = json.msg+"<a href='lostpassword.html'>忘记密码？</a>";
+                    }
+
 
                     showError( msg );
                     wp_shake_js();

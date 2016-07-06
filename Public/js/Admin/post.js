@@ -167,6 +167,11 @@ function delPost(id) {
 
 }
 
+/**
+ * 修改文章
+ * @param flag
+ * @constructor
+ */
 function UpdateFormSubmit(flag) {
 
     //前端验证

@@ -296,6 +296,12 @@ namespace Admin\Model;
             //处理部门数字转化为文字 start
             $dept = json_decode($deptCodeJsonList);            //json转化为数字
 
+
+            //如果是管理员或者拥有所有部门的,则不显示具体部门名称,显示为所有,以防文字溢出不美观
+            if( count($dept) == count($deptArr)){
+                return '所有部门';
+            }
+
             //给obj新增dept数组,给文章列表中显示部门可点击用
 
             $str = '';
@@ -313,5 +319,24 @@ namespace Admin\Model;
                 }
             }
             return $str;
+        }
+
+
+        /**
+         * 从数据库取得的json对象的用户权限id，转化为名称并以逗号隔开的字符串
+         * @param $autoCodeJson
+         * @return mixed
+         */
+        static function autoCodeToName($autoCodeJson)
+        {
+            $autotArr = C('AUTO_ARRAY');   //取得自定义常量部门数组
+
+            //处理部门数字转化为文字 start
+            $auto = json_decode($autoCodeJson);            //json转化为数字
+
+            //给obj新增dept数组,给文章列表中显示部门可点击用
+
+            return $autotArr[$auto];
+
         }
     }

@@ -89,6 +89,14 @@
     var PUBLIC= "__PUBLIC__";
     var ROOT = "__ROOT__";
 
+    //全局变量角色
+    var BAOLIAOZHE = 1;       //爆料者
+    var XIAOBIAN   = 2;       //小编
+    var ZONGBIAN   = 3;       //总编
+    var ADMIN      = 88;      //管理员
+    var ALL_DEPT_COUNT = 4    //部门的总个数
+
+
     $('#file_upload').uploadify({
         'queueID'  : 'some_file_queue',
         'swf'      : '__PUBLIC__/uploadify.swf',

@@ -20,7 +20,7 @@ class ToolController extends Controller{
         switch ($auto){
             case ADMIN:
             case SUPPER_ADMIN:
-                $this->assign('postControl',true);
+                //$this->assign('postControl',true);
                 $this->assign('mediaControl',true);
                 $this->assign('userControl',true);
                 $this->assign('scoreControl',true);

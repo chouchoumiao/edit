@@ -65,6 +65,18 @@ class LoginController extends Controller{
         $userInfo = D('User')->checklogin();
 
         if( $userInfo ){
+            
+            //继续判断是否已经被激活过
+            if( $userInfo['status'] == 0){
+                $arr['success'] = 'NG';
+                $arr['emailErr'] = true;
+                $arr['msg'] = '您的邮箱还未激活,请先激活。如果注册邮箱【'.$userInfo['email'].'】错误,请联系管理员邮箱:wu_jy1984@126.com';
+                echo json_encode($arr);
+                exit;
+            }
+            
+            
+            
             //将用户信息中用户名 id 头像路径放入session中
             $_SESSION['uid']      = $userInfo['id'];
             $_SESSION['username'] = $userInfo['username'];

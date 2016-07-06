@@ -309,73 +309,166 @@ class PostController extends CommonController {
 
         $obj = D('Post');
         $this->assign('all',true);
-        
+
+        if( intval($this->auto) != BAOLIAOZHE){
+            if( (isset($_GET['userSearch'])) && ( '' != I('get.userSearch')) ){
+                $this->getUserSearch();
+            }
+
+        }
+
         //管理员和超级管理的情况下,文章一览表中 的部门可以点击,点击相对应的部门显示该部门的一览
-        if( (intval($this->auto) == ADMIN) || ( intval($this->auto) == SUPPER_ADMIN) ){
+        if( (intval($this->auto) != XIAOBIAN) && ( intval($this->auto) != ZONGBIAN) ){
             if( (isset($_GET['deptSearch'])) && ( '' != I('get.deptSearch')) ){
-
-                $count = $obj->getdeptSearchCount();
-
-                //分页
-                import('ORG.Util.Page');// 导入分页类
-                $Page = new \Org\Util\Page($count,PAGE_SHOW_COUNT);// 实例化分页类 传入总记录数
-                $limit = $Page->firstRow.','.$Page->listRows;
-                $show = $Page->show();// 分页显示输出
-
-                //取得指定条数的信息
-                $post = $obj->showdeptSearchPostList($limit);
-
-                //文章的标题的长度超过10个则街区10个(默认是10)
-                $this->setPostTitleLength($post);
-                //用户昵称超过10个则街区10个(默认是10)
-                $this->setPostNameLength($post);
-
-                //重新取得所有状态的文章个数
-                $allCount = $obj->getAllStatusCount();
-                //取得保存文章个数
-                $saveCount = $obj->getStatusCount('save');
-                //取得待审核文章个数
-                $peningCount = $obj->getStatusCount('pending');
-
-                //取得待最终审核文章个数
-                $pening2Count = $obj->getStatusCount('pending2');
-                //取得已审核文章个数
-                $pendedCount = $obj->getStatusCount('pended');
-
-                //取得未审核通过文章个数
-                $dismissCount = $obj->getStatusCount('dismiss');
-
-                //因为小编和总编的情况下不显示保存的个数,所有该html文需要判定
-                $html = '';
-                $html .= '<a href='.__ROOT__.'/Admin/Post/doAction/action/all/status/save>
-                                保存  <span class="badge badge-warning bounceIn 
-                                animation-delay3 active">'.$saveCount.'</span></a>';
-
-                $this->assign('showSave',$html);
-                $this->assign('allCount',$allCount);
-                $this->assign('peningCount',$peningCount);
-                $this->assign('pening2Count',$pening2Count);
-                $this->assign('pendedCount',$pendedCount);
-                $this->assign('dismissCount',$dismissCount);
-                
-                $this->assign('allPost',$post); //用户信息注入模板
-                $this->assign('page',$show);    //赋值分页输出
-
-                //将管理员的flag设置为1
-                $this->assign('isAdmin',1);
-
-                //文章的按钮显示为查看
-                $this->assign('editShow','查看');
-
-                $this->display('post');
-                exit;
+                $this->getDeptSearch();
             }
         }
 
+        //根据不同的角色来来显示文章列表
+        $this->getPostWithAutos();
 
+    }
+
+    /**
+     *根据作者来查询文章并显示
+     */
+    private function getUserSearch(){
+        $count = $this->postObj->getUserSearchCount(I('get.userSearch'));
+
+        //分页
+        import('ORG.Util.Page');// 导入分页类
+        $Page = new \Org\Util\Page($count,PAGE_SHOW_COUNT);// 实例化分页类 传入总记录数
+        $limit = $Page->firstRow.','.$Page->listRows;
+        $show = $Page->show();// 分页显示输出
+
+        //取得指定条数的信息
+        $post = $this->postObj->showUserSearchPostList(I('get.userSearch'),$limit);
+
+        //文章的标题的长度超过10个则街区10个(默认是10)
+        $this->setPostTitleLength($post);
+        //用户昵称超过10个则街区10个(默认是10)
+        $this->setPostNameLength($post);
+
+        //重新取得所有状态的文章个数
+        $allCount = $this->postObj->getAllStatusCount();
+        //取得保存文章个数
+        $saveCount = $this->postObj->getStatusCount('save');
+        //取得待审核文章个数
+        $peningCount = $this->postObj->getStatusCount('pending');
+
+        //取得待最终审核文章个数
+        $pening2Count = $this->postObj->getStatusCount('pending2');
+        //取得已审核文章个数
+        $pendedCount = $this->postObj->getStatusCount('pended');
+
+        //取得未审核通过文章个数
+        $dismissCount = $this->postObj->getStatusCount('dismiss');
+
+        //因为小编和总编的情况下不显示保存的个数,所有该html文需要判定
+        $html = '';
+        $html .= '<a href='.__ROOT__.'/Admin/Post/doAction/action/all/status/save>
+                                保存  <span class="badge badge-warning bounceIn 
+                                animation-delay3 active">'.$saveCount.'</span></a>';
+
+        $this->assign('showSave',$html);
+        $this->assign('allCount',$allCount);
+        $this->assign('peningCount',$peningCount);
+        $this->assign('pening2Count',$pening2Count);
+        $this->assign('pendedCount',$pendedCount);
+        $this->assign('dismissCount',$dismissCount);
+
+        $this->assign('allPost',$post); //用户信息注入模板
+        $this->assign('page',$show);    //赋值分页输出
+
+
+        $this->assign('isUserSearch',1);    //是否显示可以通过作者筛选
+
+
+        if($this->auto == XIAOBIAN || $this->auto == ZONGBIAN){
+            $this->assign('editShow','审核');  //爆料者显示为编辑
+        }else{
+            $this->assign('editShow','查看');  //管理员显示查看
+            //将管理员的flag设置为1
+            $this->assign('isAdmin',1);
+        }
+
+        $this->display('post');
+        exit;
+    }
+
+    /**
+     * 根据部门查查询文章并显示
+     */
+    private function getDeptSearch(){
+        $count = $this->postObj->getdeptSearchCount($this->auto);
+
+        //分页
+        import('ORG.Util.Page');// 导入分页类
+        $Page = new \Org\Util\Page($count,PAGE_SHOW_COUNT);// 实例化分页类 传入总记录数
+        $limit = $Page->firstRow.','.$Page->listRows;
+        $show = $Page->show();// 分页显示输出
+
+        //取得指定条数的信息
+        $post = $this->postObj->showdeptSearchPostList($this->auto,$limit);
+
+        //文章的标题的长度超过10个则街区10个(默认是10)
+        $this->setPostTitleLength($post);
+        //用户昵称超过10个则街区10个(默认是10)
+        $this->setPostNameLength($post);
+
+        //重新取得所有状态的文章个数
+        $allCount = $this->postObj->getAllStatusCount();
+        //取得保存文章个数
+        $saveCount = $this->postObj->getStatusCount('save');
+        //取得待审核文章个数
+        $peningCount = $this->postObj->getStatusCount('pending');
+
+        //取得待最终审核文章个数
+        $pening2Count = $this->postObj->getStatusCount('pending2');
+        //取得已审核文章个数
+        $pendedCount = $this->postObj->getStatusCount('pended');
+
+        //取得未审核通过文章个数
+        $dismissCount = $this->postObj->getStatusCount('dismiss');
+
+        //因为小编和总编的情况下不显示保存的个数,所有该html文需要判定
+        $html = '';
+        $html .= '<a href='.__ROOT__.'/Admin/Post/doAction/action/all/status/save>
+                                保存  <span class="badge badge-warning bounceIn 
+                                animation-delay3 active">'.$saveCount.'</span></a>';
+
+        $this->assign('showSave',$html);
+        $this->assign('allCount',$allCount);
+        $this->assign('peningCount',$peningCount);
+        $this->assign('pening2Count',$pening2Count);
+        $this->assign('pendedCount',$pendedCount);
+        $this->assign('dismissCount',$dismissCount);
+
+        $this->assign('allPost',$post); //用户信息注入模板
+        $this->assign('page',$show);    //赋值分页输出
+
+        //将管理员的flag设置为1
+        $this->assign('isAdmin',1);
+
+
+        if($this->auto == BAOLIAOZHE){
+            $this->assign('editShow','编辑');  //爆料者显示为编辑
+        }else{
+            $this->assign('editShow','查看');  //管理员显示查看
+        }
+
+        $this->display('post');
+        exit;
+    }
+
+    /**
+     * 根据不同的角色来显示文章列表
+     */
+    private function getPostWithAutos(){
+        //管理员和超级管理员时显示文章
         if( (intval($this->auto) == ADMIN) || ( intval($this->auto) == SUPPER_ADMIN)){
             //取得所有用户信息总条数，用于分页
-            $count = $obj->getCount();
+            $count = $this->postObj->getCount();
 
             //分页
             import('ORG.Util.Page');// 导入分页类
@@ -383,21 +476,21 @@ class PostController extends CommonController {
             $limit = $Page->firstRow.','.$Page->listRows;
 
             //取得指定条数的信息
-            $post = $obj->showPostList($limit);
+            $post = $this->postObj->showPostList($limit);
 
             $show = $Page->show();// 分页显示输出
 
             //重新取得所有状态的文章个数
-            $allCount = $obj->getAllStatusCount();
+            $allCount = $this->postObj->getAllStatusCount();
             //取得保存文章个数
-            $saveCount = $obj->getStatusCount('save');
+            $saveCount = $this->postObj->getStatusCount('save');
             //取得待审核文章个数
-            $peningCount = $obj->getStatusCount('pending');
+            $peningCount = $this->postObj->getStatusCount('pending');
             //取得已审核文章个数
-            $pendedCount = $obj->getStatusCount('pended');
+            $pendedCount = $this->postObj->getStatusCount('pended');
 
-            $pending2Count = $obj->getStatusCount('pending2');
-            $dismissCount = $obj->getStatusCount('dismiss');
+            $pending2Count = $this->postObj->getStatusCount('pending2');
+            $dismissCount = $this->postObj->getStatusCount('dismiss');
 
             //因为小编和总编的情况下不显示保存的个数,所有该html文需要判定
             $html = '';
@@ -410,10 +503,10 @@ class PostController extends CommonController {
 
             $this->assign('editShow','查看');
 
-        //如果是爆料者,则显示所有该爆料者提交的文章
+            //如果是爆料者,则显示所有该爆料者提交的文章
         }else if( intval($this->auto) == BAOLIAOZHE ){
 
-            $count = $obj->getBaoliaozheCount();
+            $count = $this->postObj->getBaoliaozheCount();
 
             //分页
             import('ORG.Util.Page');// 导入分页类
@@ -421,19 +514,19 @@ class PostController extends CommonController {
             $limit = $Page->firstRow.','.$Page->listRows;
 
             //取得指定条数的信息
-            $post = $obj->showBaoliaozhePostList($limit);
+            $post = $this->postObj->showBaoliaozhePostList($limit);
 
             $show = $Page->show();// 分页显示输出
 
             //取得保存文章个数
-            $saveCount = $obj->getBaoliaozheStatusCount('save');
+            $saveCount = $this->postObj->getBaoliaozheStatusCount('save');
             //取得待审核文章个数
-            $peningCount = $obj->getBaoliaozheStatusCount('pending');
+            $peningCount = $this->postObj->getBaoliaozheStatusCount('pending');
             //取得已审核文章个数
-            $pendedCount = $obj->getBaoliaozheStatusCount('pended');
+            $pendedCount = $this->postObj->getBaoliaozheStatusCount('pended');
 
-            $pending2Count = $obj->getBaoliaozheStatusCount('pending2');
-            $dismissCount = $obj->getBaoliaozheStatusCount('dismiss');
+            $pending2Count = $this->postObj->getBaoliaozheStatusCount('pending2');
+            $dismissCount = $this->postObj->getBaoliaozheStatusCount('dismiss');
 
             //因为小编和总编的情况下不显示保存的个数,所有该html文需要判定
             $html = '';
@@ -445,7 +538,7 @@ class PostController extends CommonController {
 
 
             //重新取得所有状态的文章个数
-            $allCount = $obj->getAllBaoliaozheCount();
+            $allCount = $this->postObj->getAllBaoliaozheCount();
 
 
             $this->assign('editShow','编辑');
@@ -457,7 +550,7 @@ class PostController extends CommonController {
             $this->dept = $arr[0];
 
             //小编和总编只能看到属于自己部门,并且文章状态为待审的文章一览
-            $count = $obj->getDeptCount($this->dept);
+            $count = $this->postObj->getDeptCount($this->dept);
 
             //分页
             import('ORG.Util.Page');// 导入分页类
@@ -465,19 +558,19 @@ class PostController extends CommonController {
             $limit = $Page->firstRow.','.$Page->listRows;
 
             //取得指定条数的信息
-            $post = $obj->showDeptPostList($this->dept,$limit);
+            $post = $this->postObj->showDeptPostList($this->dept,$limit);
 
             $show = $Page->show();// 分页显示输出
 
             //不文章状态取得所有文章个数
-            $allCount = $obj->getAllDeptCount($this->dept);
+            $allCount = $this->postObj->getAllDeptCount($this->dept);
             //取得待审核文章个数
-            $peningCount = $obj->getDeptStatusCount($this->dept,'pending');
+            $peningCount = $this->postObj->getDeptStatusCount($this->dept,'pending');
             //取得已审核文章个数
-            $pendedCount = $obj->getDeptStatusCount($this->dept,'pended');
+            $pendedCount = $this->postObj->getDeptStatusCount($this->dept,'pended');
 
-            $pending2Count = $obj->getDeptStatusCount($this->dept,'pending2');
-            $dismissCount = $obj->getDeptStatusCount($this->dept,'dismiss');
+            $pending2Count = $this->postObj->getDeptStatusCount($this->dept,'pending2');
+            $dismissCount = $this->postObj->getDeptStatusCount($this->dept,'dismiss');
 
             $this->assign('editShow','审核');
         }
@@ -485,10 +578,16 @@ class PostController extends CommonController {
         $this->setPostTitleLength($post);
         $this->setPostNameLength($post);
 
-        if( (intval($this->auto) == ADMIN) || ( intval($this->auto) == SUPPER_ADMIN) ){
+        //小编和总编不能点击部门进行再查询
+        if( (intval($this->auto) != XIAOBIAN) && ( intval($this->auto) != ZONGBIAN) ){
             $this->assign('isAdmin',1);
         }else{
             $this->assign('isAdmin',0);
+        }
+
+        //爆料者不能点击作者进行再查询
+        if( intval($this->auto) != BAOLIAOZHE ){
+            $this->assign('isUserSearch',1);    //是否显示可以通过作者筛选
         }
 
         $this->assign('showSave',$html);
@@ -503,8 +602,6 @@ class PostController extends CommonController {
 
         $this->display('post');
     }
-
-
     /**
      * 设定取得的文章中Title的长度
      * @param $post
