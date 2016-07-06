@@ -3,24 +3,27 @@
         <li>文章</li>
         <li>文章一览表</li>
     </ul>
+
+    <!--大屏幕尺寸-->
     <div class="smart-widget">
-        <div class="smart-widget-header">
-            <a href="__ROOT__/Admin/Post/doAction/action/all">所有
-                <span class="badge badge-primary bounceIn animation-delay3 active">{$allCount}</span>
-            </a> &nbsp; &nbsp; &nbsp;
-            <a href="__ROOT__/Admin/Post/doAction/action/all/status/pending">待审核
-                <span class="badge badge-danger bounceIn animation-delay3 active">{$peningCount}</span>
-            </a> &nbsp; &nbsp; &nbsp;
-            <a href="__ROOT__/Admin/Post/doAction/action/all/status/pending2">待最终审核
-                <span class="badge badge-warning bounceIn animation-delay3 active">{$pening2Count}</span>
-            </a> &nbsp; &nbsp; &nbsp;
-            <a href="__ROOT__/Admin/Post/doAction/action/all/status/pended">审核通过
-                <span class="badge badge-info bounceIn animation-delay3 active">{$pendedCount}</span>
-            </a> &nbsp; &nbsp; &nbsp;
-            <a href="__ROOT__/Admin/Post/doAction/action/all/status/dismiss">审核未通过
-                <span class="badge badge-purple bounceIn animation-delay3 active">{$dismissCount}</span>
-            </a> &nbsp; &nbsp; &nbsp;
-            {$showSave}
+        <div class="hidden-xs">
+            <div class="smart-widget-header">
+                <a href="__ROOT__/Admin/Post/doAction/action/all">所有
+                    <span class="badge badge-primary bounceIn animation-delay3 active">{$allCount}</span>
+                </a> &nbsp; &nbsp; &nbsp;
+                <a href="__ROOT__/Admin/Post/doAction/action/all/status/pending">待审核
+                    <span class="badge badge-danger bounceIn animation-delay3 active">{$peningCount}</span>
+                </a> &nbsp; &nbsp; &nbsp;
+                <a href="__ROOT__/Admin/Post/doAction/action/all/status/pending2">待最终审核
+                    <span class="badge badge-warning bounceIn animation-delay3 active">{$pening2Count}</span>
+                </a> &nbsp; &nbsp; &nbsp;
+                <a href="__ROOT__/Admin/Post/doAction/action/all/status/pended">审核通过
+                    <span class="badge badge-info bounceIn animation-delay3 active">{$pendedCount}</span>
+                </a> &nbsp; &nbsp; &nbsp;
+                <a href="__ROOT__/Admin/Post/doAction/action/all/status/dismiss">审核未通过
+                    <span class="badge badge-purple bounceIn animation-delay3 active">{$dismissCount}</span>
+                </a> &nbsp; &nbsp; &nbsp;
+                {$showSave}
             <span class="smart-widget-option">
                 <span class="refresh-icon-animated">
                     <i class="fa fa-circle-o-notch fa-spin"></i>
@@ -32,76 +35,160 @@
                     <i class="fa fa-chevron-up"></i>
                 </a>
             </span>
-        </div>
-        <div class="smart-widget-inner">
-            <div class="smart-widget-hidden-section">
-                <ul class="widget-color-list clearfix">
-                    <li style="background-color:#20232b;" data-color="widget-dark"></li>
-                    <li style="background-color:#4c5f70;" data-color="widget-dark-blue"></li>
-                    <li style="background-color:#23b7e5;" data-color="widget-blue"></li>
-                    <li style="background-color:#2baab1;" data-color="widget-green"></li>
-                    <li style="background-color:#edbc6c;" data-color="widget-yellow"></li>
-                    <li style="background-color:#fbc852;" data-color="widget-orange"></li>
-                    <li style="background-color:#e36159;" data-color="widget-red"></li>
-                    <li style="background-color:#7266ba;" data-color="widget-purple"></li>
-                    <li style="background-color:#f5f5f5;" data-color="widget-light-grey"></li>
-                    <li style="background-color:#fff;" data-color="reset"></li>
-                </ul>
             </div>
-            <div class="smart-widget-body">
-                <table class="table table-hover center">
-                    <thead style="text-align: center">
-                    <tr>
-                        <th><h5>文章标题</h5></th>
-                        <th><h5>作者</h5></th>
-                        <th><h5>所属部门</h5></th>
-                        <th><h5>发布日期</h5></th>
-                        <th><h5>修改时间</h5></th>
-                        <th><h5>状态</h5></th>
-                        <th><h5>操作</h5></th>
-                    </tr>
-                    </thead>
-                    <tbody style="text-align: center">
-                    <if condition = "$allPost neq '' ">
-                        <foreach name="allPost" item="vo">
-                            <tr>
-                                <td>{$vo.post_title}</td>
-                                <if condition = "$isUserSearch eq 1">
-                                    <td><a href="__ROOT__/Admin/Post/doAction/action/all/userSearch/{$vo.post_author}">{$vo.username}</a></td>
-                                <else />
-                                    <td>{$vo.username}</td>
-                                </if>
-                                <td>
-                                    <if condition = "$isAdmin eq 1 ">
-                                        <foreach name="vo.post_dept" item="voo">
-                                            <a href="__ROOT__/Admin/Post/doAction/action/all/deptSearch/{$voo}">{$voo}</a> &nbsp;
-                                        </foreach>
+            <div class="smart-widget-inner">
+                <div class="smart-widget-hidden-section">
+                    <ul class="widget-color-list clearfix">
+                        <li style="background-color:#20232b;" data-color="widget-dark"></li>
+                        <li style="background-color:#4c5f70;" data-color="widget-dark-blue"></li>
+                        <li style="background-color:#23b7e5;" data-color="widget-blue"></li>
+                        <li style="background-color:#2baab1;" data-color="widget-green"></li>
+                        <li style="background-color:#edbc6c;" data-color="widget-yellow"></li>
+                        <li style="background-color:#fbc852;" data-color="widget-orange"></li>
+                        <li style="background-color:#e36159;" data-color="widget-red"></li>
+                        <li style="background-color:#7266ba;" data-color="widget-purple"></li>
+                        <li style="background-color:#f5f5f5;" data-color="widget-light-grey"></li>
+                        <li style="background-color:#fff;" data-color="reset"></li>
+                    </ul>
+                </div>
+                <div class="smart-widget-body">
+                    <table class="table table-hover center">
+
+                        <thead style="text-align: center">
+                        <tr>
+                            <th><h5>文章标题</h5></th>
+                            <th><h5>作者</h5></th>
+                            <th><h5>所属部门</h5></th>
+                            <th><h5>发布日期</h5></th>
+                            <th><h5>最新时间</h5></th>
+                            <th><h5>状态</h5></th>
+                            <th><h5>操作</h5></th>
+                        </tr>
+                        </thead>
+                        <tbody style="text-align: center">
+                        <if condition = "$allPost neq '' ">
+                            <foreach name="allPost" item="vo">
+                                <tr>
+                                    <td>{$vo.post_title}</td>
+                                    <if condition = "$isUserSearch eq 1">
+                                        <td><a href="__ROOT__/Admin/Post/doAction/action/all/userSearch/{$vo.post_author}">{$vo.username}</a></td>
                                     <else />
-                                        <foreach name="vo.post_dept" item="voo">
-                                            {$voo} &nbsp;
-                                        </foreach>
+                                        <td>{$vo.username}</td>
                                     </if>
-                                </td>
-                                <td>{$vo.post_date}</td>
-                                <td>{$vo.post_modified}</td>
-                                <td>{$vo.post_status}</td>
-                                <td>
-                                    <a href="__ROOT__/Admin/Post/doAction/action/the/id/{$vo.id}">
-                                        <i class="fa fa-edit"></i>{$editShow}
-                                    </a>
-                                    <a href="javascript:delPost({$vo['id']});">
-                                        &nbsp <i class="fa fa-trash">删除</i>
-                                    </a>
-                                </td>
-                            </tr>
-                        </foreach>
-                    <else />
-                        <tr><td colspan=6>没有数据</td></tr>
-                    </if>
-                    </tbody>
-                </table>
-                <div>{$page}</div>
+                                    <td>
+                                        <if condition = "$isAdmin eq 1 ">
+                                            <foreach name="vo.post_dept" item="voo">
+                                                <a href="__ROOT__/Admin/Post/doAction/action/all/deptSearch/{$voo}">{$voo}</a> &nbsp;
+                                            </foreach>
+                                        <else />
+                                            <foreach name="vo.post_dept" item="voo">
+                                                {$voo} &nbsp;
+                                            </foreach>
+                                        </if>
+                                    </td>
+                                    <td>{$vo.post_date}</td>
+                                    <td>{$vo.post_modified}</td>
+                                    <td>{$vo.post_status}</td>
+                                    <td>
+                                        <a href="__ROOT__/Admin/Post/doAction/action/the/id/{$vo.id}/preview/1">
+                                            <i class="fa fa-edit"></i>{$editShow}
+                                        </a>
+
+
+                                        <!--<a href="__ROOT__/Admin/Post/doAction/action/the/id/{$vo.id}">-->
+                                            <!--<i class="fa fa-edit"></i>{$editShow}-->
+                                        <!--</a>-->
+
+                                        <a href="javascript:delPost({$vo['id']});">
+                                            &nbsp <i class="fa fa-trash">删除</i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </foreach>
+                        <else />
+                            <tr><td colspan=6>没有数据</td></tr>
+                        </if>
+                        </tbody>
+                    </table>
+                    <div>{$page}</div>
+                </div>
+            </div><!-- ./smart-widget-inner -->
+        </div>
+        <div class="visible-xs">
+            <div class="smart-widget-header">
+                <a href="__ROOT__/Admin/Post/doAction/action/all">所有
+                    <span class="badge badge-primary bounceIn animation-delay3 active">{$allCount}</span>
+                </a> &nbsp;
+                <a href="__ROOT__/Admin/Post/doAction/action/all/status/pended">审核通过
+                    <span class="badge badge-info bounceIn animation-delay3 active">{$pendedCount}</span>
+                </a> &nbsp;
+            <span class="smart-widget-option">
+                <span class="refresh-icon-animated">
+                    <i class="fa fa-circle-o-notch fa-spin"></i>
+                </span>
+                <a href="#" class="widget-toggle-hidden-option">
+                    <i class="fa fa-cog"></i>
+                </a>
+                <a href="#" class="widget-collapse-option" data-toggle="collapse">
+                    <i class="fa fa-chevron-up"></i>
+                </a>
+            </span>
             </div>
-        </div><!-- ./smart-widget-inner -->
+            <div class="smart-widget-inner">
+                <div class="smart-widget-hidden-section">
+                    <ul class="widget-color-list clearfix">
+                        <li style="background-color:#20232b;" data-color="widget-dark"></li>
+                        <li style="background-color:#4c5f70;" data-color="widget-dark-blue"></li>
+                        <li style="background-color:#23b7e5;" data-color="widget-blue"></li>
+                        <li style="background-color:#2baab1;" data-color="widget-green"></li>
+                        <li style="background-color:#edbc6c;" data-color="widget-yellow"></li>
+                        <li style="background-color:#fbc852;" data-color="widget-orange"></li>
+                        <li style="background-color:#e36159;" data-color="widget-red"></li>
+                        <li style="background-color:#7266ba;" data-color="widget-purple"></li>
+                        <li style="background-color:#f5f5f5;" data-color="widget-light-grey"></li>
+                        <li style="background-color:#fff;" data-color="reset"></li>
+                    </ul>
+                </div>
+                <div class="smart-widget-body">
+                    <table class="table table-hover center">
+
+                        <thead style="text-align: center">
+                        <tr>
+                            <th><h5>标题</h5></th>
+                            <th><h5>状态</h5></th>
+                            <th><h5>操作</h5></th>
+                        </tr>
+                        </thead>
+                        <tbody style="text-align: center">
+                        <if condition = "$allPost neq '' ">
+                            <foreach name="allPost" item="vo">
+                                <tr>
+                                    <td>{$vo.post_title_small}</td>
+                                    <td>{$vo.post_status}</td>
+                                    <td>
+                                        <a href="__ROOT__/Admin/Post/doAction/action/the/id/{$vo.id}/preview/1">
+                                            <i class="fa fa-edit"></i>{$editShow}
+                                        </a>
+
+
+                                        <!--<a href="__ROOT__/Admin/Post/doAction/action/the/id/{$vo.id}">-->
+                                        <!--<i class="fa fa-edit"></i>{$editShow}-->
+                                        <!--</a>-->
+
+                                        <a href="javascript:delPost({$vo['id']});">
+                                            &nbsp <i class="fa fa-trash">删除</i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </foreach>
+                            <else />
+                            <tr><td colspan=3>没有数据</td></tr>
+                        </if>
+                        </tbody>
+                    </table>
+                    <div>{$page}</div>
+                </div>
+            </div>
+        </div>
     </div><!-- ./smart-widget -->
 </div>

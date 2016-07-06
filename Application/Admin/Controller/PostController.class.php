@@ -217,6 +217,23 @@ class PostController extends CommonController {
      */
     private function the(){
 
+//        //如果对文章点击预览后执行预览画面显示
+//        if(isset($_GET['preview']) && I('get.preview') == 1){
+//
+//            $post = $this->postObj->getThePostAndUser(I('get.id'));
+//
+//            if($post){
+//
+//                $post['post_dept'] = ToolModel::deptCodeToNameArr($post['post_dept']);
+//
+//                //dump($post['post_dept_name_arr']);exit;
+//                $this->assign('post',$post);
+//                $this->display('preview');
+//            }
+//
+//            exit;
+//        }
+
         if(!isset($_GET['id'])) ToolModel::goBack('警告,session出错请重新登录');
 
         $data = $this->postObj->getThePost(I('get.id'));
@@ -254,6 +271,7 @@ class PostController extends CommonController {
 
         //根据角色来显示不同的按钮
         $html = '';
+        $htmlSmall = '';
         $save     = 1;        //保存flag
         $pending  = 2;        //提交审核
         $pending2 = 3;        //继续提交审核
@@ -263,6 +281,7 @@ class PostController extends CommonController {
         switch (intval($this->auto)){
             case ADMIN:
             case SUPPER_ADMIN:
+                break;
             case ZONGBIAN:
 
                 $html .= '<div class="col-sm-2 col-sm-offset-2">';
@@ -270,9 +289,25 @@ class PostController extends CommonController {
                             onclick="return UpdateFormSubmit('.$pended.');" value="审核通过" name="send">';
                 $html .= '</div>';
                 $html .= '<div class="col-sm-2 col-sm-offset-1">';
-                $html .= '<input type="button" class="btn btn-warning btn-block" 
+                $html .= '<input type="button" class="btn btn-danger btn-block" 
                             onclick="return UpdateFormSubmit('.$dismiss.');" value="审核不通过" name="send">';
                 $html .= '</div>';
+                $html .= '<div class="col-sm-2 col-sm-offset-1">';
+                $html .= '<input type="button" class="btn  btn-default m-left-xs btn-block" onclick="return resetAddForm();" value="清空内容" id="res">';
+                $html .= '</div>';
+
+                $htmlSmall .= '<div class="col-xs-2">';
+                $htmlSmall .= '<input type="button" class="btn btn-info  btn-xs" 
+                            onclick="return UpdateFormSubmit('.$pended.');" value="审核通过" name="send">';
+                $htmlSmall .= '</div>';
+                $htmlSmall .= '<div class="col-xs-2 col-xs-offset-2">';
+                $htmlSmall .= '<input type="button" class="btn btn-danger  btn-xs" 
+                            onclick="return UpdateFormSubmit('.$dismiss.');" value="审核不通过" name="send">';
+                $htmlSmall .= '</div>';
+                $htmlSmall .= '<div class="col-xs-2 col-xs-offset-2">';
+                $htmlSmall .= '<input type="button" class="btn  btn-default btn-xs" onclick="return resetAddForm();" value="清空内容" id="res">';
+                $htmlSmall .= '</div>';
+
                 break;
             case XIAOBIAN:
                 $html .= '<div class="col-sm-2 col-sm-offset-2">';
@@ -280,9 +315,25 @@ class PostController extends CommonController {
                             onclick="return UpdateFormSubmit('.$pending2.');" value="继续提交审核" name="send">';
                 $html .= '</div>';
                 $html .= '<div class="col-sm-2 col-sm-offset-1">';
-                $html .= '<input type="button" class="btn btn-warning btn-block" 
+                $html .= '<input type="button" class="btn btn-danger btn-block" 
                             onclick="return UpdateFormSubmit('.$dismiss.');" value="审核不通过" name="send">';
                 $html .= '</div>';
+                $html .= '<div class="col-sm-2 col-sm-offset-1">';
+                $html .= '<input type="button" class="btn  btn-default m-left-xs btn-block" onclick="return resetAddForm();" value="清空内容" id="res">';
+                $html .= '</div>';
+
+
+                $htmlSmall .= '<div class="col-xs-2">';
+                $htmlSmall .= '<input type="button" class="btn btn-xs btn-info" 
+                            onclick="return UpdateFormSubmit('.$pending2.');" value="继续审核" name="send">';
+                $htmlSmall .= '</div>';
+                $htmlSmall .= '<div class="col-xs-2 col-xs-offset-2">';
+                $htmlSmall .= '<input type="button" class="btn btn-danger btn-xs" 
+                            onclick="return UpdateFormSubmit('.$dismiss.');" value="审核不通过" name="send">';
+                $htmlSmall .= '</div>';
+                $htmlSmall .= '<div class="col-xs-2 col-xs-offset-2">';
+                $htmlSmall .= '<input type="button" class="btn  btn-default btn-xs" onclick="return resetAddForm();" value="清空内容" id="res">';
+                $htmlSmall .= '</div>';
                 break;
             case BAOLIAOZHE:
                 $html .= '<div class="col-sm-2 col-sm-offset-2">';
@@ -293,10 +344,27 @@ class PostController extends CommonController {
                 $html .= '<input type="button" class="btn btn-warning btn-block" 
                             onclick="return UpdateFormSubmit('.$save.');" value="修改并保存" name="send">';
                 $html .= '</div>';
+                $html .= '<div class="col-sm-2 col-sm-offset-1">';
+                $html .= '<input type="button" class="btn  btn-default m-left-xs btn-block" onclick="return resetAddForm();" value="清空内容" id="res">';
+                $html .= '</div>';
+
+
+                $htmlSmall .= '<div class="col-xs-2">';
+                $htmlSmall .= '<input type="button" class="btn btn-xs btn-info " 
+                            onclick="return UpdateFormSubmit('.$pending.');" value="提交审核" name="send">';
+                $htmlSmall .= '</div>';
+                $htmlSmall .= '<div class="col-xs-2 col-xs-offset-2">';
+                $htmlSmall .= '<input type="button" class="btn btn-xs btn-warning" 
+                            onclick="return UpdateFormSubmit('.$save.');" value="修改并保存" name="send">';
+                $htmlSmall .= '</div>';
+                $htmlSmall .= '<div class="col-xs-2 col-xs-offset-2">';
+                $htmlSmall .= '<input type="button" class="btn btn-xs btn-default" onclick="return resetAddForm();" value="清空内容" id="res">';
+                $htmlSmall .= '</div>';
 
                 break;
 
         }
+        $this->assign('btnSmall',$htmlSmall);    //响应式手机用小按钮组
         $this->assign('btn',$html);
         $this->assign('the',true);
         $this->display('post');
@@ -541,7 +609,7 @@ class PostController extends CommonController {
 
             $this->assign('editShow','编辑');
 
-        }else{
+        }else if(intval($this->auto) == XIAOBIAN){      //小编显示自己部门所有的待审核文章
             //取得属于小编或者总编部门文章总条数，用于分页
             $arr = json_decode($this->dept);
 
@@ -571,6 +639,8 @@ class PostController extends CommonController {
             $dismissCount = $this->postObj->getDeptStatusCount($this->dept,'dismiss');
 
             $this->assign('editShow','审核');
+        }else{                  //只显示小编提交给自己的文章
+
         }
 
         $this->setPostTitleLength($post);
@@ -605,8 +675,11 @@ class PostController extends CommonController {
      * @param $post
      * @param int $len
      */
-    private function setPostTitleLength(&$post,$len=10){
+    private function setPostTitleLength(&$post,$len=6){
         for ($i=0;$i<count($post);$i++){
+
+            //自适应小屏幕手机时只截取3个
+            $post[$i]['post_title_small'] = ToolModel::getSubString($post[$i]['post_title'],3);
 
             //如果文章标题过长则截取
             if(  ToolModel::getStrLen($post[$i]['post_title']) > $len){
@@ -622,8 +695,13 @@ class PostController extends CommonController {
      */
     private function setPostNameLength(&$post,$len=10){
         for ($i=0;$i<count($post);$i++){
+
+            //自适应小屏幕手机时只截取3个
+            $post[$i]['username_small'] = ToolModel::getSubString($post[$i]['username'],3);
+
             //如果昵称过长则截取
             if(  ToolModel::getStrLen($post[$i]['username']) > $len){
+
                 $post[$i]['username'] = ToolModel::getSubString($post[$i]['username'],$len);
             }
         }

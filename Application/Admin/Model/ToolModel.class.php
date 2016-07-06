@@ -284,6 +284,30 @@ namespace Admin\Model;
         }
 
 
+
+        /**
+         * 从数据库取得的json对象的部门id，转化为名称并以逗号隔开的字符串
+         * @param $deptCodeJsonList
+         * @return string
+         */
+        static function deptCodeToNameArr($deptCodeJsonList)
+        {
+            $deptArr = C('DEPT_ARRAY');   //取得自定义常量部门数组
+
+            //处理部门数字转化为文字 start
+            $dept = json_decode($deptCodeJsonList);            //json转化为数字
+
+            //将json转化的数组循环判断并显示名称
+            for ($j = 0; $j < count($dept); $j++) {
+
+                //为空则不输出
+                if ('' != $dept[$j]) {
+                    $dept[$j] = $deptArr[$dept[$j]];
+                }
+            }
+            return $dept;
+        }
+
         /**
          * 从数据库取得的json对象的部门id，转化为名称并以逗号隔开的字符串
          * @param $deptCodeJsonList

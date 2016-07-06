@@ -543,6 +543,24 @@ namespace Admin\Model;
          * 根据传入的文章ID取得文章
          * @return mixed
          */
+        public function getThePostAndUser($id){
+            $where['ccm_posts.id'] = intval($id);
+            $field = 'ccm_m_user.username,
+                    ccm_posts.post_title,
+                    ccm_posts.post_content,
+                    ccm_posts.post_dept,
+                    ccm_posts.post_name,
+                    ccm_posts.post_modified';
+            $join = "INNER JOIN ccm_m_user 
+                        ON ccm_posts.post_author = ccm_m_user.id";
+            return $this->object->field($field)->where($where)->join($join)->find();
+        }
+
+
+        /**
+         * 根据传入的文章ID取得文章
+         * @return mixed
+         */
         public function getThePost($id){
             $where['id'] = intval($id);
             return $this->object->where($where)->find();

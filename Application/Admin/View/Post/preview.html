@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>
+        {$post.post_title}
+    </title>
+    <meta charset="utf-8">
+    <meta content="" name="keywords"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <link rel="icon" type="image/x-icon" href="__PUBLIC__/img/favicon.ico">
+    <meta name='robots' content='noindex,follow' />
+    <link href="__PUBLIC__/css/Admin/bootstrap.min.css?v=20160121" type="text/css" rel="stylesheet">
+    <link href="__PUBLIC__/css/Admin/font-awesome.min.css" type="text/css"  rel="stylesheet">
+    <link href="__PUBLIC__/css/Admin/zan.css" type="text/css"  rel="stylesheet">
+
+</head>
+<body class="singular single single-post postid-24 single-format-standard logged-in">
+<header id="zan-header">
+    <div class="header">
+        <div class="logo" data-toggle="animation"></div>
+    </div>
+    <nav class="navbar navbar-inverse">
+        <div class="container clearfix">
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <foreach name="post.post_dept" item="vo">
+                        <li><a href="#">{$vo}</a></li>
+                    </foreach>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header><div id="zan-bodyer">
+    <div class="container">
+        <section class="row">
+            <div class="col-md-12">
+                <article class="zan-article">
+                    <!-- 大型设备文章显示 -->
+                    <div class="hidden-xs">
+                        <h1><a href="#">{$post.post_title}</a></h1>
+                        <p class="post-big-info">
+                            <span class="label label-zan"><i class="fa fa-calendar"></i> {$post.post_modified}</span>
+                            <span class="label label-zan"><i class="fa fa-tags"></i>
+                                <foreach name="post.post_dept" item="vo">
+                                    <a>{$vo}</a> &nbsp;
+                                </foreach>
+                            </span>
+                            <span class="label label-zan"><i class="fa fa-user"></i>
+                                <a>{$post.username}</a>
+                            </span>
+                        </p>
+                    </div>
+                    <!-- 大型设备文章显示结束 -->
+                    <!-- 小型设备文章显示 -->
+                    <div class="visible-xs">
+                        <div class="title-article">
+                            <h4><a href="#">{$post.post_title}</a></h4>
+                        </div>
+                        <p class="post-info">
+                            <span><i class="fa fa-calendar"></i> {$post.post_modified}</span>
+                            <span><i class="fa fa-eye"></i> </span>
+                        </p>
+                    </div>
+                    <!-- 小型设备文章显示结束 -->
+                    <figure class="thumbnail zan-thumb"></figure>
+                    <article class="zan-single-content">
+                        {$post.post_content}
+                    </article>
+                    <!-- 百度分享 -->
+                    <div class="zan-share clearfix">
+                        <div class="bdsharebuttonbox pull-right">
+                            <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+                            <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+                        </div>
+                    </div>
+                    <!-- 百度分享结束 -->
+
+                    <!-- 分页 -->
+                    <div clas="zan-page">
+                        <ul class="pager">
+
+                        </ul>
+                    </div>
+                    <!-- 分页结束 -->
+                </article>
+            </div>
+        </section>
+    </div>
+</div>
+
+<footer id="zan-footer">
+    <section class="zan-link" id="zan-link">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="footer-column tag">
+                        <h4>
+                            <strong class="text-danger">稿件管理</strong> 系统
+                        </h4>
+                        <div class="content clearfix">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="footer-column tag">
+                        <h4>
+                            &copy; 2016 <strong>chouchoumiao.com</strong>. ALL Rights Reserved.
+                        </h4>
+                        <div class="content clearfix">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="footer-space">
+        <div class="footer-space-line"></div>
+    </section>
+</footer>
+<div id="zan-gotop">
+    <div class="gotop">
+        <i class="fa fa-chevron-up"></i>
+    </div>
+</div>
+<script type='text/javascript' src='http://localhost/NewWordpress/wp-content/themes/Zamblog/ui/js/bootstrap.min.js?ver=3.1.1'></script>
+<script type='text/javascript' src='http://localhost/NewWordpress/wp-content/themes/Zamblog/ui/flexslider/jquery.flexslider.js?ver=3.0.0'></script>
+<script type='text/javascript' src='http://localhost/NewWordpress/wp-content/themes/Zamblog/ui/js/jquery.validate.js?ver=3.0.0'></script>
+<script type='text/javascript' src='http://localhost/NewWordpress/wp-content/themes/Zamblog/ui/audiojs/audio.min.js?ver=3.0.0'></script>
+<script type='text/javascript' src='http://localhost/NewWordpress/wp-content/themes/Zamblog/ui/js/shine.min.js?ver=3.0.0'></script>
+<script type='text/javascript' src='http://localhost/NewWordpress/wp-content/themes/Zamblog/ui/js/zan.js?ver=3.0.0'></script>
+<script type='text/javascript' src='http://localhost/NewWordpress/wp-content/themes/Zamblog/ui/js/custom.js?ver=3.0.0'></script>
+<script type='text/javascript' src='http://localhost/NewWordpress/wp-includes/js/wp-embed.min.js?ver=4.5'></script>
+<script type='text/javascript'>
+    backTop = function ( btnId ) {
+        var btn =document.getElementById( btnId );
+        var d = document.documentElement;
+        var b = document.body;
+        window.onscroll = set;
+        btn.onclick = function () {
+            btn.style.display = "none";
+            window.onscroll = null;
+            this.timer = setInterval( function() {
+                d.scrollTop -= Math.ceil( ( d.scrollTop + b.scrollTop ) * 0.1 );
+                b.scrollTop -= Math.ceil( ( d.scrollTop + b.scrollTop ) * 0.1 );
+                if( ( d.scrollTop + b.scrollTop ) == 0 ) clearInterval( btn.timer, window.onscroll=set );
+            }, 10 );
+        };
+        function set() { btn.style.display = ( d.scrollTop + b.scrollTop > 100 ) ? 'block' : "none" }
+    };
+    backTop( 'zan-gotop' );
+</script><script type="text/javascript">
+    jQuery( '#commentform' ).validate(
+            {
+                rules: {
+                    author: {
+                        required: true,
+                    },
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    url: {
+                        url:true
+                    },
+                    comment: {
+                        required: true,
+                    }
+                },
+                messages: {
+                    author: {
+                        required: "用户名不能为空！"
+                    },
+                    email: {
+                        required: "邮箱不能为空！",
+                        email: "输入的邮箱格式不正确！"
+                    },
+                    url: {
+                        url: "输入的网址不正确！"
+                    },
+                    comment: {
+                        required: "留言内容不能为空！"
+                    }
+                }
+            } );
+</script>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"32"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+</body>
+</html>
