@@ -307,23 +307,21 @@ class PostController extends CommonController {
      */
     private function all(){
 
-        $obj = D('Post');
         $this->assign('all',true);
 
-        if( intval($this->auto) != BAOLIAOZHE){
-            if( (isset($_GET['userSearch'])) && ( '' != I('get.userSearch')) ){
+        if( (isset($_GET['userSearch'])) && ( '' != I('get.userSearch')) ){
+            if( intval($this->auto) != BAOLIAOZHE) {
                 $this->getUserSearch();
             }
-
         }
 
         //管理员和超级管理的情况下,文章一览表中 的部门可以点击,点击相对应的部门显示该部门的一览
-        if( (intval($this->auto) != XIAOBIAN) && ( intval($this->auto) != ZONGBIAN) ){
-            if( (isset($_GET['deptSearch'])) && ( '' != I('get.deptSearch')) ){
+        if( (isset($_GET['deptSearch'])) && ( '' != I('get.deptSearch')) ){
+            if( (intval($this->auto) != XIAOBIAN) && ( intval($this->auto) != ZONGBIAN) ) {
                 $this->getDeptSearch();
             }
         }
-
+        
         //根据不同的角色来来显示文章列表
         $this->getPostWithAutos();
 
