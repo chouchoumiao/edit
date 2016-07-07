@@ -25,13 +25,22 @@
                                 </div>
                             </div>
 
-
-                            <div class="form-group" id="dept">
-                                <label class="col-sm-1 control-label">提交部门</label>
-                                <div class="col-sm-11">
-                                    {$theDept}
+                            <empty name="showDeptCheckBox">
+                                <div class="form-group" id="dept" style="display: none">
+                                    <label class="col-sm-1 control-label">提交部门</label>
+                                    <div class="col-sm-11">
+                                        {$theDept}
+                                    </div>
                                 </div>
-                            </div>
+                            <else/>
+                                <div class="form-group" id="dept">
+                                    <label class="col-sm-1 control-label">提交部门</label>
+                                    <div class="col-sm-11">
+                                        {$theDept}
+                                    </div>
+                                </div>
+                            </empty>
+
 
                             <div class="form-group m-top-lg hidden-xs">
                                 {$btn}
