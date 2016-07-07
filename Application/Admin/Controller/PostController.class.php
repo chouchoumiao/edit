@@ -506,71 +506,36 @@ class PostController extends CommonController {
      */
     private function getDeptSearch(){
 
-        if($this->auto == ADMIN || $this->auto == SUPPER_ADMIN){
-            $count = $this->postObj->getdeptSearchCount($this->auto);
+        $count = $this->postObj->getdeptSearchCount($this->auto);
 
-            //分页
-            import('ORG.Util.Page');// 导入分页类
-            $Page = new \Org\Util\Page($count,PAGE_SHOW_COUNT);// 实例化分页类 传入总记录数
-            $limit = $Page->firstRow.','.$Page->listRows;
-            $show = $Page->show();// 分页显示输出
+        //分页
+        import('ORG.Util.Page');// 导入分页类
+        $Page = new \Org\Util\Page($count,PAGE_SHOW_COUNT);// 实例化分页类 传入总记录数
+        $limit = $Page->firstRow.','.$Page->listRows;
+        $show = $Page->show();// 分页显示输出
 
-            //取得指定条数的信息
-            $post = $this->postObj->showdeptSearchPostList($this->auto,$limit);
+        //取得指定条数的信息
+        $post = $this->postObj->showdeptSearchPostList($this->auto,$limit);
 
-            //文章的标题的长度超过10个则街区10个(默认是10)
-            $this->setPostTitleLength($post);
-            //用户昵称超过10个则街区10个(默认是10)
-            $this->setPostNameLength($post);
+        //文章的标题的长度超过10个则街区10个(默认是10)
+        $this->setPostTitleLength($post);
+        //用户昵称超过10个则街区10个(默认是10)
+        $this->setPostNameLength($post);
 
-            //重新取得所有状态的文章个数
-            $allCount = $this->postObj->getAllStatusCount();
-            //取得保存文章个数
-            $saveCount = $this->postObj->getStatusCount('save');
-            //取得待审核文章个数
-            $peningCount = $this->postObj->getStatusCount('pending');
+        //重新取得所有状态的文章个数(根据传入的权限自动区分)
+        $allCount = $this->postObj->getStatusCountByFlag($this->auto,'all');
+        //取得保存文章个数
+        $saveCount = $this->postObj->getStatusCountByFlag($this->auto,'save');
+        //取得待审核文章个数
+        $peningCount = $this->postObj->getStatusCountByFlag($this->auto,'pending');
 
-            //取得待最终审核文章个数
-            $pending2Count = $this->postObj->getStatusCount('pending2');
-            //取得已审核文章个数
-            $pendedCount = $this->postObj->getStatusCount('pended');
+        //取得待最终审核文章个数
+        $pending2Count = $this->postObj->getStatusCountByFlag($this->auto,'pending2');
+        //取得已审核文章个数
+        $pendedCount = $this->postObj->getStatusCountByFlag($this->auto,'pended');
 
-            //取得未审核通过文章个数
-            $dismissCount = $this->postObj->getStatusCount('dismiss');
-
-            
-        }else if($this->auto == BAOLIAOZHE){
-
-            $id = $_SESSION['uid'];
-            $count = $this->postObj->getdeptSearchCount($this->auto,$id);
-
-            //分页
-            import('ORG.Util.Page');// 导入分页类
-            $Page = new \Org\Util\Page($count,PAGE_SHOW_COUNT);// 实例化分页类 传入总记录数
-            $limit = $Page->firstRow.','.$Page->listRows;
-            $show = $Page->show();// 分页显示输出
-
-            //取得指定条数的信息
-            $post = $this->postObj->showdeptSearchPostList($this->auto,$limit,$id);
-            //文章的标题的长度超过10个则街区10个(默认是10)
-            $this->setPostTitleLength($post);
-            //用户昵称超过10个则街区10个(默认是10)
-            $this->setPostNameLength($post);
-
-
-            //取得保存文章个数
-            $saveCount = $this->postObj->getBaoliaozheStatusCount('save');
-            //取得待审核文章个数
-            $peningCount = $this->postObj->getBaoliaozheStatusCount('pending');
-            //取得已审核文章个数
-            $pendedCount = $this->postObj->getBaoliaozheStatusCount('pended');
-
-            $pending2Count = $this->postObj->getBaoliaozheStatusCount('pending2');
-            $dismissCount = $this->postObj->getBaoliaozheStatusCount('dismiss');
-
-            //重新取得所有状态的文章个数
-            $allCount = $this->postObj->getAllBaoliaozheCount();
-        }
+        //取得未审核通过文章个数
+        $dismissCount = $this->postObj->getStatusCountByFlag($this->auto,'dismiss');
 
         //因为小编和总编的情况下不显示保存的个数,所有该html文需要判定
         $html = '';
@@ -588,7 +553,6 @@ class PostController extends CommonController {
 
         $this->assign('allPost',$post); //用户信息注入模板
         $this->assign('page',$show);    //赋值分页输出
-
 
         $this->display('post');
         exit;
