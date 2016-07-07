@@ -36,20 +36,20 @@ $(function(){
             ,dataType: "json"
             ,beforeSend:function(XMLHttpRequest){
                     $("#wp-submit").val('正在提交...');
+                    $("#wp-submit").attr('disabled',true);      //防止多次提交
                 }
             ,success:function(json){
+
+                $("#wp-submit").val('注册');
+                $("#wp-submit").attr('disabled',false);         //防止多次提交恢复按钮
+
                 if(json.success == "NG"){
                     showError( json.msg );
                     wp_shake_js();
-                    $("#wp-submit").val('注册');
-
                     return false;
                 }else{
-                    $("#wp-submit").val('注册');
                     var msg = json.msg+'<a href="login.html">点我登录</a>'
                     showMSg(msg);
-                    //$("html").html(json.msg);
-
                 }
             }
             ,error:function(xhr){alert('PHP页面有错误！'+xhr.responseText);}

@@ -39,6 +39,7 @@ $(function(){
             ,dataType: "json"
             ,beforeSend:function(XMLHttpRequest){
                     $("#wp-submit").val('正在登录...');
+                    $("#wp-submit").attr('disabled',true);  //防止多次提交
                 }
             ,success:function(json){
                 if(json.success == "NG"){
@@ -53,6 +54,7 @@ $(function(){
                     showError( msg );
                     wp_shake_js();
                     $("#wp-submit").val('登录');
+                    $("#wp-submit").attr('disabled',false); //恢复按钮
 
                     return false;
                 }else{
