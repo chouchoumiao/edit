@@ -68,24 +68,30 @@ namespace Admin\Model;
          * @param string $dept
          * @return mixed
          */
-        public function getUserSearchCount($userid,$dept=''){
+        public function getUserSearchCount($auto,$dept=''){
 
-            if($dept == ''){
-                //传入的是部门名称,需要转化为部门id
-                $join = "INNER JOIN ccm_m_user 
-                        ON ccm_posts.post_author = ccm_m_user.id 
-                        AND ccm_posts.post_author = $userid";
-            }else{
-                //点击用户查询(管理员和小编总编可以),管理员默认取得全部,小编总编条件中需要加入部门和不显示保存的
-                $join = "INNER JOIN ccm_m_user 
+            $userid = I('get.userSearch');
+            switch ($auto){
+                case ADMIN:
+                case SUPPER_ADMIN:
+                    //传入的是部门名称,需要转化为部门id
+                    $join = "INNER JOIN ccm_m_user 
+                            ON ccm_posts.post_author = ccm_m_user.id 
+                            AND ccm_posts.post_author = $userid";
+                    break;
+                case XIAOBIAN:
+                case ZONGBIAN:
+                    //点击用户查询(管理员和小编总编可以),管理员默认取得全部,小编总编条件中需要加入部门和不显示保存的
+                    $join = "INNER JOIN ccm_m_user 
                         ON ccm_posts.post_author = ccm_m_user.id 
                         AND ccm_posts.post_author = $userid 
                         AND ccm_posts.post_status <> 'save'
                         AND ccm_posts.post_dept LIKE '%$dept%'";
+                    break;
             }
-
             return $this->object->join($join)->count();
         }
+
 
         /**
          * 文章一览中除了爆料者角色以外的都可以通过点击作者来筛选文章列表
@@ -94,10 +100,10 @@ namespace Admin\Model;
          * @param string $dept
          * @return mixed
          */
-        public function showUserSearchPostList($userid,$limit,$dept=''){
+        public function showUserSearchPostList($auto,$limit,$dept=''){
 
             //点击用户查询(管理员和小编总编可以),管理员默认取得全部,小编总编条件中需要加入部门和不显示保存的
-            $obj = $this->allUserSearchPost($userid,$limit,$dept);
+            $obj = $this->allUserSearchPost($auto,$limit,$dept);
 
             if($obj){
                 //是二维数组则进行数据格式修正并返回
@@ -115,19 +121,23 @@ namespace Admin\Model;
          * @param $dept
          * @return mixed
          */
-        private function allUserSearchPost($userid,$limit,$dept){
-
-            //点击用户查询(管理员和小编总编可以),管理员默认取得全部,小编总编条件中需要加入部门和不显示保存的
-            if($dept == ''){
-                $join = "INNER JOIN ccm_m_user 
-                        ON ccm_m_user.id = ccm_posts.post_author 
-                        AND ccm_posts.post_author = $userid";
-            }else{
-                $join = "INNER JOIN ccm_m_user 
-                        ON ccm_m_user.id = ccm_posts.post_author 
-                        AND ccm_posts.post_author = $userid 
-                        AND ccm_posts.post_status <> 'save'
-                        AND ccm_posts.post_dept LIKE '%$dept%'";
+        private function allUserSearchPost($auto,$limit,$dept){
+            $userid = I('get.userSearch');
+            switch ($auto){
+                case ADMIN:
+                case SUPPER_ADMIN:
+                    $join = "INNER JOIN ccm_m_user 
+                            ON ccm_m_user.id = ccm_posts.post_author 
+                            AND ccm_posts.post_author = $userid";
+                    break;
+                case XIAOBIAN:
+                case ZONGBIAN:
+                    $join = "INNER JOIN ccm_m_user 
+                            ON ccm_m_user.id = ccm_posts.post_author 
+                            AND ccm_posts.post_author = $userid 
+                            AND ccm_posts.post_status <> 'save'
+                            AND ccm_posts.post_dept LIKE '%$dept%'";
+                    break;
             }
             $field = 'ccm_posts.*,
                         ccm_m_user.id as uid,

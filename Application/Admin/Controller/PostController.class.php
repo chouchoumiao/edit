@@ -414,7 +414,7 @@ class PostController extends CommonController {
     private function getUserSearch(){
 
         if($this->auto == ADMIN || $this->auto == SUPPER_ADMIN){
-            $count = $this->postObj->getUserSearchCount(I('get.userSearch'));
+            $count = $this->postObj->getUserSearchCount($this->auto);
 
             //分页
             import('ORG.Util.Page');// 导入分页类
@@ -423,7 +423,7 @@ class PostController extends CommonController {
             $show = $Page->show();// 分页显示输出
 
             //取得指定条数的信息
-            $post = $this->postObj->showUserSearchPostList(I('get.userSearch'),$limit);
+            $post = $this->postObj->showUserSearchPostList($this->auto,$limit);
 
             //文章的标题的长度超过10个则街区10个(默认是10)
             $this->setPostTitleLength($post);
@@ -460,7 +460,7 @@ class PostController extends CommonController {
             $this->dept = $arr[0];
 
             //小编和总编只能看到属于自己部门,并且文章状态为待审的文章一览
-            $count = $this->postObj->getUserSearchCount(I('get.userSearch'),$this->dept);
+            $count = $this->postObj->getUserSearchCount($this->auto,I('get.userSearch'),$this->dept);
 
             //分页
             import('ORG.Util.Page');// 导入分页类
@@ -470,7 +470,7 @@ class PostController extends CommonController {
 
 
             //取得指定条数的信息
-            $post = $this->postObj->showUserSearchPostList(I('get.userSearch'),$limit,$this->dept);
+            $post = $this->postObj->showUserSearchPostList($this->auto,$limit,$this->dept);
 
             //文章的标题的长度超过10个则街区10个(默认是10)
             $this->setPostTitleLength($post);
