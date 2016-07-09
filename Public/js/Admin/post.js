@@ -204,6 +204,18 @@ function UpdateFormSubmit(flag) {
 
     //将数组转化为json格式
     var deptJson = JSON.stringify(deptArr);
+    if((flag == 4) && ($("#dismiss_msg").is(":hidden"))){
+        $('#dismiss_msg').fadeIn();
+        return false;
+    }
+
+    var dismissMsg = $('#dismiss_msg').val();
+
+    if(flag == 4 && (dismissMsg == '')){
+        alert('必须填写不通过审核的原因');
+        return false;
+    }
+
 
     $.ajax({
         url:ROOT+"/Admin/Post/doAction/action/update"//改为你的动态页
@@ -213,7 +225,8 @@ function UpdateFormSubmit(flag) {
             'dept':deptJson,
             'title':title,
             'data':data,
-            'flag':flag
+            'flag':flag,
+            'dismissMsg':dismissMsg
         }
         ,dataType: "json"
         ,success:function(json){

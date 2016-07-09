@@ -15,6 +15,14 @@ define(ZONGBIAN,3);         //总编
 define(ADMIN,'88');         //管理员
 define(SUPPER_ADMIN,'99');  //超级管理员
 
+//文章状态
+define(POST_SAVE,'save');           //保存
+define(POST_PENDING,'pending');     //初审
+define(POST_PENDING2,'pending2');   //最终审核
+define(POST_PENDED,'pended');       //审核通过
+define(POST_DISMISS,'dismiss');     //审核不通过
+
+
 
 return array(
 
@@ -78,7 +86,7 @@ return array(
         'pending'  => '待审核',
         'pending2' => '待最终审核',
         'dismiss'  => '审核未通过',
-        'pended'   => '已审核'
+        'pended'   => '已审核通过'
     ),
 
 

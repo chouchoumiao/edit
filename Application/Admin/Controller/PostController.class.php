@@ -76,8 +76,9 @@ class PostController extends CommonController {
         //检查ajax上传的数据,并赋值
         $this->postObj->checkAndSetUpdateData();
 
-        //追加新文章
+        //更新文章
         if( $this->postObj->updatePost() ){
+
             $arr['success'] = 1;
             $arr['msg'] = '更新成功！';
         }else{
@@ -242,26 +243,33 @@ class PostController extends CommonController {
             //如果是小编的情况下点击了审核,需要新增同样的文章
             if( intval($this->auto) == XIAOBIAN ){
 
-                //先判定是否已经拷贝过了，如果拷贝过了，则取得原先拷贝的文章，没有则新增
-                $isCopiedObj = $this->postObj->isCopiedByXIAOBIAN(I('get.id'));
+                //继续判定点击的文章作者是不是当前小编,如果是则不作拷贝也不作判断
+                if($data['post_author'] != $_SESSION['uid']){
 
-                if($isCopiedObj){
-                    ToolModel::goBack('您已经有了该文章的拷贝了,请操作备份文件');
-                    exit;
-                }else{
-                    $newID = $this->postObj->copyPostByXIAOBIAN($data,$this->dept);
-                    if( false ===  $newID){
-                        ToolModel::goBack('审核时生成拷贝文件失败,请重试');
-                    }else{          //拷贝后原来的爆料者提交的文章状态设置为审核中,并小编不可编辑该文章,只能编辑拷贝后的文章
+                    //先判定是否已经拷贝过了，如果拷贝过了，则取得原先拷贝的文章，没有则新增
+                    $isCopiedObj = $this->postObj->isCopiedByXIAOBIAN(I('get.id'));
+                    if($isCopiedObj){
+                        ToolModel::goBack('您已经有了该文章的拷贝了,请操作备份文件');
+                        exit;
+                    }else{
+                        $newID = $this->postObj->copyPostByXIAOBIAN($data,$this->dept);
+                        if( false ===  $newID){
+                            ToolModel::goBack('审核时生成拷贝文件失败,请重试');
+                        }else{  //被拷贝原文章的的继承字段要更新,从来可以来判断该文章是否被拷贝过
 
+                            if( false === $this->postObj->updatePostChild(I('get.id'),$newID)){
+                                ToolModel::goBack('拷贝文章时候原文章状态更新失败!');
+                            }
 
+                        }
+                    }
+                    $data = $this->postObj->getThePost( $newID );
+
+                    if(!$data){
+                        ToolModel::goBack('取得文章失败');
                     }
                 }
-                $data = $this->postObj->getThePost( $newID );
 
-                if(!$data){
-                    ToolModel::goBack('取得文章失败');
-                }
             }
 
             $this->assign('postid',$data['id']);
@@ -512,5 +520,6 @@ class PostController extends CommonController {
         $this->assign('pendedCount',$this->postObj->getStatusCountByFlag($this->auto,'pended',$this->dept));
         //取得审核不通过文章个数
         $this->assign('dismissCount',$this->postObj->getStatusCountByFlag($this->auto,'dismiss',$this->dept));
+
     }
 }

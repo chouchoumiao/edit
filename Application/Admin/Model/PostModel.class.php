@@ -13,6 +13,7 @@ namespace Admin\Model;
         private $post_title ;
         private $post_dept ;
         private $post_status;
+        private $dismissMsg = '';
         private $post_modified;
         private $post_parent;
         private $object;
@@ -46,13 +47,21 @@ namespace Admin\Model;
                             AND ccm_posts.post_author = $userid";
                             break;
                         case XIAOBIAN:
-                        case ZONGBIAN:
-                            //点击用户查询(管理员和小编总编可以),管理员默认取得全部,小编总编条件中需要加入部门和不显示保存的
+                            $post_status = POST_SAVE;
                             $join = "INNER JOIN ccm_m_user 
-                        ON ccm_posts.post_author = ccm_m_user.id 
-                        AND ccm_posts.post_author = $userid 
-                        AND ccm_posts.post_status <> 'save'
-                        AND ccm_posts.post_dept LIKE '%$dept%'";
+                                        ON ccm_posts.post_author = ccm_m_user.id 
+                                        AND ccm_posts.post_author = $userid 
+                                        AND ccm_posts.post_status <> '$post_status'
+                                        AND ccm_posts.post_dept LIKE '%$dept%'
+                                        AND ccm_posts.post_child = 0";
+                            break;
+                        case ZONGBIAN:  //总编只显示提交给自己最终审核的文章
+                            $join = "INNER JOIN ccm_m_user 
+                                        ON ccm_posts.post_author = ccm_m_user.id 
+                                        AND ccm_posts.post_author = $userid 
+                                        AND ccm_posts.post_status in ('pending2','pended')
+                                        AND ccm_posts.post_dept LIKE '%$dept%'
+                                        AND ccm_posts.post_child = 0";
                             break;
                     }
                     break;
@@ -62,15 +71,16 @@ namespace Admin\Model;
                         case ADMIN:
                         case SUPPER_ADMIN:
                             $join = "INNER JOIN ccm_m_user 
-                            ON ccm_posts.post_author = ccm_m_user.id 
-                            AND ccm_posts.post_dept LIKE '%$deptID%'";
+                                        ON ccm_posts.post_author = ccm_m_user.id 
+                                        AND ccm_posts.post_dept LIKE '%$deptID%'";
                             break;
                         case BAOLIAOZHE:
                             $id = $_SESSION['uid'];
-                            $join = "INNER JOIN ccm_m_user 
-                        ON ccm_posts.post_author = ccm_m_user.id 
-                        AND ccm_posts.post_author = '$id' 
-                        AND ccm_posts.post_dept LIKE '%$deptID%'";
+
+                                $join = "INNER JOIN ccm_m_user 
+                                        ON ccm_posts.post_author = ccm_m_user.id 
+                                        AND ccm_posts.post_author = '$id' 
+                                        AND ccm_posts.post_dept LIKE '%$deptID%'";
                             break;
 
                     }
@@ -87,41 +97,71 @@ namespace Admin\Model;
                         case SUPPER_ADMIN:
                             if($status == 'all'){
                                 $join = "INNER JOIN ccm_m_user 
-                                    ON ccm_posts.post_author = ccm_m_user.id" ;
+                                            ON ccm_posts.post_author = ccm_m_user.id" ;
                             }else{
                                 $join = "INNER JOIN ccm_m_user 
-                                ON ccm_posts.post_author = ccm_m_user.id 
-                                AND ccm_posts.post_status = '$status'" ;
+                                            ON ccm_posts.post_author = ccm_m_user.id 
+                                            AND ccm_posts.post_status = '$status'" ;
                             }
                             break;
                         case BAOLIAOZHE:
                             if($status == 'all'){
                                 $id = $_SESSION['uid'];
                                 $join = "INNER JOIN ccm_m_user 
-                            ON ccm_posts.post_author = ccm_m_user.id 
-                            AND ccm_posts.post_author = '$id'";
+                                            ON ccm_posts.post_author = ccm_m_user.id 
+                                            AND ccm_posts.post_author = '$id'";
                             }else{
                                 $id = $_SESSION['uid'];
-                                $join = "INNER JOIN ccm_m_user 
-                                ON ccm_posts.post_author = ccm_m_user.id 
-                                AND ccm_posts.post_author = '$id' 
-                                AND ccm_posts.post_status = '$status'" ;
+
+                                if($status == 'dismiss' || $status == 'pended'){
+                                    $join = "INNER JOIN ccm_m_user 
+                                            ON ccm_posts.post_author = ccm_m_user.id 
+                                            AND ccm_posts.post_parent_author = '$id' 
+                                            AND ccm_posts.post_status = '$status'" ;
+                                }else{
+
+                                    $join = "INNER JOIN ccm_m_user 
+                                            ON ccm_posts.post_author = ccm_m_user.id 
+                                            AND ccm_posts.post_author = '$id' 
+                                            AND ccm_posts.post_status = '$status'" ;
+                                }
+
                             }
                             break;
                         case XIAOBIAN:
-                        case ZONGBIAN:
+                            $post_status = POST_SAVE;
                             if($status == 'all'){
                                 $join = "INNER JOIN ccm_m_user 
-                            ON ccm_posts.post_author = ccm_m_user.id 
-                            AND ccm_posts.post_status <> 'save' 
-                            AND ccm_posts.post_dept LIKE '%$dept%'" ;
+                                            ON ccm_posts.post_author = ccm_m_user.id 
+                                            AND ccm_posts.post_status <> '$post_status' 
+                                            AND ccm_posts.post_dept LIKE '%$dept%'
+                                            AND ccm_posts.post_child = 0" ;
 
                             }else{
                                 $join = "INNER JOIN ccm_m_user 
-                            ON ccm_posts.post_author = ccm_m_user.id 
-                            AND ccm_posts.post_status <> 'save' 
-                            AND ccm_posts.post_dept LIKE '%$dept%' 
-                            AND ccm_posts.post_status = '$status'";
+                                            ON ccm_posts.post_author = ccm_m_user.id 
+                                            AND ccm_posts.post_status <> '$post_status' 
+                                            AND ccm_posts.post_dept LIKE '%$dept%' 
+                                            AND ccm_posts.post_status = '$status'
+                                            AND ccm_posts.post_child = 0";
+                            }
+                            break;
+                        case ZONGBIAN:
+
+                            if($status == 'all'){
+                                $join = "INNER JOIN ccm_m_user 
+                                            ON ccm_posts.post_author = ccm_m_user.id 
+                                            AND ccm_posts.post_status in ('pending2','pended') 
+                                            AND ccm_posts.post_dept LIKE '%$dept%'
+                                            AND ccm_posts.post_child = 0" ;
+
+                            }else{
+                                $join = "INNER JOIN ccm_m_user 
+                                            ON ccm_posts.post_author = ccm_m_user.id 
+                                            AND ccm_posts.post_status in ('pending2','pended') 
+                                            AND ccm_posts.post_dept LIKE '%$dept%' 
+                                            AND ccm_posts.post_status = '$status'
+                                            AND ccm_posts.post_child = 0";
                             }
                             break;
                     }
@@ -173,11 +213,19 @@ namespace Admin\Model;
                                         AND ccm_posts.post_author = $userid";
                             break;
                         case XIAOBIAN:
-                        case ZONGBIAN:
+                            $post_status = POST_SAVE;
                             $join = "INNER JOIN ccm_m_user 
                                         ON ccm_m_user.id = ccm_posts.post_author 
                                         AND ccm_posts.post_author = $userid 
-                                        AND ccm_posts.post_status <> 'save'
+                                        AND ccm_posts.post_status <> '$post_status'
+                                        AND ccm_posts.post_dept LIKE '%$dept%'";
+                            break;
+                        case ZONGBIAN:
+
+                            $join = "INNER JOIN ccm_m_user 
+                                        ON ccm_m_user.id = ccm_posts.post_author 
+                                        AND ccm_posts.post_author = $userid 
+                                        AND ccm_posts.post_status in ('pending2','pended') 
                                         AND ccm_posts.post_dept LIKE '%$dept%'";
                             break;
                     }
@@ -230,25 +278,53 @@ namespace Admin\Model;
                                             ON ccm_m_user.id = ccm_posts.post_author 
                                             AND ccm_posts.post_author = '$id'";
                             }else{
-                                $join = "INNER JOIN ccm_m_user 
+
+                                if($status == 'dismiss' || $status == 'pended'){
+                                    $join = "INNER JOIN ccm_m_user 
+                                            ON ccm_m_user.id = ccm_posts.post_author 
+                                            AND ccm_posts.post_parent_author = '$id'
+                                            AND ccm_posts.post_status = '$status'";
+                                }else{
+                                    $join = "INNER JOIN ccm_m_user 
                                             ON ccm_m_user.id = ccm_posts.post_author 
                                             AND ccm_posts.post_author = '$id'
                                             AND ccm_posts.post_status = '$status'";
+                                }
+
                             }
                             break;
                         case XIAOBIAN:
-                        case ZONGBIAN:
+                            $post_status = POST_SAVE;
                             if($status == 'all'){
                                 $join = "INNER JOIN ccm_m_user 
                                             ON ccm_m_user.id = ccm_posts.post_author 
-                                            AND ccm_posts.post_status <> 'save' 
-                                            AND ccm_posts.post_dept LIKE '%$dept%'";
+                                            AND ccm_posts.post_status <> '$post_status' 
+                                            AND ccm_posts.post_dept LIKE '%$dept%'
+                                            AND ccm_posts.post_child = 0";
                             }else{
                                 $join = "INNER JOIN ccm_m_user 
                                             ON ccm_m_user.id = ccm_posts.post_author 
-                                            AND ccm_posts.post_status <> 'save' 
+                                            AND ccm_posts.post_status <> '$post_status' 
                                             AND ccm_posts.post_dept LIKE '%$dept%'
-                                            AND ccm_posts.post_status = '$status'";
+                                            AND ccm_posts.post_status = '$status'
+                                            AND ccm_posts.post_child = 0";
+                            }
+                            break;
+                        case ZONGBIAN:
+
+                            if($status == 'all'){
+                                $join = "INNER JOIN ccm_m_user 
+                                            ON ccm_m_user.id = ccm_posts.post_author 
+                                            AND ccm_posts.post_status in ('pending2','pended') 
+                                            AND ccm_posts.post_dept LIKE '%$dept%'
+                                            AND ccm_posts.post_child = 0";
+                            }else{
+                                $join = "INNER JOIN ccm_m_user 
+                                            ON ccm_m_user.id = ccm_posts.post_author 
+                                            AND ccm_posts.post_status in ('pending2','pended') 
+                                            AND ccm_posts.post_dept LIKE '%$dept%'
+                                            AND ccm_posts.post_status = '$status'
+                                            AND ccm_posts.post_child = 0";
                             }
                             break;
                     }
@@ -298,26 +374,55 @@ namespace Admin\Model;
                             AND ccm_posts.post_author = '$id'";
                     }else{
                         $id = $_SESSION['uid'];
-                        $join = "INNER JOIN ccm_m_user 
+
+                        if($status == 'dismiss' || $status == 'pended'){
+                            $join = "INNER JOIN ccm_m_user 
+                                ON ccm_posts.post_author = ccm_m_user.id 
+                                AND ccm_posts.post_parent_author = '$id' 
+                                AND ccm_posts.post_status = '$status'" ;
+                        }else{
+                            $join = "INNER JOIN ccm_m_user 
                                 ON ccm_posts.post_author = ccm_m_user.id 
                                 AND ccm_posts.post_author = '$id' 
                                 AND ccm_posts.post_status = '$status'" ;
+
+                        }
                     }
                     break;
                 case XIAOBIAN:
-                case ZONGBIAN:
+                    $post_status = POST_SAVE;
                     if($status == 'all'){
                         $join = "INNER JOIN ccm_m_user 
-                            ON ccm_posts.post_author = ccm_m_user.id 
-                            AND ccm_posts.post_status <> 'save' 
-                            AND ccm_posts.post_dept LIKE '%$dept%'" ;
+                                    ON ccm_posts.post_author = ccm_m_user.id 
+                                    AND ccm_posts.post_status <> '$post_status' 
+                                    AND ccm_posts.post_dept LIKE '%$dept%'
+                                    AND ccm_posts.post_child = 0" ;
 
                     }else{
                         $join = "INNER JOIN ccm_m_user 
-                            ON ccm_posts.post_author = ccm_m_user.id 
-                            AND ccm_posts.post_status <> 'save' 
-                            AND ccm_posts.post_dept LIKE '%$dept%' 
-                            AND ccm_posts.post_status = '$status'";
+                                    ON ccm_posts.post_author = ccm_m_user.id 
+                                    AND ccm_posts.post_status <> '$post_status' 
+                                    AND ccm_posts.post_dept LIKE '%$dept%' 
+                                    AND ccm_posts.post_status = '$status'
+                                    AND ccm_posts.post_child = 0" ;
+                    }
+                    break;
+                case ZONGBIAN:
+
+                    if($status == 'all'){
+                        $join = "INNER JOIN ccm_m_user 
+                                    ON ccm_posts.post_author = ccm_m_user.id 
+                                    AND ccm_posts.post_status in ('pending2','pended')  
+                                    AND ccm_posts.post_dept LIKE '%$dept%'
+                                    AND ccm_posts.post_child = 0" ;
+
+                    }else{
+                        $join = "INNER JOIN ccm_m_user 
+                                    ON ccm_posts.post_author = ccm_m_user.id 
+                                    AND ccm_posts.post_status in ('pending2','pended')  
+                                    AND ccm_posts.post_dept LIKE '%$dept%' 
+                                    AND ccm_posts.post_status = '$status'
+                                    AND ccm_posts.post_child = 0" ;
                     }
                     break;
             }
@@ -360,6 +465,14 @@ namespace Admin\Model;
                     break;
                 case 4:
                     $this->post_status = 'dismiss';
+
+                    //审核不通过检查是否填写了原因
+                    if(I('post.dismissMsg') == ''){
+                        ToolModel::goBack('必须填写不通过原因');
+                    }
+
+                    $this->dismissMsg = I('post.dismissMsg');
+
                     break;
                 case 5:
                     $this->post_status = 'pended';
@@ -396,12 +509,13 @@ namespace Admin\Model;
             $where['id'] = $this->post_id;
 
             $dataArr = array(
-                'post_author'  => $this->post_author,
-                'post_content' => $this->post_content,
-                'post_title'   => $this->post_title,
-                'post_dept'    => $this->post_dept,
-                'post_status'  => $this->post_status,
-                'post_modified'=> $now
+                'post_author'           => $this->post_author,
+                'post_content'          => $this->post_content,
+                'post_title'            => $this->post_title,
+                'post_dept'             => $this->post_dept,
+                'post_status'           => $this->post_status,
+                'post_dismiss_msg'   => $this->dismissMsg,
+                'post_modified'         => $now
             );
 
             if( false === $this->object->where($where)->save($dataArr)){
@@ -423,6 +537,33 @@ namespace Admin\Model;
 
             return $this->object->field($field)->where($where)->find();
             
+        }
+
+        public function getPostChild($postid){
+            $field = 'ccm_posts.post_child';
+            $where['id'] = $postid;
+
+            $data = $this->object->field($field)->where($where)->find();
+            if($data){
+                return $data['post_child'];
+            }
+            return false;
+
+        }
+        
+        public function updatePostChild($postid,$newid){
+            
+            $data['post_child'] = $newid;
+            $where['id'] = $postid;
+
+            return $this->object->where($where)->save($data);
+            
+        }
+
+
+        public function updatePostByPar($data,$where){
+            return $this->object->where($where)->sava($data);
+
         }
 
         /**
@@ -561,7 +702,32 @@ namespace Admin\Model;
 
                 //对文章状态进行过滤
                 if($obj[$i]['post_status']) {
-                    $obj[$i]['post_status'] = $statusArr[$obj[$i]['post_status']];
+                    $spanColor = '';
+                    switch ($obj[$i]['post_status']){
+                        case 'pending':
+                            $spanColor = '<span style="color: #e36159">';
+                            $obj[$i]['post_canEdit'] = 1;
+                            break;
+                        case 'pending2':
+                            $spanColor = '<span style="color: #edbc6c">';
+                            $obj[$i]['post_canEdit'] = 1;
+                            break;
+                        case 'save':
+                            $spanColor = '<span style="color: #edbc6c">';
+                            $obj[$i]['post_canEdit'] = 1;
+                            break;
+                        case 'dismiss':
+                            $spanColor = '<span style="color: #7266ba">';
+                            $obj[$i]['post_canEdit'] = 0;
+                            break;
+                        case 'pended':
+                            $spanColor = '<span style="color: #23b7e5">';
+                            $obj[$i]['post_canEdit'] = 2;
+                            break;
+
+                    }
+
+                    $obj[$i]['post_status'] = $spanColor.$statusArr[$obj[$i]['post_status']].'</span>';
                 }
 
             }

@@ -69,7 +69,7 @@
                         </thead>
                         <tbody style="text-align: center">
                         <if condition = "$allPost neq '' ">
-                            <foreach name="allPost" item="vo">
+                            <foreach name="allPost" item="vo" key="k">
                                 <tr>
                                     <td>{$vo.post_title}</td>
                                     <if condition = "$auto neq BAOLIAOZHE">
@@ -95,15 +95,44 @@
                                         <a href="__ROOT__/Admin/Post/doAction/action/the/id/{$vo.id}/preview/1">
                                             <i class="fa fa-eye"></i> 预览
                                         </a>
-
-                                        <if condition = "$auto neq ADMIN ">
-                                            <a href="__ROOT__/Admin/Post/doAction/action/the/id/{$vo.id}">
-                                                &nbsp <i class="fa fa-edit"></i> 编辑
+                                        <if condition="$vo.post_canEdit eq 1">
+                                            <if condition = "$auto neq ADMIN ">
+                                                <a href="__ROOT__/Admin/Post/doAction/action/the/id/{$vo.id}">
+                                                    &nbsp <i class="fa fa-edit"></i> 编辑
+                                                </a>
+                                            </if>
+                                            <a href="javascript:delPost({$vo['id']});">
+                                                &nbsp <i class="fa fa-trash">删除</i>
                                             </a>
+                                        <elseif condition="$vo.post_canEdit eq 0"/>
+                                            <if condition = "$auto neq ADMIN ">
+                                                <a href="#" data-toggle="modal" data-target="#normalModal{$k}">
+                                                    &nbsp <i class="fa fa-edit"></i> 查看原因
+                                                </a>
+                                            </if>
+                                        <else/>
                                         </if>
-                                        <a href="javascript:delPost({$vo['id']});">
-                                            &nbsp <i class="fa fa-trash">删除</i>
-                                        </a>
+                                        <div class="modal fade" id="normalModal{$k}" aria-hidden="true" style="display: none;">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal">
+                                                            <span aria-hidden="true">×</span>
+                                                            <span class="sr-only">Close</span>
+                                                        </button>
+                                                        <h4 class="modal-title">文章未审核通过,原因如下:</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+
+                                                        {$vo.post_dismiss_msg}
+
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                             </foreach>
@@ -113,6 +142,8 @@
                         </tbody>
                     </table>
                     <div>{$page}</div>
+
+
                 </div>
             </div><!-- ./smart-widget-inner -->
         </div>
