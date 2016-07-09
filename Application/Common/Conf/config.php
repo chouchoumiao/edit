@@ -86,7 +86,8 @@ return array(
         'pending'  => '待审核',
         'pending2' => '待最终审核',
         'dismiss'  => '审核未通过',
-        'pended'   => '已审核通过'
+        'pended'   => '已审核通过',
+        'close'    => '所有部门审核完毕'
     ),
 
 

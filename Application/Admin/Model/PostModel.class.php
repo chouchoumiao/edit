@@ -52,16 +52,14 @@ namespace Admin\Model;
                                         ON ccm_posts.post_author = ccm_m_user.id 
                                         AND ccm_posts.post_author = $userid 
                                         AND ccm_posts.post_status <> '$post_status'
-                                        AND ccm_posts.post_dept LIKE '%$dept%'
-                                        AND ccm_posts.post_child = 0";
+                                        AND ccm_posts.post_dept LIKE '%$dept%'";
                             break;
                         case ZONGBIAN:  //总编只显示提交给自己最终审核的文章
                             $join = "INNER JOIN ccm_m_user 
                                         ON ccm_posts.post_author = ccm_m_user.id 
                                         AND ccm_posts.post_author = $userid 
                                         AND ccm_posts.post_status in ('pending2','pended')
-                                        AND ccm_posts.post_dept LIKE '%$dept%'
-                                        AND ccm_posts.post_child = 0";
+                                        AND ccm_posts.post_dept LIKE '%$dept%'";
                             break;
                     }
                     break;
@@ -134,16 +132,14 @@ namespace Admin\Model;
                                 $join = "INNER JOIN ccm_m_user 
                                             ON ccm_posts.post_author = ccm_m_user.id 
                                             AND ccm_posts.post_status <> '$post_status' 
-                                            AND ccm_posts.post_dept LIKE '%$dept%'
-                                            AND ccm_posts.post_child = 0" ;
+                                            AND ccm_posts.post_dept LIKE '%$dept%'" ;
 
                             }else{
                                 $join = "INNER JOIN ccm_m_user 
                                             ON ccm_posts.post_author = ccm_m_user.id 
                                             AND ccm_posts.post_status <> '$post_status' 
                                             AND ccm_posts.post_dept LIKE '%$dept%' 
-                                            AND ccm_posts.post_status = '$status'
-                                            AND ccm_posts.post_child = 0";
+                                            AND ccm_posts.post_status = '$status'";
                             }
                             break;
                         case ZONGBIAN:
@@ -152,16 +148,14 @@ namespace Admin\Model;
                                 $join = "INNER JOIN ccm_m_user 
                                             ON ccm_posts.post_author = ccm_m_user.id 
                                             AND ccm_posts.post_status in ('pending2','pended') 
-                                            AND ccm_posts.post_dept LIKE '%$dept%'
-                                            AND ccm_posts.post_child = 0" ;
+                                            AND ccm_posts.post_dept LIKE '%$dept%'" ;
 
                             }else{
                                 $join = "INNER JOIN ccm_m_user 
                                             ON ccm_posts.post_author = ccm_m_user.id 
                                             AND ccm_posts.post_status in ('pending2','pended') 
                                             AND ccm_posts.post_dept LIKE '%$dept%' 
-                                            AND ccm_posts.post_status = '$status'
-                                            AND ccm_posts.post_child = 0";
+                                            AND ccm_posts.post_status = '$status'";
                             }
                             break;
                     }
@@ -299,15 +293,13 @@ namespace Admin\Model;
                                 $join = "INNER JOIN ccm_m_user 
                                             ON ccm_m_user.id = ccm_posts.post_author 
                                             AND ccm_posts.post_status <> '$post_status' 
-                                            AND ccm_posts.post_dept LIKE '%$dept%'
-                                            AND ccm_posts.post_child = 0";
+                                            AND ccm_posts.post_dept LIKE '%$dept%'";
                             }else{
                                 $join = "INNER JOIN ccm_m_user 
                                             ON ccm_m_user.id = ccm_posts.post_author 
                                             AND ccm_posts.post_status <> '$post_status' 
                                             AND ccm_posts.post_dept LIKE '%$dept%'
-                                            AND ccm_posts.post_status = '$status'
-                                            AND ccm_posts.post_child = 0";
+                                            AND ccm_posts.post_status = '$status'";
                             }
                             break;
                         case ZONGBIAN:
@@ -316,15 +308,13 @@ namespace Admin\Model;
                                 $join = "INNER JOIN ccm_m_user 
                                             ON ccm_m_user.id = ccm_posts.post_author 
                                             AND ccm_posts.post_status in ('pending2','pended') 
-                                            AND ccm_posts.post_dept LIKE '%$dept%'
-                                            AND ccm_posts.post_child = 0";
+                                            AND ccm_posts.post_dept LIKE '%$dept%'";
                             }else{
                                 $join = "INNER JOIN ccm_m_user 
                                             ON ccm_m_user.id = ccm_posts.post_author 
                                             AND ccm_posts.post_status in ('pending2','pended') 
                                             AND ccm_posts.post_dept LIKE '%$dept%'
-                                            AND ccm_posts.post_status = '$status'
-                                            AND ccm_posts.post_child = 0";
+                                            AND ccm_posts.post_status = '$status'";
                             }
                             break;
                     }
@@ -395,16 +385,14 @@ namespace Admin\Model;
                         $join = "INNER JOIN ccm_m_user 
                                     ON ccm_posts.post_author = ccm_m_user.id 
                                     AND ccm_posts.post_status <> '$post_status' 
-                                    AND ccm_posts.post_dept LIKE '%$dept%'
-                                    AND ccm_posts.post_child = 0" ;
+                                    AND ccm_posts.post_dept LIKE '%$dept%'" ;
 
                     }else{
                         $join = "INNER JOIN ccm_m_user 
                                     ON ccm_posts.post_author = ccm_m_user.id 
                                     AND ccm_posts.post_status <> '$post_status' 
                                     AND ccm_posts.post_dept LIKE '%$dept%' 
-                                    AND ccm_posts.post_status = '$status'
-                                    AND ccm_posts.post_child = 0" ;
+                                    AND ccm_posts.post_status = '$status'" ;
                     }
                     break;
                 case ZONGBIAN:
@@ -413,16 +401,14 @@ namespace Admin\Model;
                         $join = "INNER JOIN ccm_m_user 
                                     ON ccm_posts.post_author = ccm_m_user.id 
                                     AND ccm_posts.post_status in ('pending2','pended')  
-                                    AND ccm_posts.post_dept LIKE '%$dept%'
-                                    AND ccm_posts.post_child = 0" ;
+                                    AND ccm_posts.post_dept LIKE '%$dept%'" ;
 
                     }else{
                         $join = "INNER JOIN ccm_m_user 
                                     ON ccm_posts.post_author = ccm_m_user.id 
                                     AND ccm_posts.post_status in ('pending2','pended')  
                                     AND ccm_posts.post_dept LIKE '%$dept%' 
-                                    AND ccm_posts.post_status = '$status'
-                                    AND ccm_posts.post_child = 0" ;
+                                    AND ccm_posts.post_status = '$status'" ;
                     }
                     break;
             }
@@ -445,6 +431,25 @@ namespace Admin\Model;
             if(!isset($_SESSION['uid'])) ToolModel::goBack('警告,session出错,请重新登录!');
 
             $this->post_author = intval($_SESSION['uid']);
+
+
+            if(!isset($_POST['dept'])) ToolModel::goBack('警告,部门传参错误!');
+            if( '' == $_POST['dept']) ToolModel::goBack('警告,部门参数不能为空!');
+
+            //存入数据库中取出转义（默认I函数会转义）
+            $this->post_dept = htmlspecialchars_decode(I('post.dept'));
+
+            if(!isset($_POST['title'])) ToolModel::goBack('警告,文章标题传参错误!');
+            if( '' == $_POST['title']) ToolModel::goBack('警告,文章标题不能为空!');
+
+            //存入数据库中取出转义（默认I函数会转义）
+            $this->post_title = htmlspecialchars_decode(I('post.title'));
+
+            if(!isset($_POST['data'])) ToolModel::goBack('警告,文章内容传参错误!');
+            if( '' == $_POST['data']) ToolModel::goBack('警告,文章内容不能为空!');
+
+            //存入数据库中取出转义（默认I函数会转义）
+            $this->post_content = htmlspecialchars_decode(I('post.data'));
 
 
             //            1 ：保存flag
@@ -478,24 +483,6 @@ namespace Admin\Model;
                     $this->post_status = 'pended';
                     break;
             }
-
-            if(!isset($_POST['dept'])) ToolModel::goBack('警告,部门传参错误!');
-            if( '' == $_POST['dept']) ToolModel::goBack('警告,部门参数不能为空!');
-
-            //存入数据库中取出转义（默认I函数会转义）
-            $this->post_dept = htmlspecialchars_decode(I('post.dept'));
-
-            if(!isset($_POST['title'])) ToolModel::goBack('警告,文章标题传参错误!');
-            if( '' == $_POST['title']) ToolModel::goBack('警告,文章标题不能为空!');
-
-            //存入数据库中取出转义（默认I函数会转义）
-            $this->post_title = htmlspecialchars_decode(I('post.title'));
-
-            if(!isset($_POST['data'])) ToolModel::goBack('警告,文章内容传参错误!');
-            if( '' == $_POST['data']) ToolModel::goBack('警告,文章内容不能为空!');
-
-            //存入数据库中取出转义（默认I函数会转义）
-            $this->post_content = htmlspecialchars_decode(I('post.data'));
         }
 
 
@@ -514,15 +501,89 @@ namespace Admin\Model;
                 'post_title'            => $this->post_title,
                 'post_dept'             => $this->post_dept,
                 'post_status'           => $this->post_status,
-                'post_dismiss_msg'   => $this->dismissMsg,
+                'post_dismiss_msg'      => $this->dismissMsg,
                 'post_modified'         => $now
             );
 
             if( false === $this->object->where($where)->save($dataArr)){
                 return false;
             }else{
+
+                //如果是审核通过或者不通过的情况下,还需要判断是否提交的部门都已经做出审核,
+                //如果是,额需要将元文章的状态改变为审核结束
+
+                if(($this->post_status == 'dismiss') || ($this->post_status == 'pended')){
+
+                    //取得该拷贝文章的父文章的id
+                    $parentid = $this->getParentPostid($this->post_id);
+
+                    //根据父文章id取得提交给部门的个数
+                    $count = $this->getDeptCountByParentid($parentid);
+
+                    //查询父文章id是当前id的所有文章(状态是审核通过或者未审核通过的)
+                    $count2 = $this->getParentIdCount($parentid);
+
+                    //如果当前文章是审核通过或者不通过,并且满足了原文章提交的所有部门都最终审核的条件
+                    //则将原文章的状态改为[所有部门都确认完毕]
+                    if($count == $count2){
+                        $where['id'] = $parentid;
+                        $data['post_status'] = 'close';
+                        $data['post_modified'] = date('Y/m/d H:m:s',time());
+
+                        //更新原文章状态
+                        $this->object->where($where)->save($data);
+                    }
+
+                }
+
                 return true;
             }
+        }
+
+        /**
+         * 查询父文章id是当前id的所有文章(状态是审核通过或者未审核通过的)
+         * @param $id
+         * @return mixed
+         */
+        private function getParentIdCount($id){
+
+            $where = "post_parent = $id AND post_status IN ('pended','dismiss')";
+            return $this->object->where($where)->count();
+        }
+
+        /**
+         * 根据父文章id取得提交给部门的个数
+         * @param $parentid
+         * @return bool|int
+         */
+        private function getDeptCountByParentid($parentid){
+            $where['id'] = $parentid;
+            $field = 'post_dept';
+
+            $arr = $this->object->field($field)->where($where)->find();
+
+            if($arr){
+                $dept = json_decode($arr['post_dept']);
+                return count($dept);
+            }
+            return false;
+
+        }
+
+        /**
+         * 取得该拷贝文章的父文章的id
+         * @param $id
+         * @return bool
+         */
+        private function getParentPostid($id){
+            $where['id'] = $id;
+            $field = 'post_parent';
+            $arr = $this->object->field($field)->where($where)->find();
+            if($arr){
+                return $arr['post_parent'];
+            }
+            return false;
+
         }
 
         /**
@@ -723,6 +784,10 @@ namespace Admin\Model;
                         case 'pended':
                             $spanColor = '<span style="color: #23b7e5">';
                             $obj[$i]['post_canEdit'] = 2;
+                            break;
+                        case 'close':
+                            $spanColor = '<span style="color: #3278b3">';
+                            $obj[$i]['post_canEdit'] = 9;
                             break;
 
                     }

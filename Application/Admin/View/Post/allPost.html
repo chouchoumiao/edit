@@ -105,11 +105,11 @@
                                                 &nbsp <i class="fa fa-trash">删除</i>
                                             </a>
                                         <elseif condition="$vo.post_canEdit eq 0"/>
-                                            <if condition = "$auto neq ADMIN ">
-                                                <a href="#" data-toggle="modal" data-target="#normalModal{$k}">
-                                                    &nbsp <i class="fa fa-edit"></i> 查看原因
-                                                </a>
-                                            </if>
+
+                                            <a href="#" data-toggle="modal" data-target="#normalModal{$k}">
+                                                &nbsp <i class="fa fa-edit"></i> 查看原因
+                                            </a>
+
                                         <else/>
                                         </if>
                                         <div class="modal fade" id="normalModal{$k}" aria-hidden="true" style="display: none;">

@@ -78,7 +78,7 @@ class PostController extends CommonController {
 
         //更新文章
         if( $this->postObj->updatePost() ){
-
+            
             $arr['success'] = 1;
             $arr['msg'] = '更新成功！';
         }else{
