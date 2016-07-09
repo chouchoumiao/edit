@@ -25,7 +25,258 @@ namespace Admin\Model;
             }
         }
 
-        public function getStatusCountByFlag($auto='',$status=''){
+        /**
+         * 根据传入的flag来判断是执行查询(部门或者用户),还是单纯的查询,显示相应的文章个数
+         * @param $flag
+         * @param $auto
+         * @param string $dept
+         * @return mixed
+         */
+        public function getCountWithAutoAndSearch($flag,$auto,$dept=''){
+
+            switch ($flag){
+                case 'userSearch':
+                    $userid = I('get.userSearch');
+                    switch ($auto){
+                        case ADMIN:
+                        case SUPPER_ADMIN:
+                            //传入的是部门名称,需要转化为部门id
+                            $join = "INNER JOIN ccm_m_user 
+                            ON ccm_posts.post_author = ccm_m_user.id 
+                            AND ccm_posts.post_author = $userid";
+                            break;
+                        case XIAOBIAN:
+                        case ZONGBIAN:
+                            //点击用户查询(管理员和小编总编可以),管理员默认取得全部,小编总编条件中需要加入部门和不显示保存的
+                            $join = "INNER JOIN ccm_m_user 
+                        ON ccm_posts.post_author = ccm_m_user.id 
+                        AND ccm_posts.post_author = $userid 
+                        AND ccm_posts.post_status <> 'save'
+                        AND ccm_posts.post_dept LIKE '%$dept%'";
+                            break;
+                    }
+                    break;
+                case 'deptSearch':
+                    $deptID = $this->getDeptIDByName(I('get.deptSearch'));
+                    switch ($auto){
+                        case ADMIN:
+                        case SUPPER_ADMIN:
+                            $join = "INNER JOIN ccm_m_user 
+                            ON ccm_posts.post_author = ccm_m_user.id 
+                            AND ccm_posts.post_dept LIKE '%$deptID%'";
+                            break;
+                        case BAOLIAOZHE:
+                            $id = $_SESSION['uid'];
+                            $join = "INNER JOIN ccm_m_user 
+                        ON ccm_posts.post_author = ccm_m_user.id 
+                        AND ccm_posts.post_author = '$id' 
+                        AND ccm_posts.post_dept LIKE '%$deptID%'";
+                            break;
+
+                    }
+
+                    break;
+                case 'noSearch':
+                    if( ( isset($_GET['status'] ) ) && ( '' != I('get.status')) ){
+                        $status = I('get.status');
+                    }else{
+                        $status = 'all';
+                    }
+                    switch ($auto){
+                        case ADMIN:
+                        case SUPPER_ADMIN:
+                            if($status == 'all'){
+                                $join = "INNER JOIN ccm_m_user 
+                                    ON ccm_posts.post_author = ccm_m_user.id" ;
+                            }else{
+                                $join = "INNER JOIN ccm_m_user 
+                                ON ccm_posts.post_author = ccm_m_user.id 
+                                AND ccm_posts.post_status = '$status'" ;
+                            }
+                            break;
+                        case BAOLIAOZHE:
+                            if($status == 'all'){
+                                $id = $_SESSION['uid'];
+                                $join = "INNER JOIN ccm_m_user 
+                            ON ccm_posts.post_author = ccm_m_user.id 
+                            AND ccm_posts.post_author = '$id'";
+                            }else{
+                                $id = $_SESSION['uid'];
+                                $join = "INNER JOIN ccm_m_user 
+                                ON ccm_posts.post_author = ccm_m_user.id 
+                                AND ccm_posts.post_author = '$id' 
+                                AND ccm_posts.post_status = '$status'" ;
+                            }
+                            break;
+                        case XIAOBIAN:
+                        case ZONGBIAN:
+                            if($status == 'all'){
+                                $join = "INNER JOIN ccm_m_user 
+                            ON ccm_posts.post_author = ccm_m_user.id 
+                            AND ccm_posts.post_status <> 'save' 
+                            AND ccm_posts.post_dept LIKE '%$dept%'" ;
+
+                            }else{
+                                $join = "INNER JOIN ccm_m_user 
+                            ON ccm_posts.post_author = ccm_m_user.id 
+                            AND ccm_posts.post_status <> 'save' 
+                            AND ccm_posts.post_dept LIKE '%$dept%' 
+                            AND ccm_posts.post_status = '$status'";
+                            }
+                            break;
+                    }
+                    break;
+            }
+
+
+            return $this->object->join($join)->count();
+        }
+
+        /**
+         * 根据传入的flag来判断是执行查询(部门或者用户),还是单纯的查询,显示相应的文章内容
+         * 并对得到的数据进行过滤
+         * @param $flag
+         * @param $auto
+         * @param $limit
+         * @param string $dept
+         * @return mixed
+         */
+        public function showPostListWithAutoAndSearch($flag,$auto,$limit,$dept=''){
+            $obj = $this->PostListWithAutoAndSearch($flag,$auto,$limit,$dept);
+
+            if($obj){
+                //是二维数组则进行数据格式修正并返回
+                if(ToolModel::isTwoArray($obj)){
+                    return $this->dataFormart($obj);
+                }
+            }
+
+        }
+
+        /**
+         * 根据传入的flag来判断是执行查询(部门或者用户),还是单纯的查询,显示相应的文章内容 (具体执行函数)
+         * @param $flag
+         * @param $auto
+         * @param $limit
+         * @param $dept
+         * @return mixed
+         */
+        private function PostListWithAutoAndSearch($flag,$auto,$limit,$dept){
+            switch ($flag){
+                case 'userSearch':
+                    $userid = I('get.userSearch');
+                    switch ($auto){
+                        case ADMIN:
+                        case SUPPER_ADMIN:
+                            $join = "INNER JOIN ccm_m_user 
+                                        ON ccm_m_user.id = ccm_posts.post_author 
+                                        AND ccm_posts.post_author = $userid";
+                            break;
+                        case XIAOBIAN:
+                        case ZONGBIAN:
+                            $join = "INNER JOIN ccm_m_user 
+                                        ON ccm_m_user.id = ccm_posts.post_author 
+                                        AND ccm_posts.post_author = $userid 
+                                        AND ccm_posts.post_status <> 'save'
+                                        AND ccm_posts.post_dept LIKE '%$dept%'";
+                            break;
+                    }
+                    break;
+                case 'deptSearch':
+                    //传入的是部门名称,需要转化为部门id
+                    $deptID =  $this->getDeptIDByName(I('get.deptSearch'));
+
+                    switch ($auto){
+                        case ADMIN:
+                        case SUPPER_ADMIN:
+                            $join = "INNER JOIN ccm_m_user 
+                                        ON ccm_m_user.id = ccm_posts.post_author 
+                                        AND ccm_posts.post_dept LIKE '%$deptID%'";
+                            break;
+                        case BAOLIAOZHE:
+                            $id = $_SESSION['uid'];
+                            $join = "INNER JOIN ccm_m_user 
+                                        ON ccm_m_user.id = ccm_posts.post_author 
+                                        AND ccm_posts.post_author = '$id' 
+                                        AND ccm_posts.post_dept LIKE '%$deptID%'";
+                            break;
+                    }
+
+                    break;
+                case 'noSearch':
+                    if( ( isset($_GET['status'] ) ) && ( '' != I('get.status')) ){
+                        $status = I('get.status');
+                    }else{
+                        $status = 'all';
+                    }
+                    switch ($auto){
+                        case ADMIN:
+                        case SUPPER_ADMIN:
+                            if($status == 'all'){
+                                $join = 'INNER JOIN ccm_m_user 
+                                            ON ccm_m_user.id = ccm_posts.post_author';
+                            }else{
+                                $join = "INNER JOIN ccm_m_user 
+                                            ON ccm_m_user.id = ccm_posts.post_author
+                                            AND ccm_posts.post_status = '$status'";
+                            }
+                            break;
+
+                        case BAOLIAOZHE:
+                            $id = $_SESSION['uid'];
+
+                            if($status == 'all'){
+                                $join = "INNER JOIN ccm_m_user 
+                                            ON ccm_m_user.id = ccm_posts.post_author 
+                                            AND ccm_posts.post_author = '$id'";
+                            }else{
+                                $join = "INNER JOIN ccm_m_user 
+                                            ON ccm_m_user.id = ccm_posts.post_author 
+                                            AND ccm_posts.post_author = '$id'
+                                            AND ccm_posts.post_status = '$status'";
+                            }
+                            break;
+                        case XIAOBIAN:
+                        case ZONGBIAN:
+                            if($status == 'all'){
+                                $join = "INNER JOIN ccm_m_user 
+                                            ON ccm_m_user.id = ccm_posts.post_author 
+                                            AND ccm_posts.post_status <> 'save' 
+                                            AND ccm_posts.post_dept LIKE '%$dept%'";
+                            }else{
+                                $join = "INNER JOIN ccm_m_user 
+                                            ON ccm_m_user.id = ccm_posts.post_author 
+                                            AND ccm_posts.post_status <> 'save' 
+                                            AND ccm_posts.post_dept LIKE '%$dept%'
+                                            AND ccm_posts.post_status = '$status'";
+                            }
+                            break;
+                    }
+
+                    break;
+            }
+
+
+            $field = 'ccm_posts.*,ccm_m_user.id as uid,ccm_m_user.username';
+
+            //多表联合查询
+            if('' == $limit){
+                return $this->object->field($field)->join($join)->order($this->order)->select();
+            }else{
+                return $this->object->field($field)->join($join)->order($this->order)->limit($limit)->select();
+            }
+
+        }
+
+
+        /**
+         * 根据传入的角色和文章状态取得对应的文章个数(用于显示文章列表一览中的各个状态的文章个数)
+         * @param string $auto
+         * @param string $status
+         * @param string $dept
+         * @return mixed
+         */
+        public function getStatusCountByFlag($auto='',$status='',$dept=''){
 
             switch ($auto){
                 case ADMIN:
@@ -53,6 +304,22 @@ namespace Admin\Model;
                                 AND ccm_posts.post_status = '$status'" ;
                     }
                     break;
+                case XIAOBIAN:
+                case ZONGBIAN:
+                    if($status == 'all'){
+                        $join = "INNER JOIN ccm_m_user 
+                            ON ccm_posts.post_author = ccm_m_user.id 
+                            AND ccm_posts.post_status <> 'save' 
+                            AND ccm_posts.post_dept LIKE '%$dept%'" ;
+
+                    }else{
+                        $join = "INNER JOIN ccm_m_user 
+                            ON ccm_posts.post_author = ccm_m_user.id 
+                            AND ccm_posts.post_status <> 'save' 
+                            AND ccm_posts.post_dept LIKE '%$dept%' 
+                            AND ccm_posts.post_status = '$status'";
+                    }
+                    break;
             }
 
 
@@ -60,97 +327,6 @@ namespace Admin\Model;
             return $this->object->join($join)->count();
         }
         
-
-
-        /**
-         * 文章一览中除了爆料者角色以外的都可以通过点击作者来获取文章个数
-         * @param $userid
-         * @param string $dept
-         * @return mixed
-         */
-        public function getUserSearchCount($auto,$dept=''){
-
-            $userid = I('get.userSearch');
-            switch ($auto){
-                case ADMIN:
-                case SUPPER_ADMIN:
-                    //传入的是部门名称,需要转化为部门id
-                    $join = "INNER JOIN ccm_m_user 
-                            ON ccm_posts.post_author = ccm_m_user.id 
-                            AND ccm_posts.post_author = $userid";
-                    break;
-                case XIAOBIAN:
-                case ZONGBIAN:
-                    //点击用户查询(管理员和小编总编可以),管理员默认取得全部,小编总编条件中需要加入部门和不显示保存的
-                    $join = "INNER JOIN ccm_m_user 
-                        ON ccm_posts.post_author = ccm_m_user.id 
-                        AND ccm_posts.post_author = $userid 
-                        AND ccm_posts.post_status <> 'save'
-                        AND ccm_posts.post_dept LIKE '%$dept%'";
-                    break;
-            }
-            return $this->object->join($join)->count();
-        }
-
-
-        /**
-         * 文章一览中除了爆料者角色以外的都可以通过点击作者来筛选文章列表
-         * @param $userid
-         * @param $limit
-         * @param string $dept
-         * @return mixed
-         */
-        public function showUserSearchPostList($auto,$limit,$dept=''){
-
-            //点击用户查询(管理员和小编总编可以),管理员默认取得全部,小编总编条件中需要加入部门和不显示保存的
-            $obj = $this->allUserSearchPost($auto,$limit,$dept);
-
-            if($obj){
-                //是二维数组则进行数据格式修正并返回
-                if(ToolModel::isTwoArray($obj)){
-                    return $this->dataFormart($obj);
-                }
-            }
-
-        }
-
-        /**
-         * 文章一览中除了爆料者角色以外的都可以通过点击作者来筛选文章列表
-         * @param $userid
-         * @param $limit
-         * @param $dept
-         * @return mixed
-         */
-        private function allUserSearchPost($auto,$limit,$dept){
-            $userid = I('get.userSearch');
-            switch ($auto){
-                case ADMIN:
-                case SUPPER_ADMIN:
-                    $join = "INNER JOIN ccm_m_user 
-                            ON ccm_m_user.id = ccm_posts.post_author 
-                            AND ccm_posts.post_author = $userid";
-                    break;
-                case XIAOBIAN:
-                case ZONGBIAN:
-                    $join = "INNER JOIN ccm_m_user 
-                            ON ccm_m_user.id = ccm_posts.post_author 
-                            AND ccm_posts.post_author = $userid 
-                            AND ccm_posts.post_status <> 'save'
-                            AND ccm_posts.post_dept LIKE '%$dept%'";
-                    break;
-            }
-            $field = 'ccm_posts.*,
-                        ccm_m_user.id as uid,
-                        ccm_m_user.username';
-
-            //多表联合查询
-            if('' == $limit){
-                return $this->object->field($field)->join($join)->order($this->order)->select();
-            }else{
-                return $this->object->field($field)->join($join)->order($this->order)->limit($limit)->select();
-            }
-
-        }
 
         /**
          * 更新文章时候数据检查以及做成
@@ -210,6 +386,10 @@ namespace Admin\Model;
         }
 
 
+        /**
+         * 更新文章内容
+         * @return bool
+         */
         public function updatePost(){
             $now = date('Y/m/d H:i:s',time());
 
@@ -270,308 +450,6 @@ namespace Admin\Model;
             //新增小编拷贝文件
             return $this->object->add($dataArr);
         }
-
-
-        /**
-         * 根据点击的部门名称先取得id,进一步取得该部门的所有文章条数
-         * @return mixed
-         */
-        public function getdeptSearchCount($auto){
-
-            //传入的是部门名称,需要转化为部门id
-            $deptID = $this->getDeptIDByName(I('get.deptSearch'));
-
-            if($auto == ADMIN){
-                $join = "INNER JOIN ccm_m_user 
-                        ON ccm_posts.post_author = ccm_m_user.id 
-                        AND ccm_posts.post_dept LIKE '%$deptID%'";
-
-            }else if($auto == BAOLIAOZHE){
-
-                $id = $_SESSION['uid'];
-                $join = "INNER JOIN ccm_m_user 
-                        ON ccm_posts.post_author = ccm_m_user.id 
-                        AND ccm_posts.post_author = '$id' 
-                        AND ccm_posts.post_dept LIKE '%$deptID%'";
-            }
-            return $this->object->join($join)->count();
-        }
-
-        /**
-         * 根据点击的部门名称先取得id,进一步取得该部门的所有文章列表,并过滤字段
-         * @param $limit
-         * @return mixed
-         */
-        public function showdeptSearchPostList($auto,$limit){
-
-            //取得该部门的所有文章列表
-            $obj = $this->alldeptSearchPost($auto,$limit);
-
-            if($obj){
-                //是二维数组则进行数据格式修正并返回
-                if(ToolModel::isTwoArray($obj)){
-                    return $this->dataFormart($obj);
-                }
-            }
-
-        }
-
-        /**
-         * 根据点击的部门名称先取得id,进一步取得该部门的所有文章列表
-         * @param $limit
-         * @return mixed
-         */
-        private function alldeptSearchPost($auto,$limit){
-
-            //传入的是部门名称,需要转化为部门id
-            $deptID =  $this->getDeptIDByName(I('get.deptSearch'));
-
-            $field = 'ccm_posts.*,
-                        ccm_m_user.id as uid,
-                        ccm_m_user.username';
-
-            if($auto == ADMIN){
-                $join = "INNER JOIN ccm_m_user 
-                        ON ccm_m_user.id = ccm_posts.post_author 
-                        AND ccm_posts.post_dept LIKE '%$deptID%'";
-            }else if( $auto = BAOLIAOZHE){
-                $id = $_SESSION['uid'];
-                $join = "INNER JOIN ccm_m_user 
-                        ON ccm_m_user.id = ccm_posts.post_author 
-                        AND ccm_posts.post_author = '$id' 
-                        AND ccm_posts.post_dept LIKE '%$deptID%'";
-            }
-
-            //多表联合查询
-            if('' == $limit){
-                return $this->object->field($field)->join($join)->order($this->order)->select();
-            }else{
-                return $this->object->field($field)->join($join)->order($this->order)->limit($limit)->select();
-            }
-
-        }
-
-        /**
-         * 根据传入的部门id,取得属于该部门的文章个数,用于分页(只用于小编和总编角色)
-         * @param $dept
-         * @return mixed
-         */
-        public function getAllDeptCount($dept){
-            $join = "INNER JOIN ccm_m_user 
-                        ON ccm_posts.post_author = ccm_m_user.id 
-                        AND ccm_posts.post_status <> 'save' 
-                        AND ccm_posts.post_dept LIKE '%$dept%'" ;
-            return $this->object->join($join)->count();
-        }
-
-
-        /**
-         * 取得保该爆料者发布的所有文章个数
-         * @return mixed
-         */
-        public function getAllBaoliaozheCount(){
-            $id = $_SESSION['uid'];
-            $join = "INNER JOIN ccm_m_user 
-                        ON ccm_posts.post_author = ccm_m_user.id 
-                        AND ccm_posts.post_author = '$id'";
-            return $this->object->join($join)->count();
-        }
-
-
-        /**
-         * 根据传入的部门id 和 文章状态取得对应状态的文章个数(只用于小编和总编角色)
-         * @param $dept
-         * @return mixed
-         */
-        public function getDeptStatusCount($dept,$status){
-            $join = "INNER JOIN ccm_m_user 
-                        ON ccm_posts.post_author = ccm_m_user.id 
-                        AND ccm_posts.post_status <> 'save' 
-                        AND ccm_posts.post_dept LIKE '%$dept%' 
-                        AND ccm_posts.post_status = '$status'";
-            return $this->object->join($join)->count();
-        }
-
-
-        /**
-         * 当前用户是爆料者,根据传入的文章状态取得对应状态的文章个数(只用于爆料者)
-         * @return mixed
-         */
-        public function getBaoliaozheStatusCount($status){
-            $id = $_SESSION['uid'];
-            $join = "INNER JOIN ccm_m_user 
-                        ON ccm_posts.post_author = ccm_m_user.id 
-                        AND ccm_posts.post_author = '$id' 
-                        AND ccm_posts.post_status = '$status'" ;
-            return $this->object->join($join)->count();
-        }
-
-
-        /**
-         * 根据传入的状态取得符合该状态的文章个数
-         * @return mixed
-         */
-        public function getStatusCount($status){
-            $join = "INNER JOIN ccm_m_user 
-                        ON ccm_posts.post_author = ccm_m_user.id 
-                        AND ccm_posts.post_status = '$status'" ;
-            return $this->object->join($join)->count();
-        }
-
-
-        /**
-         * 取得所有文章个数
-         * @return mixed
-         */
-        public function getAllStatusCount(){
-            $join = "INNER JOIN ccm_m_user 
-                        ON ccm_posts.post_author = ccm_m_user.id" ;
-
-            return $this->object->join($join)->count();
-        }
-
-
-        /**
-         * 当前用户是爆料者,则取得所有该爆料者提交的文章个数(只用于爆料者)
-         * @return mixed
-         */
-        public function getBaoliaozheCount(){
-
-            $id = $_SESSION['uid'];
-            $join = "INNER JOIN ccm_m_user 
-                        ON ccm_posts.post_author = ccm_m_user.id 
-                        AND ccm_posts.post_author = '$id'" ;
-
-            if( ( isset($_GET['status'] ) ) && ( '' != I('get.status')) ){
-                $where['post_status'] = I('get.status');
-                return $this->object->join($join)->where($where)->count();
-            }
-            return $this->object->join($join)->count();
-        }
-
-        /**
-         * 当前用户是爆料者,则取得所有该爆料者提交的文章(只用于爆料者)
-         * @param $limit
-         * @return mixed
-         */
-        public function showBaoliaozhePostList($limit){
-
-            $obj = $this->allBaoliaozhePost($limit);
-            if($obj) {
-                //是二维数组则进行数据格式修正并返回
-                if(ToolModel::isTwoArray($obj)){
-                    return $this->dataFormart($obj);
-                }
-            }
-
-        }
-
-        /**
-         * 当前用户是爆料者,则取得所有该爆料者提交的文章列表(只用于爆料者)
-         * @param $limit
-         * @return mixed
-         */
-        private function allBaoliaozhePost($limit){
-            //多表联合查询
-            $id = $_SESSION['uid'];
-            $field = 'ccm_posts.*,ccm_m_user.id as uid,ccm_m_user.username';
-            $join = "INNER JOIN ccm_m_user 
-                        ON ccm_m_user.id = ccm_posts.post_author 
-                        AND ccm_posts.post_author = '$id'";
-            if('' == $limit){
-
-                if( ( isset($_GET['status'] ) ) && ( '' != I('get.status')) ){
-                    $where['post_status'] = I('get.status');
-                    return $this->object->field($field)->join($join)->order($this->order)->where($where)->select();
-                }
-
-                return $this->object->field($field)->join($join)->order($this->order)->select();
-            }else{
-
-                if( ( isset($_GET['status'] ) ) && ( '' != I('get.status')) ){
-                    $where['post_status'] = I('get.status');
-                    return $this->object->field($field)->join($join)->where($where)->order($this->order)->limit($limit)->select();
-                }
-
-                return $this->object->field($field)->join($join)->order($this->order)->limit($limit)->select();
-            }
-
-        }
-
-
-        /**
-         * 也显示所有文章一览表使用后
-         * 取得关联表的用户数据，并通过转化生出页面可显示的数据
-
-         * @return mixed
-         */
-        public function showDeptPostList($dept,$limit){
-
-            //取得用户信息
-            $obj = $this->allDeptPost($dept,$limit);
-
-            if($obj) {
-                //是二维数组则进行数据格式修正并返回
-                if(ToolModel::isTwoArray($obj)){
-                    return $this->dataFormart($obj);
-                }
-            }
-
-        }
-
-        /**
-         * 根据传入的部门id,取得属于该部门的文章(用于小编和总编角色,默认只能属于一个部门)
-         * @param $dept
-         * @param $limit
-         * @return mixed
-         */
-        private function allDeptPost($dept,$limit){
-
-            $field = 'ccm_posts.*,ccm_m_user.id as uid,ccm_m_user.username';
-            $join = "INNER JOIN ccm_m_user 
-                        ON ccm_m_user.id = ccm_posts.post_author 
-                        AND ccm_posts.post_status <> 'save' 
-                        AND ccm_posts.post_dept LIKE '%$dept%'";
-            
-            //多表联合查询
-            if('' == $limit){
-
-                if( ( isset($_GET['status'] ) ) && ( '' != I('get.status')) ){
-                    $where['post_status'] = I('get.status');
-                    return $this->object->field($field)->join($join)->order($this->order)->where($where)->select();
-                }
-
-                return $this->object->field($field)->join($join)->order($this->order)->select();
-            }else{
-                if( ( isset($_GET['status'] ) ) && ( '' != I('get.status')) ){
-                    $where['post_status'] = I('get.status');
-                    return $this->object->field($field)->join($join)->where($where)->order($this->order)->limit($limit)->select();
-                }
-                return $this->object->field($field)->join($join)->limit($limit)->order($this->order)->select();
-            }
-
-        }
-
-        /**
-         * 根据传入的部门id,取得属于该部门的文章个数,用于分页(只用于小编和总编角色)
-         * @param $dept
-         * @return mixed
-         */
-        public function getDeptCount($dept){
-            $join = "INNER JOIN ccm_m_user 
-                        ON ccm_posts.post_author = ccm_m_user.id 
-                        AND ccm_posts.post_status <> 'save' 
-                        AND ccm_posts.post_dept LIKE '%$dept%'";
-
-            if( ( isset($_GET['status'] ) ) && ( '' != I('get.status')) ){
-                $where['post_status'] = I('get.status');
-                return $this->object->join($join)->where($where)->count();
-            }
-
-            return $this->object->join($join)->count();
-        }
-
-
 
 
         /**
@@ -645,26 +523,6 @@ namespace Admin\Model;
         }
 
 
-        /**
-         * 也显示所有文章一览表使用后
-         * 取得关联表的用户数据，并通过转化生出页面可显示的数据
-
-         * @return mixed
-         */
-        public function showPostList($limit){
-
-            //取得用户信息
-            $obj = $this->allPost($limit);
-
-            if($obj){
-                //是二维数组则进行数据格式修正并返回
-                if(ToolModel::isTwoArray($obj)){
-                    return $this->dataFormart($obj);
-                }
-            }
-
-        }
-
 
         /**
          * 对部门过滤,返回部门的name数组和id数组
@@ -711,49 +569,6 @@ namespace Admin\Model;
             return $obj;
         }
 
-        /**
-         * 取得所有用户信息(多表查询)
-         * 私有方法
-         * @return mixed
-         */
-        private function allPost($limit){
-
-            $field = 'ccm_posts.*,ccm_m_user.id as uid,ccm_m_user.username';
-            $join = 'INNER JOIN ccm_m_user 
-                        ON ccm_m_user.id = ccm_posts.post_author';
-            
-            //多表联合查询
-            if('' == $limit){
-
-                if( ( isset($_GET['status'] ) ) && ( '' != I('get.status')) ){
-                    $where['post_status'] = I('get.status');
-                    return $this->object->field($field)->join($join)->order($this->order)->where($where)->select();
-                }
-                return $this->object->field($field)->join($join)->order($this->order)->select();
-
-            }else{
-                if( ( isset($_GET['status'] ) ) && ( '' != I('get.status')) ){
-                    $where['post_status'] = I('get.status');
-                    return $this->object->field($field)->join($join)->limit($limit)->order($this->order)->where($where)->select();
-                }
-                return $this->object->field($field)->join($join)->order($this->order)->limit($limit)->select();
-            }
-
-        }
-
-        public function getCount(){
-
-            $join = 'INNER JOIN ccm_m_user 
-                        ON ccm_posts.post_author = ccm_m_user.id';
-
-            if( ( isset($_GET['status'] ) ) && ( '' != I('get.status')) ){
-                $where['post_status'] = I('get.status');
-                return $this->object->join($join)->where($where)->count();
-            }
-
-            return $this->object->join($join)->count();
-        }
-
 
         /**
          * ajax上传的数据进行检查并赋值
@@ -785,7 +600,10 @@ namespace Admin\Model;
             $this->post_content = htmlspecialchars_decode(I('post.data'));
         }
 
-
+        /**
+         * 追加新文章
+         * @return bool
+         */
         public function addNewPost(){
             $now = date('Y/m/d H:i:s',time());
 
