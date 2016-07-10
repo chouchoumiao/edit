@@ -6,7 +6,11 @@ define(MY_SITE, $_SERVER['SERVER_NAME']);   //发送邮件附带地址的时候�
 define(PAGE_SHOW_COUNT,6);
 
 define(DOCUMENT_ROOT,$_SERVER['DOCUMENT_ROOT']);
+
+//头像文件夹地址
 define(PROFILE_PATH,$_SERVER['DOCUMENT_ROOT'].'/edit/Public/Uploads/profile');
+//文章图片文件夹路径
+define(POST_PATH,$_SERVER['DOCUMENT_ROOT'].'/edit/Public/Uploads/post');
 
 //角色设定
 define(BAOLIAOZHE,1);       //爆料者

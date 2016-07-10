@@ -23,7 +23,9 @@
     <nav class="navbar navbar-inverse">
         <div class="container clearfix">
             <div class="navbar-collapse collapse">
+
                 <ul class="nav navbar-nav">
+                    <li><a href=" " onclick="history.back();"><strong>返回</strong></a></li>
                     <foreach name="post.post_dept" item="vo">
                         <li><a href="#">{$vo}</a></li>
                     </foreach>

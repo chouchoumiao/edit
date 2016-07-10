@@ -60,11 +60,37 @@ class PostController extends CommonController {
                     $this->addNew();
                     break;
 
+                case 'deleteImg':
+                    $this->deleteImg();
+                    break;
+
                 default:
                     ToolModel::goBack('警告,非法操作');
                     break;
             }
         }
+
+    }
+
+
+    /**
+     * 文章中删除图片后原先上传的图片也要删除
+     */
+    private function deleteImg(){
+
+        $imgPath = I('post.imgPath');
+
+        $pathArr = explode('/',$imgPath);
+        $count = count($pathArr);
+        $newPath = POST_PATH.'/'.$pathArr[$count-2].'/'.$pathArr[$count-1];
+
+        ToolModel::delImg($newPath);
+
+        $arr['success'] = 1;
+        $arr['msg'] = '删除成功';
+        echo json_encode($arr);
+        exit;
+
 
     }
 
@@ -78,7 +104,7 @@ class PostController extends CommonController {
 
         //更新文章
         if( $this->postObj->updatePost() ){
-            
+
             $arr['success'] = 1;
             $arr['msg'] = '更新成功！';
         }else{
@@ -160,12 +186,15 @@ class PostController extends CommonController {
      * 上传图片
      */
     private function upload(){
+
+        $day =  date('Ymd',time());
+
         //图片上传设置
         $config = array(
             'maxSize'    =>    3145728,
             'rootPath'	 =>    'Public',
-            'savePath'   =>    '/Uploads/post/',
-            'saveName'   =>    array('uniqid',''),
+            'savePath'   =>    '/Uploads/post/'.$day.'/',
+            'saveName'   =>    array('uniqid',$_SESSION['uid'].'_'),
             'exts'       =>    array('jpg','png','jpeg'),
             'autoSub'    =>    false,
             'subName'    =>    array('date','Ymd'),

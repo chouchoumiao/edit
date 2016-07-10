@@ -24,6 +24,26 @@ $(function(){
                     $('#summernote').summernote('code', '');
                 }
             },
+
+            //删除图片时候同时删除已经上传的图片
+            onMediaDelete : function($target, editor, $editable) {
+
+                var imgPath = $target[0].src;
+                $.ajax({
+                    url:ROOT+"/Admin/Post/doAction/action/deleteImg"//改为你的动态页
+                    ,type:"POST"
+                    ,data:{
+                        'imgPath':imgPath
+                    }
+                    ,dataType: "json"
+                    ,success:function(json){
+                        $target.remove();
+                    }
+                    ,error:function(xhr){alert('PHP页面有错误！'+xhr.responseText);}
+                });
+
+            },
+
             // onImageUpload的参数为files，summernote支持选择多张图片
             onImageUpload : function(files) {
 

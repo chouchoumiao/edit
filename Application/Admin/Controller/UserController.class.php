@@ -81,7 +81,7 @@ class UserController extends CommonController {
                         'maxSize'    =>    3145728,
                         'rootPath'	 =>    'Public',
                         'savePath'   =>    '/Uploads/profile/',
-                        'saveName'   =>    array('uniqid',''),
+                        'saveName'   =>    array('uniqid',$_SESSION['uid'].'_'),
                         'exts'       =>    array('jpg','png','jpeg'),
                         'autoSub'    =>    false,
                         'subName'    =>    array('date','Ymd'),
