@@ -105,37 +105,63 @@
         'fileSizeLimit' : '5MB',
         'onUploadSuccess' : function(file, data, response) {
 
-            alert('__PUBLIC__/Uploads/Media/'+data);
+            var json = jQuery.parseJSON(data);
 
-            return false;
-            var isOk = false;
-            if(data.indexOf("jpg") > -1){
-                isOk = true;
-            }
 
-            if(data.indexOf("png") > -1){
-                isOk = true;
-            }
 
-            if(data.indexOf("jpeg") > -1){
-                isOk = true;
-            }
+            if(json.success == 1){
 
-            if(isOk){
-                $("#upload-img").attr("src",'__PUBLIC__/Uploads/Media/'+data);
+                if(json.msg.indexOf('jpg') > -1 || json.msg.indexOf('jpge') > -1 || json.msg.indexOf('png') > -1){
+                    var html = '<div class="gallery-item">';
+                    html += '<div class="gallery-wrapper">';
+                    html += '<a class="gallery-remove"><i class="fa fa-times"></i></a>';
+                    html += '<img src=__PUBLIC__'+json.msg+'>';
+                    html += '<div class="gallery-title">';
+                    html += json.msg;
+                    html += '</div>';
+                    html += '<div class="gallery-overlay">';
+                    html += '<a href="__PUBLIC__'+json.msg+'" class="gallery-action enlarged-photo">';
+                    html += '<i class="fa fa-search-plus fa-lg"></i>';
+                    html += '</a>';
+                    html += '<a href="#" class="gallery-action animation-dalay"><i class="fa fa-link fa-lg"></i></a>';
+                    html += '</div>';
+                    html += '</div>';
+                    html += '</div>';
+
+                    $("#imgs").append(html);
+                }else{
+                    var html = '<div class="gallery-item">';
+                    html += '<div class="gallery-wrapper">';
+                    html += '<a class="gallery-remove"><i class="fa fa-times"></i></a>';
+
+                    html += '<div class="gallery-title">';
+                    html += json.msg;
+                    html += '</div>';
+                    html += '<div class="gallery-overlay">';
+                    html += '<a href="__PUBLIC__'+json.msg+'" class="gallery-action enlarged-photo">';
+                    html += '<i class="fa fa-search-plus fa-lg"></i>';
+                    html += '</a>';
+                    html += '<a href="#" class="gallery-action animation-dalay"><i class="fa fa-link fa-lg"></i></a>';
+                    html += '</div>';
+                    html += '</div>';
+                    html += '</div>';
+
+                    $("#imgs").append(html);
+                }
+
+
+
             }else{
-                alert(data);
+                alert(json.msg);
                 return false;
             }
-            if(data.success == 1){
-                //把上传上传的图片都放入DIV中
 
-            }else{
-                alert(data.msg);
-                return false;
-            }
-
-
+        },
+        'onError': function(event, queueID, fileObj) {
+            alert("文件:" + fileObj.name + "上传失败");
+        },
+        'onCancel': function(event, queueID, fileObj){
+            alert("取消了" + fileObj.name);
         }
     });
 

@@ -85,6 +85,7 @@ return array(
         1=>'已激活'
     ),
 
+	//文章状态
     'POST_STATUS'  => array(
         'save'     => '保存',
         'pending'  => '待审核',
@@ -93,6 +94,13 @@ return array(
         'pended'   => '已审核通过',
         'close'    => '所有部门审核完毕'
     ),
+
+	//定义资源库可上传的文件后缀
+	'POST_UPLOAD_TYPE_ARRAY' => array(
+		'jpg','png','jpeg','gif',
+		'txt','xls','pdf','doc',
+		'xlsx','docx','pptx','pptx'
+	),
 
 
 

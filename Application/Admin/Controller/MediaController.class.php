@@ -52,7 +52,7 @@ class MediaController extends CommonController {
                     $this->add();
                     break;
                 case 'upload':
-                    $this->upload();
+                    echo $this->upload();
                     exit;
                     break;
 
@@ -80,14 +80,14 @@ class MediaController extends CommonController {
         $config = array(
             'maxSize'    =>    3145728,
             'rootPath'	 =>    'Public',
-            'savePath'   =>    '/Uploads/media/'.$day.'/',
+            'savePath'   =>    '/Uploads/Media/'.$day.'/',
             'saveName'   =>    array('uniqid',$_SESSION['uid'].'_'),
-            'exts'       =>    array('jpg','png','jpeg'),
+            'exts'       =>    C('POST_UPLOAD_TYPE_ARRAY'),
             'autoSub'    =>    false,
             'subName'    =>    array('date','Ymd'),
         );
 
-        return ToolModel::uploadImg($config);
+        $retArr = ToolModel::uploadImg($config);
         if($retArr['success']){
             $arr['success'] = 1;
             $arr['msg'] = $retArr['msg'];

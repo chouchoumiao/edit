@@ -4525,7 +4525,8 @@ label.parsley-error {
 .gallery-list .gallery-item {
   position: relative;
   display: inline-block;
-  width: 33.333333333333336%;
+  /*width: 33.333333333333336%;*/
+  width: 18%;
   padding: 2px;
 }
 @media (min-width: 481px) and (max-width: 991px) {
