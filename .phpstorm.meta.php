@@ -12,6 +12,7 @@
 			'Validate' instanceof Admin\Model\ValidateModel,
 			'Adv' instanceof Think\Model\AdvModel,
 			'Auto' instanceof Admin\Model\AutoModel,
+			'Media' instanceof Admin\Model\MediaModel,
 			'Tool' instanceof Admin\Model\ToolModel,
 			'Relation' instanceof Think\Model\RelationModel,
 			'Lostpass' instanceof Admin\Model\LostpassModel,
