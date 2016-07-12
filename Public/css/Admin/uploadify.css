@@ -71,7 +71,7 @@ Released under the MIT License <http://www.opensource.org/licenses/mit-license.p
 	background-color: #FDE5DD !important;
 }
 .uploadify-queue-item .cancel a {
-	background: url('../img/uploadify-cancel.png') 0 0 no-repeat;
+	background: url('../../img/Admin/uploadify-cancel.png') 0 0 no-repeat;
 	float: right;
 	height:	16px;
 	text-indent: -9999px;
@@ -81,12 +81,12 @@ Released under the MIT License <http://www.opensource.org/licenses/mit-license.p
 	background-color: #E5E5E5;
 }
 .uploadify-progress {
-	background-color: #E5E5E5;
+    background-color: #E5E5E5;
 	margin-top: 10px;
 	width: 100%;
 }
 .uploadify-progress-bar {
-	background-color: #0099FF;
+    background-color: #0099FF;
 	height: 3px;
 	width: 1px;
 }

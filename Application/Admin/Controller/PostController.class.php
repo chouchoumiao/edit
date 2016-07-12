@@ -84,10 +84,14 @@ class PostController extends CommonController {
         $count = count($pathArr);
         $newPath = POST_PATH.'/'.$pathArr[$count-2].'/'.$pathArr[$count-1];
 
-        ToolModel::delImg($newPath);
-
-        $arr['success'] = 1;
-        $arr['msg'] = '删除成功';
+        $del = ToolModel::delImg($newPath);
+        if($del == 1){
+            $arr['success'] = 1;
+            $arr['msg'] = '删除成功';
+        }else{
+            $arr['success'] = o;
+            $arr['msg'] = $del;
+        }
         echo json_encode($arr);
         exit;
 

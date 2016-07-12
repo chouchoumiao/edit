@@ -71,16 +71,22 @@ namespace Admin\Model;
             exit;
         }
 
-
         /**
          * 删除指定文件
-         * @param $img  绝对路径文件
+         * @param $img 绝对路径文件
+         * @return bool
          */
         static function delImg($img){
             if(file_exists($img)){
 
-                unlink($img);
+                if(unlink($img)){
+                    return 1;
+                }else{
+                    return '删除失败';
+                }
             }
+            return '文件不存在';
+
         }
 
         /**
@@ -131,6 +137,7 @@ namespace Admin\Model;
                     }
                     $retArr['success'] = 1;
                     $retArr['msg'] = $pathName;
+                    $retArr['size'] = $file['size'];
                     return $retArr;
                 }
                 else{

@@ -11,6 +11,8 @@ define(DOCUMENT_ROOT,$_SERVER['DOCUMENT_ROOT']);
 define(PROFILE_PATH,$_SERVER['DOCUMENT_ROOT'].'/edit/Public/Uploads/profile');
 //文章图片文件夹路径
 define(POST_PATH,$_SERVER['DOCUMENT_ROOT'].'/edit/Public/Uploads/post');
+//资源库文件夹路径
+define(MEDIA_PATH,$_SERVER['DOCUMENT_ROOT'].'/edit/Public/Uploads/Media');
 
 //角色设定
 define(BAOLIAOZHE,1);       //爆料者

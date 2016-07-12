@@ -60,12 +60,39 @@ class MediaController extends CommonController {
                 case 'addNew':
                     $this->addNew();
                     break;
+                case 'delImg':
+                    $this->delImg();
+                    break;
 
                 default:
                     ToolModel::goBack('警告,非法操作');
                     break;
             }
         }
+
+    }
+
+
+    private function delImg(){
+        $img = I('post.img','');
+
+        if($img){
+            
+            $imgPath = MEDIA_PATH.'/'.$img;
+            $del = ToolModel::delImg($imgPath);
+
+            if($del == 1){
+                $arr['success'] = 1;
+            }else{
+                $arr['success'] = 0;
+                $arr['msg'] = $del;
+            }
+
+            echo json_encode($arr);
+            exit;
+
+        }
+
 
     }
 
@@ -89,8 +116,17 @@ class MediaController extends CommonController {
 
         $retArr = ToolModel::uploadImg($config);
         if($retArr['success']){
-            $arr['success'] = 1;
+            $arr['defaultName'] = '未命名,请编辑';
+            $arr['day'] = substr($retArr['msg'],-29,-21);
+            $arr['name'] = substr($retArr['msg'],-20,-4);
+            $arr['ext'] = substr($retArr['msg'],-4);
             $arr['msg'] = $retArr['msg'];
+            $arr['size'] = ceil($retArr['size']/1024);
+
+            //追加如数据库
+
+
+            $arr['success'] = 1;
         }else{
             $arr['success'] = 0;
             $arr['msg'] = $retArr['msg'];

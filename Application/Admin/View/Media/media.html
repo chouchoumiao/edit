@@ -71,7 +71,7 @@
 <script src="__PUBLIC__/js/Admin/simplify/simplify.js"></script>
 
 
-<script src='__PUBLIC__/js/Admin/jquery.uploadify.min.js'></script>
+<script src='__PUBLIC__/js/Admin/jquery.uploadify.js'></script>
 
 
 <script src="__PUBLIC__/js/common.js?v=20160101"></script>
@@ -107,20 +107,18 @@
 
             var json = jQuery.parseJSON(data);
 
-
-
             if(json.success == 1){
 
                 if(json.msg.indexOf('jpg') > -1
                         || json.msg.indexOf('jpge') > -1
                         || json.msg.indexOf('png') > -1
                         || json.msg.indexOf('gif') > -1){
-                    var html = '<div class="gallery-item">';
+                    var html = '<div class="gallery-item" id="'+json.name+'">';
                     html += '<div class="gallery-wrapper">';
-                    html += '<a class="gallery-remove"><i class="fa fa-times"></i></a>';
-                    html += '<img src=__PUBLIC__'+json.msg+'>';
+                    html += '<a class="gallery-remove" onclick="return removeImg(\''+json.day+'\',\''+json.name+'\',\''+json.ext+'\') "><i class="fa fa-times"></i></a>';
+                    html += '<img id= imgId src=__PUBLIC__'+json.msg+'>';
                     html += '<div class="gallery-title">';
-                    html += json.msg;
+                    html += json.defaultName;
                     html += '</div>';
                     html += '<div class="gallery-overlay">';
                     html += '<a target="_blank" href="__PUBLIC__'+json.msg+'" class="gallery-action enlarged-photo">';
@@ -133,12 +131,12 @@
 
                     $("#imgs").append(html);
                 }else{
-                    var html = '<div class="gallery-item">';
+                    var html = '<div class="gallery-item" id="'+json.name+'">';
                     html += '<div class="gallery-wrapper">';
-                    html += '<a class="gallery-remove"><i class="fa fa-times"></i></a>';
+                    html += '<a class="gallery-remove" onclick="return removeImg(\''+json.day+'\',\''+json.name+'\',\''+json.ext+'\') "><i class="fa fa-times"></i></a>';
                     html += '<img class = textshow src=__PUBLIC__/img/Admin/media/text.png>';
                     html += '<div class="gallery-title">';
-                    html += json.msg;
+                    html += json.defaultName;
                     html += '</div>';
                     html += '<div class="gallery-overlay">';
                     html += '<a target="_blank" href="__PUBLIC__'+json.msg+'" class="gallery-action enlarged-photo">';
@@ -159,16 +157,35 @@
                 return false;
             }
 
-        },
-        'onError': function(event, queueID, fileObj) {
-            alert("文件:" + fileObj.name + "上传失败");
-        },
-        'onCancel': function(event, queueID, fileObj){
-            alert("取消了" + fileObj.name);
         }
     });
 
 });
+
+    /**
+     * 如果点击删除图片按钮则先获取图片的名称,将名称传入后删除对应的ID
+     * @param data
+     */
+    function removeImg (day,name,ext) {
+        $.ajax({
+            url:ROOT+"/Admin/Media/doAction/action/delImg"//改为你的动态页
+            ,type:"POST"
+            ,data:{
+                'img':day+'/'+ name + ext
+            }
+            ,dataType: "json"
+            ,success:function(json){
+                if(json.success == 1){
+                    $('#'+name).remove();
+                }else{
+
+                    alert(json.msg);
+                    return false;
+                }
+            }
+            ,error:function(xhr){alert('PHP页面有错误！'+xhr.responseText);}
+        });
+    }
 </script>
 
 
