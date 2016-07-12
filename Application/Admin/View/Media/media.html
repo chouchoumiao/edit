@@ -111,7 +111,10 @@
 
             if(json.success == 1){
 
-                if(json.msg.indexOf('jpg') > -1 || json.msg.indexOf('jpge') > -1 || json.msg.indexOf('png') > -1){
+                if(json.msg.indexOf('jpg') > -1
+                        || json.msg.indexOf('jpge') > -1
+                        || json.msg.indexOf('png') > -1
+                        || json.msg.indexOf('gif') > -1){
                     var html = '<div class="gallery-item">';
                     html += '<div class="gallery-wrapper">';
                     html += '<a class="gallery-remove"><i class="fa fa-times"></i></a>';
@@ -120,7 +123,7 @@
                     html += json.msg;
                     html += '</div>';
                     html += '<div class="gallery-overlay">';
-                    html += '<a href="__PUBLIC__'+json.msg+'" class="gallery-action enlarged-photo">';
+                    html += '<a target="_blank" href="__PUBLIC__'+json.msg+'" class="gallery-action enlarged-photo">';
                     html += '<i class="fa fa-search-plus fa-lg"></i>';
                     html += '</a>';
                     html += '<a href="#" class="gallery-action animation-dalay"><i class="fa fa-link fa-lg"></i></a>';
@@ -133,12 +136,12 @@
                     var html = '<div class="gallery-item">';
                     html += '<div class="gallery-wrapper">';
                     html += '<a class="gallery-remove"><i class="fa fa-times"></i></a>';
-                    html += '<img src=__PUBLIC__/img/Admin/media/text.png>';
+                    html += '<img class = textshow src=__PUBLIC__/img/Admin/media/text.png>';
                     html += '<div class="gallery-title">';
                     html += json.msg;
                     html += '</div>';
                     html += '<div class="gallery-overlay">';
-                    html += '<a href="__PUBLIC__'+json.msg+'" class="gallery-action enlarged-photo">';
+                    html += '<a target="_blank" href="__PUBLIC__'+json.msg+'" class="gallery-action enlarged-photo">';
                     html += '<i class="fa fa-search-plus fa-lg"></i>';
                     html += '</a>';
                     html += '<a href="#" class="gallery-action animation-dalay"><i class="fa fa-link fa-lg"></i></a>';

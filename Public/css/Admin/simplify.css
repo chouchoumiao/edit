@@ -4522,6 +4522,11 @@ label.parsley-error {
 .gallery-list {
   list-style: none;
 }
+
+.textshow{
+  margin-left: 25px;
+}
+
 .gallery-list .gallery-item {
   position: relative;
   display: inline-block;
