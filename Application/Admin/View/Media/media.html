@@ -75,7 +75,6 @@
 
 
 <script src="__PUBLIC__/js/common.js?v=20160101"></script>
-<script src="__PUBLIC__/js/Admin/post.js?v=20160106"></script>
 
 
 <script src="__PUBLIC__/js/Admin/summernote.min.js"></script>
@@ -115,9 +114,9 @@
                         || json.msg.indexOf('gif') > -1){
                     var html = '<div class="gallery-item" id="'+json.name+'">';
                     html += '<div class="gallery-wrapper">';
-                    html += '<a class="gallery-remove" onclick="return removeImg(\''+json.day+'\',\''+json.name+'\',\''+json.ext+'\') "><i class="fa fa-times"></i></a>';
+                    html += '<a class="gallery-remove" onclick="return removeImg('+json.id+',\''+json.day+'\',\''+json.name+'\',\''+json.ext+'\') "><i class="fa fa-times"></i></a>';
                     html += '<img id= imgId src=__PUBLIC__'+json.msg+'>';
-                    html += '<div class="gallery-title">';
+                    html += '<div class="gallery-title" id="title'+json.name+'">';
                     html += json.defaultName;
                     html += '</div>';
                     html += '<div class="gallery-overlay">';
@@ -133,9 +132,9 @@
                 }else{
                     var html = '<div class="gallery-item" id="'+json.name+'">';
                     html += '<div class="gallery-wrapper">';
-                    html += '<a class="gallery-remove" onclick="return removeImg(\''+json.day+'\',\''+json.name+'\',\''+json.ext+'\') "><i class="fa fa-times"></i></a>';
+                    html += '<a class="gallery-remove" onclick="return removeImg(\''+json.id+'\',\''+json.day+'\',\''+json.name+'\',\''+json.ext+'\') "><i class="fa fa-times"></i></a>';
                     html += '<img class = textshow src=__PUBLIC__/img/Admin/media/text.png>';
-                    html += '<div class="gallery-title">';
+                    html += '<div class="gallery-title" id="title'+json.name+'">';
                     html += json.defaultName;
                     html += '</div>';
                     html += '<div class="gallery-overlay">';
@@ -149,9 +148,6 @@
 
                     $("#imgs").append(html);
                 }
-
-
-
             }else{
                 alert(json.msg);
                 return false;
@@ -166,14 +162,19 @@
      * 如果点击删除图片按钮则先获取图片的名称,将名称传入后删除对应的ID
      * @param data
      */
-    function removeImg (day,name,ext) {
+    function removeImg (id,day,name,ext) {
+
         $.ajax({
             url:ROOT+"/Admin/Media/doAction/action/delImg"//改为你的动态页
             ,type:"POST"
             ,data:{
-                'img':day+'/'+ name + ext
+                'id':id,
+                'img':day+'/'+ name + '.' + ext
             }
             ,dataType: "json"
+            ,beforeSend: function(){
+                $('#title'+name).html('正在删除...');
+            }
             ,success:function(json){
                 if(json.success == 1){
                     $('#'+name).remove();

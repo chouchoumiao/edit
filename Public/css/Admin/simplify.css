@@ -4524,15 +4524,15 @@ label.parsley-error {
 }
 
 .textshow{
-  margin-left: 25px;
+  margin-left: 2px;
 }
 
 .gallery-list .gallery-item {
   position: relative;
   display: inline-block;
   /*width: 33.333333333333336%;*/
-  width: 18%;
-  padding: 2px;
+  width: 12.3%;
+  padding: 5px;
 }
 @media (min-width: 481px) and (max-width: 991px) {
   .gallery-list .gallery-item {

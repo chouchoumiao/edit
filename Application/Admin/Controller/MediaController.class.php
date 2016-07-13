@@ -8,7 +8,7 @@ header("Content-type: text/html;charset=utf-8");
 class MediaController extends CommonController {
 
     private $auto;
-    private $postObj;
+    private $obj;
     private $dept;
 
     public function doAction(){
@@ -18,7 +18,7 @@ class MediaController extends CommonController {
 
             $user = D('User')->getNowUserDetailInfo();
 
-            $this->postObj = D('Media');
+            $this->obj = D('Media');
             $this->dept = $user['udi_dep_id'];
             $this->auto = intval($user['udi_auto_id']);
             //用于根据用户权限来显示对应功能
@@ -29,9 +29,10 @@ class MediaController extends CommonController {
 
                 //取得所有用户(分页)
                 case 'all':
-                    //$this->all();
+                    $data = $this->all();
 
                     $this->assign('all',true);
+                    $this->assign('data',$data);
                     $this->assign('auto',$this->auto);
                     $this->display('media');
 
@@ -73,7 +74,17 @@ class MediaController extends CommonController {
     }
 
 
+    /**
+     * 取得所有资源
+     * @return mixed
+     */
+    private function all(){
+
+        return $data = $this->obj->getAllMedia();
+    }
+
     private function delImg(){
+        $id = I('post.id',0);
         $img = I('post.img','');
 
         if($img){
@@ -82,7 +93,16 @@ class MediaController extends CommonController {
             $del = ToolModel::delImg($imgPath);
 
             if($del == 1){
-                $arr['success'] = 1;
+
+                //删除数据库中对应的资源
+                if(!$this->obj->deleteMedia($id)){
+                    $arr['success'] = 0;
+                    $arr['msg'] = '数据库中资源删除失败'.M('media')->getLastSql();
+                }else{
+                    $arr['success'] = 1;
+                }
+
+
             }else{
                 $arr['success'] = 0;
                 $arr['msg'] = $del;
@@ -117,16 +137,39 @@ class MediaController extends CommonController {
         $retArr = ToolModel::uploadImg($config);
         if($retArr['success']){
             $arr['defaultName'] = '未命名,请编辑';
-            $arr['day'] = substr($retArr['msg'],-29,-21);
-            $arr['name'] = substr($retArr['msg'],-20,-4);
-            $arr['ext'] = substr($retArr['msg'],-4);
+
             $arr['msg'] = $retArr['msg'];
+
+            $imgdataArr = explode('/',$arr['msg']);     //将名称用'/'分割
+
+            $arr['day'] = $imgdataArr[3];               //日期是分割后第三个下标的值
+
+            $last = array_pop($imgdataArr);             //取得名称加最后
+            $nameExt = explode('.',$last);              //继续用'.'分割，用于取得后缀和名称
+            $arr['name'] = $nameExt[0];                 //取得名称
+            $arr['ext'] = array_pop($nameExt);          //取得后缀
+
             $arr['size'] = ceil($retArr['size']/1024);
 
-            //追加如数据库
+            //追加数据库数据做成
+            $data['title']  = $arr['defaultName'];
+            $data['path']   = $arr['msg'];
+            $data['day']    = $arr['day'];
+            $data['name']   = $arr['name'];
+            $data['type']   = $arr['ext'] ;  //将后缀名存入
+            $data['size']   = $arr['size'];
+            $data['status'] = 1;
+            $data['time']   = date('Y/m/d H:m:s');
 
+            $id = $this->obj->insertMedia($data);
+            if( !$id ){
+                $arr['success'] = 0;
+                $arr['msg'] = '图片存入失败';
+             }else{
+                $arr['success'] = 1;
+                $arr['id'] = $id;
+            }
 
-            $arr['success'] = 1;
         }else{
             $arr['success'] = 0;
             $arr['msg'] = $retArr['msg'];
@@ -140,8 +183,7 @@ class MediaController extends CommonController {
     /**
      * 显示新增文章页面
      */
-    private function add(){
-        $this->assign('add',true);
+    private function add(){        $this->assign('add',true);
         $this->display('media');
     }
 
