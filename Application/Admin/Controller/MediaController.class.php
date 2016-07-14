@@ -34,15 +34,24 @@ class MediaController extends CommonController {
 
                     $this->assign('all',true);
                     $this->assign('allStatus','active');
+
+
+                    $this->setLiked($data);
                     $this->assign('data',$data);
                     $this->assign('auto',$this->auto);
                     $this->display('media');
 
                     break;
+                case 'collect':
+                    $this->collect();
+                    break;
                 case 'getStatus':
                     $data = $this->getStatus();
 
                     $this->assign('all',true);
+
+                    $this->setLiked($data);
+
                     $this->assign('data',$data);
                     $this->assign('auto',$this->auto);
                     $this->display('media');
@@ -58,8 +67,10 @@ class MediaController extends CommonController {
                     break;
 
                 //提交表单后新增文章
-                case 'addNew':
-                    $this->addNew();
+                case 'update':
+                    //dump($_POST);exit;
+                    
+                    $this->update();
                     break;
                 case 'delImg':
                     $this->delImg();
@@ -73,7 +84,74 @@ class MediaController extends CommonController {
 
     }
 
-    //根据传入的查询条件查找
+    
+    private function update(){
+        if( !isset( $_POST['send']) || '' == I('post.send')){
+            ToolModel::goBack('参数不能为空');
+        }
+
+        $data['id'] = I('post.id',0);
+        $data['title'] = I('post.title','');
+        $data['content'] = I('post.content','');
+        $data['time'] = date('Y/m/d H:m:s');
+
+        if(!$this->obj->updateMedia($data)){
+            ToolModel::goBack('更新失败');
+        }
+
+        //获取传上来的当前页面状态是媒体文件,文档文件,我的,还是收藏的
+        $status = I('get.status');
+
+        //定义状态一览
+        $statusArr = array('media','file','me','like');
+
+        //如果接收到的状态是状态一览表中的内容,则返回对应的页面
+        if(in_array($status,$statusArr)){
+            ToolModel::goToUrl('更新成功','doAction/action/getStatus/status/'.$status);
+            //否则则返回总页面
+        }else{
+            ToolModel::goToUrl('更新成功','doAction/action/all');
+        }
+    }
+    
+    /**
+     * 点击收藏资源时触发
+     */
+    private function collect(){
+
+        //判断id
+        $id = I('get.id');
+        if( !isset($id) || 0 == intval($id)){
+            ToolModel::goBack('参数不能为空');
+        }
+
+        //执行收藏操作
+        if(!$this->obj->doCollect($id)){
+            ToolModel::goBack('收藏失败');
+        }else{
+
+            //获取传上来的当前页面状态是媒体文件,文档文件,我的,还是收藏的
+            $status = I('get.status');
+
+            //定义状态一览
+            $statusArr = array('media','file','me','like');
+
+            //如果接收到的状态是状态一览表中的内容,则返回对应的页面
+            if(in_array($status,$statusArr)){
+                ToolModel::goToUrl('收藏成功','doAction/action/getStatus/status/'.$status);
+            //否则则返回总页面
+            }else{
+                ToolModel::goToUrl('收藏成功','doAction/action/all');
+            }
+
+
+        }
+    }
+
+    /**
+     * 根据传入的查询条件查找
+     * @return mixed
+     */
     private function getStatus(){
 
         $status = I('get.status');
@@ -85,19 +163,24 @@ class MediaController extends CommonController {
         switch ($status){
             case 'media':
                 $where['type'] = array('in',C('MEDIA_TYPE_ARRAY'));
-                $this->assign('mediaStatus','active');
+                $this->assign('mediaStatus','active');                  //设置页面显示那个按钮是激活状态
+                $this->assign('status','media');                        //用于给点击收藏操作时返回对应页面用
+
                 break;
             case 'file':
                 $where['type'] = array('in',C('FILE_TYPE_ARRAY'));
                 $this->assign('fileStatus','active');
+                $this->assign('status','file');
                 break;
             case 'me':
                 $where['author'] = $_SESSION['uid'];
                 $this->assign('meStatus','active');
+                $this->assign('status','me');
                 break;
             case 'like':
                 $where['label'] = array('like',"%{$_SESSION['uid']}%");
                 $this->assign('likeStatus','active');
+                $this->assign('status','like');
                 break;
             default:
                 ToolModel::goBack('参数错误');
@@ -117,6 +200,9 @@ class MediaController extends CommonController {
         return $this->obj->getAllMedia();
     }
 
+    /**
+     * 删除资源(不只是图片)
+     */
     private function delImg(){
         $id = I('post.id',0);
         $img = I('post.img','');
@@ -135,8 +221,6 @@ class MediaController extends CommonController {
                 }else{
                     $arr['success'] = 1;
                 }
-
-
             }else{
                 $arr['success'] = 0;
                 $arr['msg'] = $del;
@@ -168,37 +252,13 @@ class MediaController extends CommonController {
             'subName'    =>    array('date','Ymd'),
         );
 
+        //上传文件
         $retArr = ToolModel::uploadImg($config);
+
         if($retArr['success']){
-            $arr['defaultName'] = '未命名,请编辑';
-
-            $arr['msg'] = $retArr['msg'];
-
-            $imgdataArr = explode('/',$arr['msg']);     //将名称用'/'分割
-
-            $arr['day'] = $imgdataArr[3];               //日期是分割后第三个下标的值
-
-            $last = array_pop($imgdataArr);             //取得名称加最后
-            $nameExt = explode('.',$last);              //继续用'.'分割，用于取得后缀和名称
-            $arr['name'] = $nameExt[0];                 //取得名称
-            $arr['ext'] = array_pop($nameExt);          //取得后缀
-
-            $arr['size'] = ceil($retArr['size']/1024);
-
-            //追加数据库数据做成
-            $data['title']  = '';
-            $data['content']  = '';
-            $data['author']  = $_SESSION['uid'];
-            $data['path']   = $arr['msg'];
-            $data['day']    = $arr['day'];
-            $data['name']   = $arr['name'];
-            $data['type']   = $arr['ext'] ;  //将后缀名存入
-            $data['label']   = '' ;          //将标签存入
-
-            $data['size']   = $arr['size'];
-            $data['status'] = 1;
-            $data['time']   = date('Y/m/d H:m:s');
-
+            $arr = $this->setJsonData($retArr);
+            $data = $this->setImgData($arr);
+            //插入新资源
             $id = $this->obj->insertMedia($data);
             if( !$id ){
                 $arr['success'] = 0;
@@ -217,12 +277,82 @@ class MediaController extends CommonController {
         exit;
     }
 
+    /**
+     * 组装数据给前端显示用
+     * @param $retArr
+     * @return mixed
+     */
+    private function setJsonData(&$retArr){
+        $arr['defaultName'] = '未命名,请编辑';
+
+        $arr['msg'] = $retArr['msg'];
+
+        $imgdataArr = explode('/',$arr['msg']);     //将名称用'/'分割
+
+        $arr['day'] = $imgdataArr[3];               //日期是分割后第三个下标的值
+
+        $last = array_pop($imgdataArr);             //取得名称加最后
+        $nameExt = explode('.',$last);              //继续用'.'分割，用于取得后缀和名称
+        $arr['name'] = $nameExt[0];                 //取得名称
+        $arr['ext'] = array_pop($nameExt);          //取得后缀
+
+        $arr['size'] = ceil($retArr['size']/1024);
+
+        return $arr;
+
+
+    }
+
+    /**
+     * 做成用于新增数据表的数据
+     * @param $arr
+     * @return mixed
+     */
+    private function setImgData($arr){
+        //追加数据库数据做成
+        $data['title']  = '';
+        $data['content']  = '';
+        $data['author']  = $_SESSION['uid'];
+        $data['path']   = $arr['msg'];
+        $data['day']    = $arr['day'];
+        $data['name']   = $arr['name'];
+        $data['type']   = $arr['ext'] ;  //将后缀名存入
+        $data['label']   = '' ;          //将标签存入
+
+        $data['size']   = $arr['size'];
+        $data['status'] = 1;
+        $data['time']   = date('Y/m/d H:m:s');
+        return $data;
+    }
 
     /**
      * 显示新增文章页面
      */
     private function add(){        $this->assign('add',true);
         $this->display('media');
+    }
+
+    /**
+     * 根据收藏的label内容来判断当前用户是否是已经收藏过该资源了,追加状态没给前端页面判断用
+     * @param $data
+     */
+    private function setLiked(&$data){
+        for ($i= 0;$i<count($data);$i++){
+
+            if($data[$i]['label'] == ''){
+                $data[$i]['liked'] = 0;
+            }else{
+
+                $labelArr = explode(',',$data[$i]['label']);
+
+                if(in_array($_SESSION['uid'],$labelArr) ){
+                    $data[$i]['liked'] = 1;
+                }else{
+                    $data[$i]['liked'] = 0;
+                }
+            }
+
+        }
     }
 
 }

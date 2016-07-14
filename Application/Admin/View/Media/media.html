@@ -112,18 +112,19 @@
                         || json.msg.indexOf('jpge') > -1
                         || json.msg.indexOf('png') > -1
                         || json.msg.indexOf('gif') > -1){
+
                     var html = '<div class="gallery-item" id="'+json.name+'">';
                     html += '<div class="gallery-wrapper">';
                     html += '<a class="gallery-remove" onclick="return removeImg('+json.id+',\''+json.day+'\',\''+json.name+'\',\''+json.ext+'\') "><i class="fa fa-times"></i></a>';
                     html += '<img id= imgId src=__PUBLIC__'+json.msg+'>';
                     html += '<div class="gallery-title" id="title'+json.name+'">';
-                    html += json.defaultName;
+                    html += '<a href = "__ROOT__/Admin/Media/doAction/action/getStatus/status/me">前往资源库修改</a>';
                     html += '</div>';
                     html += '<div class="gallery-overlay">';
                     html += '<a target="_blank" href="__PUBLIC__'+json.msg+'" class="gallery-action enlarged-photo">';
                     html += '<i class="fa fa-search-plus fa-lg"></i>';
                     html += '</a>';
-                    html += '<a href="#" class="gallery-action animation-dalay"><i class="fa fa-link fa-lg"></i></a>';
+                    //html += '<a href="#" onclick="return doModel('+json.id+',\''+json.msg+'\');" class="gallery-action animation-dalay"><i class="fa fa-edit fa-lg"></i></a>';
                     html += '</div>';
                     html += '</div>';
                     html += '</div>';
@@ -135,13 +136,13 @@
                     html += '<a class="gallery-remove" onclick="return removeImg(\''+json.id+'\',\''+json.day+'\',\''+json.name+'\',\''+json.ext+'\') "><i class="fa fa-times"></i></a>';
                     html += '<img class = textshow src=__PUBLIC__/img/Admin/media/text.png>';
                     html += '<div class="gallery-title" id="title'+json.name+'">';
-                    html += json.defaultName;
+                    html += '<a href = "__ROOT__/Admin/Media/doAction/action/getStatus/status/me">前往资源库修改</a>';
                     html += '</div>';
                     html += '<div class="gallery-overlay">';
                     html += '<a target="_blank" href="__PUBLIC__'+json.msg+'" class="gallery-action enlarged-photo">';
                     html += '<i class="fa fa-search-plus fa-lg"></i>';
                     html += '</a>';
-                    html += '<a href="#" class="gallery-action animation-dalay"><i class="fa fa-link fa-lg"></i></a>';
+                    //html += '<a href="#" onclick="return doModel('+json.id+',\''+json.msg+'\');" class="gallery-action animation-dalay"><i class="fa fa-edit fa-lg"></i></a>';
                     html += '</div>';
                     html += '</div>';
                     html += '</div>';

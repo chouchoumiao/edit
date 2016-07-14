@@ -32,9 +32,16 @@
                                 <a target="_blank" href="__PUBLIC__/{$vo.path}" class="gallery-action enlarged-photo">
                                     <i class="fa fa-search-plus fa-lg"></i>
                                 </a>
-                                <a href="#" data-toggle="modal" data-target="#normalModal{$k}" class="gallery-action animation-dalay">
-                                    <i class="fa fa-edit fa-lg"></i>
-                                </a>
+                                <if condition=" $vo.author eq $_SESSION['uid']">
+                                    <a href="#" data-toggle="modal" data-target="#normalModal{$k}" class="gallery-action animation-dalay">
+                                        <i class="fa fa-edit fa-lg"></i>
+                                    </a>
+                                <else/>
+                                    <a href="#" data-toggle="modal" data-target="#normalModal{$k}" class="gallery-action animation-dalay">
+                                        <i class="fa fa-link fa-lg"></i>
+                                    </a>
+                                </if>
+
                             </div>
                         </div>
                     </div>
@@ -66,47 +73,91 @@
             <div class="modal fade" id="normalModal{$k}" aria-hidden="true" style="display: none;" data-backdrop="static">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">
-                                <span aria-hidden="true">×</span>
-                                <span class="sr-only">Close</span>
-                            </button>
-                            <h4 class="modal-title">编辑资源信息:</h4>
-                        </div>
-                        <div class="modal-body">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <switch name="vo.type">
-                                        <case value="gif|png|jpg">
-                                            <img src="__PUBLIC__/{$vo.path}">
-                                        </case>
-                                        <default />
-                                        <span style="margin-left: 23px">
-                                            <img src="__PUBLIC__/img/Admin/media/text.png">
-                                        </span>
+                        <form action="__ROOT__/Admin/Media/doAction/action/update/status/{$status}" method="post">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">
+                                    <span aria-hidden="true">×</span>
+                                    <span class="sr-only">Close</span>
+                                </button>
+                                <h4 class="modal-title">编辑资源信息:</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <switch name="vo.type">
+                                            <case value="gif|png|jpg">
+                                                <img src="__PUBLIC__/{$vo.path}" style="max-height: 160px">
+                                            </case>
+                                            <default />
+                                            <span style="margin-left: 23px">
+                                                <img src="__PUBLIC__/img/Admin/media/text.png">
+                                            </span>
 
-                                    </switch>
-                                    <br/>
-                                    <span class="label label-warning center-block" style="padding: 8px;margin: 15px">
-                                            <i class="text-danger fa fa-heart"></i>
-                                            加入收藏
-                                    </span>
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="form-group">
-                                        <input class="form-control" type="text" placeholder="请输入资源标题" value={$vo.title}>
+                                        </switch>
+                                        <br/>
+                                        <if condition="$vo.liked eq 1">
+                                            <a href="#">
+                                                <span class="label label-default center-block" style="padding: 8px;margin: 15px">
+                                                        <i class="text-danger fa fa-heart"></i>
+                                                        已收藏
+                                                </span>
+                                            </a>
+                                        <else/>
+                                            <a href="__ROOT__/Admin/Media/doAction/action/collect/id/{$vo.id}/status/{$status}">
+                                                <span class="label label-warning center-block" style="padding: 8px;margin: 15px">
+                                                        <i class="text-danger fa fa-heart"></i>
+                                                        加入收藏
+                                                </span>
+                                            </a>
+                                        </if>
                                     </div>
-                                    <div class="form-group">
-                                        <textarea class="form-control" rows="5" type="text" placeholder="请输入资源描述">{$vo.content}</textarea>
-                                    </div>
+                                    <if condition=" $vo.author eq $_SESSION['uid']">
+                                        <div class="col-md-8">
+                                            <div class="form-group">
+                                                <label class="control-label" for="title">标题:</label>
+                                                <input class="form-control" type="text" id="title" name="title"  placeholder="请输入资源标题" value={$vo.title}>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="">描述:</label>
+                                                <textarea class="form-control" rows="5" name="content" type="text" placeholder="请输入资源描述">{$vo.content}</textarea>
+                                            </div>
+                                        </div>
+                                    <else/>
+                                        <div class="col-md-8">
+                                            <div class="form-group">
+                                                <label class="control-label" for="title">标题:</label>
+                                                <input disabled class="form-control" id="title" name="title" type="text" placeholder="请输入资源标题"  value={$vo.title}>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="">描述:</label>
+                                                <textarea class="form-control" rows="5" name="content" type="text" placeholder="请输入资源描述" disabled>{$vo.content}</textarea>
+                                            </div>
+                                        </div>
+                                    </if>
                                 </div>
                             </div>
+                            <!--  不是当前用户不能修改标题和详细,所以不显示提交按钮  -->
+                            <if condition=" $vo.author eq $_SESSION['uid']">
+                                <div class="modal-footer">
+                                    <input name="id" value={$vo.id} type="hidden">
+                                    <div class="row">
+                                        <div class="col-md-6" style="margin-top: 8px;">
+                                            <span class="label label-success">当前资源文件容量大小: &nbsp; &nbsp; {$vo.size} &nbsp;&nbsp;KB</span>
+                                        </div>
+                                        <div class="col-md-5" style="margin-right: 10px">
+                                            <input type="submit" class="btn btn-info" name="send" value="提交" style="margin-right: 8px">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                        </div>
+                                    </div>
 
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn btn-info">提交</button>
-                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                        </div>
+
+                                </div>
+                            </if>
+
+                        </form>
+
+
+
                     </div>
                 </div>
             </div>
