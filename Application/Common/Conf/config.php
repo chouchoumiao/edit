@@ -105,6 +105,16 @@ return array(
 	),
 
 
+	'MEDIA_TYPE_ARRAY'=> array(
+		'jpg','png','jpeg','gif'
+	),
+
+
+	'FILE_TYPE_ARRAY'=> array(
+		'txt','xls','pdf','doc',
+		'xlsx','docx','pptx','pptx'
+	),
+
 
 
 );

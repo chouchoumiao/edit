@@ -10,10 +10,14 @@ namespace Admin\Model;
         private $obj;
 
         public function __construct(){
-
             $this->obj = M('Media');
+        }
 
 
+        public function getMediaBtStatus($where){
+
+            $order = 'time desc';
+            return $this->obj->where($where)->order($order)->select();
         }
 
         /**

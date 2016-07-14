@@ -31,23 +31,23 @@ class MediaController extends CommonController {
                 case 'all':
                     $data = $this->all();
 
+
+                    $this->assign('all',true);
+                    $this->assign('allStatus','active');
+                    $this->assign('data',$data);
+                    $this->assign('auto',$this->auto);
+                    $this->display('media');
+
+                    break;
+                case 'getStatus':
+                    $data = $this->getStatus();
+
                     $this->assign('all',true);
                     $this->assign('data',$data);
                     $this->assign('auto',$this->auto);
                     $this->display('media');
 
                     break;
-
-                //取得当前用户
-                case 'the':
-                    $this->the();
-                    break;
-
-                //删除文章
-                case 'del':
-                    $this->del();
-                    break;
-
                 //追加用户
                 case 'add':
                     $this->add();
@@ -73,6 +73,40 @@ class MediaController extends CommonController {
 
     }
 
+    //根据传入的查询条件查找
+    private function getStatus(){
+
+        $status = I('get.status');
+        if( !isset($status) || ('' == $status)){
+
+            ToolModel::goBack('参数不能为空');
+        }
+
+        switch ($status){
+            case 'media':
+                $where['type'] = array('in',C('MEDIA_TYPE_ARRAY'));
+                $this->assign('mediaStatus','active');
+                break;
+            case 'file':
+                $where['type'] = array('in',C('FILE_TYPE_ARRAY'));
+                $this->assign('fileStatus','active');
+                break;
+            case 'me':
+                $where['author'] = $_SESSION['uid'];
+                $this->assign('meStatus','active');
+                break;
+            case 'like':
+                $where['label'] = array('like',"%{$_SESSION['uid']}%");
+                $this->assign('likeStatus','active');
+                break;
+            default:
+                ToolModel::goBack('参数错误');
+                break;
+        }
+        return $this->obj->getMediaBtStatus($where);
+
+    }
+
 
     /**
      * 取得所有资源
@@ -80,7 +114,7 @@ class MediaController extends CommonController {
      */
     private function all(){
 
-        return $data = $this->obj->getAllMedia();
+        return $this->obj->getAllMedia();
     }
 
     private function delImg(){
@@ -152,11 +186,15 @@ class MediaController extends CommonController {
             $arr['size'] = ceil($retArr['size']/1024);
 
             //追加数据库数据做成
-            $data['title']  = $arr['defaultName'];
+            $data['title']  = '';
+            $data['content']  = '';
+            $data['author']  = $_SESSION['uid'];
             $data['path']   = $arr['msg'];
             $data['day']    = $arr['day'];
             $data['name']   = $arr['name'];
             $data['type']   = $arr['ext'] ;  //将后缀名存入
+            $data['label']   = '' ;          //将标签存入
+
             $data['size']   = $arr['size'];
             $data['status'] = 1;
             $data['time']   = date('Y/m/d H:m:s');
