@@ -845,6 +845,7 @@ namespace Admin\Model;
                 'post_title'   => $this->post_title,
                 'post_dept'    => $this->post_dept,
                 'post_status'  => $this->post_status,
+                'post_dismiss_msg'  => '',
                 'post_name'    => '',
                 'post_modified'=> $now,
                 'post_parent'  => 0

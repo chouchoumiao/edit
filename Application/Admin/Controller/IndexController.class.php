@@ -51,6 +51,7 @@ class IndexController extends CommonController {
             $this->dept = '';
         }
 
+        /* 文章相关*/
         //取得所有文章个数
         $this->assign('allCount',$this->postObj->getStatusCountByFlag($this->auto,'all',$this->dept));
         //取得待审核文章个数
@@ -61,6 +62,12 @@ class IndexController extends CommonController {
         $this->assign('pendedCount',$this->postObj->getStatusCountByFlag($this->auto,'pended',$this->dept));
         //取得审核不通过文章个数
         $this->assign('dismissCount',$this->postObj->getStatusCountByFlag($this->auto,'dismiss',$this->dept));
+
+        /* 文章相关*/
+        //取得资源个数
+        $this->assign('mediaCount',D('Media')->getMediaCount());
+
+
 
     }
 }

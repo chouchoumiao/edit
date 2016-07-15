@@ -255,7 +255,7 @@ class PostController extends CommonController {
     private function the(){
 
         //如果对文章点击预览后执行预览画面显示
-        if(isset($_GET['preview']) && I('get.preview') == 1){
+        if(isset($_GET['preview']) && intval(I('get.preview')) == 1){
 
             $post = $this->postObj->getThePostAndUser(I('get.id'));
 

@@ -15,6 +15,14 @@ namespace Admin\Model;
 
 
         /**
+         * 获取资源总格数，用于前台首页显示
+         * @return mixed
+         */
+        public function getMediaCount(){
+            return $this->obj->count();
+        }
+
+        /**
          * 用户修改资源的主题和详细信息
          * @param $data
          * @return bool
@@ -30,10 +38,7 @@ namespace Admin\Model;
             if( false === $this->obj->where($where)->save($newdata)){
                 return false;
             }
-
             return true;
-
-
         }
 
         /**

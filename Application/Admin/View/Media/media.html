@@ -22,7 +22,8 @@
     <!-- Simplify -->
     <link href="__PUBLIC__/css/Admin/simplify.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="__PUBLIC__/css/Admin/uploadify.css">
+    <!--<link rel="stylesheet" href="__PUBLIC__/css/Admin/uploadify.css">-->
+    <link rel="stylesheet" href="__PUBLIC__/css/Admin/uploadifive.css">
 
     <link href="__PUBLIC__/css/Admin/common.css" rel="stylesheet">
 
@@ -71,7 +72,8 @@
 <script src="__PUBLIC__/js/Admin/simplify/simplify.js"></script>
 
 
-<script src='__PUBLIC__/js/Admin/jquery.uploadify.js'></script>
+<!--<script src='__PUBLIC__/js/Admin/jquery.uploadify.js'></script>-->
+<script src='__PUBLIC__/js/Admin/jquery.uploadifive.min.js'></script>
 
 
 <script src="__PUBLIC__/js/common.js?v=20160101"></script>
@@ -94,68 +96,133 @@
     $(document).ready(function()
     {
 
-
-    $('#file_upload').uploadify({
+        $('#file_upload').uploadifive({
 //        'queueID'  : 'some_file_queue',
-        'swf'      : '__PUBLIC__/uploadify.swf',
-        'uploader' : './Admin/Media/doAction/action/upload',   //上传的方法
-        'buttonText' : '上传资源',
-        'fileTypeExts'  : '*.jpg;*.jpge;*.gif;*.txt;*.xls;*.pdf;*.doc;*.xlsx;*.docx;*.pptx;*.png',
-        'fileSizeLimit' : '5MB',
-        'onUploadSuccess' : function(file, data, response) {
+//            'swf'      : '__PUBLIC__/uploadify.swf',
+            'uploadScript' : './Admin/Media/doAction/action/upload',   //上传的方法
+            'buttonText' : '上传资源',
+            'fileTypeExts'  : '*.jpg;*.jpge;*.gif;*.txt;*.xls;*.pdf;*.doc;*.xlsx;*.docx;*.pptx;*.png',
+            'fileSizeLimit' : 5242880,
+            'removeCompleted':true,
+            'onUploadComplete' : function(file, data) {
 
-            var json = jQuery.parseJSON(data);
+                var json = jQuery.parseJSON(data);
 
-            if(json.success == 1){
+                if(json.success == 1){
 
-                if(json.msg.indexOf('jpg') > -1
-                        || json.msg.indexOf('jpge') > -1
-                        || json.msg.indexOf('png') > -1
-                        || json.msg.indexOf('gif') > -1){
+                    if(json.msg.indexOf('jpg') > -1
+                            || json.msg.indexOf('jpge') > -1
+                            || json.msg.indexOf('png') > -1
+                            || json.msg.indexOf('gif') > -1){
 
-                    var html = '<div class="gallery-item" id="'+json.name+'">';
-                    html += '<div class="gallery-wrapper">';
-                    html += '<a class="gallery-remove" onclick="return removeImg('+json.id+',\''+json.day+'\',\''+json.name+'\',\''+json.ext+'\') "><i class="fa fa-times"></i></a>';
-                    html += '<img id= imgId src=__PUBLIC__'+json.msg+'>';
-                    html += '<div class="gallery-title" id="title'+json.name+'">';
-                    html += '<a href = "__ROOT__/Admin/Media/doAction/action/getStatus/status/me">前往资源库修改</a>';
-                    html += '</div>';
-                    html += '<div class="gallery-overlay">';
-                    html += '<a target="_blank" href="__PUBLIC__'+json.msg+'" class="gallery-action enlarged-photo">';
-                    html += '<i class="fa fa-search-plus fa-lg"></i>';
-                    html += '</a>';
-                    //html += '<a href="#" onclick="return doModel('+json.id+',\''+json.msg+'\');" class="gallery-action animation-dalay"><i class="fa fa-edit fa-lg"></i></a>';
-                    html += '</div>';
-                    html += '</div>';
-                    html += '</div>';
+                        var html = '<div class="gallery-item" id="'+json.name+'">';
+                        html += '<div class="gallery-wrapper">';
+                        html += '<a class="gallery-remove" onclick="return removeImg('+json.id+',\''+json.day+'\',\''+json.name+'\',\''+json.ext+'\') "><i class="fa fa-times"></i></a>';
+                        html += '<img id= imgId src=__PUBLIC__'+json.msg+'>';
+                        html += '<div class="gallery-title" id="title'+json.name+'">';
+                        html += '<a href = "__ROOT__/Admin/Media/doAction/action/getStatus/status/me">前往资源库修改</a>';
+                        html += '</div>';
+                        html += '<div class="gallery-overlay">';
+                        html += '<a target="_blank" href="__PUBLIC__'+json.msg+'" class="gallery-action enlarged-photo">';
+                        html += '<i class="fa fa-search-plus fa-lg"></i>';
+                        html += '</a>';
+                        //html += '<a href="#" onclick="return doModel('+json.id+',\''+json.msg+'\');" class="gallery-action animation-dalay"><i class="fa fa-edit fa-lg"></i></a>';
+                        html += '</div>';
+                        html += '</div>';
+                        html += '</div>';
 
-                    $("#imgs").append(html);
+                        $("#imgs").append(html);
+                    }else{
+                        var html = '<div class="gallery-item" id="'+json.name+'">';
+                        html += '<div class="gallery-wrapper">';
+                        html += '<a class="gallery-remove" onclick="return removeImg(\''+json.id+'\',\''+json.day+'\',\''+json.name+'\',\''+json.ext+'\') "><i class="fa fa-times"></i></a>';
+                        html += '<img class = textshow src=__PUBLIC__/img/Admin/media/text.png>';
+                        html += '<div class="gallery-title" id="title'+json.name+'">';
+                        html += '<a href = "__ROOT__/Admin/Media/doAction/action/getStatus/status/me">前往资源库修改</a>';
+                        html += '</div>';
+                        html += '<div class="gallery-overlay">';
+                        html += '<a target="_blank" href="__PUBLIC__'+json.msg+'" class="gallery-action enlarged-photo">';
+                        html += '<i class="fa fa-search-plus fa-lg"></i>';
+                        html += '</a>';
+                        //html += '<a href="#" onclick="return doModel('+json.id+',\''+json.msg+'\');" class="gallery-action animation-dalay"><i class="fa fa-edit fa-lg"></i></a>';
+                        html += '</div>';
+                        html += '</div>';
+                        html += '</div>';
+
+                        $("#imgs").append(html);
+                    }
                 }else{
-                    var html = '<div class="gallery-item" id="'+json.name+'">';
-                    html += '<div class="gallery-wrapper">';
-                    html += '<a class="gallery-remove" onclick="return removeImg(\''+json.id+'\',\''+json.day+'\',\''+json.name+'\',\''+json.ext+'\') "><i class="fa fa-times"></i></a>';
-                    html += '<img class = textshow src=__PUBLIC__/img/Admin/media/text.png>';
-                    html += '<div class="gallery-title" id="title'+json.name+'">';
-                    html += '<a href = "__ROOT__/Admin/Media/doAction/action/getStatus/status/me">前往资源库修改</a>';
-                    html += '</div>';
-                    html += '<div class="gallery-overlay">';
-                    html += '<a target="_blank" href="__PUBLIC__'+json.msg+'" class="gallery-action enlarged-photo">';
-                    html += '<i class="fa fa-search-plus fa-lg"></i>';
-                    html += '</a>';
-                    //html += '<a href="#" onclick="return doModel('+json.id+',\''+json.msg+'\');" class="gallery-action animation-dalay"><i class="fa fa-edit fa-lg"></i></a>';
-                    html += '</div>';
-                    html += '</div>';
-                    html += '</div>';
-
-                    $("#imgs").append(html);
+                    alert(json.msg);
+                    return false;
                 }
-            }else{
-                alert(json.msg);
-                return false;
-            }
 
-        }
-    });
+            },
+            'onError': function(errorType) {
+                alert('The error was: ' + errorType);
+            }
+        });
+
+//    $('#file_upload').uploadify({
+////        'queueID'  : 'some_file_queue',
+//        'swf'      : '__PUBLIC__/uploadify.swf',
+//        'uploader' : './Admin/Media/doAction/action/upload',   //上传的方法
+//        'buttonText' : '上传资源',
+//        'fileTypeExts'  : '*.jpg;*.jpge;*.gif;*.txt;*.xls;*.pdf;*.doc;*.xlsx;*.docx;*.pptx;*.png',
+//        'fileSizeLimit' : '5MB',
+//        'onUploadSuccess' : function(file, data, response) {
+//
+//            var json = jQuery.parseJSON(data);
+//
+//            if(json.success == 1){
+//
+//                if(json.msg.indexOf('jpg') > -1
+//                        || json.msg.indexOf('jpge') > -1
+//                        || json.msg.indexOf('png') > -1
+//                        || json.msg.indexOf('gif') > -1){
+//
+//                    var html = '<div class="gallery-item" id="'+json.name+'">';
+//                    html += '<div class="gallery-wrapper">';
+//                    html += '<a class="gallery-remove" onclick="return removeImg('+json.id+',\''+json.day+'\',\''+json.name+'\',\''+json.ext+'\') "><i class="fa fa-times"></i></a>';
+//                    html += '<img id= imgId src=__PUBLIC__'+json.msg+'>';
+//                    html += '<div class="gallery-title" id="title'+json.name+'">';
+//                    html += '<a href = "__ROOT__/Admin/Media/doAction/action/getStatus/status/me">前往资源库修改</a>';
+//                    html += '</div>';
+//                    html += '<div class="gallery-overlay">';
+//                    html += '<a target="_blank" href="__PUBLIC__'+json.msg+'" class="gallery-action enlarged-photo">';
+//                    html += '<i class="fa fa-search-plus fa-lg"></i>';
+//                    html += '</a>';
+//                    //html += '<a href="#" onclick="return doModel('+json.id+',\''+json.msg+'\');" class="gallery-action animation-dalay"><i class="fa fa-edit fa-lg"></i></a>';
+//                    html += '</div>';
+//                    html += '</div>';
+//                    html += '</div>';
+//
+//                    $("#imgs").append(html);
+//                }else{
+//                    var html = '<div class="gallery-item" id="'+json.name+'">';
+//                    html += '<div class="gallery-wrapper">';
+//                    html += '<a class="gallery-remove" onclick="return removeImg(\''+json.id+'\',\''+json.day+'\',\''+json.name+'\',\''+json.ext+'\') "><i class="fa fa-times"></i></a>';
+//                    html += '<img class = textshow src=__PUBLIC__/img/Admin/media/text.png>';
+//                    html += '<div class="gallery-title" id="title'+json.name+'">';
+//                    html += '<a href = "__ROOT__/Admin/Media/doAction/action/getStatus/status/me">前往资源库修改</a>';
+//                    html += '</div>';
+//                    html += '<div class="gallery-overlay">';
+//                    html += '<a target="_blank" href="__PUBLIC__'+json.msg+'" class="gallery-action enlarged-photo">';
+//                    html += '<i class="fa fa-search-plus fa-lg"></i>';
+//                    html += '</a>';
+//                    //html += '<a href="#" onclick="return doModel('+json.id+',\''+json.msg+'\');" class="gallery-action animation-dalay"><i class="fa fa-edit fa-lg"></i></a>';
+//                    html += '</div>';
+//                    html += '</div>';
+//                    html += '</div>';
+//
+//                    $("#imgs").append(html);
+//                }
+//            }else{
+//                alert(json.msg);
+//                return false;
+//            }
+//
+//        }
+//    });
 
 });
 

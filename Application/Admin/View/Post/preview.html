@@ -23,7 +23,6 @@
     <nav class="navbar navbar-inverse">
         <div class="container clearfix">
             <div class="navbar-collapse collapse">
-
                 <ul class="nav navbar-nav">
                     <li><a href=" " onclick="history.back();"><strong>返回</strong></a></li>
                     <foreach name="post.post_dept" item="vo">
@@ -61,7 +60,14 @@
                         </div>
                         <p class="post-info">
                             <span><i class="fa fa-calendar"></i> {$post.post_modified}</span>
-                            <span><i class="fa fa-eye"></i> </span>
+                            <span><i class="fa fa-tags"></i>
+                                <foreach name="post.post_dept" item="vo">
+                                    <a>{$vo}</a> &nbsp;
+                                </foreach>
+                            </span>
+                            <span><i class="fa fa-user"></i>
+                                <a>{$post.username}</a>
+                            </span>
                         </p>
                     </div>
                     <!-- 小型设备文章显示结束 -->
@@ -125,14 +131,37 @@
         <i class="fa fa-chevron-up"></i>
     </div>
 </div>
-<script type='text/javascript' src='http://localhost/NewWordpress/wp-content/themes/Zamblog/ui/js/bootstrap.min.js?ver=3.1.1'></script>
-<script type='text/javascript' src='http://localhost/NewWordpress/wp-content/themes/Zamblog/ui/flexslider/jquery.flexslider.js?ver=3.0.0'></script>
-<script type='text/javascript' src='http://localhost/NewWordpress/wp-content/themes/Zamblog/ui/js/jquery.validate.js?ver=3.0.0'></script>
-<script type='text/javascript' src='http://localhost/NewWordpress/wp-content/themes/Zamblog/ui/audiojs/audio.min.js?ver=3.0.0'></script>
-<script type='text/javascript' src='http://localhost/NewWordpress/wp-content/themes/Zamblog/ui/js/shine.min.js?ver=3.0.0'></script>
+<!--<script type='text/javascript' src='http://localhost/NewWordpress/wp-content/themes/Zamblog/ui/js/bootstrap.min.js?ver=3.1.1'></script>-->
+<!--<script type='text/javascript' src='http://localhost/NewWordpress/wp-content/themes/Zamblog/ui/flexslider/jquery.flexslider.js?ver=3.0.0'></script>-->
+<!--<script type='text/javascript' src='http://localhost/NewWordpress/wp-content/themes/Zamblog/ui/js/jquery.validate.js?ver=3.0.0'></script>-->
+<!--<script type='text/javascript' src='http://localhost/NewWordpress/wp-content/themes/Zamblog/ui/audiojs/audio.min.js?ver=3.0.0'></script>-->
+<!--<script type='text/javascript' src='http://localhost/NewWordpress/wp-content/themes/Zamblog/ui/js/shine.min.js?ver=3.0.0'></script>-->
 <script type='text/javascript' src='http://localhost/NewWordpress/wp-content/themes/Zamblog/ui/js/zan.js?ver=3.0.0'></script>
-<script type='text/javascript' src='http://localhost/NewWordpress/wp-content/themes/Zamblog/ui/js/custom.js?ver=3.0.0'></script>
-<script type='text/javascript' src='http://localhost/NewWordpress/wp-includes/js/wp-embed.min.js?ver=4.5'></script>
+<!--<script type='text/javascript' src='http://localhost/NewWordpress/wp-content/themes/Zamblog/ui/js/custom.js?ver=3.0.0'></script>-->
+<!--<script type='text/javascript' src='http://localhost/NewWordpress/wp-includes/js/wp-embed.min.js?ver=4.5'></script>-->
+
+<!-- Jquery -->
+<script src="__PUBLIC__/js/Admin/jquery-1.11.1.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="__PUBLIC__/js/Admin/bootstrap.min.js"></script>
+
+<!-- Slimscroll -->
+<script src='__PUBLIC__/js/Admin/jquery.slimscroll.min.js'></script>
+
+<!-- Modernizr -->
+<script src='__PUBLIC__/js/Admin/modernizr.min.js'></script>
+
+<!-- Simplify -->
+<script src="__PUBLIC__/js/Admin/simplify/simplify.js"></script>
+
+<script src="__PUBLIC__/js/common.js?v=20160101"></script>
+<script src="__PUBLIC__/js/Admin/post.js?v=20160106"></script>
+
+
+<script src="__PUBLIC__/js/Admin/summernote.min.js"></script>
+<script src="__PUBLIC__/js/Admin/summernote-zh-CN.js"></script>
+
 <script type='text/javascript'>
     backTop = function ( btnId ) {
         var btn =document.getElementById( btnId );
@@ -151,41 +180,7 @@
         function set() { btn.style.display = ( d.scrollTop + b.scrollTop > 100 ) ? 'block' : "none" }
     };
     backTop( 'zan-gotop' );
-</script><script type="text/javascript">
-    jQuery( '#commentform' ).validate(
-            {
-                rules: {
-                    author: {
-                        required: true,
-                    },
-                    email: {
-                        required: true,
-                        email: true
-                    },
-                    url: {
-                        url:true
-                    },
-                    comment: {
-                        required: true,
-                    }
-                },
-                messages: {
-                    author: {
-                        required: "用户名不能为空！"
-                    },
-                    email: {
-                        required: "邮箱不能为空！",
-                        email: "输入的邮箱格式不正确！"
-                    },
-                    url: {
-                        url: "输入的网址不正确！"
-                    },
-                    comment: {
-                        required: "留言内容不能为空！"
-                    }
-                }
-            } );
 </script>
-<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"32"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"32"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];</script>
 </body>
 </html>

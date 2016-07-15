@@ -63,9 +63,15 @@
                                 <i class="fa fa-search-plus fa-lg"></i>
                             </a>
 
-                            <a href="#" data-toggle="modal" data-target="#normalModal{$k}" class="gallery-action animation-dalay">
-                                <i class="fa fa-edit fa-lg"></i>
-                            </a>
+                            <if condition=" $vo.author eq $_SESSION['uid']">
+                                <a href="#" data-toggle="modal" data-target="#normalModal{$k}" class="gallery-action animation-dalay">
+                                    <i class="fa fa-edit fa-lg"></i>
+                                </a>
+                                <else/>
+                                <a href="#" data-toggle="modal" data-target="#normalModal{$k}" class="gallery-action animation-dalay">
+                                    <i class="fa fa-link fa-lg"></i>
+                                </a>
+                            </if>
                         </div>
                     </div>
                 </div>

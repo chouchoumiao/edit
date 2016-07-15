@@ -29,14 +29,22 @@ class MediaController extends CommonController {
 
                 //取得所有用户(分页)
                 case 'all':
-                    $data = $this->all();
 
+                    if( (!$data = S('allData')) ||  (1 == S('resetAllData')) ){
+                        $data = $this->all();
+                        //存入缓存
+                        S('allData',$data,3000);
 
+                        //同时要将更新缓存的flag设置为0
+                        S('resetAllData',0);
+
+                    }
                     $this->assign('all',true);
                     $this->assign('allStatus','active');
 
-
-                    $this->setLiked($data);
+                    if($data !== ''){
+                        $this->setLiked($data);
+                    }
                     $this->assign('data',$data);
                     $this->assign('auto',$this->auto);
                     $this->display('media');
@@ -46,18 +54,21 @@ class MediaController extends CommonController {
                     $this->collect();
                     break;
                 case 'getStatus':
+
                     $data = $this->getStatus();
 
                     $this->assign('all',true);
 
-                    $this->setLiked($data);
+                    if($data !== ''){
+                        $this->setLiked($data);
+                    }
 
                     $this->assign('data',$data);
                     $this->assign('auto',$this->auto);
                     $this->display('media');
 
                     break;
-                //追加用户
+                //新增媒体
                 case 'add':
                     $this->add();
                     break;
@@ -68,8 +79,6 @@ class MediaController extends CommonController {
 
                 //提交表单后新增文章
                 case 'update':
-                    //dump($_POST);exit;
-                    
                     $this->update();
                     break;
                 case 'delImg':
@@ -99,19 +108,11 @@ class MediaController extends CommonController {
             ToolModel::goBack('更新失败');
         }
 
-        //获取传上来的当前页面状态是媒体文件,文档文件,我的,还是收藏的
-        $status = I('get.status');
+        //更新成功后，需要更新缓存flag
+        $this->resetCacheStatus();
 
-        //定义状态一览
-        $statusArr = array('media','file','me','like');
-
-        //如果接收到的状态是状态一览表中的内容,则返回对应的页面
-        if(in_array($status,$statusArr)){
-            ToolModel::goToUrl('更新成功','doAction/action/getStatus/status/'.$status);
-            //否则则返回总页面
-        }else{
-            ToolModel::goToUrl('更新成功','doAction/action/all');
-        }
+        //根据传入的状态返回对应的页面
+        $this->returnUrl('更新成功');
     }
     
     /**
@@ -130,21 +131,32 @@ class MediaController extends CommonController {
             ToolModel::goBack('收藏失败');
         }else{
 
-            //获取传上来的当前页面状态是媒体文件,文档文件,我的,还是收藏的
-            $status = I('get.status');
+            //更新成功后，需要更新缓存flag
+            $this->resetCacheStatus();
 
-            //定义状态一览
-            $statusArr = array('media','file','me','like');
+            //根据传入的状态返回对应的页面
+            $this->returnUrl('收藏成功');
 
-            //如果接收到的状态是状态一览表中的内容,则返回对应的页面
-            if(in_array($status,$statusArr)){
-                ToolModel::goToUrl('收藏成功','doAction/action/getStatus/status/'.$status);
+
+        }
+    }
+
+    /**
+     * 根据传入的状态返回对应的页面
+     */
+    private function returnUrl($msg){
+        //获取传上来的当前页面状态是媒体文件,文档文件,我的,还是收藏的
+        $status = I('get.status');
+
+        //定义状态一览
+        $statusArr = array('media','file','me','like');
+
+        //如果接收到的状态是状态一览表中的内容,则返回对应的页面
+        if(in_array($status,$statusArr)){
+            ToolModel::goToUrl($msg,'doAction/action/getStatus/status/'.$status);
             //否则则返回总页面
-            }else{
-                ToolModel::goToUrl('收藏成功','doAction/action/all');
-            }
-
-
+        }else{
+            ToolModel::goToUrl($msg,'doAction/action/all');
         }
     }
 
@@ -166,30 +178,67 @@ class MediaController extends CommonController {
                 $this->assign('mediaStatus','active');                  //设置页面显示那个按钮是激活状态
                 $this->assign('status','media');                        //用于给点击收藏操作时返回对应页面用
 
+                //设置缓存
+                if( (!$data = S('mediaStatus')) || (1 == S('resetMediaStatus')) ){
+                    $data = $this->obj->getMediaBtStatus($where);
+                    //存入缓存
+                    S('mediaStatus',$data,3000);
+
+                    //同时要将更新缓存的flag设置为0
+                    S('resetMediaStatus',0);
+                }
                 break;
             case 'file':
                 $where['type'] = array('in',C('FILE_TYPE_ARRAY'));
                 $this->assign('fileStatus','active');
                 $this->assign('status','file');
+
+                //设置缓存
+                if( (!$data = S('fileStatus')) || (1 == S('resetFileStatus')) ){
+                    $data = $this->obj->getMediaBtStatus($where);
+                    //存入缓存
+                    S('fileStatus',$data,3000);
+
+                    //同时要将更新缓存的flag设置为0
+                    S('resetFileStatus',0);
+                }
                 break;
             case 'me':
                 $where['author'] = $_SESSION['uid'];
                 $this->assign('meStatus','active');
                 $this->assign('status','me');
+
+                //设置缓存
+                if( (!$data = S('meStatus')) || (1 == S('resetMeStatus')) ){
+                    $data = $this->obj->getMediaBtStatus($where);
+                    //存入缓存
+                    S('meStatus',$data,3000);
+
+                    //同时要将更新缓存的flag设置为0
+                    S('resetMeStatus',0);
+                }
                 break;
             case 'like':
                 $where['label'] = array('like',"%{$_SESSION['uid']}%");
                 $this->assign('likeStatus','active');
                 $this->assign('status','like');
+
+                //设置缓存
+                if( (!$data = S('likeStatus')) || (1 == S('resetLikeStatus')) ){
+                    $data = $this->obj->getMediaBtStatus($where);
+                    //存入缓存
+                    S('likeStatus',$data,3000);
+
+                    //同时要将更新缓存的flag设置为0
+                    S('resetLikeStatus',0);
+                }
                 break;
             default:
                 ToolModel::goBack('参数错误');
                 break;
         }
-        return $this->obj->getMediaBtStatus($where);
-
+        return $data;
     }
-
 
     /**
      * 取得所有资源
@@ -228,10 +277,7 @@ class MediaController extends CommonController {
 
             echo json_encode($arr);
             exit;
-
         }
-
-
     }
 
     /**
@@ -239,18 +285,8 @@ class MediaController extends CommonController {
      */
     private function upload(){
 
-        $day =  date('Ymd',time());
-
-        //图片上传设置
-        $config = array(
-            'maxSize'    =>    3145728,
-            'rootPath'	 =>    'Public',
-            'savePath'   =>    '/Uploads/Media/'.$day.'/',
-            'saveName'   =>    array('uniqid',$_SESSION['uid'].'_'),
-            'exts'       =>    C('POST_UPLOAD_TYPE_ARRAY'),
-            'autoSub'    =>    false,
-            'subName'    =>    array('date','Ymd'),
-        );
+        //设置删除图片的相关配置项
+        $config = $this->setImgConfig();
 
         //上传文件
         $retArr = ToolModel::uploadImg($config);
@@ -264,10 +300,12 @@ class MediaController extends CommonController {
                 $arr['success'] = 0;
                 $arr['msg'] = '图片存入失败';
              }else{
+                //更新成功后，需要更新缓存flag
+                $this->resetCacheStatus();
+
                 $arr['success'] = 1;
                 $arr['id'] = $id;
             }
-
         }else{
             $arr['success'] = 0;
             $arr['msg'] = $retArr['msg'];
@@ -275,6 +313,22 @@ class MediaController extends CommonController {
 
         echo json_encode($arr);
         exit;
+    }
+
+    private function setImgConfig(){
+        $day =  date('Ymd',time());
+
+        //图片上传设置
+        $config = array(
+            'maxSize'    =>    3145728,
+            'rootPath'	 =>    'Public',
+            'savePath'   =>    '/Uploads/Media/'.$day.'/',
+            'saveName'   =>    array('uniqid',$_SESSION['uid'].'_'),
+            'exts'       =>    C('POST_UPLOAD_TYPE_ARRAY'),
+            'autoSub'    =>    false,
+            'subName'    =>    array('date','Ymd'),
+        );
+        return $config;
     }
 
     /**
@@ -326,9 +380,10 @@ class MediaController extends CommonController {
     }
 
     /**
-     * 显示新增文章页面
+     * 显示新增媒体页面
      */
-    private function add(){        $this->assign('add',true);
+    private function add(){
+        $this->assign('add',true);
         $this->display('media');
     }
 
@@ -353,6 +408,18 @@ class MediaController extends CommonController {
             }
 
         }
+    }
+
+    /**
+     * 重置需要更新缓存的flag(在新增，更新，收藏)
+     */
+    private function resetCacheStatus(){
+        //更新成功后，需要更新缓存flag
+        S('resetAllData',1);
+        S('resetMediaStatus',1);
+        S('resetFileStatus',1);
+        S('resetMeStatus',1);
+        S('resetLikeStatus',1);
     }
 
 }
