@@ -184,10 +184,16 @@ class UserController extends CommonController {
 
         $userInfo = D('User')->getTheUserInfo($userId);
 
-        //追加角色设置
-        $this->assign('theAuto',ToolModel::autoCodeToName($userInfo['udi_auto_id']));
-        //追加部门设置
-        $this->assign('theDept',ToolModel::deptCodeToName($userInfo['udi_dep_id']));
+        //页面显示用(CheckBox)
+        $this->assign('theAuto',ToolModel::theAuto($userInfo['udi_auto_id']));
+        //页面显示用(radio)
+        $this->assign('theDept',ToolModel::theDept($userInfo['udi_dep_id']));
+
+
+        //追加左边介绍处使用(文字)
+        $this->assign('thisAuto',ToolModel::autoCodeToName($userInfo['udi_auto_id']));
+        //追加左边介绍处使用(文字)
+        $this->assign('thisDept',ToolModel::deptCodeToName($userInfo['udi_dep_id']));
 
         //如果是管理员,并且当前不是管理员则显示可以选择变换角色和部门（管理员默认对所有部门有效，所以不必显示）
         if(D('User')->isAdmin() && ($userId != $_SESSION['uid'])){

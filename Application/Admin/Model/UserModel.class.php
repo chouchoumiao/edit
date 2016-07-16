@@ -772,7 +772,7 @@ namespace Admin\Model;
             $this->autopass = I('post.user_pass');      //初始密码
             $this->password = md5($this->autopass);     //密码加密
 
-            //部门需要特殊处理 start
+            //部门需要特殊处理 start (可优化)
             $deptList = array();
 
             $deptCount = D('Dept')->getDeptCount();

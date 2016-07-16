@@ -92,16 +92,26 @@
                     </li>
                 </notempty>
                 <notempty name="noticeControl">
-                    <li class="bg-palette2">
-                        <a href="Index/timeline.html">
+
+                    <li class="openable bg-palette2">
+                        <a href="#">
                             <span class="menu-content block">
                                 <span class="menu-icon"><i class="block fa fa-clock-o fa-lg"></i></span>
                                 <span class="text m-left-sm">通知管理</span>
+                                <span class="submenu-icon"></span>
                             </span>
                             <span class="menu-content-hover block">
-                                通知
+                                用户
                             </span>
                         </a>
+                        <ul class="submenu">
+                            <li><a href="__ROOT__/Admin/Notice/doAction/action/all/">
+                                <span class="submenu-label">所有通知</span></a>
+                            </li>
+                            <li><a href="__ROOT__/Admin/Notice/doAction/action/add">
+                                <span class="submenu-label">添加通知</span></a>
+                            </li>
+                        </ul>
                     </li>
                 </notempty>
                 <li class="bg-palette1">

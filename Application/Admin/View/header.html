@@ -77,7 +77,80 @@
 						</div>
 					</div>
 				</div>
+                <ul class="nav-notification">
+                    <li class="">
+                        <a href="#" data-toggle="dropdown"><i class="fa fa-envelope fa-lg"></i></a>
+                        <span class="badge badge-danger bounceIn animation-delay5 active">{$activeNoticeCount}</span>
+                        <ul class="dropdown-menu message pull-right">
+                            <li><a>您 有 {$activeNoticeCount} 条 新 通 知</a></li>
+                            <foreach name="activeNotice" item="vo" key="k">
+                            <li>
+                                <a class="clearfix gallery-action animation-dalay" href="#" data-toggle="modal" data-target="#normalModal{$k}">
+                                    <div class="detail">
+                                        <strong>{$vo.title}</strong>
+                                        <small class="text-muted"><i class="fa fa-check text-success"></i>{$vo.time} 发布</small>
+                                    </div>
+                                </a>
+                            </li>
+                                <div class="modal fade" id="normalModal{$k}" aria-hidden="true" style="display: none;" data-backdrop="static">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <form action="__ROOT__/Admin/Media/doAction/action/update/status/{$status}" method="post">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal">
+                                                        <span aria-hidden="true">×</span>
+                                                        <span class="sr-only">Close</span>
+                                                    </button>
+                                                    <h4 class="modal-title">当前通知:</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="row">
+                                                        <div class="col-md-10 col-md-offset-1">
+                                                            <div class="form-group">
+                                                                <label class="control-label" for="title">标题:</label>
+                                                                <input class="form-control" type="text" id="title" name="title" disabled value={$vo.title}>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="">描述:</label>
+                                                                <textarea class="form-control" rows="15" name="content" type="text" disabled>{$vo.content}</textarea>
+                                                            </div>
+                                                            <if condition="$vo.liked eq 1">
+                                                                <a href="#">
+                                                                    <span class="label label-default center-block" style="padding: 8px;margin: 15px">
+                                                                            <i class="text-danger fa fa-heart"></i>
+                                                                            已读
+                                                                    </span>
+                                                                </a>
+                                                            <else/>
+                                                                <!--<a href="__ROOT__/Admin/Media/doAction/action/collect/id/{$vo.id}/status/{$status}">-->
+                                                                <!--<span class="label label-warning center-block" style="padding: 8px;margin: 15px">-->
+                                                                <!--<i class="text-danger fa fa-heart"></i>-->
+                                                                <!--未读-->
+                                                                <!--</span>-->
+                                                                <!--</a>-->
+                                                            </if>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </form>
+
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </foreach>
+
+                        </ul>
+                    </li>
+                    <li class="chat-notification">
+                        <a href="#"><i class="fa "></i></a>
+
+                    </li>
+                </ul>
 			</div>
+
 		</div>
 	</div><!-- ./top-nav-inner -->
 </header>

@@ -68,6 +68,10 @@ class IndexController extends CommonController {
         $this->assign('mediaCount',D('Media')->getMediaCount());
 
 
+        $this->assign('activeNoticeCount',count(D('Notice')->getActivedNotice()));
+        $this->assign('activeNotice',D('Notice')->getActivedNotice());
+
+
 
     }
 }

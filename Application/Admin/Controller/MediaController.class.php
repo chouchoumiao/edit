@@ -102,7 +102,7 @@ class MediaController extends CommonController {
         $data['id'] = I('post.id',0);
         $data['title'] = I('post.title','');
         $data['content'] = I('post.content','');
-        $data['time'] = date('Y/m/d H:m:s');
+        $data['time'] = date('Y/m/d H:i:s',time());
 
         if(!$this->obj->updateMedia($data)){
             ToolModel::goBack('更新失败');
@@ -375,7 +375,7 @@ class MediaController extends CommonController {
 
         $data['size']   = $arr['size'];
         $data['status'] = 1;
-        $data['time']   = date('Y/m/d H:m:s');
+        $data['time']   = date('Y/m/d H:i:s',time());
         return $data;
     }
 

@@ -65,12 +65,17 @@ namespace Admin\Model;
 		/**
 		 * URL验证，纯网址格式，不支持IP验证
 		 */
-		public static function isUrl($str){
-			if(!self::isEmpty($str)) return false;
-			return preg_match('#(http|https|ftp|ftps)://([w-]+.)+[w-]+(/[w-./?%&=]*)?#i',$str) ? true : false;
-		}
+        function isUrl($url){
 
-		/**
+            if(!preg_match('/http:\/\/[\w.]+[\w\/]*[\w.]*\??[\w=&\+\%]*/is',$url)){
+                return false;
+            }
+            return true;
+        }
+
+
+
+        /**
 		 * 验证长度
 		 * @param $str
 		 * @param int $type (方式，默认min <= $str <= max)
@@ -160,4 +165,23 @@ namespace Admin\Model;
 			}
 			return false;
 		}
+
+        /**
+         * 时间相比,后一个时间等于前一个时间则返回0
+         * 后一个时间大于前一个时间则返回1
+         * 后一个时间小于前一个时间则返回-1
+         * @param $from_date
+         * @param $to_time
+         * @return bool
+         */
+        public static function dateDiff($from_date,$to_time){
+            if(strtotime($to_time) - strtotime($from_date)  == 0 ){
+                return 0;
+            }
+            if(strtotime($to_time) - strtotime($from_date) >0 ){
+                return 1;
+            }
+            return -1;
+
+        }
 	}

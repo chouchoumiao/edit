@@ -1,11 +1,11 @@
 <div class="col-md-12">
     <ul class="breadcrumb">
-        <li>用户</li>
-        <li>用户一览表</li>
+        <li>通知</li>
+        <li>通知一览表</li>
     </ul>
     <div class="smart-widget">
-        <div class="smart-widget-header smart-widget-header-user">
-            用户 信息
+        <div class="smart-widget-header smart-widget-header-notice">
+            通知 信息
             <span class="smart-widget-option">
                 <span class="refresh-icon-animated">
                     <i class="fa fa-circle-o-notch fa-spin"></i>
@@ -37,36 +37,33 @@
                 <table class="table table-hover center">
                     <thead style="text-align: center">
                     <tr>
-                        <th>用户昵称</th>
-                        <th>邮箱地址</th>
-                        <th>所属部门</th>
-                        <th>角色权限</th>
-                        <th>是否激活</th>
+                        <th>标题</th>
+                        <th>作者</th>
+                        <th>链接</th>
+                        <th>开始时间</th>
+                        <th>结束时间</th>
                         <th>创建时间</th>
                         <th>操作</th>
                     </tr>
                     </thead>
                     <tbody style="text-align: center">
-                    <if condition = "$allUser neq '' ">
-                        <foreach name="allUser" item="vo" key ="k">
+                    <if condition = "$data neq '' ">
+                        <foreach name="data" item="vo" key ="k">
                             <tr>
+                                <td>{$vo.title}</td>
                                 <td>{$vo.username}</td>
-                                <td>{$vo.email}</td>
-                                <td>{$vo.udi_dep_id}</td>
-                                <td>{$vo.udi_auto_id}</td>
-                                <td>{$vo.status}</td>
-                                <td>{$vo.regtime}</td>
+                                <td>{$vo.link}</td>
+                                <td>{$vo.from_date}</td>
+                                <td>{$vo.to_date}</td>
+                                <td>{$vo.time}</td>
                                 <td>
-                                    <a href="__ROOT__/Admin/User/doAction/action/the/id/{$vo.uid}">
+                                    <a href="__ROOT__/Admin/Notice/doAction/action/the/id/{$vo.id}">
                                         <i class="fa fa-edit"></i>编辑
                                     </a>
-                                    <if condition="$vo['uid'] eq $_SESSION['uid']">
-                                        不能删除
-                                        <else />
-                                        <a href="javascript:delUser({$vo['uid']});">
-                                            &nbsp <i class="fa fa-trash">删除</i>
-                                        </a>
-                                    </if>
+                                    <a href="__ROOT__/Admin/Notice/doAction/action/del/id/{$vo.id}">
+                                        &nbsp <i class="fa fa-trash">删除</i>
+                                    </a>
+
                                 </td>
                             </tr>
                         </foreach>

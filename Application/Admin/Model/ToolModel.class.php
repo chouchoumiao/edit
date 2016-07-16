@@ -53,6 +53,15 @@ namespace Admin\Model;
         }
 
         /**
+         * 错误返回
+         * @param $msg
+         */
+        static function goReload($msg){
+            echo "<script>alert('$msg');location.reload()</script>";
+            exit;
+        }
+
+        /**
          * 错误关闭
          * @param $msg
          */
@@ -205,6 +214,33 @@ namespace Admin\Model;
             return $html;
         }
 
+        /**
+         * 默认取得所有的部门,并组成html的checkbook形式返回
+         * @return string
+         */
+        static function showAllAutoCheckbox(){
+
+            $obj = D('Auto')->getAllAuto();
+            $html = '';
+            //(count($obj) - 2) 超级管理员,管理员不予显示
+            for($i=0;$i<(count($obj) - 2);$i++) {
+
+                $html .= '<div class="checkbox inline-block">';
+                $html .= '<div class="custom-checkbox">';
+
+                $html .= '<input type="checkbox" id="auto' . $obj[$i]['id'] . '" value="' . $obj[$i]['id'] . '" name="auto' . $obj[$i]['id'] . '" class="checkbox-yellow"  checked>';
+                $html .= '<label for="auto' . $obj[$i]['id'] . '"></label>';
+                $html .= '</div>';
+                $html .= '<div class="inline-block vertical-top">' . $obj[$i]['name'];
+
+                $html .= '</div> &nbsp &nbsp';
+                $html .= '</div>';
+            }
+
+            return $html;
+
+        }
+
 
         /**
          * 从数据库中取得json格式的部门信息,
@@ -282,6 +318,63 @@ namespace Admin\Model;
                 $html .= '</div>';
                 $html .= '<div class="inline-block vertical-top">'.$obj[$i]['name'];
 
+                $html .= '</div> &nbsp &nbsp';
+                $html .= '</div>';
+
+            }
+
+            return $html;
+        }
+
+        /**
+         * 从数据库中取得json格式的角色信息,
+         * 取得对应用户的角色信息并组成html进行判断输出,用于页面显示
+         * @return string
+         */
+        static function theAutoCheckbox($auto){
+
+            //取得数据库中的deptjson格式后，转化为数组格式
+            $autoArr = json_decode($auto);
+
+
+            $obj = D('Auto')->getAllAuto();
+
+//            dump($autoArr);
+//            dump($obj);
+//            exit;
+
+            $html = '';
+
+            //count($obj) - 2 最后一个超级管理员，管理员不予显示
+            for($i=0;$i<(count($obj) - 2);$i++){
+
+                $html .= '<div class="checkbox inline-block">';
+                $html .= '<div class="custom-checkbox">';
+
+
+                //用于判断没有选择的次数（如果没有选择的次数等于总部门数，则表示没有选中）
+                $x = 0;
+
+                //循环判断数据库中部门表在该用户的数组中是否存在，存在则表示选中状态
+                for( $j=0; $j < count($autoArr); $j++ ){
+                    //如果该用户的部门id在数据表中存在，则改部门为选中状态
+                    if($autoArr[$j] == $obj[$i]['id']){
+                        $html .= '<input type="checkbox" id="auto'.($i+1).'" value="'.($i+1).'" name="auto'.($i+1).'" class="checkbox-yellow" checked>';
+                    }else{
+                        //不存在数据表，数值加一
+                        $x++;
+
+                    }
+                }
+
+                //都不存在，则表示该用户没有选中该部门
+                if($x == count($autoArr)){
+                    $html .= '<input type="checkbox" id="auto'.($i+1).'" value="'.($i+1).'" name="auto'.($i+1).'" class="checkbox-yellow">';
+                }
+
+                $html .= '<label for="auto'.($i+1).'"></label>';
+                $html .= '</div>';
+                $html .= '<div class="inline-block vertical-top">'.$obj[$i]['name'];
                 $html .= '</div> &nbsp &nbsp';
                 $html .= '</div>';
 
@@ -369,5 +462,65 @@ namespace Admin\Model;
 
             return $autotArr[$auto];
 
+        }
+
+        /**
+         * from提交的部门的checkbox内容
+         * 必须是post提交的
+         * 必须名称是dept+数字
+         * 中转为数组,在转化为json格式返回
+         *
+         * @return string
+         */
+        static function deptFormToDbData(){
+            //部门需要特殊处理 start
+            $deptList = array();
+
+            $deptCount = D('Dept')->getDeptCount();
+
+            //取得所有的dept个数，然后根据上传的dept进行确认，做成数组
+            for($i = 1;$i<=$deptCount;$i++){
+                $name = 'dept'.$i;
+                if(I("post.$name")){
+                    $deptList[] = I("post.$name");
+                }
+            }
+
+            //数组转化为json格式
+            return json_encode($deptList);
+        }
+
+        /**
+         * from提交的角色的checkbox内容
+         * 必须是post提交的
+         * 必须名称是dept+数字
+         * 中转为数组,在转化为json格式返回
+         * 因为管理员和超级管理员特殊,需要直接判断
+         * (去除管理员和超级管理员)
+         *
+         * @return string
+         */
+        static function autoFormToDbData(){
+            //部门需要特殊处理 start
+            $autoList = array();
+
+            $autoCount = D('Auto')->getAutoCount();
+
+            for($i = 1;$i<=$autoCount;$i++){
+
+                $name = 'auto'.$i;
+                if(I("post.$name")){
+                    $autoList[] = I("post.$name");
+                }
+            }
+//            if(I("post.auto88")){
+//                $autoList[] = I("post.auto88");
+//            }
+//            if(I("post.auto99")){
+//                $autoList[] = I("post.auto99");
+//            }
+
+            //数组转化为json格式
+            return json_encode($autoList);
         }
     }

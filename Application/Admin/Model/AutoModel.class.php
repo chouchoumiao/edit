@@ -12,8 +12,18 @@ namespace Admin\Model;
  */
 	class AutoModel {
 
+        private $_model;
+
+        public function __construct(){
+            $this->_model = M('auto');
+        }
+
         public function getAllAuto(){
-            return M('auto')->select();
+            return $this->_model->select();
+        }
+
+        public function getAutoCount(){
+            return $this->_model->count();
         }
 
 	}

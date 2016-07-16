@@ -528,7 +528,7 @@ namespace Admin\Model;
                     if($count == $count2){
                         $where['id'] = $parentid;
                         $data['post_status'] = 'close';
-                        $data['post_modified'] = date('Y/m/d H:m:s',time());
+                        $data['post_modified'] = date('Y/m/d H:i:s',time());
 
                         //更新原文章状态
                         $this->object->where($where)->save($data);

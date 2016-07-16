@@ -3456,6 +3456,22 @@ table tbody td.text-right {
   -moz-border-radius: 3px 3px 0 0;
   -webkit-border-radius: 3px 3px 0 0;
 }
+
+/*通知一览默认为黄色 新增class*/
+.smart-widget .smart-widget-header-notice {
+    background-color: #fbc852;
+}
+
+/*用户一览默认为深蓝色 新增class*/
+.smart-widget .smart-widget-header-user {
+    background-color: #23b7e5;
+    padding: 15px;
+    border-bottom: 1px solid #e6e6e6;
+    border-radius: 3px 3px 0 0;
+    -moz-border-radius: 3px 3px 0 0;
+    -webkit-border-radius: 3px 3px 0 0;
+}
+
 .smart-widget .smart-widget-header .smart-widget-option {
   float: right;
   -webkit-backface-visibility: hidden;

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>稿库系统后台管理</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Bootstrap core CSS -->
+    <link href="__PUBLIC__/css/Admin/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="__PUBLIC__/css/Admin/font-awesome.min.css" rel="stylesheet">
+
+
+    <link href="__PUBLIC__/css/Admin/summernote.css" rel="stylesheet">
+
+    <!-- ionicons -->
+    <link href="__PUBLIC__/css/Admin/ionicons.min.css" rel="stylesheet">
+
+    <!-- Simplify -->
+    <link href="__PUBLIC__/css/Admin/simplify.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/Admin/common.css" rel="stylesheet">
+
+</head>
+
+<body class="overflow-hidden">
+<div class="wrapper preload">
+    <!-- 导入 nav-->
+    <include file='./header' />
+
+    <!-- 导入左边栏-->
+    <include file='./aside'/>
+
+    <div class="main-container">
+        <div class="padding-md">
+            <div class="row user-profile-wrapper">
+
+                <notempty name = "all">
+                    <include file='./Notice/allNotice' />  <!-- 导入 所有用户-->
+                </notempty>
+
+                <notempty name = "the">
+                    <include file='./Notice/theNotice' />   <!-- 导入 修改用户-->
+                </notempty>
+
+                <notempty name = "add">
+                    <include file='./Notice/addNotice' />   <!-- 导入 追加用户-->
+                </notempty>
+
+            </div>
+        </div>
+    </div><!-- /main-container -->
+    <!-- 导入footer -->
+    <include file = './footer'/>
+</div><!-- /wrapper -->
+
+<a href="#" class="scroll-to-top hidden-print"><i class="fa fa-chevron-up fa-lg"></i></a>
+
+<!-- Jquery -->
+<script src="__PUBLIC__/js/Admin/jquery-1.11.1.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="__PUBLIC__/js/Admin/bootstrap.min.js"></script>
+
+<!-- Slimscroll -->
+<script src='__PUBLIC__/js/Admin/jquery.slimscroll.min.js'></script>
+
+<!-- Modernizr -->
+<script src='__PUBLIC__/js/Admin/modernizr.min.js'></script>
+
+<!-- Simplify -->
+<script src="__PUBLIC__/js/Admin/simplify/simplify.js"></script>
+
+<script src="__PUBLIC__/js/common.js?v=20160101"></script>
+
+
+<script src="__PUBLIC__/js/Admin/summernote.min.js"></script>
+<script src="__PUBLIC__/js/Admin/summernote-zh-CN.js"></script>
+
+
+<script type="text/javascript">
+    var PUBLIC= "__PUBLIC__";
+    var ROOT = "__ROOT__";
+
+    //全局变量角色
+    var BAOLIAOZHE = 1;       //爆料者
+    var XIAOBIAN   = 2;       //小编
+    var ZONGBIAN   = 3;       //总编
+    var ADMIN      = 88;      //管理员
+
+</script>
+
+
+</body>
+</html>
