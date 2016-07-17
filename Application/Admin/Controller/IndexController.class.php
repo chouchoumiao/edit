@@ -66,12 +66,6 @@ class IndexController extends CommonController {
         /* 文章相关*/
         //取得资源个数
         $this->assign('mediaCount',D('Media')->getMediaCount());
-
-
-        $this->assign('activeNoticeCount',count(D('Notice')->getActivedNotice()));
-        $this->assign('activeNotice',D('Notice')->getActivedNotice());
-
-
-
+        
     }
 }

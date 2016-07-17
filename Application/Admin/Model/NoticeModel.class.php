@@ -28,14 +28,38 @@ namespace Admin\Model;
          */
         public function getActivedNotice(){
 
+            //先获取当前用户的部门和角色
+
+            $userData = D('User')->getNowUserDetailInfo();
+            $auto = $userData['udi_auto_id'];
+            $deptArr = json_decode($userData['udi_dep_id']);
+
             $nowDate = date('Y-m-d');
 
             $where['from_date'] = array('elt',$nowDate);
             $where['_logic'] = 'AND';
             $where['to_date'] = array('egt',$nowDate);
+            $where['_logic'] = 'AND';
+            $where['auto'] = array('like','%'.$auto.'%');
+            $where['_logic'] = 'AND';
+
+            if(count($deptArr) == 1){
+                $where['dept'] = array('like','%'.$deptArr[0].'%');
+            }else{
+                $arr = array();
+                for ($i = 0;$i<count($deptArr);$i++){
+
+                    $arr[] = array('like','%'.$deptArr[$i].'%');
+                }
+                $arr[] = 'or';
+
+                $where['dept'] = $arr;
+
+            }
+
 
             return $this->object->where($where)->select();
-
+//            echo $this->object->getLastSql().$where['dept'];exit;
 
         }
 

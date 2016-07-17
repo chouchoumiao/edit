@@ -82,6 +82,13 @@ class LoginController extends Controller{
             $_SESSION['username'] = $userInfo['username'];
             $_SESSION['img']      = $userInfo['img'];
 
+            //新通知条数也存入session
+            /* 通知相关 因为每个在header显示所以需要加入session中*/
+            $notice = D('Notice')->getActivedNotice();
+            $_SESSION['activeNotice'] = $notice;
+            $_SESSION['activeNoticeCount'] = count($notice);
+
+
             $arr['success'] = 'OK';
             echo json_encode($arr);
             exit;
