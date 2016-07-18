@@ -9,6 +9,7 @@ namespace Admin\Model;
 
         private $post_id;
         private $post_author;
+        private $post_parent_author;
         private $post_content;
         private $post_title ;
         private $post_dept ;
@@ -25,6 +26,7 @@ namespace Admin\Model;
                 $this->order = 'post_modified DESC';    //默认排序为修改文章的时间降序
             }
         }
+
 
         /**
          * 根据传入的flag来判断是执行查询(部门或者用户),还是单纯的查询,显示相应的文章个数
@@ -538,6 +540,42 @@ namespace Admin\Model;
 
                 return true;
             }
+        }
+
+
+        /**
+         * 最终审核文章提交成功后,将评分记录计入评分表
+         * @return mixed
+         */
+        public function insertScore(){
+            $now = date('Y/m/d H:i:s',time());
+
+            $parentid = $this->getParentPostid($this->post_id);
+
+            $scoreData['postid'] = $parentid;
+
+            $author = $this->getAuthorByPostID($parentid);
+
+            $scoreData['author'] = $author;
+
+            $scoreData['scoreAuthor'] = $_SESSION['uid'];
+            $scoreData['score'] = I('post.score');
+            $scoreData['insertTime'] = $now;
+            $scoreData['updateTime'] = $now;
+
+            return D('Score')->newScoreInsert($scoreData);
+
+        }
+
+        private function getAuthorByPostID($id){
+            $where['id'] = $id;
+            $field = 'post_author';
+
+            $data = $this->object->field($field)->where($where)->find();
+            if($data){
+                return $data['post_author'];
+            }
+            return false;
         }
 
         /**

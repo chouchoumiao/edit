@@ -12,7 +12,7 @@
                             <textarea style="display: none" id="content" >{$content}</textarea>
                             <div class="form-group">
                                 <div class="col-sm-12">
-                                    <input type="text" class="form-control" value={$title} name="title" id="title">
+                                    <input type="text" class="form-control" value={$title} name="theTitle" id="theTitle">
                                 </div>
                             </div>
                             <br/>
@@ -49,9 +49,10 @@
                             </div>
                             <!--通过需要填写评分-->
                             <div class="form-group" id="scoreBtn" style="display: none">
+                                <div class="form-group">
                                 <label class="col-sm-4 control-label col-sm-offset-1">请为文章打分（默认为1个徽章）：</label>
                                 <div class="btn-group marginTB-xs col-sm-5">
-                                    <button type="button" class="btn btn-default scoreBtn"  id="scoreBtn1"  value="1">
+                                    <button type="button" class="btn btn-default scoreBtn active"  id="scoreBtn1"  value="1">
                                         <i class="text-danger fa fa-heart"></i>
                                     </button>
                                     <button type="button" class="btn btn-default scoreBtn" id="scoreBtn2" value="2">
@@ -66,6 +67,16 @@
                                     <button type="button" class="btn btn-default scoreBtn" id="scoreBtn5" value="5">
                                         <i class="text-danger fa fa-heart"></i>
                                     </button>
+                                    <button type="button" class="btn btn-default scoreBtn" id="scoreBtn6" value="6">
+                                        <i class="text-danger fa fa-heart"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default scoreBtn" id="scoreBtn7" value="7">
+                                        <i class="text-danger fa fa-heart"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default scoreBtn" id="scoreBtn8" value="8">
+                                        <i class="text-danger fa fa-heart"></i>
+                                    </button>
+                                </div>
                                 </div>
                                 <!--<div class="col-sm-5 col-sm-offset-3">-->
 

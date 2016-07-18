@@ -1,20 +1,29 @@
 $(function(){
 
-
-
-
+    //点击评分时候获得评分的个数
     $(".scoreBtn").on('click',function (e) {
 
-        var obj = $('.scoreBtn').each(function(){
-
-            this.addClass('active');
-
-            console.log(this.value);//这里 this获得的就是每一个dom对象 如果需要jquery对象 需要写成$(this)
+        //点击时候如果存在active和lastActive先清空原有的class
+        $('.scoreBtn').each(function () {
+            if($(this).hasClass('active')){
+                $(this).removeClass('active');
+            }
+            if($(this).hasClass('lastActive')){
+                $(this).removeClass('lastActive');
+            }
         });
-        // alert(e.id);
-        // console.log(e);
-        // return false;
-    })
+
+        //取得当前的数值,默认就是个数
+        var val = $(this).attr("value");
+
+        //点击的前几个都给附上class
+        for(var i= 1;i<=val;i++){
+            $('#scoreBtn'+i).addClass('active');
+        }
+        //最后一个追加一个特有class,用于提交时判断
+        $('#scoreBtn'+val).addClass('lastActive');
+
+    }),
 
 
     /**
@@ -111,7 +120,7 @@ $(function(){
 function addFormSubmit(flag) {
 
     //前端验证
-    var title = $("#title").val();
+    var title = $("#newTitle").val();
 
     if(title == ''){
         alert('文章标题不能空');
@@ -212,7 +221,7 @@ function delPost(id) {
 function UpdateFormSubmit(flag) {
 
     //前端验证
-    var title = $("#title").val();
+    var title = $("#theTitle").val();
 
     if(title == ''){
         alert('文章标题不能空');
@@ -259,9 +268,7 @@ function UpdateFormSubmit(flag) {
         return false;
     }
 
-    alert($('.active').val());
-
-    return false;
+    var score = $('.lastActive').val();
 
     if(flag == 4 && (dismissMsg == '')){
         alert('必须填写不通过审核的原因');
@@ -279,7 +286,8 @@ function UpdateFormSubmit(flag) {
             'title':title,
             'data':data,
             'flag':flag,
-            'dismissMsg':dismissMsg
+            'dismissMsg':dismissMsg,
+            'score':score
         }
         ,dataType: "json"
         ,success:function(json){

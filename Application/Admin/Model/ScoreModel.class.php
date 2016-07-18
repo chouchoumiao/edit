@@ -23,6 +23,17 @@ namespace Admin\Model;
         }
 
         /**
+         * 追加新记录
+         * @param $score
+         * @return mixed
+         */
+        public function newScoreInsert($score){
+
+            return M('score')->add($score);
+            
+        }
+
+        /**
          * 取得所有
          * @return mixed
          */
