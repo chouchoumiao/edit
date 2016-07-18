@@ -85,7 +85,7 @@
                             <li><a>您 有 {$_SESSION['activeNoticeCount']} 条 新 通 知</a></li>
                             <foreach name="Think.session.activeNotice" item="vo" key="k">
                             <li>
-                                <a class="clearfix gallery-action animation-dalay" href="#" data-toggle="modal" data-target="#normalModal{$k}">
+                                <a class="clearfix gallery-action animation-dalay" href="#" data-toggle="modal" data-target="#noticeModal{$k}">
                                     <div class="detail">
                                         <strong>{$vo.title}</strong>
                                         <small class="text-muted"><i class="fa fa-check text-success"></i>{$vo.time} 发布</small>

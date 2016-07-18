@@ -39,27 +39,28 @@ namespace Admin\Model;
             $where['from_date'] = array('elt',$nowDate);
             $where['_logic'] = 'AND';
             $where['to_date'] = array('egt',$nowDate);
-            $where['_logic'] = 'AND';
-            $where['auto'] = array('like','%'.$auto.'%');
-            $where['_logic'] = 'AND';
 
-            if(count($deptArr) == 1){
-                $where['dept'] = array('like','%'.$deptArr[0].'%');
-            }else{
-                $arr = array();
-                for ($i = 0;$i<count($deptArr);$i++){
+            //管理员和超级管理员全部进行部门条件
+            if( (intval($auto) != ADMIN) && (intval($auto) != SUPPER_ADMIN) ){
+                $where['_logic'] = 'AND';
+                $where['auto'] = array('like','%'.$auto.'%');
+                $where['_logic'] = 'AND';
 
-                    $arr[] = array('like','%'.$deptArr[$i].'%');
+                if(count($deptArr) == 1){
+                    $where['dept'] = array('like','%'.$deptArr[0].'%');
+                }else{
+                    $arr = array();
+                    for ($i = 0;$i<count($deptArr);$i++){
+
+                        $arr[] = array('like','%'.$deptArr[$i].'%');
+                    }
+                    $arr[] = 'or';
+
+                    $where['dept'] = $arr;
+
                 }
-                $arr[] = 'or';
-
-                $where['dept'] = $arr;
-
             }
-
-
             return $this->object->where($where)->select();
-//            echo $this->object->getLastSql().$where['dept'];exit;
 
         }
 
@@ -122,10 +123,16 @@ namespace Admin\Model;
             
             
             if(ValidateModel::dateDiff($data['from_date'],$data['to_date']) == -1) ToolModel::goBack('结束日期不能小于开始日期');
-            
-            if(empty(json_decode($data['dept']))) ToolModel::goBack('至少要选择一个部门');
 
-            if(empty(json_decode($data['auto']))) ToolModel::goBack('至少要选择一个角色');
+            $deptArr = json_decode($data['dept']);
+            if(empty($deptArr)) {
+                ToolModel::goBack('至少要选择一个部门');
+            }
+
+            $autoArr = json_decode($data['auto']);
+            if(empty($autoArr)) {
+                ToolModel::goBack('至少要选择一个角色');
+            }
 
 
             $this->data = $data;

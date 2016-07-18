@@ -1,0 +1,83 @@
+<div class="col-md-12">
+    <div class="smart-widget">
+        <div class="smart-widget-inner">
+
+            <div class="smart-widget-body">
+                <div class="tab-content">
+                    <div class="tab-pane fade in active">
+                        <h4 class="header-text m-top-md">修 改 通 知</h4>
+                        <form class="form-horizontal m-top-md" action="__ROOT__/Admin/Notice/doAction/action/update" method="post">
+
+                            <input type="hidden" value={$vo.id} name="id" id="id">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="title">标题</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="title" id="title" value={$vo.title}>
+                                </div>
+                            </div>
+                            <br/>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="link">链接</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" placeholder="如有需要请填写链接地址,,必须是http://开头(没有可不填)" name="link" id="link" value="{$vo.link}">
+                                </div>
+                            </div>
+                            <br/>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="content">内容</label>
+                                <div class="col-sm-9">
+                                    <textarea class="form-control" rows="15" name="content" id="content">{$vo.content}</textarea>
+                                </div>
+                            </div>
+                            <br/>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="from_date">开始日期</label>
+                                <div class="col-sm-9">
+                                    <input type="date" class="form-control" name="from_date" id="from_date" value={$vo.from_date}>
+                                </div>
+                            </div>
+                            <br/>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="to_date">结束日期</label>
+                                <div class="col-sm-9">
+                                    <input type="date" class="form-control" name="to_date" id="to_date" value={$vo.to_date}>
+                                </div>
+                            </div>
+                            <br/>
+
+                            <div class="form-group" id="dept">
+                                <label class="col-sm-2 control-label" style="margin-top: 5px;">开放部门</label>
+                                <div class="col-sm-9">
+                                    {$theDept}
+                                </div>
+                            </div>
+                            <br/>
+
+                            <div class="form-group" id="auto">
+                                <label class="col-sm-2 control-label">开放角色</label>
+                                <div class="col-sm-9">
+                                    {$theAuto}
+                                </div>
+                            </div>
+
+                            <div class="form-group m-top-lg">
+                                <label class="col-sm-12  control-label"></label>
+                                <div class="col-sm-3 col-sm-offset-3" >
+                                    <input type="submit" class="btn btn-info btn-block" value="修改" name="send">
+                                </div>
+                                <div class="col-sm-3 ">
+                                    <input type="reset" class="btn  btn-default m-left-xs btn-block" value="取消">
+                                </div>
+                            </div>
+
+                        </form>
+                    </div><!-- ./tab-pane -->
+                </div><!-- ./tab-content -->
+            </div><!-- ./smart-widget-body -->
+        </div><!-- ./smart-widget-inner -->
+    </div><!-- ./smart-widget -->
+</div>

@@ -41,13 +41,51 @@
                                 </div>
                             </empty>
 
+                            <!--不通过需要写原因-->
                             <div class="form-group">
                                 <div class="col-sm-12">
                                     <textarea style="display: none" rows="4" class="form-control" id="dismiss_msg" placeholder="请输入不通过的原因"></textarea>
                                 </div>
                             </div>
+                            <!--通过需要填写评分-->
+                            <div class="form-group" id="scoreBtn" style="display: none">
+                                <label class="col-sm-4 control-label col-sm-offset-1">请为文章打分（默认为1个徽章）：</label>
+                                <div class="btn-group marginTB-xs col-sm-5">
+                                    <button type="button" class="btn btn-default scoreBtn"  id="scoreBtn1"  value="1">
+                                        <i class="text-danger fa fa-heart"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default scoreBtn" id="scoreBtn2" value="2">
+                                        <i class="text-danger fa fa-heart"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default scoreBtn" id="scoreBtn3" value="3">
+                                        <i class="text-danger fa fa-heart"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default scoreBtn" id="scoreBtn4" value="4">
+                                        <i class="text-danger fa fa-heart"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default scoreBtn" id="scoreBtn5" value="5">
+                                        <i class="text-danger fa fa-heart"></i>
+                                    </button>
+                                </div>
+                                <!--<div class="col-sm-5 col-sm-offset-3">-->
 
 
+                                  <!--<span class="label label-warning center-block" style="padding: 8px;margin: 15px">-->
+                                        <!--<i class="text-danger fa fa-heart"></i>-->
+                                    <!--</span>-->
+                                    <!--<span class="label label-warning center-block" style="padding: 8px;margin: 15px">-->
+                                        <!--<i class="text-danger fa fa-heart"></i>-->
+                                    <!--</span>-->
+                                   <!--<span class="label label-warning center-block" style="padding: 8px;margin: 15px">-->
+                                        <!--<i class="text-danger fa fa-heart"></i>-->
+                                    <!--</span>-->
+                                    <!--<span class="label label-warning center-block" style="padding: 8px;margin: 15px">-->
+                                        <!--<i class="text-danger fa fa-heart"></i>-->
+                                    <!--</span>-->
+                                <!--</div>-->
+                                    <!--<textarea style="display: none" rows="4" class="form-control" id="score" placeholder="请给该文章打分"></textarea>-->
+
+                            </div>
 
                             <div class="form-group m-top-lg hidden-xs">
                                 {$btn}

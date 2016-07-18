@@ -1,5 +1,22 @@
 $(function(){
 
+
+
+
+    $(".scoreBtn").on('click',function (e) {
+
+        var obj = $('.scoreBtn').each(function(){
+
+            this.addClass('active');
+
+            console.log(this.value);//这里 this获得的就是每一个dom对象 如果需要jquery对象 需要写成$(this)
+        });
+        // alert(e.id);
+        // console.log(e);
+        // return false;
+    })
+
+
     /**
      * 富文本编辑器初始化
      * 最小长度400
@@ -235,6 +252,22 @@ function UpdateFormSubmit(flag) {
         alert('必须填写不通过审核的原因');
         return false;
     }
+
+
+    if((flag == 5) && ($("#scoreBtn").is(":hidden"))){
+        $('#scoreBtn').fadeIn();
+        return false;
+    }
+
+    alert($('.active').val());
+
+    return false;
+
+    if(flag == 4 && (dismissMsg == '')){
+        alert('必须填写不通过审核的原因');
+        return false;
+    }
+
 
 
     $.ajax({
