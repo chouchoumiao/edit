@@ -1,0 +1,399 @@
+11IT连接用：
+
+URL:\\fs.lawsonidc.com
+ID:matsuda.yt@cn.vinx.asia
+PW:P@ssWord
+-----------------------------------------------------------------------------------------------------------------------------------------------
+大连
+user：999999
+pw：9527
+
+北京
+user：999999
+pw：7259
+
+重庆
+user：999999
+pw：9527
+
+上海
+user：999999
+pw：1388
+
+user：999998
+pw：1259
+
+
+武汉
+user：999999
+pw：1
+
+-----------------------------------------------------------------------------------------------------------------------------------------------
+//内部文件服务器
+server: 10.1.2.44
+ID:hp
+PSD:vinx3075
+
+//罗森文件服务器
+URL:192.168.1.118
+ID:0122483
+PW:kobatake
+-----------------------------------------------------------------------------------------------------------------------------------------------
+＜ＦＣ会計システム＞
+ST環境：
+上海 http://fc01.lawsonidc.com/portal-fcshst/portalmain.do
+北京 http://fc01.lawsonidc.com/portal-fcbjst/portalmain.do
+重庆 http://fc02.lawsonidc.com/portal-fccqst/portalmain.do
+大连 http://fc02.lawsonidc.com/portal-fcdlst/portalmain.do
+
+本番：
+北京 http://fc01.lawsonidc.com/portal-fcbj/portalmain.do
+    财务 1002001     IT担当  1003001  密码  Bj1003001     财务主管 1001001    密码 Bj1001001
+  
+上海 http://fc01.lawsonidc.com/portal-fcsh/portalmain.do
+     财务 1002003     IT担当  1003002  密码  ASDasd123     财务主管 1001001    密码 Zz123456
+
+重庆 http://fc02.lawsonidc.com/portal-fccq/portalmain.do
+     财务 1002003     IT担当  1003003  密码  ASDasd123   财务主管 1001001
+     
+大连 http://fc02.lawsonidc.com/portal-fcdl/portalmain.do
+     财务 1002001     IT担当  1003001  密码  ASDasd123   财务主管 1001001
+     
+
+FC管理员权限
+ST环境：
+ 账号：mdware
+ 密码：mdware
+ 
+真实环境：
+ 账号： mdware
+ 密码： Zaq12wsx
+-----------------------------------------------------------------------------------------------------------------------------------------------
+＜FTPサーバ（ＦＣ会計ＩＦ本番）＞
+ftp://114.141.131.19
+
+上海,,,,大連,,,,重慶
+ＩＤ：  fcif_sh,,,ＩＤ：  fcif_dl,,,ＩＤ    fcif_cq
+ＰＷ：  LSnec123,,ＰＷ：  LSnec123,,ＰＷ    LSnec123
+
+-----------------------------------------------------------------------------------------------------------------------------------------------
+＜本番ＤＢ＞ PGADMIN
+161
+162
+
+重庆tomcat
+   usr → tomca6.0 → bin → 下的  shutdown.sh 和 startup,sh
+
+上海
+　　IP: 172.31.1.163
+　　DB: 本番-> fcat_sh      test->  fcat_shst
+　　user: fcat
+　　pwd: fcat
+
+大连
+　　IP: 172.31.1.164
+　　DB: 本番-> fcat_dl      test->  fcat_shst
+　　user: fcat
+　　pwd: fcat
+
+重庆
+　　IP: 172.31.1.164
+　　DB: 本番-> fcat_cq      test->  fcat_shst
+　　user: fcat
+　　pwd: fcat
+-----------------------------------------------------------------------------------------------------------------------------------------------
+
+VNC Viewer(bath)
+
+DB服务器：
+上海 北京
+　　IP: 172.31.1.163:1
+　　user: 
+　　pwd: Laws@Vnix123
+
+大连 重庆
+　　IP: 172.31.1.164:1
+　　user: 
+　　pwd: Vnixtest123
+
+AP服务器：
+上海 北京
+　　IP: 172.31.1.161:1
+　　user: 
+　　pwd: Laws@Vnix123
+
+大连 重庆
+　　IP: 172.31.1.162:1    
+　　user: 
+　　pwd: Vnixtest123
+
+    <数据库备份>
+    /bak/dl/db_bak/bak.sh
+
+    <数据库恢复>
+    /bak/dl/db_bak/huifu.sh
+
+    <bath程序位置(IN OUT IF文件导入)>
+    /data/mdware/fcat_dl/2.0/daily.sh  (里面包含日次，月次处理，日次是一直开着，月次是被注释掉了)
+
+     <IF(OUT)文件下载位置>
+     /data/fc_dl/if_data/
+
+     <IF(IN)文件上载位置>
+     /data/fc_dl/send_data/
+ 
+
+-----------------------------------------------------------------------------------------------------------------------------------------------
+WEB照合
+
+WEB照合确认时候抽取数据库数据时使用SQL文：
+※注意： 不用小数点四舍五入（ACCESS中的SQL文也不需要四舍五入）
+
+------------------------------------------------------------
+SELECT LEFT(供应商,6) AS 供应商编码,
+SUM(实际成本金额不含税) AS 实际成本金额不含税总金额,
+SUM(进项税额) AS 进项总税额,
+SUM(实际成本金额含税) AS 实际成本金额含税总金额
+FROM 进货
+GROUP BY 供应商
+------------------------------------------------------------
+
+
+☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆
+
+FC做试月次显示有店铺合同没有登录无法做试月次时，使用一下SQL查询是什么店铺 
+
+SELECT *
+	 FROM IF_SHOP_MASTER ISM LEFT JOIN V_SHOP_ALL_DATE VSAD
+	 ON (VSAD.LAWSON_COM_CD = ISM.LAWSON_COM_CD
+	 OR VSAD.LAWSON_COM_CD = TO_CHAR(TO_NUMBER(ISM.LAWSON_COM_CD, '99') + 50, 'FM00'))
+	 AND ISM.SCODE = VSAD.SCODE
+	 WHERE VSAD.SCODE IS NULL
+	 AND ISM.UPDFLG != '7'
+	 AND  '201605' > SUBSTR(ISM.OPEN_DATE,1,6)
+
+	 order by ISM.scode
+
+☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆
+
+
+---------------------------------------------------------------------------------------------------------
+SELECT supplier_cd,
+(SELECT t1.supplier_nm from m_supplier t1 where t1.supplier_cd = t2.supplier_cd),
+(SELECT t1.pay_cond_nm from m_supplier t1 where t1.supplier_cd = t2.supplier_cd), 
+sum(t_cost_exc) as t_cost_exc,
+sum(total_tax_amount) as total_tax_amount,
+sum(t_cost_inc) as t_cost_inc  
+FROM t_doc t2 
+where LEFT(delivery_ymd,6) = '201602'
+group by supplier_cd
+ORDER BY supplier_cd
+---------------------------------------------------------------------------------------------------------
+ 
+FTPサーバのIP Address：
+172.31.201.60
+ftp://172.31.201.60
+
+PORT：
+21
+　
+ユーザとパスワード：
+上海→ shanghai / LSnec123
+大连→ dal / LSnec123
+重庆→ chongqing / LSnec123
+北京→ beijing / LSnec123
+
+
+        代码所在服务器,账号, 密码,,DB所在服务器,    账号, 密码,,    DB连接,    端口,账号,密码
+上海,172.31.201.132,root,123456,,172.31.1.134,root,123456,,172.31.1.134,5432,webrs,webrs
+北京,172.31.201.132,root,123456,,172.31.1.134,root,123456,,172.31.1.134,5432,webrs,webrs
+重庆,172.31.201.131,root,123456,,172.31.1.133,root,123456,,172.31.1.133,5432,webrs,webrs
+大连,172.31.201.131,root,123456,,172.31.1.133,root,123456,,172.31.1.133,5432,webrs,webrs
+
+密码 123456  已经修改为 8Sgc+syJ
+
+        url                          ,                            ,,,,,用户名,密码,,,,
+上海,https://webfix02.chinalawson.com.cn/portal-sh/portalmain.do,,,,,,    ,Zaq12wsx,,,,
+北京,https://webfix02.chinalawson.com.cn/portal-bj/portalmain.do,,,,,,admin,Zaq12wsx,,,,
+重庆,https://webfix01.chinalawson.com.cn/portal-cq/portalmain.do,,,,,,admin,Zaq12wsx,,,,
+大连,https://webfix01.chinalawson.com.cn/portal-dl/portalmain.do,,,,,,admin,Zaq12wsx,,,,
+
+
+手册在APP服务器存在路径：/usr/tomcat-6.0/webapps/portal-bjst/WEB-INF/properties/manual/bj （以北京ST为例）
+
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------
+现在为止解决问题记录：   
+
+铁通与铁通IP问题解决：
+
+  1.DCMStar上下载
+     进销存管理→营业报表查询→店铺销售查询→服务商品销售汇总表/服务上商品销售明细表
+     
+  2.FC的FTP上文件：SKUSRVCS_T.csv（营业收入相关）   
+  
+  3.财务得到表格
+    （与财务表格格式相近的 DCMStar中也可以下载： 内部版本→菜单2→店铺阅读代收费手续费汇总表）
+  
+  4.首先比对汇总和明细表中数据一致性
+  
+  5.FC的SKUSRVCS_T.csv与汇总表的比较。
+  
+  
+  note：一般都是铁通IP和铁通的数据弄错导致问题。
+  
+        铁通的手续费：0.0035
+        铁通IP手续费：0.30
+        
+    FC的报表中的【营业收入】项目计算方式：
+        
+         = KUSRVCS_T「营业收入」 - (SKUSRVCS_T「营业收入」*0.05) + (营业收入<伝票4020>)
+           （没有4020票的话可以简化为营业收入合计*0.95）
+-----------------------------------------------------------------------------------------------------------------------------------------------
+SELECT * 
+FROM t_gl_hdr h ,t_gl_dtl d
+WHERE h.scode = '1176'
+AND substr(h.slip_date, 1 ,6) = '201506'
+AND d.ac_code = '4020'
+AND h.slipid = d.slipid;
+
+SELECT * 
+FROM t_gl_hdr h
+WHERE
+substr(h.slip_date, 1 ,6) = '201507'
+AND h.slipid >= '20150700268' AND h.slipid <= '20150701357'
+order by slipno
+
+-----------------------------------------------------------------------------------------------------------------------------------------------
+供应商WEB-EDI:
+  https://114.141.131.19/ui/
+用户名：admin
+密码：000000
+
+初始密码：123456
+重庆初始密码：000000
+
+注意：供应商过来询问密码时候，不要直接告诉，通过财务告知
+-----------------------------------------------------------------------------------------------------------------------------------------------
+密码：
+vcc2015!
+-----------------------------------------------------------------------------------------------------------------------------------------------
+索迪斯 手续费 修改
+update if_card_dtl set card_chg = ROUND(turnover * 0.01,2), userid = 'wjy'
+where left(eigyodate,6) = '201508' and turnover_type = '55';
+-----------------------------------------------------------------------------------------------------------------------------------------------
+WEB照合数据抽取SQL文：
+SELECT supplier_cd,,,,,,,,,,,
+(SELECT t1.supplier_nm  from m_supplier t1 where t1.supplier_cd = t2.supplier_cd),,,,,,,,,,,
+(SELECT t1.pay_cond_nm from m_supplier t1 where t1.supplier_cd = t2.supplier_cd), ,,,,,,,,,,
+sum(t_cost_exc) as t_cost_exc ,sum(total_tax_amount) as total_tax_amount ,sum(t_cost_inc) as t_cost_inc  ,,,,,,,,,,
+FROM t_doc t2 where (delivery_ymd >= '20150901' and delivery_ymd <= '20150930'),,,,,,,,,,
+group by supplier_cd,,,,,,,,,
+ORDER BY supplier_cd
+-----------------------------------------------------------------------------------------------------------------------------------------------
+卡类问题比对方法：,,
+,①【进销存管理】→【卡对账管理】→【卡对账导入结果查询】 画面,（来自银行，微信公司等）
+,②【进销存管理】→【卡对账管理】→【外部卡已勾对结果查询】 画面 中 [银联已勾对]按钮下 的数据,
+,,
+,,理论上①和②的合计值应该是一致的。
+,,如果不一致，则通过卡号，店号进行比对，查询出问题数据
+         （店号，卡号，时间）为主KEY
+
+-----------------------------------------------------------------------------------------------------------------------------------------------
+ 
+ 2015wu@VINX
+ 
+-----------------------------------------------------------------------------------------------------------------------------------------------
+将北京的数据返回到1月份
+（金哲urt003中的数据已经做好，不需要删除，但是需要删除10月份的）
+
+第一步：删数据表
+
+①
+    DELETE FROM dt_table_log;
+    DELETE FROM if_card_dtl;
+    DELETE FROM if_card_sale;
+    DELETE FROM if_sit003;
+    DELETE FROM if_sku_srvcs;
+    DELETE FROM p_acbalance;
+    DELETE FROM p_gl_dtl;
+    DELETE FROM p_gl_hdr;
+    DELETE FROM t_acbalance;
+    DELETE FROM t_acbalance_bak;
+    DELETE FROM t_adj;
+    DELETE FROM t_chg_dtl;
+    DELETE FROM t_gl_dtl;
+    DELETE FROM t_gl_hdr;
+    DELETE FROM t_income;
+    DELETE FROM t_income_new;
+    DELETE FROM t_log;
+    DELETE FROM t_month_urt003;
+    DELETE FROM t_notice;
+    DELETE FROM t_others;
+    DELETE FROM t_owner_cal;
+    DELETE FROM t_salary;
+    DELETE FROM t_slip_dtl;
+    DELETE FROM t_slip_hdr;
+    DELETE FROM tmp_06_balance;
+    DELETE FROM tmp_06_balance_tp;
+    DELETE FROM tmp_batch_log;
+    DELETE FROM tmp_t_gl;
+
+②
+    删除URT003中10月份数据
+    delete from if_urt003 where eigyodate = '201510';
+  
+
+第二步：
+    修改system_control中的以下数据：
+    
+       "MEND";"201501"
+       "PREMEND";"201502"
+    
+第三步：
+    画面做试月次
+    
+需要注意事项：
+    店别合同主档确认中委托C店铺修改之前的合同类型。还有实际的合同开始日是否正确
+    金哲做的URT003的数据，不一定全，比如4,5月份有新开店，可能URT003中并未将数据做进去，需要确认！
+-----------------------------------------------------------------------------------------------------------------------------------------------
+
+测试时，最终月次做完，进行下月月次需要进行以下操作：
+  ①month_control表中 将0改为1
+  ②system_control 表中 PREMEND 为下个月
+
+
+Eclipse  快捷键：
+
+   Shift + Alt + O   相同单词亮高
+
+ini_set("display_errors", "On");
+error_reporting(E_ALL | E_STRICT);
+
+ ☆修改system_control中的 "BATCH_DT_DAY" 数据时  如果是1-9号  需要改成01-09
+-----------------------------------------------------------------------------------------------------------------------------------------------
+
+lqfabu 
+2455301lq
+
+WordPress
+gokayuwu
+1qazXSW@Wujiayu
+
+-----------------------------------------------------------------------------------------------------------------------------------------------
+上海 卖价变更3的年次调整公式：
+
+ (卖变3_1(卖价) + 卖变3_2(卖价))*(12月成本率-各个月的成本率(如计算11月份的则是11月份的成本率))*卖家3比例(画面设定一般是100%)-该月的四半期调整额
+
+  举例： 11月份数据
+    (卖变3_1(卖价) + 卖变3_2(卖价))*（12月成本率 - 11月的成本率） * 卖家3比例（画面设定一般是100%） - 11月的四半期调整额
+       
+-----------------------------------------------------------------------------------------------------------------------------------------------
+上海手续费计算方式  金额 * 费率 * 0.6（46分层）
+      
+       update if_sku_srvcs set sgamt = ROUND(agency_amt * 0.0035 * 0.6,2)
+       where eigyodate = '201601'and goodscode = '311995'
+       
+-----------------------------------------------------------------------------------------------------------------------------------------------  

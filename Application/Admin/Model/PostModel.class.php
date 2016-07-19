@@ -558,10 +558,9 @@ namespace Admin\Model;
 
             $scoreData['author'] = $author;
 
-            $scoreData['scoreAuthor'] = $_SESSION['uid'];
+            $scoreData['score_author'] = $_SESSION['uid'];
             $scoreData['score'] = I('post.score');
-            $scoreData['insertTime'] = $now;
-            $scoreData['updateTime'] = $now;
+            $scoreData['time'] = $now;
 
             return D('Score')->newScoreInsert($scoreData);
 

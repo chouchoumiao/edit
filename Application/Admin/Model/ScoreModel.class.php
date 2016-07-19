@@ -15,11 +15,45 @@ namespace Admin\Model;
 
         public function __construct(){
             if(!$this->object){
-                $this->join = 'INNER JOIN ccm_user_detail_info ON ccm_user_detail_info.uid = ccm_m_user.id AND ccm_user_detail_info.udi_auto_id = 1 INNER JOIN ccm_score ON ccm_score.author = ccm_m_user.id';
-                $this->object = M('m_user');
+                $this->join = 'INNER JOIN ccm_m_user ON ccm_score.author = ccm_m_user.id';
+                $this->object = M('score');
                 $this->order = 'regtime DESC';    //默认排序为修改文章的时间降序
-                $this->field = 'ccm_m_user.username,ccm_user_detail_info.udi_auto_id,ccm_score.*';
+                $this->field = 'ccm_m_user.username,ccm_score.*';
             }
+        }
+
+        /**
+         * 根据传入的uid获得该用户的总积分
+         * @param $uid
+         * @return int
+         */
+        public function getSumScoreByUid($uid){
+            $where['author'] = $uid;
+            $field = 'score';
+
+            $data = $this->object->where($where)->sum($field);
+            if($data){
+                return $data;
+            }
+            return 0;
+
+        }
+
+        /**
+         * 根据传入的评分者的ID获得该昵称
+         */
+        public function getScoreAuthorName($authorid){
+
+            $where['id'] = $authorid;
+            $field = 'username';
+
+            $data = M('m_user')->field($field)->where($where)->find();
+            if($data){
+                return $data['username'];
+            }
+            return false;
+
+
         }
 
         /**
@@ -34,16 +68,35 @@ namespace Admin\Model;
         }
 
         /**
+         * 获取所有评分总记录
+         * @return mixed
+         */
+        public function getAllScoreCount(){
+            return $this->object
+                ->join($this->join)
+                ->count();
+        }
+        /**
          * 取得所有
          * @return mixed
          */
-        public function getAllScore(){
+        public function getAllScore($limit){
 
-            return $this->object
-                        ->join($this->join)
-                        ->field($this->field)
-                        ->order($this->order)
-                        ->select();
+            if('' == $limit){
+
+                return $this->object
+                    ->join($this->join)
+                    ->field($this->field)
+                    ->order($this->order)
+                    ->select();
+            }else{
+                return $this->object
+                    ->join($this->join)
+                    ->field($this->field)
+                    ->limit($limit)
+                    ->order($this->order)
+                    ->select();
+            }
 //            echo $this->object->getLastSql();exit;
         }
 

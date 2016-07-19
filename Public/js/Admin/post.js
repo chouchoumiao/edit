@@ -268,7 +268,22 @@ function UpdateFormSubmit(flag) {
         return false;
     }
 
-    var score = $('.lastActive').val();
+    //初始化评分
+    var score = 0;
+
+    //只有在总编最终审核文章的情况下才进行获取数据
+    if(flag == 5){
+
+        //获取对应class的数值
+        score = $('.lastActive').val();
+
+        //没有没有点击的情况下,不能获取该class,则默认将评分设为1
+        if (typeof(score) == "undefined"){
+            score = 1;
+
+        }
+    }
+
 
     if(flag == 4 && (dismissMsg == '')){
         alert('必须填写不通过审核的原因');

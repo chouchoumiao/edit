@@ -18,9 +18,14 @@ class ToolController extends Controller{
      */
     public function doAuto($auto){
         switch ($auto){
-            case ADMIN:
             case SUPPER_ADMIN:
                 //$this->assign('postControl',true);
+                $this->assign('mediaControl',true);
+                $this->assign('userControl',true);
+                $this->assign('scoreControl',true);
+                $this->assign('noticeControl',true);
+                break;
+            case ADMIN:
                 $this->assign('mediaControl',true);
                 $this->assign('userControl',true);
                 $this->assign('scoreControl',true);
