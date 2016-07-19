@@ -58,6 +58,9 @@ return array(
 
     'DEFAULT_CHARSET'       => 'utf-8', // 默认输出编码
 
+
+	'DEFAULT_MODULE' => 'Admin',		// 追加默认模块设置为Admin
+
     //性别数组
     'SEX_ARRAY' => array(
         0=>'女',
