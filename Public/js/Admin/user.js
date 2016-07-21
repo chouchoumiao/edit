@@ -92,10 +92,10 @@ $(function(){
                 return false;
             }
 
-            //判断新增的角色为小编或者总编时,只能选择一个部门,管理员必全选部门
+            //判断新增的角色为小编或者总编时，或者部门管理员,只能选择一个部门,管理员必全选部门
             var auto = $("input[name='auto']:checked").val();
 
-            if( auto == XIAOBIAN || auto == ZONGBIAN ){
+            if( auto == XIAOBIAN || auto == ZONGBIAN || auto == DEPT_ADMIN){
                 if(deptCount > 1){
                     alert('该角色只能选择一个部门');
                     return false;

@@ -352,7 +352,7 @@ namespace Admin\Model;
         public function isAdmin(){
             $where['uid'] = $_SESSION['uid'];
             $ret =  M('user_detail_info')->field('udi_auto_id')->where($where)->find();
-            if(($ret['udi_auto_id'] == ADMIN) || ($ret['udi_auto_id'] == SUPPER_ADMIN)){
+            if(($ret['udi_auto_id'] == ADMIN) || ($ret['udi_auto_id'] == SUPPER_ADMIN) || ($ret['udi_auto_id'] == DEPT_ADMIN)){
                 return true;
             }
             return false;
@@ -879,8 +879,8 @@ namespace Admin\Model;
                 ToolModel::goBack('警告，至少选择一个部门！');
             }
 
-            //如果是小编或者总编,则只能选择一个部门
-            if( ($this->auto == XIAOBIAN) || ($this->auto == ZONGBIAN) ){
+            //如果是小编或者总编,或者部门管理员,则只能选择一个部门
+            if( ($this->auto == XIAOBIAN) || ($this->auto == ZONGBIAN) || ($this->auto == DEPT_ADMIN)){
                 if(count($dept) > 1){
                     ToolModel::goBack('该角色只能选择一个部门');
                 }

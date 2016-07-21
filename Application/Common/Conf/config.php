@@ -18,6 +18,7 @@ define(MEDIA_PATH,$_SERVER['DOCUMENT_ROOT'].'/edit/Public/Uploads/Media');
 define(BAOLIAOZHE,1);       //爆料者
 define(XIAOBIAN,2);         //小编
 define(ZONGBIAN,3);         //总编
+define(DEPT_ADMIN,4);       //部门管理员
 define(ADMIN,'88');         //管理员
 define(SUPPER_ADMIN,'99');  //超级管理员
 
@@ -77,11 +78,12 @@ return array(
 
     //角色数组
     'AUTO_ARRAY' => array(
-        1=>'爆料者',
-        2=>'小编',
-        3=>'总编',
-        88=>'管理员',
-        99=>'超级管理员'
+        1	=>'爆料者',
+        2	=>'小编',
+        3	=>'总编',
+        4	=>'部门管理员',
+        88	=>'管理员',
+        99	=>'超级管理员'
     ),
 
     //激活状态数组

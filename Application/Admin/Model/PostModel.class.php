@@ -48,6 +48,13 @@ namespace Admin\Model;
                             ON ccm_posts.post_author = ccm_m_user.id 
                             AND ccm_posts.post_author = $userid";
                             break;
+                        case DEPT_ADMIN:
+                            //传入的是部门名称,需要转化为部门id
+                            $join = "INNER JOIN ccm_m_user 
+                            ON ccm_posts.post_author = ccm_m_user.id 
+                            AND ccm_posts.post_author = $userid  
+                            AND ccm_posts.post_dept LIKE '%$dept%'";
+                            break;
                         case XIAOBIAN:
                             $post_status = POST_SAVE;
                             $join = "INNER JOIN ccm_m_user 
@@ -160,6 +167,20 @@ namespace Admin\Model;
                                             AND ccm_posts.post_status = '$status'";
                             }
                             break;
+                        case DEPT_ADMIN:
+
+                            if($status == 'all'){
+                                $join = "INNER JOIN ccm_m_user 
+                                            ON ccm_posts.post_author = ccm_m_user.id
+                                            AND ccm_posts.post_dept LIKE '%$dept%'" ;
+
+                            }else{
+                                $join = "INNER JOIN ccm_m_user 
+                                            ON ccm_posts.post_author = ccm_m_user.id
+                                            AND ccm_posts.post_dept LIKE '%$dept%' 
+                                            AND ccm_posts.post_status = '$status'";
+                            }
+                            break;
                     }
                     break;
             }
@@ -222,6 +243,13 @@ namespace Admin\Model;
                                         ON ccm_m_user.id = ccm_posts.post_author 
                                         AND ccm_posts.post_author = $userid 
                                         AND ccm_posts.post_status in ('pending2','pended') 
+                                        AND ccm_posts.post_dept LIKE '%$dept%'";
+                            break;
+                        case DEPT_ADMIN:
+
+                            $join = "INNER JOIN ccm_m_user 
+                                        ON ccm_m_user.id = ccm_posts.post_author 
+                                        AND ccm_posts.post_author = $userid 
                                         AND ccm_posts.post_dept LIKE '%$dept%'";
                             break;
                     }
@@ -319,6 +347,19 @@ namespace Admin\Model;
                                             AND ccm_posts.post_status = '$status'";
                             }
                             break;
+                        case DEPT_ADMIN:
+
+                            if($status == 'all'){
+                                $join = "INNER JOIN ccm_m_user 
+                                            ON ccm_m_user.id = ccm_posts.post_author 
+                                            AND ccm_posts.post_dept LIKE '%$dept%'";
+                            }else{
+                                $join = "INNER JOIN ccm_m_user 
+                                            ON ccm_m_user.id = ccm_posts.post_author 
+                                            AND ccm_posts.post_dept LIKE '%$dept%'
+                                            AND ccm_posts.post_status = '$status'";
+                            }
+                            break;
                     }
 
                     break;
@@ -409,6 +450,20 @@ namespace Admin\Model;
                         $join = "INNER JOIN ccm_m_user 
                                     ON ccm_posts.post_author = ccm_m_user.id 
                                     AND ccm_posts.post_status in ('pending2','pended')  
+                                    AND ccm_posts.post_dept LIKE '%$dept%' 
+                                    AND ccm_posts.post_status = '$status'" ;
+                    }
+                    break;
+                case DEPT_ADMIN:
+
+                    if($status == 'all'){
+                        $join = "INNER JOIN ccm_m_user 
+                                    ON ccm_posts.post_author = ccm_m_user.id 
+                                    AND ccm_posts.post_dept LIKE '%$dept%'" ;
+
+                    }else{
+                        $join = "INNER JOIN ccm_m_user 
+                                    ON ccm_posts.post_author = ccm_m_user.id 
                                     AND ccm_posts.post_dept LIKE '%$dept%' 
                                     AND ccm_posts.post_status = '$status'" ;
                     }

@@ -329,6 +329,7 @@ class PostController extends CommonController {
 
         switch (intval($this->auto)){
             case ADMIN:
+            case DEPT_ADMIN:
             case SUPPER_ADMIN:
                 break;
             case ZONGBIAN:
@@ -458,7 +459,7 @@ class PostController extends CommonController {
      */
     private function getPostWithAutosAndSearch($flag){
 
-        if($this->auto == XIAOBIAN || $this->auto == ZONGBIAN ){
+        if($this->auto == XIAOBIAN || $this->auto == ZONGBIAN || $this->auto == DEPT_ADMIN){
             //取得属于小编或者总编部门文章总条数，用于分页
             $arr = json_decode($this->dept);
             $this->dept = $arr[0];

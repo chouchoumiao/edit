@@ -19,7 +19,7 @@ namespace Admin\Model;
         }
 
         public function getAllAuto(){
-            return $this->_model->select();
+            return $this->_model->order('id')->select();
         }
 
         public function getAutoCount(){

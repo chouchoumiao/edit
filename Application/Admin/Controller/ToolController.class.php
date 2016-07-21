@@ -31,6 +31,12 @@ class ToolController extends Controller{
                 $this->assign('scoreControl',true);
                 $this->assign('noticeControl',true);
                 break;
+            case DEPT_ADMIN:
+                $this->assign('mediaControl',true);
+                $this->assign('userControl',true);
+                $this->assign('scoreControl',true);
+                $this->assign('noticeControl',true);
+                break;
             case ZONGBIAN:
                 $this->assign('mediaControl',true);
                 break;
