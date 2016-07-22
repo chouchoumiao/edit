@@ -46,21 +46,31 @@
                                 </div>
                             </div>
                             <br/>
-
-                            <div class="form-group" id="dept">
-                                <label class="col-sm-2 control-label" style="margin-top: 5px;">开放部门</label>
-                                <div class="col-sm-9">
-                                    {$dept}
+                            <notempty name="showDept">
+                                <div class="form-group" id="dept">
+                                    <label class="col-sm-2 control-label" style="margin-top: 5px;">开放部门</label>
+                                    <div class="col-sm-9">
+                                        {$dept}
+                                    </div>
                                 </div>
-                            </div>
-                            <br/>
-
-                            <div class="form-group" id="auto">
-                                <label class="col-sm-2 control-label">开放角色</label>
-                                <div class="col-sm-9">
-                                    {$auto}
+                                <br/>
+                            <else />
+                                <div class="form-group" id="dept" style="display: none;">
+                                    <label class="col-sm-2 control-label" style="margin-top: 5px;">开放部门</label>
+                                    <div class="col-sm-9">
+                                        {$dept}
+                                    </div>
                                 </div>
-                            </div>
+                            </notempty>
+
+                            <notempty name="auto">
+                                <div class="form-group" id="auto">
+                                    <label class="col-sm-2 control-label">开放角色</label>
+                                    <div class="col-sm-9">
+                                        {$auto}
+                                    </div>
+                                </div>
+                            </notempty>
 
                             <div class="form-group m-top-lg">
                                 <label class="col-sm-12  control-label"></label>

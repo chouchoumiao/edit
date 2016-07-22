@@ -54,7 +54,12 @@ class ScoreController extends CommonController {
         }
 
         $uid = intval(I('get.uid'));
-        $sumScore = $this->obj->getSumScoreByUid($uid);
+        if($this->auto == DEPT_ADMIN){      //部门管理员查询时，只取本部门的合计值
+            $sumScore = $this->obj->getDeptAdminSumScoreByUid($uid,$this->dept);
+        }else{
+
+            $sumScore = $this->obj->getSumScoreByUid($uid);
+        }
         ToolModel::goToUrl('当前总积分为:'.$sumScore,'doAction/action/all');
 
     }
@@ -66,8 +71,18 @@ class ScoreController extends CommonController {
 
         $this->assign('all',true);
 
+        if($this->auto == DEPT_ADMIN){
+            //取得所有用户信息总条数，用于分页
+            $count = $this->obj->getDeptAdminAllScoreCount($this->dept);
+
+        }elseif ($this->auto == BAOLIAOZHE){        //当前用户为爆料者，可以查询属于自己的评分记录
+            $count = $this->obj->getBaoliaozheScoreCount();
+        }else{
+            //取得所有用户信息总条数，用于分页
+            $count = $this->obj->getAllScoreCount();
+        }
         //取得所有用户信息总条数，用于分页
-        $count = $this->obj->getAllScoreCount();
+        //$count = $this->obj->getAllScoreCount();
 
         //分页
         import('ORG.Util.Page');// 导入分页类
@@ -76,7 +91,16 @@ class ScoreController extends CommonController {
 
         //取得指定条数的信息
         $show = $Page->show();// 分页显示输出
-        $data = $this->obj->getAllScore($limit);
+
+        if($this->auto == DEPT_ADMIN){
+            $data = $this->obj->getDeptAdminAllScore($limit,$this->dept);
+        }
+        elseif ($this->auto == BAOLIAOZHE){
+            $data = $this->obj->getBaoliaozheScore($limit);
+        }else{
+
+            $data = $this->obj->getAllScore($limit);
+        }
 
         if(!$data){
             $data = '';

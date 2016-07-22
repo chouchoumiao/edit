@@ -10,6 +10,7 @@ class NoticeController extends CommonController {
     private $obj;
     private $dept;
     private $auto;
+    private $uid;
 
     public function doAction(){
 
@@ -21,6 +22,7 @@ class NoticeController extends CommonController {
             $this->obj = D('Notice');
             $this->dept = $user['udi_dep_id'];
             $this->auto = intval($user['udi_auto_id']);
+            $this->uid = intval($user['uid']);
 
             //用于根据用户权限来显示对应功能
             $autoCon = new ToolController();
@@ -151,11 +153,26 @@ class NoticeController extends CommonController {
      */
     private function add(){
 
-        //追加部门设置
-        $this->assign('dept',ToolModel::showAllDept());
+        //部门管理员的情况下，部门不需要显示
+        if($this->auto == DEPT_ADMIN){
 
-        //追加角色设置
-        $this->assign('auto',ToolModel::showAllAutoCheckbox());
+            //追加部门设置
+            $this->assign('dept',ToolModel::DEPT_ADMINShowAllDept($this->dept));
+
+            //追加角色设置
+            $this->assign('auto',ToolModel::DEPT_ADMINShowAllAutoCheckbox());
+
+        }else{
+            //显示dept
+            $this->assign('showDept',true);
+
+            //追加部门设置
+            $this->assign('dept',ToolModel::showAllDept());
+
+            //追加角色设置
+            $this->assign('auto',ToolModel::showAllAutoCheckbox());
+        }
+
 
 
         $this->assign('add',true);
@@ -175,14 +192,26 @@ class NoticeController extends CommonController {
 
         if(!$data){
             $data = '';
+        }else{
+            //部门管理员的情况下，部门不需要显示
+            if($this->auto == DEPT_ADMIN){
+                //追加角色设置
+                $this->assign('theAuto',ToolModel::DEPT_ADMINTheAutoCheckbox($data['auto']));
+                //追加部门设置
+                $this->assign('theDept',ToolModel::DEPT_ADMINTheDept($data['dept']));
+            }else{
+                //显示dept
+                $this->assign('showTheDept',true);
+
+                //追加角色设置
+                $this->assign('theAuto',ToolModel::theAutoCheckbox($data['auto']));
+                //追加部门设置
+                $this->assign('theDept',ToolModel::theDept($data['dept']));
+            }
+
         }
 
-        //追加角色设置
-        $this->assign('theAuto',ToolModel::theAutoCheckbox($data['auto']));
-        //追加部门设置
-        $this->assign('theDept',ToolModel::theDept($data['dept']));
-
-        $this->assign('vo',$data);
+        $this->assign('theData',$data);
 
         
         $this->assign('the',true);
@@ -206,8 +235,12 @@ class NoticeController extends CommonController {
 
         //取得指定条数的信息
         $show = $Page->show();// 分页显示输出
+        if($this->auto == DEPT_ADMIN){
+            $data = $this->obj->getDeptAdminAllNotice($limit,$this->uid);
+        }else{
 
-        $data = $this->obj->getAllNotice($limit);
+            $data = $this->obj->getAllNotice($limit);
+        }
 
         if(!$data){
             $data = '';

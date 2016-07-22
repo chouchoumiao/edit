@@ -63,6 +63,12 @@ class IndexController extends CommonController {
         //取得审核不通过文章个数
         $this->assign('dismissCount',$this->postObj->getStatusCountByFlag($this->auto,'dismiss',$this->dept));
 
+        if($this->auto == BAOLIAOZHE){
+
+            //取得爆料者的评分总数
+            $this->assign('scoreCount',D('Score')->getSumScoreByUid($_SESSION['uid']));
+        }
+
         /* 文章相关*/
         //取得资源个数
         $this->assign('mediaCount',D('Media')->getMediaCount());

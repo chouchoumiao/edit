@@ -111,7 +111,7 @@ class PostController extends CommonController {
 
             if(intval(I('post.flag')) == 5){
 
-                $this->postObj->insertScore();
+                $this->postObj->insertScore($this->dept);
             }
 
             $arr['success'] = 1;

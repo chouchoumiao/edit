@@ -104,8 +104,9 @@ namespace Admin\Model;
         /**
          * 字段检查
          * @param $data
+         * @param bool $checkDept
          */
-        public function checkData($data){
+        public function checkData($data,$checkDept = true){
 
             if($data['title'] == '') ToolModel::goBack('标题不能为空');
 
@@ -125,8 +126,10 @@ namespace Admin\Model;
             if(ValidateModel::dateDiff($data['from_date'],$data['to_date']) == -1) ToolModel::goBack('结束日期不能小于开始日期');
 
             $deptArr = json_decode($data['dept']);
-            if(empty($deptArr)) {
-                ToolModel::goBack('至少要选择一个部门');
+            if($checkDept){
+                if(empty($deptArr)) {
+                    ToolModel::goBack('至少要选择一个部门');
+                }
             }
 
             $autoArr = json_decode($data['auto']);
@@ -168,6 +171,7 @@ namespace Admin\Model;
 
         /**
          * 取得所有通知信息
+         * @param $limit
          * @return mixed
          */
         public function getAllNotice($limit){
@@ -176,6 +180,23 @@ namespace Admin\Model;
                 return $this->object->order($this->order)->join($this->join)->field($this->field)->select();
             }
             return $this->object->order($this->order)->join($this->join)->limit($limit)->field($this->field)->select();
+
+
+        }
+        /**
+         * 部门管理员的情况，取得所有通知信息
+         * @param $limit
+         * @param $uid
+         * @return mixed
+         */
+        public function getDeptAdminAllNotice($limit,$uid){
+
+            $where['author'] = $uid;
+
+            if( '' == $limit){
+                return $this->object->order($this->order)->join($this->join)->where($where)->field($this->field)->select();
+            }
+            return $this->object->order($this->order)->join($this->join)->where($where)->limit($limit)->field($this->field)->select();
 
 
         }

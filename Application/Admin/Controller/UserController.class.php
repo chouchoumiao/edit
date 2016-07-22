@@ -8,6 +8,10 @@ header("Content-type: text/html;charset=utf-8");
 class UserController extends CommonController {
 
     private $uploadImgName;
+    private $dept;
+    private $auto;
+    private $uid;
+    private $obj;
 
     public function doAction(){
 
@@ -15,7 +19,13 @@ class UserController extends CommonController {
         if( isset($action) && '' != $action ){
 
             //用于根据用户权限来显示对应功能
-            $user = D('User')->getNowUserDetailInfo();
+            $this->obj = D('User');
+
+            $user = $this->obj->getNowUserDetailInfo();
+
+            $this->dept = $user['udi_dep_id'];
+            $this->auto = intval($user['udi_auto_id']);
+            $this->uid = intval($user['uid']);
 
             $autoCon = new ToolController();
             $autoCon->doAuto($user['udi_auto_id']);
@@ -72,8 +82,7 @@ class UserController extends CommonController {
                     echo D('City')->get4thCity();
                     break;
                 case 'update':
-
-                    D('User')->updateUser();
+                    $this->updateUser();
                     break;
                 case 'editimg':
                     //图片上传设置
@@ -101,22 +110,41 @@ class UserController extends CommonController {
     }
 
     /**
+     * 更新用户
+     *
+     */
+    private function updateUser(){
+        if($this->obj->updateUser()){
+            //如果修改的是当前用户的信息,则重置session
+            ToolModel::setSession();
+            if ($this->auto == ADMIN || $this->auto == DEPT_ADMIN || $this->auto == SUPPER_ADMIN){
+                ToolModel::goToUrl('修改用户信息成功','all');
+            }else{
+                ToolModel::goToUrl('修改用户信息成功',U('Index/index'));
+            }
+
+        }
+
+        ToolModel::goBack('修改用户信息出错');
+    }
+
+    /**
      * 删除指定id的用户信息
      */
     private function del(){
         //如果有传值过来用查询传值的用户
         if(isset($_POST['id']) && '' != $_POST['id']){
 
-            if(!D('User')->idIsExist(I('post.id'))){
+            if(!$this->obj->idIsExist(I('post.id'))){
                 ToolModel::goBack('警告，传值错误');
             }
 
             //删除前先取得该用户的img，如果用户删除成功，则将原先上传的头像也删除，避免垃圾数据
-            $img = D('User')->getOldImg(I('post.id'));
+            $img = $this->obj->getOldImg(I('post.id'));
             $imgName = $img['img'];
 
             //删除用户
-            if(D('User')->delTheUserInfo(I('post.id'))){
+            if($this->obj->delTheUserInfo(I('post.id'))){
 
                 //如果是默认图片则不删除，否则则删除
                 if( 'default.jpg' != $imgName ){
@@ -143,7 +171,8 @@ class UserController extends CommonController {
             ToolModel::goBack('非法操作');
         }
 
-        D('User')->addNewUser();
+        //echo $_SESSION['newImg'];exit;
+        $this->obj->addNewUser();
     }
 
     /**
@@ -156,11 +185,25 @@ class UserController extends CommonController {
         $autopass = make_password();
         $this->assign('autopass',$autopass);
 
-        //追加部门设置
-        $this->assign('dept',ToolModel::showAllDept());
+        //部门管理员的情况下，部门不需要显示
+        if($this->auto == DEPT_ADMIN){
+            //追加部门设置
+            $this->assign('dept',ToolModel::DEPT_ADMINShowAllDept($this->dept));
 
-        //追加角色设置
-        $this->assign('auto',ToolModel::showAllAuto());
+            //追加角色设置
+            $this->assign('auto',ToolModel::DEPT_ADMINShowAllAuto());
+        }else{
+
+            //显示dept
+            $this->assign('showDept',true);
+
+            //追加部门设置
+            $this->assign('dept',ToolModel::showAllDept());
+
+            //追加角色设置
+            $this->assign('auto',ToolModel::showAllAuto());
+        }
+
 
         $this->display('user');
 
@@ -173,7 +216,7 @@ class UserController extends CommonController {
         //如果有传值过来用查询传值的用户
         if(isset($_GET['id']) && '' != $_GET['id']){
 
-            if(!D('User')->idIsExist(I('get.id'))){
+            if(!$this->obj->idIsExist(I('get.id'))){
                 ToolModel::goBack('警告，传值错误');
             }
 
@@ -182,13 +225,23 @@ class UserController extends CommonController {
             $userId = $_SESSION['uid'];
         }
 
-        $userInfo = D('User')->getTheUserInfo($userId);
+        $userInfo = $this->obj->getTheUserInfo($userId);
 
-        //页面显示用(CheckBox)
-        $this->assign('theAuto',ToolModel::theAuto($userInfo['udi_auto_id']));
-        //页面显示用(radio)
-        $this->assign('theDept',ToolModel::theDept($userInfo['udi_dep_id']));
+        if($this->auto == DEPT_ADMIN){
+            //追加角色设置
+            $this->assign('theAuto',ToolModel::DEPT_ADMINTheAuto($userInfo['udi_auto_id']));
+            //追加部门设置
+            $this->assign('theDept',ToolModel::DEPT_ADMINTheDept($userInfo['udi_dep_id']));
+        }else{
 
+            //显示dept
+            $this->assign('showTheDept',true);
+
+            //页面显示用(CheckBox)
+            $this->assign('theAuto',ToolModel::theAuto($userInfo['udi_auto_id']));
+            //页面显示用(radio)
+            $this->assign('theDept',ToolModel::theDept($userInfo['udi_dep_id']));
+        }
 
         //追加左边介绍处使用(文字)
         $this->assign('thisAuto',ToolModel::autoCodeToName($userInfo['udi_auto_id']));
@@ -196,7 +249,7 @@ class UserController extends CommonController {
         $this->assign('thisDept',ToolModel::deptCodeToName($userInfo['udi_dep_id']));
 
         //如果是管理员,并且当前不是管理员则显示可以选择变换角色和部门（管理员默认对所有部门有效，所以不必显示）
-        if(D('User')->isAdmin() && ($userId != $_SESSION['uid'])){
+        if($this->obj->isAdmin() && ($userId != $_SESSION['uid'])){
             $this->assign('admin',1);
             //追加字段,方面在js段判断是否需要验证部门都没有选择
             $this->assign('noShowDeptAndAuto',true);
@@ -205,7 +258,7 @@ class UserController extends CommonController {
         }
         
         $this->assign('the',true);
-        $this->assign('userInfo',$userInfo);
+        $this->assign('theUserInfo',$userInfo);
         $this->display('user');
     }
 
@@ -216,21 +269,26 @@ class UserController extends CommonController {
     private function all(){
         $this->assign('all',true);
 
-        $userObj = D('User');
-
         //取得所有用户信息总条数，用于分页
-        $count = $userObj->getAllUserCount();
+        if($this->auto == DEPT_ADMIN){                                          //部门管理员
+            $count = $this->obj->getDeptAdminAllUserCount($this->dept);
+    }else{                                                                      //管理员，超级管理员
+            $count = $this->obj->getAllUserCount();
+        }
+
 
         //分页
         import('ORG.Util.Page');// 导入分页类
-        $Page = new \Org\Util\Page($count,PAGE_SHOW_COUNT);// 实例化分页类 传入总记录数
+        $Page = new \Org\Util\Page($count,PAGE_SHOW_COUNT);                     //实例化分页类 传入总记录数
         $limit = $Page->firstRow.','.$Page->listRows;
 
         //取得指定条数的信息
 
-
-        $user = $userObj->showUserList($limit);
-
+        if($this->auto == DEPT_ADMIN) {                                         //部门管理员
+            $user = $this->obj->showDeptAdminUserList($limit,$this->dept);
+        }else{                                                                  //管理员，超级管理员
+            $user = $this->obj->showUserList($limit);
+        }
         $show = $Page->show();// 分页显示输出
 
         for ($i=0;$i<count($user);$i++){

@@ -602,7 +602,7 @@ namespace Admin\Model;
          * 最终审核文章提交成功后,将评分记录计入评分表
          * @return mixed
          */
-        public function insertScore(){
+        public function insertScore($dept){
             $now = date('Y/m/d H:i:s',time());
 
             $parentid = $this->getParentPostid($this->post_id);
@@ -616,6 +616,7 @@ namespace Admin\Model;
             $scoreData['score_author'] = $_SESSION['uid'];
             $scoreData['score'] = I('post.score');
             $scoreData['time'] = $now;
+            $scoreData['dept'] = $dept;
 
             return D('Score')->newScoreInsert($scoreData);
 

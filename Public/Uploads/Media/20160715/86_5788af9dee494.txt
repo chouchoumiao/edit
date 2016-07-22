@@ -1,9 +1,0 @@
-create VIEW VipView AS 
-select V.Vip_id,V.WEIXIN_ID,V.Vip_name,V.Vip_sex,V.Vip_tel,
-        V.Vip_openid,V.Vip_integral,V.Vip_createtime,V.Vip_edittime,V.Vip_isSignedDayTime,
-        V.Vip_isDeleted,V.Vip_comment,
-        B.Bill_id,B.Bill_type,B.Bill_item_id,B.Bill_GoodsName,B.Bill_GoodsDescription,
-        B.Bill_insertDate,B.B.Bill_goods_beginDate,B.Bill_goods_endDate,B.Bill_goods_expirationDate,
-        B.Bill_integral,B.Bill_SN,B.Bill_Status
-from Vip AS V, bill AS B 
-where V.Vip_openid = B.Bill_openid AND V.WEIXIN_ID = B.WEIXIN_ID

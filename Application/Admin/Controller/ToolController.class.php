@@ -46,6 +46,7 @@ class ToolController extends Controller{
             case BAOLIAOZHE:
                 $this->assign('postControl',true);
                 $this->assign('mediaControl',true);
+                $this->assign('baoliaozheScoreControl',true);
                 break;
             default:
                 break;

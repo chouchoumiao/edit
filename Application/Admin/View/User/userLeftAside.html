@@ -6,7 +6,7 @@
                     <img src="__PUBLIC__/Uploads/profile/default.jpg" alt="">
                 </notempty>
                 <notempty name = "the">
-                    <img src="__PUBLIC__/Uploads/profile/{$userInfo.img}" alt="">
+                    <img src="__PUBLIC__/Uploads/profile/{$theUserInfo.img}" alt="">
                 </notempty>
                 <div class="ribbon-wrapper">
                     <div class="ribbon-inner shadow-pulse bg-success">
@@ -16,7 +16,7 @@
             </div>
         </div>
         <div class="col-sm-6 col-md-12">
-            <div class="user-name m-top-sm">{$userInfo.username}<i class="fa fa-circle text-success m-left-xs font-14"></i></div>
+            <div class="user-name m-top-sm">{$theUserInfo.username}<i class="fa fa-circle text-success m-left-xs font-14"></i></div>
 
             <div class="m-top-sm">
 
@@ -37,14 +37,9 @@
 
             <h4 class="m-top-md m-bottom-sm">个人描述</h4>
             <p class="m-top-sm">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales at.
+                {$theUserInfo.udi_description}
+                <!--Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales at.-->
             <p>
-
-            <h4 class="m-top-md m-bottom-sm">点击分享</h4>
-
-            <a class="social-link facebook-hover"><i class="fa fa-weibo"></i></a>
-            <a class="social-link twitter-hover"><i class="fa fa-wechat"></i></a>
-            <a class="social-link pinterest-hover"><i class="fa fa-qq"></i></a>
 
         </div>
     </div><!-- ./row -->

@@ -32,6 +32,14 @@ namespace Admin\Model;
         private $dataArray; //整合后主表数据
         private $detailDataArray; //整合后明细数据
 
+        private $join;  //join条件
+        private $order; //排序条件
+
+        public function __construct(){
+            $this->join = 'INNER JOIN ccm_user_detail_info ON ccm_user_detail_info.uid = ccm_m_user.id';
+            $this->order ='ccm_m_user.regtime desc';
+        }
+
 
         public function getNowUserDetailInfo(){
             $where['uid'] = $_SESSION['uid'];
@@ -228,41 +236,22 @@ namespace Admin\Model;
             if('' != $this->auto){
                 $detailData['udi_auto_id'] = intval($this->auto);
             }
-
-            //return M('m_user')->where("id=$this->id")->save($data);
-            //更新主表内容
-
-            //echo $this->id;
-            //dump($data);exit;
-
             if( false !== M('m_user')->where(array('id'=>$this->id))->save($data)){
-
                 //删除upload文件夹中原先用户设置的头像，避免脏数据
-
                 //上传了图片则删除原图
                 if( '' != $this->img ){
                     if( 'default.jpg' != I('post.oldImg' )){
-
                         //删除就图片，防止垃圾数据
                         ToolModel::delImg(PROFILE_PATH.'/'.I('post.oldImg'));
-
                     }
                 }
-
                 if( false === M('user_detail_info')->where(array('uid'=>$this->id))->save($detailData)){
 
-                    ToolModel::goBack('修改明细表出错').M('user_detail_info')->getLastSql();
+                    ToolModel::goBack('修改明细表出错');
                 }
-                
-                
-                //如果修改的是当前用户的信息,则重置session
-                ToolModel::setSession();
-                
-                ToolModel::goToUrl('修改用户信息成功','all');
-            }else{
-                ToolModel::goBack('修改用户信息出错');
+                return true;
             }
-
+            return false;
         }
 
         public function getOldImg($id){
@@ -372,13 +361,41 @@ namespace Admin\Model;
         /**
          * 也显示所有用户一览表使用后(管理员)
          * 取得关联表的用户数据，并通过转化生出页面可显示的数据
-
+         * @param $limit
          * @return mixed
          */
         public function showUserList($limit){
 
             //取得用户信息
             $obj = $this->allUser($limit);
+
+            if(!$obj) ToolModel::goBack('未能取到数据');
+            //返回格式化好的数据，用于显示
+
+            //是二维数组则进行数据格式修正并返回
+            if(ToolModel::isTwoArray($obj)){
+                return $this->dataFormart($obj);
+            }
+        }
+
+        /**
+         * 也显示所有用户一览表使用后(部门管理员)
+         * 取得关联表的用户数据，并通过转化生出页面可显示的数据
+         * @param $limit
+         * @param $dept
+         * @return mixed
+         */
+        public function showDeptAdminUserList($limit,$dept){
+
+            $join = "INNER JOIN ccm_user_detail_info 
+                        ON ccm_user_detail_info.uid = ccm_m_user.id
+                        AND ccm_user_detail_info.udi_dep_id = '$dept'";
+            //多表联合查询
+            if('' == $limit){
+                $obj =  M('m_user')->join($join)->order($this->order)->select();
+            }else{
+                $obj =  M('m_user')->join($join)->order($this->order)->limit($limit)->select();
+            }
 
             if(!$obj) ToolModel::goBack('未能取到数据');
             //返回格式化好的数据，用于显示
@@ -444,11 +461,13 @@ namespace Admin\Model;
 
             return $obj;
         }
-		/**
-		 * 取得当前用户详细信息
-		 * 公有方法
-		 * @return mixed
-		 */
+
+        /**
+         * 取得当前用户详细信息
+         * 公有方法
+         * @param $id
+         * @return mixed
+         */
 		public function getTheUserInfo($id){
 			return $obj = $this->theUser($id);
 		}
@@ -463,6 +482,14 @@ namespace Admin\Model;
             return $this->getCount();
         }
 
+        public function getDeptAdminAllUserCount($dept){
+            $join = "INNER JOIN ccm_user_detail_info 
+                        ON ccm_user_detail_info.uid = ccm_m_user.id
+                        AND udi_dep_id = '$dept'";
+            return M('m_user')->join($join)->count();
+            //return $this->getCount();
+        }
+
         public function delTheUserInfo($id){
             return $this->delTheUser($id);
         }
@@ -475,31 +502,32 @@ namespace Admin\Model;
          */
         private function getCount(){
             //多表联合查询
-            return M('m_user')->join('INNER JOIN ccm_user_detail_info ON ccm_user_detail_info.uid = ccm_m_user.id')->count();
+            return M('m_user')->join($this->join)->count();
         }
 
-		/**
-		 * 取得当前用户的详细信息(多表查询)
-		 * 私有方法
-		 * @return mixed
-		 */
+        /**
+         * 取得当前用户的详细信息(多表查询)
+         * 私有方法
+         * @param $id
+         * @return mixed
+         */
 		private function theUser($id){
 			//多表联合查询
             $where['ccm_m_user.id'] = $id;
-			return M('m_user')->join('INNER JOIN ccm_user_detail_info ON ccm_user_detail_info.uid = ccm_m_user.id')->where($where)->find();
+			return M('m_user')->join($this->join)->where($where)->find();
 		}
 
-		/**
-		 * 取得所有用户信息(多表查询)
-		 * 私有方法
-		 * @return mixed
-		 */
+        /**取得所有用户信息(多表查询)
+         * 私有方法
+         * @param $limit
+         * @return mixed
+         */
 		private function allUser($limit){
 			//多表联合查询
             if('' == $limit){
-                return M('m_user')->join('INNER JOIN ccm_user_detail_info ON ccm_user_detail_info.uid = ccm_m_user.id')->order('ccm_m_user.regtime desc')->select();
+                return M('m_user')->join($this->join)->order($this->order)->select();
             }else{
-                return M('m_user')->join('INNER JOIN ccm_user_detail_info ON ccm_user_detail_info.uid = ccm_m_user.id')->order('ccm_m_user.regtime desc')->limit($limit)->select();
+                return M('m_user')->join($this->join)->order($this->order)->limit($limit)->select();
             }
 
 		}
@@ -742,6 +770,9 @@ namespace Admin\Model;
                 exit;
             }
 
+            //新增成功后需要情况图片的session中
+            $_SESSION['newImg'] = '';
+            unset($_SESSION['newImg']);
 
             //向新用户发送邮件
             if( 0 == $this->status ){
@@ -806,10 +837,6 @@ namespace Admin\Model;
 
             if((isset($_SESSION['newImg'])) && ( '' != $_SESSION['newImg'])){
                 $this->img = $_SESSION['newImg'];
-
-                //清空session中的新图片信息
-                $_SESSION['newImg'] = '';
-                unset($_SESSION['newImg']);
             }else{
                 $this->img = 'default.jpg';
             }
