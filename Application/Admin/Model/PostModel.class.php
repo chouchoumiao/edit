@@ -61,13 +61,14 @@ namespace Admin\Model;
                                         ON ccm_posts.post_author = ccm_m_user.id 
                                         AND ccm_posts.post_author = $userid 
                                         AND ccm_posts.post_status <> '$post_status'
+                                        AND ccm_posts.post_child = 0 
                                         AND ccm_posts.post_dept LIKE '%$dept%'";
                             break;
                         case ZONGBIAN:  //总编只显示提交给自己最终审核的文章
                             $join = "INNER JOIN ccm_m_user 
                                         ON ccm_posts.post_author = ccm_m_user.id 
                                         AND ccm_posts.post_author = $userid 
-                                        AND ccm_posts.post_status in ('pending2','pended')
+                                        AND ccm_posts.post_status in ('pending2','dismiss','pended')
                                         AND ccm_posts.post_dept LIKE '%$dept%'";
                             break;
                     }
@@ -141,12 +142,14 @@ namespace Admin\Model;
                                 $join = "INNER JOIN ccm_m_user 
                                             ON ccm_posts.post_author = ccm_m_user.id 
                                             AND ccm_posts.post_status <> '$post_status' 
+                                            AND ccm_posts.post_child = 0 
                                             AND ccm_posts.post_dept LIKE '%$dept%'" ;
 
                             }else{
                                 $join = "INNER JOIN ccm_m_user 
                                             ON ccm_posts.post_author = ccm_m_user.id 
                                             AND ccm_posts.post_status <> '$post_status' 
+                                            AND ccm_posts.post_child = 0 
                                             AND ccm_posts.post_dept LIKE '%$dept%' 
                                             AND ccm_posts.post_status = '$status'";
                             }
@@ -156,13 +159,13 @@ namespace Admin\Model;
                             if($status == 'all'){
                                 $join = "INNER JOIN ccm_m_user 
                                             ON ccm_posts.post_author = ccm_m_user.id 
-                                            AND ccm_posts.post_status in ('pending2','pended') 
+                                            AND ccm_posts.post_status in ('pending2','dismiss','pended') 
                                             AND ccm_posts.post_dept LIKE '%$dept%'" ;
 
                             }else{
                                 $join = "INNER JOIN ccm_m_user 
                                             ON ccm_posts.post_author = ccm_m_user.id 
-                                            AND ccm_posts.post_status in ('pending2','pended') 
+                                            AND ccm_posts.post_status in ('pending2','dismiss','pended') 
                                             AND ccm_posts.post_dept LIKE '%$dept%' 
                                             AND ccm_posts.post_status = '$status'";
                             }
@@ -235,6 +238,7 @@ namespace Admin\Model;
                                         ON ccm_m_user.id = ccm_posts.post_author 
                                         AND ccm_posts.post_author = $userid 
                                         AND ccm_posts.post_status <> '$post_status'
+                                        AND ccm_posts.post_child = 0 
                                         AND ccm_posts.post_dept LIKE '%$dept%'";
                             break;
                         case ZONGBIAN:
@@ -242,7 +246,7 @@ namespace Admin\Model;
                             $join = "INNER JOIN ccm_m_user 
                                         ON ccm_m_user.id = ccm_posts.post_author 
                                         AND ccm_posts.post_author = $userid 
-                                        AND ccm_posts.post_status in ('pending2','pended') 
+                                        AND ccm_posts.post_status in ('pending2','dismiss','pended') 
                                         AND ccm_posts.post_dept LIKE '%$dept%'";
                             break;
                         case DEPT_ADMIN:
@@ -322,12 +326,14 @@ namespace Admin\Model;
                             if($status == 'all'){
                                 $join = "INNER JOIN ccm_m_user 
                                             ON ccm_m_user.id = ccm_posts.post_author 
-                                            AND ccm_posts.post_status <> '$post_status' 
+                                            AND ccm_posts.post_status <> '$post_status'
+                                             AND ccm_posts.post_child = 0 
                                             AND ccm_posts.post_dept LIKE '%$dept%'";
                             }else{
                                 $join = "INNER JOIN ccm_m_user 
                                             ON ccm_m_user.id = ccm_posts.post_author 
                                             AND ccm_posts.post_status <> '$post_status' 
+                                            AND ccm_posts.post_child = 0 
                                             AND ccm_posts.post_dept LIKE '%$dept%'
                                             AND ccm_posts.post_status = '$status'";
                             }
@@ -337,12 +343,12 @@ namespace Admin\Model;
                             if($status == 'all'){
                                 $join = "INNER JOIN ccm_m_user 
                                             ON ccm_m_user.id = ccm_posts.post_author 
-                                            AND ccm_posts.post_status in ('pending2','pended') 
+                                            AND ccm_posts.post_status in ('pending2','dismiss','pended') 
                                             AND ccm_posts.post_dept LIKE '%$dept%'";
                             }else{
                                 $join = "INNER JOIN ccm_m_user 
                                             ON ccm_m_user.id = ccm_posts.post_author 
-                                            AND ccm_posts.post_status in ('pending2','pended') 
+                                            AND ccm_posts.post_status in ('pending2','dismiss','pended') 
                                             AND ccm_posts.post_dept LIKE '%$dept%'
                                             AND ccm_posts.post_status = '$status'";
                             }
@@ -428,12 +434,14 @@ namespace Admin\Model;
                         $join = "INNER JOIN ccm_m_user 
                                     ON ccm_posts.post_author = ccm_m_user.id 
                                     AND ccm_posts.post_status <> '$post_status' 
+                                    AND ccm_posts.post_child = 0 
                                     AND ccm_posts.post_dept LIKE '%$dept%'" ;
 
                     }else{
                         $join = "INNER JOIN ccm_m_user 
                                     ON ccm_posts.post_author = ccm_m_user.id 
                                     AND ccm_posts.post_status <> '$post_status' 
+                                    AND ccm_posts.post_child = 0 
                                     AND ccm_posts.post_dept LIKE '%$dept%' 
                                     AND ccm_posts.post_status = '$status'" ;
                     }
@@ -443,13 +451,13 @@ namespace Admin\Model;
                     if($status == 'all'){
                         $join = "INNER JOIN ccm_m_user 
                                     ON ccm_posts.post_author = ccm_m_user.id 
-                                    AND ccm_posts.post_status in ('pending2','pended')  
+                                    AND ccm_posts.post_status in ('pending2','dismiss','pended') 
                                     AND ccm_posts.post_dept LIKE '%$dept%'" ;
 
                     }else{
                         $join = "INNER JOIN ccm_m_user 
                                     ON ccm_posts.post_author = ccm_m_user.id 
-                                    AND ccm_posts.post_status in ('pending2','pended')  
+                                    AND ccm_posts.post_status in ('pending2','dismiss','pended')  
                                     AND ccm_posts.post_dept LIKE '%$dept%' 
                                     AND ccm_posts.post_status = '$status'" ;
                     }

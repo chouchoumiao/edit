@@ -33,6 +33,10 @@ class PostController extends CommonController {
                     $this->all();
                     break;
 
+                case 'unlockPost':
+                    $this->unlockPost();
+                    break;
+
                 //取得当前用户
                 case 'the':
                     $this->the();
@@ -72,6 +76,23 @@ class PostController extends CommonController {
 
     }
 
+    /**
+     * 清除该文章的缓存
+     */
+    private function unlockPost(){
+
+        //echo 'dddd';return;
+        //将锁定文章的缓存去除
+        if(S('lockPostId'.intval(I('post.postid')))){
+            S('lockPostId'.intval(I('post.postid')),null);
+        }
+        exit;
+//        $arr['success'] = 1;
+//        $arr['msg'] = 'OK';
+//
+//        echo json_encode($arr);
+
+    }
 
     /**
      * 文章中删除图片后原先上传的图片也要删除
@@ -119,6 +140,10 @@ class PostController extends CommonController {
         }else{
             $arr['success'] = 0;
             $arr['msg'] = '更新失败，请重试！';
+        }
+        //将锁定文章的缓存去除
+        if(S('lockPostId'.intval(I('post.postid')))){
+            S('lockPostId'.intval(I('post.postid')),null);
         }
         echo json_encode($arr);
         exit;
@@ -225,31 +250,30 @@ class PostController extends CommonController {
 
 
     /**
+     * 只有爆料者可以进行
      * 显示新增文章页面
      */
     private function add(){
-        //追加部门设置
-        $this->assign('dept',ToolModel::showAllDept());
 
-        //根据权限来显示按钮，爆料者和小编是提交审核，总编是审核按钮
-
-        if( $this->auto == BAOLIAOZHE){
-            $html= '';
-            $isSave = 'save';
-            $html .= '<div class="col-sm-2  col-sm-offset-3">';
-            $html .= '<input type="button" class="btn btn-info btn-block" 
-                        onclick="return addFormSubmit('.$isSave.');" value="保存不审核">';
-            $html .='</div>';
-            $html .= '<div class="col-sm-2">';
-            $html .= '<input type="button" class="btn btn-info btn-block" onclick="return addFormSubmit();" value="提交审核">';
-            $html .='</div>';
-
-
-            $this->assign('btn',$html);
-        }else{
+        if($this->auto != BAOLIAOZHE){
             ToolModel::goBack('您没有发表文章的功能');
         }
-        
+
+        //只显示该爆料者可以提交的部门
+        $this->assign('dept',ToolModel::onlyShowTheDept($this->dept));
+
+        $html= '';
+        $isSave = 'save';
+        $html .= '<div class="col-sm-2  col-sm-offset-3">';
+        $html .= '<input type="button" class="btn btn-info btn-block" 
+                    onclick="return addFormSubmit('.$isSave.');" value="保存不审核">';
+        $html .='</div>';
+        $html .= '<div class="col-sm-2">';
+        $html .= '<input type="button" class="btn btn-info btn-block" onclick="return addFormSubmit();" value="提交审核">';
+        $html .='</div>';
+
+        $this->assign('btn',$html);
+
         $this->assign('add',true);
         $this->display('post');
     }
@@ -274,6 +298,12 @@ class PostController extends CommonController {
         }
 
         if(!isset($_GET['id'])) ToolModel::goBack('警告,session出错请重新登录');
+
+        //判断cache中是否存在该文章的缓存,有则表示该文章处理正在编辑中
+        if(S('lockPostId'.intval(I('get.id')))){
+            //ToolModel::goBack('本文文章有别人正在编辑中,请过会在编辑');
+            //exit;
+        }
 
         $data = $this->postObj->getThePost(I('get.id'));
 
@@ -313,7 +343,8 @@ class PostController extends CommonController {
             $this->assign('postid',$data['id']);
             $this->assign('content',$data['post_content']);
             $this->assign('title',$data['post_title']);
-            $this->assign('theDept',ToolModel::theDept($data['post_dept']));
+            $this->assign('theDept',ToolModel::onlyShowTheDept($data['post_dept']));
+//            $this->assign('theDept',ToolModel::showTheDeptForPost($data['post_dept'],$data['post_author']));
         }else{
             ToolModel::goBack('无该文章,请确认');
         }
@@ -425,6 +456,10 @@ class PostController extends CommonController {
         $this->assign('showDeptCheckBox',$showDeptCheckBox);    //如果是小编或者总编部门固定,所以不显示部门可选
         $this->assign('btn',$html);
         $this->assign('the',true);
+
+        //设置缓存
+        S('lockPostId'.intval(I('get.id')),intval(I('get.id')),3000);
+
         $this->display('post');
     }
 
@@ -448,7 +483,7 @@ class PostController extends CommonController {
                 $this->getPostWithAutosAndSearch('deptSearch');
             }
         }
-        
+
         //根据不同的角色来来显示文章列表
         $this->getPostWithAutosAndSearch('noSearch');
     }
@@ -485,6 +520,13 @@ class PostController extends CommonController {
 
         //追加注入斑模板的不同文章状态的文章个数
         $this->getShowPostCountWithStatus();
+
+        //总编的情况下,文章一览显示是审核者,而不是作者
+        if($this->auto == ZONGBIAN){
+            $this->assign('authorName','审批者');
+        }else{
+            $this->assign('authorName','作者');
+        }
 
         $this->assign('allPost',$post); //用户信息注入模板
         $this->assign('page',$show);    //赋值分页输出

@@ -40,6 +40,20 @@ namespace Admin\Model;
             $this->order ='ccm_m_user.regtime desc';
         }
 
+        /**
+         * 根据传入的用户id取得用户明细表中的DEPT
+         * @param $uid
+         * @return bool
+         */
+        public function getTheDept($uid){
+            $field = 'udi_dep_id';
+            $where['uid'] = $uid;
+            $data = M('user_detail_info')->field($field)->where($where)->find();
+            if($data){
+                return $data['udi_dep_id'];
+            }
+            return false;
+        }
 
         public function getNowUserDetailInfo(){
             $where['uid'] = $_SESSION['uid'];

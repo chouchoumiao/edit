@@ -59,7 +59,7 @@
                         <thead style="text-align: center">
                         <tr>
                             <th><h5>文章标题</h5></th>
-                            <th><h5>作者</h5></th>
+                            <th><h5>{$authorName}</h5></th>
                             <th><h5>所属部门</h5></th>
                             <th><h5>发布日期</h5></th>
                             <th><h5>最新时间</h5></th>
@@ -92,7 +92,7 @@
                                     <td>{$vo.post_modified}</td>
                                     <td>{$vo.post_status}</td>
                                     <td>
-                                        <a href="__ROOT__/Admin/Post/doAction/action/the/id/{$vo.id}/preview/1">
+                                        <a target="_blank" href="__ROOT__/Admin/Post/doAction/action/the/id/{$vo.id}/preview/1">
                                             <i class="fa fa-eye"></i> 预览
                                         </a>
                                         <if condition="$vo.post_canEdit eq 1">
@@ -137,7 +137,7 @@
                                 </tr>
                             </foreach>
                         <else />
-                            <tr><td colspan=6>没有数据</td></tr>
+                            <tr><td colspan=7>没有数据</td></tr>
                         </if>
                         </tbody>
                     </table>
@@ -200,7 +200,7 @@
                                     <td>{$vo.post_status}</td>
                                     <td>
 
-                                        <a href="__ROOT__/Admin/Post/doAction/action/the/id/{$vo.id}/preview/1">
+                                        <a target="_blank" href="__ROOT__/Admin/Post/doAction/action/the/id/{$vo.id}/preview/1">
                                             <i class="fa fa-eye"></i> 预览
                                         </a>
                                         <!--<if condition="$vo.post_canEdit eq 1">-->

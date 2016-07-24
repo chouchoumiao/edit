@@ -724,14 +724,46 @@ namespace Admin\Model;
                     $autoList[] = I("post.$name");
                 }
             }
-//            if(I("post.auto88")){
-//                $autoList[] = I("post.auto88");
-//            }
-//            if(I("post.auto99")){
-//                $autoList[] = I("post.auto99");
-//            }
-
             //数组转化为json格式
             return json_encode($autoList);
+        }
+
+        /**
+         * gen
+         * @param $dept
+         * @return string
+         */
+        static function onlyShowTheDept($dept){
+
+            //取得数据库中的deptjson格式后，转化为数组格式
+            $deptArr = json_decode($dept);
+
+            //取得数据库中的部门表
+            $deptDefineArr = D('Dept')->getAllDept();
+
+            //拼接成html
+            $html = '';
+
+            //显示所有的部门信息，如果该用户选过的则显示打勾，不然则不打勾
+            for($i=1;$i<=count($deptDefineArr);$i++){
+
+                //循环判断数据库中部门表在该用户的数组中是否存在，存在则表示选中状态
+                for($j=0;$j<count($deptArr);$j++){
+                    //如果该用户的部门id在数据表中存在，则改部门为选中状态
+                    if($deptArr[$j] == $i){
+                        $html .= '<div class="checkbox inline-block">';
+                        $html .= '<div class="custom-checkbox">';
+                        $html .= '<input type="checkbox" id="dept'.$i.'" value="'.$i.'" name="dept'.$i.'" class="checkbox-purple" checked>';
+                        $html .= '<label for="dept'.$i.'"></label>';
+                        $html .= '</div>';
+                        $html .= '<div class="inline-block vertical-top">'.$deptDefineArr[$i -1 ]['name'];
+                        $html .= '</div> &nbsp &nbsp';
+                        $html .= '</div>';
+
+                    }
+                }
+
+            }
+            return $html;
         }
     }

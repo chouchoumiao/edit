@@ -25,7 +25,6 @@ $(function(){
 
     }),
 
-
     /**
      * 富文本编辑器初始化
      * 最小长度400
@@ -251,6 +250,9 @@ function UpdateFormSubmit(flag) {
     //将数组转化为json格式
     var deptJson = JSON.stringify(deptArr);
     if((flag == 4) && ($("#dismiss_msg").is(":hidden"))){
+        if(!$("#scoreBtn").is(":hidden")){
+            $('#scoreBtn').hide();
+        }
         $('#dismiss_msg').fadeIn();
         return false;
     }
@@ -264,6 +266,9 @@ function UpdateFormSubmit(flag) {
 
 
     if((flag == 5) && ($("#scoreBtn").is(":hidden"))){
+        if(!$("#dismiss_msg").is(":hidden")){
+            $('#dismiss_msg').hide();
+        }
         $('#scoreBtn').fadeIn();
         return false;
     }
@@ -317,3 +322,30 @@ function UpdateFormSubmit(flag) {
         ,error:function(xhr){alert('PHP页面有错误！'+xhr.responseText);}
     });
 }
+
+window.addEventListener("beforeunload", function(event) {
+
+    if( (typeof ($("#postid").val()) != 'undefined') && ($("#postid").val() != '') ){
+
+        $.ajax({
+            url:ROOT+"/Admin/Post/doAction/action/unlockPost"//改为你的动态页
+            ,type:"POST"
+            ,data:{
+                'postid':$("#postid").val()
+            }
+            ,dataType: "json"
+            ,success:function(json){
+                if(json.success == "OK"){
+                    alert('删除成功');
+                    location = ROOT+"/Admin/Post/doAction/action/all";
+
+                }else{
+                    alert('删除失败');
+                    return false;
+                }
+            }
+            ,error:function(xhr){alert('PHP页面有错误！'+xhr.responseText);}
+        });
+    }
+
+});
