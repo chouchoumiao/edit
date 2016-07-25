@@ -1,4 +1,4 @@
-<div class="col-md-12">
+<div class="col-md-12 col-sm-12 col-xs-12">
     <ul class="breadcrumb">
         <li>评分</li>
         <li>评分一览表</li>
@@ -33,7 +33,7 @@
                     <li style="background-color:#fff;" data-color="reset"></li>
                 </ul>
             </div>
-            <div class="smart-widget-body">
+            <div class="smart-widget-body hidden-xs">
                 <table class="table table-hover center">
                     <thead style="text-align: center">
                     <tr>
@@ -63,6 +63,40 @@
                             </tr>
                         </foreach>
                     <else />
+                        <tr>
+                            <td colspan=5>没有数据</td>
+                        </tr>
+                    </if>
+                    </tbody>
+                </table>
+                <div>{$page}</div>
+            </div>
+            <!--小屏幕显示-->
+            <div class="smart-widget-body visible-xs">
+                <table class="table table-hover center">
+                    <thead style="text-align: center">
+                    <tr>
+                        <th>昵称</th>
+                        <th>评分</th>
+                        <th>审核</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody style="text-align: center">
+                    <if condition = "$data neq '' ">
+                        <foreach name="data" item="vo" key ="k">
+                            <tr>
+                                <td>{$vo.username}</td>
+                                <td>{$vo.score}</td>
+                                <td>{$scoreAuthorArr[$k]}</td>
+                                <td>
+                                    <a target="_blank" href="__ROOT__/Admin/Post/doAction/action/the/id/{$vo.postid}/preview/1">
+                                        <i class="fa fa-eye"></i>预览
+                                    </a>
+                                </td>
+                            </tr>
+                        </foreach>
+                        <else />
                         <tr>
                             <td colspan=5>没有数据</td>
                         </tr>

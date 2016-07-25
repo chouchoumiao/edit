@@ -20,7 +20,7 @@
     <!-- Simplify -->
     <link href="__PUBLIC__/css/Admin/simplify.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="__PUBLIC__/css/Admin/uploadify.css">
+    <link rel="stylesheet" href="__PUBLIC__/css/Admin/uploadifive.css">
     <link rel="stylesheet" href="__PUBLIC__/css/Admin/common.css">
 
 </head>
@@ -76,7 +76,7 @@
 <!-- Simplify -->
 <script src="__PUBLIC__/js/Admin/simplify/simplify.js"></script>
 
-<script src='__PUBLIC__/js/Admin/jquery.uploadify.min.js'></script>
+<script src='__PUBLIC__/js/Admin/jquery.uploadifive.min.js'></script>
 
 <!-- 前端验证JS插件-->
 <script src="http://apps.bdimg.com/libs/angular.js/1.4.6/angular.min.js"></script>
@@ -101,13 +101,13 @@
     var ALL_DEPT_COUNT = 4    //部门的总个数
 
 
-    $('#file_upload').uploadify({
-        'queueID'  : 'some_file_queue',
-        'swf'      : '__PUBLIC__/uploadify.swf',
-        'uploader' : './Admin/User/doAction/action/upload',   //上传的方法
+    $('#file_upload').uploadifive({
+        'uploadScript' : './Admin/User/doAction/action/upload',   //上传的方法
         'buttonText' : '头像上传',
-        'multi' : false,
-        'onUploadSuccess' : function(file, data, response) {
+        'fileTypeExts'  : '*.jpg;*.jpge;*.png',
+        'fileSizeLimit' : 5242880,
+        'removeCompleted':true,
+        'onUploadComplete' : function(file, data) {
 
             var isOk = false;
             if(data.indexOf("jpg") > -1){
@@ -121,34 +121,22 @@
             if(data.indexOf("jpeg") > -1){
                 isOk = true;
             }
-
-            //$('.uploadify-queue').hide(); //不显示进度条
-
             if(isOk){
                 $("#upload-img").attr("src",'__PUBLIC__/Uploads/profile/'+data);
             }else{
                 alert(data);
                 return false;
             }
-//                        if(data.success == 1){
-//                            //把上传上传的图片都放入DIV中
-
-//                        }else{
-//                            alert(data.msg);
-//                            return false;
-//                        }
-
-
         }
     });
 
-    $('#edit_file_upload').uploadify({
-        'queueID'  : 'some_file_queue',
-        'swf'      : '__PUBLIC__/uploadify.swf',
-        'uploader' : './Admin/User/doAction/action/editimg',   //上传的方法
-        'buttonText' : '头像上传',
+    $('#edit_file_upload').uploadifive({
         'multi' : false,
-        'onUploadSuccess' : function(file, data, response) {
+        'uploadScript' : './Admin/User/doAction/action/editimg',   //上传的方法
+        'buttonText' : '头像上传',
+        'fileTypeExts'  : '*.jpg;*.jpge;*.png',
+        'fileSizeLimit' : 5242880,
+        'onUploadComplete' : function(file, data) {
 
             var isOk = false;
             if(data.indexOf("jpg") > -1){
@@ -162,24 +150,12 @@
             if(data.indexOf("jpeg") > -1){
                 isOk = true;
             }
-
-            //$('.uploadify-queue').hide(); //不显示进度条
-
             if(isOk){
                 $("#upload-img").attr("src",'__PUBLIC__/Uploads/profile/'+data);
             }else{
                 alert(data);
                 return false;
             }
-//                        if(data.success == 1){
-//                            //把上传上传的图片都放入DIV中
-
-//                        }else{
-//                            alert(data.msg);
-//                            return false;
-//                        }
-
-
         }
     });
 

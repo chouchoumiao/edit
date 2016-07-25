@@ -34,6 +34,7 @@ class PostController extends CommonController {
                     break;
 
                 case 'unlockPost':
+
                     $this->unlockPost();
                     break;
 
@@ -80,17 +81,17 @@ class PostController extends CommonController {
      * 清除该文章的缓存
      */
     private function unlockPost(){
-
-        //echo 'dddd';return;
         //将锁定文章的缓存去除
         if(S('lockPostId'.intval(I('post.postid')))){
             S('lockPostId'.intval(I('post.postid')),null);
+            S('lockUser'.intval(I('post.postid')),null);
+            $arr['msg'] = 'clear cache';
+        }else{
+            $arr['msg'] = 'No cache';
         }
-        exit;
-//        $arr['success'] = 1;
-//        $arr['msg'] = 'OK';
-//
-//        echo json_encode($arr);
+        $arr['success'] = 1;
+
+        echo json_encode($arr);
 
     }
 
@@ -144,6 +145,7 @@ class PostController extends CommonController {
         //将锁定文章的缓存去除
         if(S('lockPostId'.intval(I('post.postid')))){
             S('lockPostId'.intval(I('post.postid')),null);
+            S('lockUser'.intval(I('post.postid')),null);
         }
         echo json_encode($arr);
         exit;
@@ -300,9 +302,11 @@ class PostController extends CommonController {
         if(!isset($_GET['id'])) ToolModel::goBack('警告,session出错请重新登录');
 
         //判断cache中是否存在该文章的缓存,有则表示该文章处理正在编辑中
-        if(S('lockPostId'.intval(I('get.id')))){
-            //ToolModel::goBack('本文文章有别人正在编辑中,请过会在编辑');
-            //exit;
+        if( S('lockPostId'.intval(I('get.id'))) == intval(I('get.id')) ){
+            if(S('lockUser'.intval(I('get.id'))) != $_SESSION['username']){
+                ToolModel::goBack("本文文章由【".S('lockUser'.intval(I('get.id')))."】正在编辑中,请过会再编辑");
+                exit;
+            }
         }
 
         $data = $this->postObj->getThePost(I('get.id'));
@@ -457,8 +461,9 @@ class PostController extends CommonController {
         $this->assign('btn',$html);
         $this->assign('the',true);
 
-        //设置缓存
-        S('lockPostId'.intval(I('get.id')),intval(I('get.id')),3000);
+        //设置缓存，时间为100分钟
+        S('lockPostId'.intval(I('get.id')),intval(I('get.id')),6000);
+        S('lockUser'.intval(I('get.id')),$_SESSION['username'],6000);
 
         $this->display('post');
     }

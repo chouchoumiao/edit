@@ -1,6 +1,6 @@
 <div class="padding-md">
     <h2 class="header-text no-margin">
-        Gallery
+        媒体库一览
     </h2>
 
     <div class="gallery-filter m-top-md">
@@ -8,8 +8,8 @@
             <li class={$allStatus}><a href="__ROOT__/Admin/Media/doAction/action/all">所有</a></li>
             <li class={$mediaStatus}><a href="__ROOT__/Admin/Media/doAction/action/getStatus/status/media">媒体</a></li>
             <li class={$fileStatus} ><a href="__ROOT__/Admin/Media/doAction/action/getStatus/status/file">文档</a></li>
-            <li class={$meStatus} ><a href="__ROOT__/Admin/Media/doAction/action/getStatus/status/me">我发布的</a></li>
-            <li class="{$likeStatus}" ><a href="__ROOT__/Admin/Media/doAction/action/getStatus/status/like">我喜欢的</a></li>
+            <li class="{$meStatus}" ><a href="__ROOT__/Admin/Media/doAction/action/getStatus/status/me">我的</a></li>
+            <li class="{$likeStatus}" ><a href="__ROOT__/Admin/Media/doAction/action/getStatus/status/like">收藏</a></li>
         </ul>
     </div>
 
@@ -147,8 +147,8 @@
                                 <div class="modal-footer">
                                     <input name="id" value={$vo.id} type="hidden">
                                     <div class="row">
-                                        <div class="col-md-6" style="margin-top: 8px;">
-                                            <span class="label label-success">当前资源文件容量大小: &nbsp; &nbsp; {$vo.size} &nbsp;&nbsp;KB</span>
+                                        <div class="col-md-4 col-xs-4" style="margin-top: 8px;">
+                                            <span class="label label-success">文件大小: &nbsp; {$vo.size} &nbsp;KB</span>
                                         </div>
                                         <div class="col-md-5" style="margin-right: 10px">
                                             <input type="submit" class="btn btn-info" name="send" value="提交" style="margin-right: 8px">

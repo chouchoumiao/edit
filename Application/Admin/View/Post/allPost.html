@@ -142,8 +142,6 @@
                         </tbody>
                     </table>
                     <div>{$page}</div>
-
-
                 </div>
             </div><!-- ./smart-widget-inner -->
         </div>
@@ -199,27 +197,9 @@
                                     <td>{$vo.post_title_small}</td>
                                     <td>{$vo.post_status}</td>
                                     <td>
-
                                         <a target="_blank" href="__ROOT__/Admin/Post/doAction/action/the/id/{$vo.id}/preview/1">
                                             <i class="fa fa-eye"></i> 预览
                                         </a>
-                                        <!--<if condition="$vo.post_canEdit eq 1">-->
-                                            <!--<if condition = "$auto neq ADMIN ">-->
-                                                <!--<a href="__ROOT__/Admin/Post/doAction/action/the/id/{$vo.id}">-->
-                                                    <!--&nbsp <i class="fa fa-edit"></i> 编辑-->
-                                                <!--</a>-->
-                                            <!--</if>-->
-                                            <!--<a href="javascript:delPost({$vo['id']});">-->
-                                                <!--&nbsp <i class="fa fa-trash">删除</i>-->
-                                            <!--</a>-->
-                                            <!--<elseif condition="$vo.post_canEdit eq 0"/>-->
-
-                                            <!--<a href="#" data-toggle="modal" data-target="#normalModal{$k}">-->
-                                                <!--&nbsp <i class="fa fa-edit"></i> 查看原因-->
-                                            <!--</a>-->
-
-                                            <!--<else/>-->
-                                        <!--</if>-->
                                     </td>
                                 </tr>
                             </foreach>

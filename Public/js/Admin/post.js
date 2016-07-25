@@ -323,10 +323,13 @@ function UpdateFormSubmit(flag) {
     });
 }
 
+/**
+ * 编辑文章页面进行刷新，离开则会触发
+ * 文章防止多人编辑，当刷新页面或者离开页面的时候触发，清除cache
+ */
 window.addEventListener("beforeunload", function(event) {
-
-    if( (typeof ($("#postid").val()) != 'undefined') && ($("#postid").val() != '') ){
-
+    //当前页面是编辑文章页面，不在编辑页面才会触发清空cache
+    if($('#thePostForLock').length == 1){
         $.ajax({
             url:ROOT+"/Admin/Post/doAction/action/unlockPost"//改为你的动态页
             ,type:"POST"
@@ -335,17 +338,13 @@ window.addEventListener("beforeunload", function(event) {
             }
             ,dataType: "json"
             ,success:function(json){
-                if(json.success == "OK"){
-                    alert('删除成功');
-                    location = ROOT+"/Admin/Post/doAction/action/all";
-
-                }else{
-                    alert('删除失败');
-                    return false;
+                if(json.success == 1){
+                    console.log(json.msg);
                 }
-            }
-            ,error:function(xhr){alert('PHP页面有错误！'+xhr.responseText);}
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+
+            },
         });
     }
-
 });
