@@ -54,7 +54,12 @@ $(function(){
                     showMSg(msg);
                 }
             }
-            ,error:function(xhr){alert('PHP页面有错误！'+xhr.responseText);}
+            ,error:function(xhr){
+                showError( '请不要频繁重置获取，等稍后再试！' );
+                wp_shake_js();
+                $("#wp-submit").val('获取新密码');
+                $("#wp-submit").attr('disabled',false);
+            }
         });
     }
 
