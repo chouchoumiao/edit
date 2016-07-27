@@ -118,10 +118,22 @@ class UserController extends CommonController {
             //如果修改的是当前用户的信息,则重置session
             ToolModel::setSession();
             if ($this->auto == ADMIN || $this->auto == DEPT_ADMIN || $this->auto == SUPPER_ADMIN){
+
+                //如果是审核爆料者的情况下下，激活成功后需要向改爆料者发送通知邮件（只有超级管理员和管理员可以）
+                if ($this->auto == ADMIN || $this->auto == SUPPER_ADMIN){
+                    if(isset($_POST['auditSend']) && '' != I('post.auditSend')){
+                        if($this->obj->afterAuditToUser(I('post.oldEmail'))){
+                            ToolModel::goToUrl('审核完毕，并已成功发送通知邮件给用户了','all');
+                        }else{
+                            ToolModel::goToUrl('审核完毕，但通知用户邮件发送出错，请联系管理员','all');
+                        }
+                    }
+                }
                 ToolModel::goToUrl('修改用户信息成功','all');
             }else{
                 ToolModel::goToUrl('修改用户信息成功',U('Index/index'));
             }
+
 
         }
 
@@ -256,7 +268,11 @@ class UserController extends CommonController {
         }else{
             $this->assign('admin',0);
         }
-        
+
+        if( (isset($_GET['audit'])) && intval(I('get.audit')) == 1 ){
+            $this->assign('audit',true);
+        }
+
         $this->assign('the',true);
         $this->assign('theUserInfo',$userInfo);
         $this->display('user');

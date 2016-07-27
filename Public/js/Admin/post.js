@@ -186,10 +186,11 @@ function resetAddForm () {
  * @param id
  */
 function delPost(id) {
-    if (!confirm('确定要删除吗？')){
+
+    //三次弹出确认对话框
+    if( !confirmThree() ){
         return;
     }
-
     $.ajax({
         url:ROOT+"/Admin/Post/doAction/action/del"//改为你的动态页
         ,type:"POST"

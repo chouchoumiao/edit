@@ -222,6 +222,11 @@ namespace Admin\Model;
                 $data['img'] = $this->img;
             }
 
+            //如果是审核爆料者的情况下下，同时要将状态设置为1：激活
+            if(isset($_POST['auditSend']) && '' != I('post.auditSend')){
+                $data['status'] = 1;
+            }
+
 
             //明细表数据做成
             if('' != $this->sex){
@@ -255,7 +260,7 @@ namespace Admin\Model;
                 //上传了图片则删除原图
                 if( '' != $this->img ){
                     if( 'default.jpg' != I('post.oldImg' )){
-                        //删除就图片，防止垃圾数据
+                        //删除旧图片，防止垃圾数据
                         ToolModel::delImg(PROFILE_PATH.'/'.I('post.oldImg'));
                     }
                 }
@@ -463,6 +468,8 @@ namespace Admin\Model;
                 //处理角色数字转为为文字
                 $obj[$i]['udi_auto_id'] = $autoArr[$obj[$i]['udi_auto_id']];
 
+                //追加id，用于判断，提高速度
+                $obj[$i]['statusId'] = $obj[$i]['status'] ;
                 //处理激活状态数字转为为文字
                 $obj[$i]['status'] = $statusArr[$obj[$i]['status']];
 
@@ -745,11 +752,11 @@ namespace Admin\Model;
 				if($nowtime > $data['token_exptime']){ //一周
 					$msg = '您的激活有效期已过，请登录您的帐号重新发送激活邮件.';
 				}else{
-					$data['status'] = 1;
+					$data['status'] = -1;
 					$autopass = $data['autopass'];
 					$where['id']= $data['id'];
 					if(M('m_user')->where($where)->save($data)){
-						$msg = "激活成功！<br/>您的初始密码为：$autopass<br/>请及时修改您的密码";
+						$msg = "激活成功！<br/>您的初始密码为：$autopass<br/>请及时修改您的密码,并完善您的个人信息，并等待管理员审核";
 					}
 				}
 			}else{
@@ -939,6 +946,32 @@ namespace Admin\Model;
         }
         /*********************************************新增用户***************************************************/
 
+        /**
+         * 取得当前用户的状态
+         * @return bool
+         */
+        public function getNowUserStatus(){
+            $where['id'] = $_SESSION['uid'];
+            $field = 'status';
+            $data = M('m_user')->where($where)->field($field)->find();
+            if($data){
+                return $data['status'];
+            }
+            return false;
+        }
 
+        /**
+         * 发送邮件到新注册用户邮箱
+         * @return string
+         */
+        public function afterAuditToUser($email){
+
+            $emailTitle= "恭喜！您的注册信息已被审核通过";//邮件标题
+            //邮件主体内容
+            $emailContent = "您的注册信息已被管理员审核通过，现在您可以登录系统使用更多功能了...";
+
+            return SendMail($email,$emailTitle,$emailContent)?  true: false;
+
+        }
 
     }

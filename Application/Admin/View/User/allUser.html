@@ -57,9 +57,15 @@
                                 <td>{$vo.status}</td>
                                 <td>{$vo.regtime}</td>
                                 <td>
-                                    <a href="__ROOT__/Admin/User/doAction/action/the/id/{$vo.uid}">
-                                        <i class="fa fa-edit"></i>编辑
-                                    </a>
+                                    <if condition=" $vo.statusId eq -1">
+                                        <a href="__ROOT__/Admin/User/doAction/action/the/id/{$vo.uid}/audit/1">
+                                            <span style="color: red"><i class="fa fa-edit"></i>审核</span>
+                                        </a>
+                                    <else/>
+                                        <a href="__ROOT__/Admin/User/doAction/action/the/id/{$vo.uid}">
+                                            <i class="fa fa-edit"></i>编辑
+                                        </a>
+                                    </if>
                                     <if condition="$vo['uid'] eq $_SESSION['uid']">
                                         不能删除
                                         <else />

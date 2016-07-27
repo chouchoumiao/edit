@@ -226,6 +226,41 @@ $(function(){
             }
         });
 
+        //管理员审核时。
+        $('#auditSend').click(function(){
+
+            if($('#address').val().length > 200){
+                alert('地址内容不得超过200位');
+                $('#address').focus();
+                return false;
+            }
+
+            //如果是管理员或者超级管理员的时候则不验证部门
+            if($('#isShow').val()){
+
+                //判断部门复选框是否都没有选中
+                if( 0 == ($("input[class='checkbox-purple']:checked").length)){
+                    alert('至少选中一个部门');
+                    return false;
+                }
+            }
+
+            $("form :input.required").trigger('blur');
+
+            //通过判定含有错误class的个数来验证是否都通过
+            var numError = $('.glyphicon-remove').length;
+
+            if(numError){
+                return false;
+            }
+        });
+
+        //管理员审核时。
+        $('#auditNoSend').click(function(){
+
+            location.href = history.back();
+        });
+
         //重置
         $('#updateRes').click(function(){
 
@@ -293,9 +328,10 @@ function doOK($parent,idname) {
 
 //删除用户
 function delUser(id){
-
-    if (!confirm('确定要删除吗？')){
-    return;
+    
+    //三次弹出确认对话框
+    if( !confirmThree() ){
+        return;
     }
 
     $.ajax({

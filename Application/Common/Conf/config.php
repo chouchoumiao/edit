@@ -88,6 +88,7 @@ return array(
 
     //激活状态数组
     'STATUS_ARRAY' => array(
+		-1=>'未审核',
         0=>'未激活',
         1=>'已激活'
     ),

@@ -16,6 +16,7 @@
                         <h4 class="header-text m-top-md">个人 资料</h4>
                         <form action="__ROOT__/Admin/User/doAction/action/update" id="updateForm" class="form-horizontal m-top-md" enctype="multipart/form-data" method="post">
 
+                            <input type="hidden" value="{$theUserInfo.email}" name="oldEmail"/>
                             <input type="hidden" value="{$theUserInfo.password}" name="oldMd5Pass"/>
                             <input type="hidden" value="{$theUserInfo.username}" name="oldUsername"/>
                             <input type="hidden" value="{$theUserInfo.img}" name="oldImg"/>
@@ -178,9 +179,17 @@
                             <div class="form-group m-top-lg">
                                 <label class="col-sm-3 control-label"></label>
                                 <div class="col-sm-9">
-                                    <input type="submit" class="btn btn-info" id="updateSend" value="提交">
-                                    <input type="reset" id="updateRes" class="btn btn-default m-left-xs" value="取消">
-
+                                    <notempty name="audit">
+                                        <div class="col-sm-4">
+                                            <input type="submit" class="btn btn-info " name="auditSend" id="auditSend" value="审核通过">
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <input type="submit" class="btn btn-danger" id="auditNoSend" value="审核不通过">
+                                        </div>
+                                    <else/>
+                                        <input type="submit" class="btn btn-info" id="updateSend" value="提交">
+                                        <input type="reset" id="updateRes" class="btn btn-default m-left-xs" value="取消">
+                                    </notempty>
                                 </div>
                             </div>
                         </form>

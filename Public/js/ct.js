@@ -33,8 +33,8 @@ City.prototype = {
 			switch((parseInt(index))){
 				case 0:type="省";break;
 				case 1:type="市";break;
-				case 2:type="镇";break;
-				case 3:type="乡";break;
+				case 2:type="区(县)";break;
+				case 3:type="镇(乡)";break;
 				default:type="中华人民共和国";break;	
 			}
 			//追加显示一个提示下拉的Option

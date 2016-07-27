@@ -17,36 +17,49 @@ class ToolController extends Controller{
      * @param $auto
      */
     public function doAuto($auto){
+
         switch ($auto){
             case SUPPER_ADMIN:
                 //$this->assign('postControl',true);
+                $this->assign('postMainControl',true);
                 $this->assign('mediaControl',true);
                 $this->assign('userControl',true);
                 $this->assign('scoreControl',true);
                 $this->assign('noticeControl',true);
                 break;
             case ADMIN:
+                $this->assign('postMainControl',true);
                 $this->assign('mediaControl',true);
                 $this->assign('userControl',true);
                 $this->assign('scoreControl',true);
                 $this->assign('noticeControl',true);
                 break;
             case DEPT_ADMIN:
+                $this->assign('postMainControl',true);
                 $this->assign('mediaControl',true);
                 $this->assign('userControl',true);
                 $this->assign('scoreControl',true);
                 $this->assign('noticeControl',true);
                 break;
             case ZONGBIAN:
+                $this->assign('postMainControl',true);
                 $this->assign('mediaControl',true);
                 break;
             case XIAOBIAN:
+                $this->assign('postMainControl',true);
                 $this->assign('mediaControl',true);
                 break;
             case BAOLIAOZHE:
-                $this->assign('postControl',true);
-                $this->assign('mediaControl',true);
-                $this->assign('baoliaozheScoreControl',true);
+
+                $status = D('User')->getNowUserStatus();
+
+                if($status != -1){
+                    $this->assign('postMainControl',true);
+                    $this->assign('postControl',true);
+                    $this->assign('mediaControl',true);
+                    $this->assign('baoliaozheScoreControl',true);
+                }
+
                 break;
             default:
                 break;
