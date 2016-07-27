@@ -744,6 +744,7 @@ namespace Admin\Model;
                 'post_title'   => $data['post_title'],
                 'post_dept'    => $dept,
                 'post_status'  => 'pending',    //待审核
+                'post_dismiss_msg'  => '',    //待审核
                 'post_name'    => '',
                 'post_modified'=> $now,
                 'post_parent'  => $data['id'],   //父节点是提交过来的文章ID

@@ -370,6 +370,8 @@ namespace Admin\Model;
          * @return mixed
          */
         public function checklogin(){
+
+                
             //使用I内置函数过滤，如果
             $where['login_name'] = I('post.user_login');
             $where['password'] = md5(I('post.user_pass'));
