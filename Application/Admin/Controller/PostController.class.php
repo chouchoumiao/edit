@@ -399,15 +399,19 @@ class PostController extends CommonController {
             case XIAOBIAN:
                 $html .= '<div class="col-sm-2 col-sm-offset-2">';
                 $html .= '<input type="button" class="btn btn-info btn-block" 
-                            onclick="return UpdateFormSubmit('.$pending2.');" value="继续提交审核" name="send">';
+                            onclick="return UpdateFormSubmit('.$pending2.');" value="提交审核" name="send">';
                 $html .= '</div>';
                 $html .= '<div class="col-sm-2 col-sm-offset-1">';
                 $html .= '<input type="button" class="btn btn-danger btn-block" 
                             onclick="return UpdateFormSubmit('.$dismiss.');" value="审核不通过" name="send">';
                 $html .= '</div>';
                 $html .= '<div class="col-sm-2 col-sm-offset-1">';
-                $html .= '<input type="button" class="btn  btn-default m-left-xs btn-block" onclick="return resetAddForm();" value="清空内容" id="res">';
+                $html .= '<input type="button" class="btn btn-warning btn-block" 
+                            onclick="return UpdateFormSubmit('.$save.');" value="保存" name="send">';
                 $html .= '</div>';
+//                $html .= '<div class="col-sm-2 col-sm-offset-1">';
+//                $html .= '<input type="button" class="btn  btn-default m-left-xs btn-block" onclick="return resetAddForm();" value="清空内容" id="res">';
+//                $html .= '</div>';
 
 
                 $htmlSmall .= '<div class="col-xs-2">';
@@ -419,8 +423,12 @@ class PostController extends CommonController {
                             onclick="return UpdateFormSubmit('.$dismiss.');" value="审核不通过" name="send">';
                 $htmlSmall .= '</div>';
                 $htmlSmall .= '<div class="col-xs-2 col-xs-offset-2">';
-                $htmlSmall .= '<input type="button" class="btn  btn-default btn-xs" onclick="return resetAddForm();" value="清空内容" id="res">';
+                $htmlSmall .= '<input type="button" class="btn btn-xs btn-warning" 
+                            onclick="return UpdateFormSubmit('.$save.');" value="修改并保存" name="send">';
                 $htmlSmall .= '</div>';
+//                $htmlSmall .= '<div class="col-xs-2 col-xs-offset-2">';
+//                $htmlSmall .= '<input type="button" class="btn  btn-default btn-xs" onclick="return resetAddForm();" value="清空内容" id="res">';
+//                $htmlSmall .= '</div>';
 
                 $showDeptCheckBox = false;
 
@@ -520,7 +528,7 @@ class PostController extends CommonController {
         $show = $Page->show();// 分页显示输出
         //文章的标题的长度超过10个则街区10个(默认是10)
         $this->setPostTitleLength($post);
-        //用户昵称超过10个则街区10个(默认是10)
+        //用户姓名超过10个则街区10个(默认是10)
         $this->setPostNameLength($post);
 
         //追加注入斑模板的不同文章状态的文章个数
@@ -570,7 +578,7 @@ class PostController extends CommonController {
             //自适应小屏幕手机时只截取3个
             $post[$i]['username_small'] = ToolModel::getSubString($post[$i]['username'],3);
 
-            //如果昵称过长则截取
+            //如果姓名过长则截取
             if(  ToolModel::getStrLen($post[$i]['username']) > $len){
 
                 $post[$i]['username'] = ToolModel::getSubString($post[$i]['username'],$len);
@@ -583,7 +591,8 @@ class PostController extends CommonController {
      */
     private function getShowPostCountWithStatus(){
 
-        if( ($this->auto != XIAOBIAN) && ($this->auto != ZONGBIAN) ){
+//        if( ($this->auto != XIAOBIAN) && ($this->auto != ZONGBIAN) ){
+        if( $this->auto != ZONGBIAN ){
             //取得保存文章个数
             $saveCount = $this->postObj->getStatusCountByFlag($this->auto,'save');
             //取得待审核文章个数

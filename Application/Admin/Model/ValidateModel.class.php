@@ -7,7 +7,7 @@ namespace Admin\Model;
 
 	class ValidateModel {
 		/**
-		 * 姓名昵称合法性检查，只能输入中文英文
+		 * 姓名合法性检查，只能输入中文英文
 		 * @param $val
 		 * @return bool
 		 */

@@ -60,7 +60,7 @@ namespace Admin\Model;
         }
 
         /**
-         * 根据传入的评分者的ID获得该昵称
+         * 根据传入的评分者的ID获得该姓名
          * @param $authorid
          * @return bool
          */

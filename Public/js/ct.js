@@ -30,7 +30,8 @@ City.prototype = {
 			selectObj.empty();//可以清空
 			//定义一个type变量用于在select中显示为第几级的标识：省市镇乡
 			var	type ="";
-			switch((parseInt(index))){
+			var thisIndex = (parseInt(index));
+			switch(thisIndex){
 				case 0:type="省";break;
 				case 1:type="市";break;
 				case 2:type="区(县)";break;
@@ -38,7 +39,9 @@ City.prototype = {
 				default:type="中华人民共和国";break;	
 			}
 			//追加显示一个提示下拉的Option
-			selectObj.append("<option value=''>请选择--"+type+"</option>");	
+			if( thisIndex != 3){	//第四级直接显示第一个  用于三级显示用 wujiayu
+				selectObj.append("<option value=''>请选择--"+type+"</option>");
+			}
 			//将二维数组中的数据循环的填充到select中
 			for(i=0;i<cityArray.length;i++){
 				if(cityArray[i]=="") continue;

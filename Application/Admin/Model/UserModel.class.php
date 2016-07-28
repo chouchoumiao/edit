@@ -5,7 +5,9 @@
  */
 namespace Admin\Model;
 
-	class UserModel {
+	use Think\Log;
+
+    class UserModel {
 
 		private $id;
 		private $username;
@@ -28,6 +30,9 @@ namespace Admin\Model;
         private $address;
         private $tel;
         private $description;
+        private $workPlace;
+
+        private $areaObj;   //area表
 
         private $dataArray; //整合后主表数据
         private $detailDataArray; //整合后明细数据
@@ -38,6 +43,8 @@ namespace Admin\Model;
         public function __construct(){
             $this->join = 'INNER JOIN ccm_user_detail_info ON ccm_user_detail_info.uid = ccm_m_user.id';
             $this->order ='ccm_m_user.regtime desc';
+
+            $this->areaObj = M('area');
         }
 
         /**
@@ -87,15 +94,15 @@ namespace Admin\Model;
                 ToolModel::goBack('传值错误');
             }
 
-            //取得该用户的昵称
+            //取得该用户的姓名
             if( I('post.oldUsername') == I('post.user_name') ){
                 $this->username = I('post.oldUsername');      //无修改则取原先的值
             }else{
-                //判断新昵称长度是否超过30位
+                //判断新姓名长度是否超过30位
                 if(!ValidateModel::length(I('post.user_name'),2,0,30)){
-                    ToolModel::goBack('警告，昵称不能超过30位');
+                    ToolModel::goBack('警告，姓名不能超过30位');
                 }
-                $this->username = I('post.user_name');      //修改了则取新的昵称
+                $this->username = I('post.user_name');      //修改了则取新的姓名
             }
 
             //取得该用户的性别
@@ -154,11 +161,18 @@ namespace Admin\Model;
                 $this->address = I('post.address');      //修改了则取新的具体地址(int型)
             }
 
-            //取得该用户的个人描述
+            //取得该用户的个人说明
             if( intval(I('post.oldDescription')) == intval(I('post.description')) ){
                 $this->description = I('post.oldDescription');      //无修改则取原先的值(int型)
             }else{
-                $this->description = I('post.description');      //修改了则取新的个人描述(int型)
+                $this->description = I('post.description');      //修改了则取新的个人说明(int型)
+            }
+
+            //取得该用户的
+            if( intval(I('post.oldDescription')) == intval(I('post.description')) ){
+                $this->description = I('post.oldDescription');      //无修改则取原先的值(int型)
+            }else{
+                $this->description = I('post.description');      //修改了则取新的个人说明(int型)
             }
 
 
@@ -249,6 +263,10 @@ namespace Admin\Model;
                 $detailData['udi_description'] = $this->description;
             }
 
+            if('' != $this->workPlace){
+                $detailData['udi_workplace'] = $this->workPlace;
+            }
+
             if('' != $this->dept){
                 $detailData['udi_dep_id'] = $this->dept;
             }
@@ -284,7 +302,7 @@ namespace Admin\Model;
         private function get3thSelName(){
 
             //根据四级内容取得四级的父级ID
-            $sel4 = M('area')->where("areaid = $this->sel4")->find();
+            $sel4 = $this->areaObj->where("areaid = $this->sel4")->find();
 
             //四级的名称
             $sel4name = $sel4['areaname'];
@@ -299,30 +317,31 @@ namespace Admin\Model;
             $sel3id = $sel4iArr[$count-1];
 
             //根据三级ID取得三级的名称
-            $sel3 = M('area')->field('areaname')->where("areaid = $sel3id")->find();
+            $sel3 = $this->areaObj->field('areaname')->where("areaid = $sel3id")->find();
             $sel3name = $sel3['areaname'];
 
             //数组的最后二个为二级的ID
             $sel2id = $sel4iArr[$count - 2];
             //根据三级ID取得二级的名称
-            $sel2 = M('area')->field('areaname')->where("areaid = $sel2id")->find();
+            $sel2 = $this->areaObj->field('areaname')->where("areaid = $sel2id")->find();
             $sel2name = $sel2['areaname'];
 
             //数组的最后二个为一级的ID
             $sel1id = $sel4iArr[$count - 3];
             //根据三级ID取得一级的名称
-            $sel1 = M('area')->field('areaname')->where("areaid = $sel1id")->find();
+            $sel1 = $this->areaObj->field('areaname')->where("areaid = $sel1id")->find();
             $sel1name = $sel1['areaname'];
 
             //返回拼接的地址
-            return $sel1name.'  (省)  '.$sel2name.'  (市)  '.$sel3name.'  (镇)  '.$sel4name.'  (乡)  ';
+//            return $sel1name.'  (省)  '.$sel2name.'  (市)  '.$sel3name.'  (镇)  '.$sel4name.'  (乡)  ';
+            return $sel1name.'  (省)  '.$sel2name.'  (市)  '.$sel3name.'  (区/县)';
         }
 
         //根据sel3数值取得前两级的值
         private function get2thSelName(){
 
             //根据四级内容取得三级的父级ID
-            $sel3 = M('area')->where("areaid = $this->sel3")->find();
+            $sel3 = $this->areaObj->where("areaid = $this->sel3")->find();
 
             //三级的名称
             $sel3name = $sel3['areaname'];
@@ -336,17 +355,17 @@ namespace Admin\Model;
             //数组的最后二个为二级的ID
             $sel2id = $sel3iArr[$count - 1];
             //根据三级ID取得二级的名称
-            $sel2 = M('area')->field('areaname')->where("areaid = $sel2id")->find();
+            $sel2 = $this->areaObj->field('areaname')->where("areaid = $sel2id")->find();
             $sel2name = $sel2['areaname'];
 
             //数组的最后二个为一级的ID
             $sel1id = $sel3iArr[$count - 2];
             //根据三级ID取得一级的名称
-            $sel1 = M('area')->field('areaname')->where("areaid = $sel1id")->find();
+            $sel1 = $this->areaObj->field('areaname')->where("areaid = $sel1id")->find();
             $sel1name = $sel1['areaname'];
 
             //返回拼接的地址
-            return $sel1name.'  (省)  '.$sel2name.'  (市)  '.$sel3name.'  (镇)  ';
+            return $sel1name.'  (省)  '.$sel2name.'  (市)  '.$sel3name.'  (区/县)  ';
 
         }
 
@@ -371,9 +390,15 @@ namespace Admin\Model;
          */
         public function checklogin(){
 
-                
-            //使用I内置函数过滤，如果
-            $where['login_name'] = I('post.user_login');
+            $emailOrName = I('post.user_login');
+
+            //判断是否是email，如果是则设置给email字段，如果不是则设置给用户名字段
+            if(ValidateModel::isEmail($emailOrName)){
+                $where['email'] = $emailOrName;
+            }else{
+                $where['login_name'] = $emailOrName;
+            }
+
             $where['password'] = md5(I('post.user_pass'));
 
             return M('m_user')->where($where)->find();
@@ -625,7 +650,7 @@ namespace Admin\Model;
 
             $this->dataArray  = array(
                 'login_name' => $this->loginName,
-                'username' => $this->username,	//注册时候默认昵称和用户名设置为一样
+                'username' => $this->username,	//注册时候默认姓名和用户名设置为一样
                 'autopass' => $this->autopass,
                 'password'=> $this->password,
                 'img'=> 'default.jpg',
@@ -674,6 +699,7 @@ namespace Admin\Model;
                 'udi_dep_id'=>$jsoID,
                 'udi_auto_id'=>BAOLIAOZHE,
                 'udi_description'=> '',
+                'udi_workplace'=> '',
                 'udi_update_time'=> time()
             );
         }
@@ -820,7 +846,7 @@ namespace Admin\Model;
         private function setNewUserData(){
 
             $this->loginName = I('post.user_login');    //登录用户名
-            $this->username = I('post.user_name');      //昵称
+            $this->username = I('post.user_name');      //姓名
             $this->email = I('post.user_email');        //邮件地址
             $this->sex = I('post.sex');                 //性别
             $this->autopass = I('post.user_pass');      //初始密码
@@ -866,7 +892,7 @@ namespace Admin\Model;
 
             $this->dataArray  = array(
                 'login_name' => $this->loginName,
-                'username' => $this->username,	//注册时候默认昵称和用户名设置为一样
+                'username' => $this->username,	//注册时候默认姓名和用户名设置为一样
                 'autopass' => $this->autopass,
                 'password'=> $this->password,
                 'img'=> $this->img,
@@ -891,6 +917,7 @@ namespace Admin\Model;
                 'udi_dep_id'=>$this->dept,
                 'udi_auto_id'=>$this->auto,
                 'udi_description'=> '',
+                'udi_workplace'=> '',
                 'udi_update_time'=> time()
             );
         }

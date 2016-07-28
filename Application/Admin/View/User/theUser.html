@@ -16,7 +16,7 @@
                         <h4 class="header-text m-top-md">个人 资料</h4>
                         <form action="__ROOT__/Admin/User/doAction/action/update" id="updateForm" class="form-horizontal m-top-md" enctype="multipart/form-data" method="post">
 
-                            <input type="hidden" value="{$theUserInfo.email}" name="oldEmail"/>
+                            <!--<input type="hidden" value="{$theUserInfo.email}" name="oldEmail"/>-->
                             <input type="hidden" value="{$theUserInfo.password}" name="oldMd5Pass"/>
                             <input type="hidden" value="{$theUserInfo.username}" name="oldUsername"/>
                             <input type="hidden" value="{$theUserInfo.img}" name="oldImg"/>
@@ -28,6 +28,7 @@
                             <input type="hidden" value="{$theUserInfo.udi_area}" name="oldArea"/>
                             <input type="hidden" value="{$theUserInfo.udi_address}" name="oldAddress"/>
                             <input type="hidden" value="{$theUserInfo.udi_dep_id}" name="olddepID"/>
+                            <input type="hidden" value="{$theUserInfo.udi_workplace}" name="oldWorkplace"/>
                             <input type="hidden" value="{$theUserInfo.udi_description}" name="oldDescription"/>
                             <input type="hidden" value="{$theUserInfo.udi_auto_id}" name="auto_id" id="auto_id"/>
 
@@ -39,9 +40,15 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">昵称</label>
+                                <label class="col-sm-3 control-label">姓名</label>
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control" value="{$theUserInfo.username}" name="user_name" id="user_name">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">邮箱</label>
+                                <div class="col-sm-9">
+                                    <input type="text" readonly class="form-control" value="{$theUserInfo.email}" name="oldEmail" id="oldEmail">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -114,7 +121,8 @@
                                     <select id="sel1" name = "sel1" onChange="getCity(this)" class="form-control col-sm-2" style="margin-right: 10px"></select>
                                     <select id="sel2" name = "sel2" onChange="getCity(this)" class="form-control col-sm-2" style="margin-right: 10px"></select>
                                     <select id="sel3" name = "sel3" onChange="getCity(this)" class="form-control col-sm-2" style="margin-right: 10px"></select>
-                                    <select id="sel4" name = "sel4" class="form-control col-sm-2"></select>
+                                    <select id="sel4" name = "sel4" class="form-control col-sm-2 hidden"></select>
+
                                 </div>
                             </div>
                             <if condition = "$admin eq 1" >
@@ -157,9 +165,15 @@
                                 </div>
                             </if>
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">具体地址(选填)</label>
+                                <label class="col-sm-3 control-label">详细地址(选填)</label>
                                 <div class="col-sm-9">
-                                    <textarea rows="4" class="form-control" id="address" name="address">{$theUserInfo.udi_address}</textarea>
+                                    <textarea rows="2" class="form-control" id="address" name="address">{$theUserInfo.udi_address}</textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">工作单位(选填)</label>
+                                <div class="col-sm-9">
+                                    <textarea rows="2" class="form-control" id="workPlace" name="workPlace">{$theUserInfo.udi_workplace}</textarea>
                                 </div>
                             </div>
 
@@ -171,7 +185,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">个人描述</label>
+                                <label class="col-sm-3 control-label">个人说明(选填)</label>
                                 <div class="col-sm-9">
                                     <textarea rows="4" id="description" name="description" class="form-control">{$theUserInfo.udi_description}</textarea>
                                 </div>

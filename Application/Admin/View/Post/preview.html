@@ -24,10 +24,10 @@
         <div class="container clearfix">
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href=" " onclick="history.back();"><strong>返回</strong></a></li>
-                    <foreach name="post.post_dept" item="vo">
-                        <li><a href="#">{$vo}</a></li>
-                    </foreach>
+                    <!--<li><a href=" " onclick="history.back();"><strong>返回</strong></a></li>-->
+                    <!--<foreach name="post.post_dept" item="vo">-->
+                        <!--<li><a href="#">{$vo}</a></li>-->
+                    <!--</foreach>-->
                 </ul>
             </div>
         </div>
@@ -41,15 +41,16 @@
                     <div class="hidden-xs">
                         <h1><a href="#">{$post.post_title}</a></h1>
                         <p class="post-big-info">
-                            <span class="label label-zan"><i class="fa fa-calendar"></i> {$post.post_modified}</span>
-                            <span class="label label-zan"><i class="fa fa-tags"></i>
+                            <span class="label label-zan">时间：{$post.post_modified}</span>
+                            <span class="label label-zan">作者：
+                                <a>{$post.username}</a>
+                            </span>
+                            <span class="label label-zan">投递平台：
                                 <foreach name="post.post_dept" item="vo">
                                     <a>{$vo}</a> &nbsp;
                                 </foreach>
                             </span>
-                            <span class="label label-zan"><i class="fa fa-user"></i>
-                                <a>{$post.username}</a>
-                            </span>
+
                         </p>
                     </div>
                     <!-- 大型设备文章显示结束 -->
@@ -60,13 +61,13 @@
                         </div>
                         <p class="post-info">
                             <span><i class="fa fa-calendar"></i> {$post.post_modified}</span>
+                            <span><i class="fa fa-user"></i>
+                                <a>{$post.username}</a>
+                            </span>
                             <span><i class="fa fa-tags"></i>
                                 <foreach name="post.post_dept" item="vo">
                                     <a>{$vo}</a> &nbsp;
                                 </foreach>
-                            </span>
-                            <span><i class="fa fa-user"></i>
-                                <a>{$post.username}</a>
                             </span>
                         </p>
                     </div>
@@ -131,36 +132,8 @@
         <i class="fa fa-chevron-up"></i>
     </div>
 </div>
-<!--<script type='text/javascript' src='http://localhost/NewWordpress/wp-content/themes/Zamblog/ui/js/bootstrap.min.js?ver=3.1.1'></script>-->
-<!--<script type='text/javascript' src='http://localhost/NewWordpress/wp-content/themes/Zamblog/ui/flexslider/jquery.flexslider.js?ver=3.0.0'></script>-->
-<!--<script type='text/javascript' src='http://localhost/NewWordpress/wp-content/themes/Zamblog/ui/js/jquery.validate.js?ver=3.0.0'></script>-->
-<!--<script type='text/javascript' src='http://localhost/NewWordpress/wp-content/themes/Zamblog/ui/audiojs/audio.min.js?ver=3.0.0'></script>-->
-<!--<script type='text/javascript' src='http://localhost/NewWordpress/wp-content/themes/Zamblog/ui/js/shine.min.js?ver=3.0.0'></script>-->
 <script type='text/javascript' src='http://localhost/NewWordpress/wp-content/themes/Zamblog/ui/js/zan.js?ver=3.0.0'></script>
-<!--<script type='text/javascript' src='http://localhost/NewWordpress/wp-content/themes/Zamblog/ui/js/custom.js?ver=3.0.0'></script>-->
-<!--<script type='text/javascript' src='http://localhost/NewWordpress/wp-includes/js/wp-embed.min.js?ver=4.5'></script>-->
 
-<!-- Jquery -->
-<script src="__PUBLIC__/js/Admin/jquery-1.11.1.min.js"></script>
-
-<!-- Bootstrap -->
-<script src="__PUBLIC__/js/Admin/bootstrap.min.js"></script>
-
-<!-- Slimscroll -->
-<script src='__PUBLIC__/js/Admin/jquery.slimscroll.min.js'></script>
-
-<!-- Modernizr -->
-<script src='__PUBLIC__/js/Admin/modernizr.min.js'></script>
-
-<!-- Simplify -->
-<script src="__PUBLIC__/js/Admin/simplify/simplify.js"></script>
-
-<script src="__PUBLIC__/js/common.js?v=20160101"></script>
-<script src="__PUBLIC__/js/Admin/post.js?v=20160106"></script>
-
-
-<script src="__PUBLIC__/js/Admin/summernote.min.js"></script>
-<script src="__PUBLIC__/js/Admin/summernote-zh-CN.js"></script>
 
 <script type='text/javascript'>
     backTop = function ( btnId ) {

@@ -308,7 +308,7 @@ class UserController extends CommonController {
         $show = $Page->show();// 分页显示输出
 
         for ($i=0;$i<count($user);$i++){
-            //如果昵称过长则截取
+            //如果姓名过长则截取
             if(  ToolModel::getStrLen($user[$i]['username']) > 20){
                 $user[$i]['username'] = ToolModel::getSubString($user[$i]['username'],20);
             }

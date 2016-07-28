@@ -42,12 +42,23 @@ $(function(){
         callbacks : {
             //初始化
             onInit: function() {
+
                 var content = $('#content').val();
                 if(content != ''){
                     $('#summernote').summernote('code', content);
                 }else {
                     $('#summernote').summernote('code', '');
                 }
+
+                //console.log($('#postid').length);
+                if($('#postid').length == 1){
+                    console.log('1');
+                    $('#summernote').summernote('foreColor', 'red');
+                }else {
+                    console.log('0');
+                    $('#summernote').summernote('foreColor', 'black');
+                }
+
             },
 
             //删除图片时候同时删除已经上传的图片

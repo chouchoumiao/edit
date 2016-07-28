@@ -61,6 +61,7 @@
                             <th><h5>文章标题</h5></th>
                             <th><h5>{$authorName}</h5></th>
                             <th><h5>所属部门</h5></th>
+                            <th><h5>得分</h5></th>
                             <th><h5>发布日期</h5></th>
                             <th><h5>最新时间</h5></th>
                             <th><h5>状态</h5></th>
@@ -88,6 +89,7 @@
                                             </foreach>
                                         </if>
                                     </td>
+                                    <td>{$vo.score|default=0}</td>
                                     <td>{$vo.post_date}</td>
                                     <td>{$vo.post_modified}</td>
                                     <td>{$vo.post_status}</td>
@@ -137,7 +139,7 @@
                                 </tr>
                             </foreach>
                         <else />
-                            <tr><td colspan=7>没有数据</td></tr>
+                            <tr><td colspan=8>没有数据</td></tr>
                         </if>
                         </tbody>
                     </table>

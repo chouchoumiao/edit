@@ -7,9 +7,19 @@ namespace Admin\Model;
 header("Content-Type:text/html; charset=utf-8");
 	class CityModel {
 
+        private $obj;
         private $parentid;
         private $arrchildid;
         private $idarrs;
+        private $field;
+
+        public function __construct(){
+            $this->obj = M('area');
+            $this->field = array(
+                'arrchildid',
+                'areaname'
+            );
+        }
 
         public function get4thCity(){
 
@@ -23,7 +33,6 @@ header("Content-Type:text/html; charset=utf-8");
                 for($i=0;$i<count($result);$i++){
                     $str.=$result[$i]['arrchildid']."|".$result[$i]['areaname']."-";
                 }
-
 
                 return $str;
             }
@@ -48,14 +57,13 @@ header("Content-Type:text/html; charset=utf-8");
         private function getCityByParentid(){
 
             $where['parentid'] = $this->parentid;
-
-            return M('area')->where($where)->order('areaid asc')->select();
+            return $this->obj->field($this->field)->where($where)->order('areaid asc')->select();
         }
 
         private function getCityByArrchildid(){
             $where['parentid'] = $this->idarrs[0];
             $where['areaid'] = array('in',$this->arrchildid);
-            return M('area')->where($where)->order('areaid')->select();
+            return $this->obj->field($this->field)->where($where)->order('areaid')->select();
         }
 
     }
