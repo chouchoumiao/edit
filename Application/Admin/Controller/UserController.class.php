@@ -308,6 +308,13 @@ class UserController extends CommonController {
         $show = $Page->show();// 分页显示输出
 
         for ($i=0;$i<count($user);$i++){
+
+            //将只有一个部门的爆料者名称修改为编辑
+            $deptArr = explode('，',$user[$i]['udi_dep_id']);
+            if ( ($user[$i]['udi_auto_id'] == '爆料者') && (count($deptArr) == 1) ){
+                $user[$i]['udi_auto_id'] = '编辑';
+            }
+
             //如果姓名过长则截取
             if(  ToolModel::getStrLen($user[$i]['username']) > 20){
                 $user[$i]['username'] = ToolModel::getSubString($user[$i]['username'],20);
@@ -317,7 +324,7 @@ class UserController extends CommonController {
                 $user[$i]['email'] = ToolModel::getSubString($user[$i]['email'],30);
             }
         }
-
+        
         $this->assign('allUser',$user); //用户信息注入模板
         $this->assign('page',$show);    //赋值分页输出
 

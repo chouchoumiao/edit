@@ -5,7 +5,9 @@
  */
 namespace Admin\Model;
 
-	class ToolModel {
+	use Think\Log;
+
+    class ToolModel {
 
         /**
          * 解决中文多字符问题，改方式将中文认为一个字符
@@ -48,7 +50,9 @@ namespace Admin\Model;
          * @param $msg
          */
 		static function goBack($msg){
-            echo "<script>alert('$msg');history.go(-1)</script>";
+
+            echo "<script>alert('$msg');history.back();</script>";
+
             exit;
         }
 
@@ -262,7 +266,12 @@ namespace Admin\Model;
                 }
                 $html .= '<label for="auto'.$obj[$i]['id'].'"></label>';
                 $html .= '</div>';
-                $html .= '<div class="inline-block vertical-top">'.$obj[$i]['name'];
+                if( 1 == $obj[$i]['id']){
+
+                    $html .= '<div class="inline-block vertical-top">编辑';
+                }else{
+                    $html .= '<div class="inline-block vertical-top">'.$obj[$i]['name'];
+                }
 
                 $html .= '</div> &nbsp &nbsp';
                 $html .= '</div>';
@@ -281,7 +290,7 @@ namespace Admin\Model;
             $obj = D('Auto')->getAllAuto();
             $html = '';
             //(count($obj) - 1) 超级管理员不予显示
-            for($i=0;$i<(count($obj) - 1);$i++){
+            for($i=0;$i<(count($obj) - 2);$i++){
 
                 $html .= '<div class="radio inline-block">';
                 $html .= '<div class="custom-radio m-right-xs">';
@@ -293,7 +302,15 @@ namespace Admin\Model;
                 }
                 $html .= '<label for="auto'.$obj[$i]['id'].'"></label>';
                 $html .= '</div>';
-                $html .= '<div class="inline-block vertical-top">'.$obj[$i]['name'];
+
+                if( 1 == $obj[$i]['id']){
+
+                    $html .= '<div class="inline-block vertical-top">爆料者/编辑(一个部门为编辑)';
+                }else{
+                    $html .= '<div class="inline-block vertical-top">'.$obj[$i]['name'];
+                }
+
+//                $html .= '<div class="inline-block vertical-top">'.$obj[$i]['name'];
 
                 $html .= '</div> &nbsp &nbsp';
                 $html .= '</div>';

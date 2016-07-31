@@ -1,5 +1,7 @@
 $(function(){
 
+
+
     //点击评分时候获得评分的个数
     $(".scoreBtn").on('click',function (e) {
 
@@ -35,30 +37,42 @@ $(function(){
      */
     $( '#summernote' ).summernote({
         minHeight: 400,
-        focus:false,
+        focus:true,
         lang:'zh-CN',
+        toolbar: [
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['fontname', ['fontname']],
+            ['color', ['color']],
+            ['fontsize', ['fontsize']],
+            ['para', ['ul', 'paragraph']],
+            ['table', ['table']],
+            ['insert', ['link', 'picture']]
+        ],
 
         //回调函数
         callbacks : {
             //初始化
             onInit: function() {
 
-                var content = $('#content').val();
-                if(content != ''){
-                    $('#summernote').summernote('code', content);
+                // var content = $('#content').val();
+                var content = $('#content');
+
+                if( (content.length > 0) && (content.val() != '') ){
+
+                    $('#summernote').summernote('code', content.val());
+
                 }else {
                     $('#summernote').summernote('code', '');
+                    // $('#summernote').summernote('foreColor', 'black');
                 }
+                // $('#summernote').summernote('backColor', 'red');
+            },
 
-                //console.log($('#postid').length);
-                if($('#postid').length == 1){
-                    console.log('1');
+            onChange: function() {
+
+                if($('#theAuto').length > 0 && $('#theAuto').val() == XIAOBIAN ){
                     $('#summernote').summernote('foreColor', 'red');
-                }else {
-                    console.log('0');
-                    $('#summernote').summernote('foreColor', 'black');
                 }
-
             },
 
             //删除图片时候同时删除已经上传的图片
@@ -120,6 +134,8 @@ $(function(){
         }
 
     });
+
+
 
 });
 
@@ -340,22 +356,30 @@ function UpdateFormSubmit(flag) {
  * 文章防止多人编辑，当刷新页面或者离开页面的时候触发，清除cache
  */
 window.addEventListener("beforeunload", function(event) {
+
+
     //当前页面是编辑文章页面，不在编辑页面才会触发清空cache
     if($('#thePostForLock').length == 1){
+
+        //console.log($("#postid").val());
+
+        // $.post(ROOT+"/Admin/Post/doAction/action/unlockPost");
+
         $.ajax({
             url:ROOT+"/Admin/Post/doAction/action/unlockPost"//改为你的动态页
             ,type:"POST"
             ,data:{
                 'postid':$("#postid").val()
             }
-            ,dataType: "json"
+            ,async: false
+            // ,dataType: "json"
             ,success:function(json){
                 if(json.success == 1){
                     console.log(json.msg);
                 }
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
-
+                console.log('失败');
             },
         });
     }

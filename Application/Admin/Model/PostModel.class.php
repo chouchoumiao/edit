@@ -136,17 +136,19 @@ namespace Admin\Model;
                             }
                             break;
                         case XIAOBIAN:
+                            $theID = $_SESSION['uid'];
                             //$post_status = POST_SAVE;
                             if($status == 'all'){
                                 $join = "INNER JOIN ccm_m_user 
                                             ON ccm_posts.post_author = ccm_m_user.id 
                                             AND ccm_posts.post_child = 0 
+                                            AND ccm_posts.post_author = '$theID'
                                             AND ccm_posts.post_dept LIKE '%$dept%'" ;
 
                             }else{
 
                                 if($status == POST_SAVE){
-                                    $theID = $_SESSION['uid'];
+
                                     $join = "INNER JOIN ccm_m_user 
                                             ON ccm_posts.post_author = ccm_m_user.id 
                                             AND ccm_posts.post_child = 0 
@@ -330,15 +332,17 @@ namespace Admin\Model;
                             break;
                         case XIAOBIAN:
                             //$post_status = POST_SAVE;
+                            $theID = $_SESSION['uid'];
                             if($status == 'all'){
                                 $join = "INNER JOIN ccm_m_user 
                                             ON ccm_m_user.id = ccm_posts.post_author 
                                              AND ccm_posts.post_child = 0 
+                                             AND ccm_posts.post_author = '$theID'
                                             AND ccm_posts.post_dept LIKE '%$dept%'";
                             }else{
 
                                 if($status == POST_SAVE){
-                                    $theID = $_SESSION['uid'];
+
                                     $join = "INNER JOIN ccm_m_user 
                                             ON ccm_m_user.id = ccm_posts.post_author 
                                             AND ccm_posts.post_child = 0 
@@ -450,15 +454,17 @@ namespace Admin\Model;
                     break;
                 case XIAOBIAN:
                     //$post_status = POST_SAVE;
+                    $theID = $_SESSION['uid'];
                     if($status == 'all'){
                         $join = "INNER JOIN ccm_m_user 
                                     ON ccm_posts.post_author = ccm_m_user.id 
                                     AND ccm_posts.post_child = 0 
+                                    AND ccm_posts.post_author = '$theID'
                                     AND ccm_posts.post_dept LIKE '%$dept%'" ;
 
                     }else{
                         if($status == POST_SAVE){
-                            $theID = $_SESSION['uid'];
+
                             $join = "INNER JOIN ccm_m_user 
                                     ON ccm_posts.post_author = ccm_m_user.id 
                                     AND ccm_posts.post_child = 0 

@@ -2,6 +2,7 @@
 namespace Admin\Controller;
 use Admin\Model\ToolModel;
 use Think\Controller;
+use Think\Log;
 
 header("Content-type: text/html;charset=utf-8");
 
@@ -34,7 +35,6 @@ class PostController extends CommonController {
                     break;
 
                 case 'unlockPost':
-
                     $this->unlockPost();
                     break;
 
@@ -85,13 +85,11 @@ class PostController extends CommonController {
         if(S('lockPostId'.intval(I('post.postid')))){
             S('lockPostId'.intval(I('post.postid')),null);
             S('lockUser'.intval(I('post.postid')),null);
-            $arr['msg'] = 'clear cache';
+            Log::write('fuction:unlockPost() && clearcache && POSTID: '.I('post.postid'),'LOCKIMG');
         }else{
-            $arr['msg'] = 'No cache';
+            Log::write('fuction:unlockPost() && No cache && POSTID: '.I('post.postid'),'LOCKIMG');
         }
-        $arr['success'] = 1;
 
-        echo json_encode($arr);
 
     }
 
@@ -146,6 +144,7 @@ class PostController extends CommonController {
         if(S('lockPostId'.intval(I('post.postid')))){
             S('lockPostId'.intval(I('post.postid')),null);
             S('lockUser'.intval(I('post.postid')),null);
+            Log::write('fuction:update() && clearcache && POSTID: '.I('post.postid'),'LOCKIMG');
         }
         echo json_encode($arr);
         exit;
@@ -304,6 +303,10 @@ class PostController extends CommonController {
         //判断cache中是否存在该文章的缓存,有则表示该文章处理正在编辑中
         if( S('lockPostId'.intval(I('get.id'))) == intval(I('get.id')) ){
             if(S('lockUser'.intval(I('get.id'))) != $_SESSION['username']){
+                Log::write('fuction:the() && hasCache Can not edit && 
+                            lockUser:'.S('lockUser'.intval(I('get.id'))).' && 
+                            ThisAuto:'.$_SESSION['username'].' && 
+                            POSTID: '.I('get.id'),'LOCKIMG');
                 ToolModel::goBack("本文文章由【".S('lockUser'.intval(I('get.id')))."】正在编辑中,请过会再编辑");
                 exit;
             }
@@ -312,6 +315,7 @@ class PostController extends CommonController {
         $data = $this->postObj->getThePost(I('get.id'));
 
         if($data){
+            //$lockID = I('get.id');
             //如果是小编的情况下点击了审核,需要新增同样的文章
             if( intval($this->auto) == XIAOBIAN ){
 
@@ -334,16 +338,15 @@ class PostController extends CommonController {
                             }
 
                         }
-                    }
-                    $data = $this->postObj->getThePost( $newID );
-
-                    if(!$data){
-                        ToolModel::goBack('取得文章失败');
+                        $data = $this->postObj->getThePost( $newID );
+                        if(!$data){
+                            ToolModel::goBack('取得文章失败');
+                        }
                     }
                 }
 
             }
-
+            $lockID = $data['id'];
             $this->assign('postid',$data['id']);
             $this->assign('content',$data['post_content']);
             $this->assign('title',$data['post_title']);
@@ -468,10 +471,16 @@ class PostController extends CommonController {
         $this->assign('showDeptCheckBox',$showDeptCheckBox);    //如果是小编或者总编部门固定,所以不显示部门可选
         $this->assign('btn',$html);
         $this->assign('the',true);
+        $this->assign('theAuto',$this->auto);
 
+        //echo $lockID;exit;
         //设置缓存，时间为100分钟
-        S('lockPostId'.intval(I('get.id')),intval(I('get.id')),6000);
-        S('lockUser'.intval(I('get.id')),$_SESSION['username'],6000);
+        if(!S('lockPostId'.intval($lockID))){
+
+            S('lockPostId'.intval($lockID),intval($lockID),6000);
+            S('lockUser'.intval($lockID),$_SESSION['username'],6000);
+            Log::write('fuction:the() && Add Cache && POSTID: '.$lockID,'LOCKIMG');
+        }
 
         $this->display('post');
     }

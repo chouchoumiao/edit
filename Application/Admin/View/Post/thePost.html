@@ -7,6 +7,9 @@
                     <div class="tab-pane fade in active">
                         <h4 class="header-text m-top-md">修 改 文 章</h4>
                         <form action="__ROOT__/Admin/Post/doAction/action/update" class="form-horizontal m-top-md" enctype="multipart/form-data" method="post">
+
+                            <input type="hidden" value={$theAuto} id="theAuto">
+
                             <input type="hidden" value={$postid} id="postid">
                             <input style="display: none" name="oldTitle" value={$title} />
                             <textarea style="display: none" id="content" >{$content}</textarea>
