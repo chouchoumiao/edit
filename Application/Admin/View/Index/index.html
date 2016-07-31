@@ -32,182 +32,206 @@
                 <!--加入通知模态框-->
                 <include file='./noticeModel'/>
 
-
-                <div class="padding-md">
-					<div class="row m-top-md">
-						<a href="__ROOT__/Admin/Post/doAction/action/all">
-							<div class="col-lg-3 col-sm-6">
-								<div class="statistic-box bg-primary m-bottom-md">
-									<div class="statistic-title">
-										当前共有
-									</div>
-									<div class="statistic-value">
-										{$allCount}
-									</div>
-									<div class="m-top-md">篇文章</div>
-									<div class="statistic-icon-background">
-										<i class="ion-document-text"></i>
-									</div>
-								</div>
-							</div>
-						</a>
-						<a href="__ROOT__/Admin/Post/doAction/action/all/status/pended">
-							<div class="col-lg-3 col-sm-6">
-								<div class="statistic-box bg-info m-bottom-md">
-									<div class="statistic-title">
-										当前有
-									</div>
-
-									<div class="statistic-value">
-										{$pendedCount}
-									</div>
-
-									<div class="m-top-md">篇文章已通过审核</div>
-
-									<div class="statistic-icon-background">
-										<i class="ion-document-text"></i>
-									</div>
-								</div>
-							</div>
-						</a>
-						<a href="__ROOT__/Admin/Post/doAction/action/all/status/dismiss">
-							<div class="col-lg-3 col-sm-6">
-								<div class="statistic-box bg-danger m-bottom-md">
-									<div class="statistic-title">
-										当前有
-									</div>
-
-									<div class="statistic-value">
-										{$dismissCount}
-									</div>
-
-									<div class="m-top-md">篇文章未通过审核</div>
-
-									<div class="statistic-icon-background">
-										<i class="ion-document-text"></i>
-									</div>
-								</div>
-							</div>
-						</a>
-						<a href="__ROOT__/Admin/Post/doAction/action/all/status/pending">
-							<div class="col-lg-3 col-sm-6">
-								<div class="statistic-box bg-light-green m-bottom-md">
-									<div class="statistic-title">
-										当前有
-									</div>
-
-									<div class="statistic-value">
-										{$peningCount}
-									</div>
-
-									<div class="m-top-md">篇文章待审</div>
-
-									<div class="statistic-icon-background">
-										<i class="ion-document-text"></i>
-									</div>
-								</div>
-							</div>
-						</a>
-						<a href="__ROOT__/Admin/Post/doAction/action/all/status/pending2">
-							<div class="col-lg-3 col-sm-6">
-								<div class="statistic-box bg-success m-bottom-md">
-									<div class="statistic-title">
-										当前有
-									</div>
-
-									<div class="statistic-value">
-										{$pening2Count}
-									</div>
-
-									<div class="m-top-md">篇文章待最终审核</div>
-
-									<div class="statistic-icon-background">
-										<i class="ion-document-text"></i>
-									</div>
-								</div>
-							</div>
-						</a>
-						<a href="__ROOT__/Admin/Media/doAction/action/all">
-							<div class="col-lg-3 col-sm-6">
-								<div class="statistic-box bg-purple m-bottom-md">
-									<div class="statistic-title">
-										当前共有
-									</div>
-
-									<div class="statistic-value">
-										{$mediaCount}
-									</div>
-
-									<div class="m-top-md">个资源文件</div>
-
-									<div class="statistic-icon-background">
-										<i class="ion-upload"></i>
-									</div>
-								</div>
-							</div>
-						</a>
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="statistic-box bg-info m-bottom-md">
-                                <div class="statistic-title">
-                                    当前有
+                <empty name="noIndex">
+                    <div class="padding-md">
+                        <div class="row m-top-md">
+                            <a href="__ROOT__/Admin/Post/doAction/action/all">
+                                <div class="col-lg-3 col-sm-6">
+                                    <div class="statistic-box bg-primary m-bottom-md">
+                                        <div class="statistic-title">
+                                            当前共有
+                                        </div>
+                                        <div class="statistic-value">
+                                            {$allCount}
+                                        </div>
+                                        <div class="m-top-md">篇文章</div>
+                                        <div class="statistic-icon-background">
+                                            <i class="ion-document-text"></i>
+                                        </div>
+                                    </div>
                                 </div>
+                            </a>
+                            <a href="__ROOT__/Admin/Post/doAction/action/all/status/pended">
+                                <div class="col-lg-3 col-sm-6">
+                                    <div class="statistic-box bg-info m-bottom-md">
+                                        <div class="statistic-title">
+                                            当前有
+                                        </div>
 
-                                <div class="statistic-value">
-                                    {$_SESSION['activeNoticeCount']}
+                                        <div class="statistic-value">
+                                            {$pendedCount}
+                                        </div>
+
+                                        <div class="m-top-md">篇文章已通过审核</div>
+
+                                        <div class="statistic-icon-background">
+                                            <i class="ion-document-text"></i>
+                                        </div>
+                                    </div>
                                 </div>
+                            </a>
+                            <a href="__ROOT__/Admin/Post/doAction/action/all/status/dismiss">
+                                <div class="col-lg-3 col-sm-6">
+                                    <div class="statistic-box bg-danger m-bottom-md">
+                                        <div class="statistic-title">
+                                            当前有
+                                        </div>
 
-                                <div class="m-top-md">新通知信息</div>
+                                        <div class="statistic-value">
+                                            {$dismissCount}
+                                        </div>
 
-                                <div class="statistic-icon-background">
-                                    <i class="ion-chatbox-working"></i>
+                                        <div class="m-top-md">篇文章未通过审核</div>
+
+                                        <div class="statistic-icon-background">
+                                            <i class="ion-document-text"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="__ROOT__/Admin/Post/doAction/action/all/status/pending">
+                                <div class="col-lg-3 col-sm-6">
+                                    <div class="statistic-box bg-light-green m-bottom-md">
+                                        <div class="statistic-title">
+                                            当前有
+                                        </div>
+
+                                        <div class="statistic-value">
+                                            {$peningCount}
+                                        </div>
+
+                                        <div class="m-top-md">篇文章待审</div>
+
+                                        <div class="statistic-icon-background">
+                                            <i class="ion-document-text"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="__ROOT__/Admin/Post/doAction/action/all/status/pending2">
+                                <div class="col-lg-3 col-sm-6">
+                                    <div class="statistic-box bg-success m-bottom-md">
+                                        <div class="statistic-title">
+                                            当前有
+                                        </div>
+
+                                        <div class="statistic-value">
+                                            {$pening2Count}
+                                        </div>
+
+                                        <div class="m-top-md">篇文章待最终审核</div>
+
+                                        <div class="statistic-icon-background">
+                                            <i class="ion-document-text"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="__ROOT__/Admin/Media/doAction/action/all">
+                                <div class="col-lg-3 col-sm-6">
+                                    <div class="statistic-box bg-purple m-bottom-md">
+                                        <div class="statistic-title">
+                                            当前共有
+                                        </div>
+
+                                        <div class="statistic-value">
+                                            {$mediaCount}
+                                        </div>
+
+                                        <div class="m-top-md">个资源文件</div>
+
+                                        <div class="statistic-icon-background">
+                                            <i class="ion-upload"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                            <div class="col-lg-3 col-sm-6">
+                                <div class="statistic-box bg-info m-bottom-md">
+                                    <div class="statistic-title">
+                                        当前有
+                                    </div>
+
+                                    <div class="statistic-value">
+                                        {$_SESSION['activeNoticeCount']}
+                                    </div>
+
+                                    <div class="m-top-md">新通知信息</div>
+
+                                    <div class="statistic-icon-background">
+                                        <i class="ion-chatbox-working"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <notempty name="scoreCount">
+                                <a href="__ROOT__/Admin/Score/doAction/action/all/">
+                                    <div class="col-lg-3 col-sm-6">
+                                        <div class="statistic-box bg-warning m-bottom-md">
+                                            <div class="statistic-title">
+                                                当前累计
+                                            </div>
+
+                                            <div class="statistic-value">
+                                                {$scoreCount}
+                                            </div>
+
+                                            <div class="m-top-md">个评分</div>
+
+                                            <div class="statistic-icon-background">
+                                                <i class="ion-star"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </notempty>
+
+                            <a href="__ROOT__/Admin/User/doAction/action/the">
+                                <div class="col-lg-3 col-sm-6">
+                                    <div class="statistic-box bg-success m-bottom-md">
+                                        <div class="statistic-title">
+                                            &nbsp
+                                        </div>
+
+                                        <div class="statistic-value">
+                                            个人资料
+                                        </div>
+                                        <br />
+                                        <div class="m-top-md"></div>
+
+                                        <div class="statistic-icon-background">
+                                            <i class="ion-gear-b"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div><!-- ./padding-md -->
+                <else/>
+                    <div class="padding-md">
+                        <div class="row m-top-md">
+                            <div class="col-lg-10 col-lg-offset-1 col-sm-10 col-sm-offset-1">
+                                <div class="statistic-box bg-success m-bottom-md">
+                                    <div class="statistic-title">
+                                        &nbsp
+                                    </div>
+
+                                    <div class="statistic-value">
+                                        请完善您的个人信息,并等待管理员审核
+                                    </div>
+                                    <br />
+                                    <div class="m-top-md"></div>
+
+                                    <div class="statistic-icon-background">
+                                        <i class="ion-gear-b"></i>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-
-						<notempty name="scoreCount">
-							<a href="__ROOT__/Admin/Score/doAction/action/all/">
-								<div class="col-lg-3 col-sm-6">
-									<div class="statistic-box bg-warning m-bottom-md">
-										<div class="statistic-title">
-											当前累计
-										</div>
-
-										<div class="statistic-value">
-											{$scoreCount}
-										</div>
-
-										<div class="m-top-md">个评分</div>
-
-										<div class="statistic-icon-background">
-											<i class="ion-star"></i>
-										</div>
-									</div>
-								</div>
-							</a>
-						</notempty>
-
-						<a href="__ROOT__/Admin/User/doAction/action/the">
-							<div class="col-lg-3 col-sm-6">
-								<div class="statistic-box bg-success m-bottom-md">
-									<div class="statistic-title">
-										&nbsp
-									</div>
-
-									<div class="statistic-value">
-										个人资料
-									</div>
-									<br />
-									<div class="m-top-md"></div>
-
-									<div class="statistic-icon-background">
-										<i class="ion-gear-b"></i>
-									</div>
-								</div>
-							</div>
-						</a>
-					</div>
-				</div><!-- ./padding-md -->
+                    </div>
+                </empty>
 			</div><!-- /main-container -->
+
 			<!-- 导入footer -->
             <include file = './footer'/>
 

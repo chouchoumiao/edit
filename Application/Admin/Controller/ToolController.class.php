@@ -58,6 +58,8 @@ class ToolController extends Controller{
                     $this->assign('postControl',true);
                     $this->assign('mediaControl',true);
                     $this->assign('baoliaozheScoreControl',true);
+                }else{
+                    $this->assign('noIndex',true);
                 }
 
                 break;
