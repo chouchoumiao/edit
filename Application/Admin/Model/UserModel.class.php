@@ -168,11 +168,11 @@ namespace Admin\Model;
                 $this->description = I('post.description');      //修改了则取新的个人说明(int型)
             }
 
-            //取得该用户的
-            if( intval(I('post.oldDescription')) == intval(I('post.description')) ){
-                $this->description = I('post.oldDescription');      //无修改则取原先的值(int型)
+            //取得该用户的工作单位
+            if( intval(I('post.oldWorkplace')) == intval(I('post.workPlace')) ){
+                $this->workPlace = I('post.oldWorkplace');      //无修改则取原先的值(int型)
             }else{
-                $this->description = I('post.description');      //修改了则取新的个人说明(int型)
+                $this->workPlace = I('post.workPlace');      //修改了则取新的个人说明(int型)
             }
 
 
@@ -210,7 +210,7 @@ namespace Admin\Model;
             $this->auto = I('post.auto');
 
 
-            $this->description = I('post.description');
+            //$this->description = I('post.description');
 
             if((isset($_SESSION['editImg'])) && ( '' != $_SESSION['editImg'])){
                 $this->img = $_SESSION['editImg'];
