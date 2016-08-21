@@ -27,6 +27,50 @@ namespace Admin\Model;
             }
         }
 
+        /**
+         * 根据传入的文章ID取得对应的附件
+         * @param $postID
+         * @return bool
+         */
+        public function getAttachmentData($postID){
+
+            $where['post_id'] = $postID;
+
+            $data = M('post_attachment')->where($where)->find();
+            if(!$data){
+                return false;
+            }
+            return $data;
+
+        }
+
+        /**
+         * 根据传入的postid来删除对应的单独上传的附件
+         * @param $postID 文章ID
+         * @return bool
+         */
+        public function delAttachmentData($postID){
+            $where['post_id'] = $postID;
+
+            if( false === M('post_attachment')->where($where)->delete()){
+                return false;
+            }
+            return true;
+
+        }
+
+        /**
+         * 数据库中追加的单独上传附件
+         * @param $data
+         * @return bool
+         */
+        public function insertAttachment($data){
+            $ret = M('post_attachment')->add($data);
+            if( false === $ret){
+                return false;
+            }
+            return $ret;
+        }
 
         /**
          * 根据传入的flag来判断是执行查询(部门或者用户),还是单纯的查询,显示相应的文章个数
@@ -988,9 +1032,29 @@ namespace Admin\Model;
                 'post_parent'  => 0
             );
 
-            if( false === $this->object->add($dataArr)){
+            $newId = $this->object->add($dataArr);
+
+            if(false === $newId ){
                 return false;
             }else{
+
+                //判断是否存在单独附件上传,有则存入数据库
+                $attachment = htmlspecialchars_decode(I('attachment'));
+                $saveName = htmlspecialchars_decode(I('saveName'));
+                $fileName = htmlspecialchars_decode(I('fileName'));
+                if('' != $attachment){
+
+                    $data['post_id'] = $newId;
+                    $data['post_attachment'] = $attachment;
+                    $data['post_save_name'] = $saveName;
+                    $data['post_file_name'] = $fileName;
+                    $data['time'] = $now;
+
+                    if( false == $this->insertAttachment($data)){
+                        return false;
+                    }
+                }
+
                 return true;
             }
         }

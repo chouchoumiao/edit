@@ -308,7 +308,8 @@ class MediaController extends CommonController {
             }
         }else{
             $arr['success'] = 0;
-            $arr['msg'] = $retArr['msg'];
+            $arr['msg'] = '上传失败! (原因: '.$retArr['msg'].')';
+//            $arr['msg'] = $retArr['msg'];
         }
 
         echo json_encode($arr);

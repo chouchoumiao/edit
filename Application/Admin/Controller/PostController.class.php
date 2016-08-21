@@ -60,6 +60,10 @@ class PostController extends CommonController {
                     $this->upload();
                     break;
 
+                case 'uploadAttachment':
+                    $this->uploadAttachment();
+                    break;
+
                 //提交表单后新增文章
                 case 'addNew':
                     $this->addNew();
@@ -67,6 +71,10 @@ class PostController extends CommonController {
 
                 case 'deleteImg':
                     $this->deleteImg();
+                    break;
+
+                case 'delAttachment':
+                    $this->delAttachment();
                     break;
 
                 default:
@@ -103,6 +111,31 @@ class PostController extends CommonController {
         $pathArr = explode('/',$imgPath);
         $count = count($pathArr);
         $newPath = POST_PATH.'/'.$pathArr[$count-2].'/'.$pathArr[$count-1];
+
+        $del = ToolModel::delImg($newPath);
+        if($del == 1){
+            $arr['success'] = 1;
+            $arr['msg'] = '删除成功';
+        }else{
+            $arr['success'] = o;
+            $arr['msg'] = $del;
+        }
+        echo json_encode($arr);
+        exit;
+
+
+    }
+
+    /**
+     * 文章中删除图片后原先上传的图片也要删除
+     */
+    private function delAttachment(){
+
+        $imgPath = I('post.path');
+
+        $pathArr = explode('/',$imgPath);
+        $count = count($pathArr);
+        $newPath = POST_ATTACHMENT_PATH.'/'.$pathArr[$count-2].'/'.$pathArr[$count-1];
 
         $del = ToolModel::delImg($newPath);
         if($del == 1){
@@ -183,6 +216,10 @@ class PostController extends CommonController {
                         ToolModel::delImg(DOCUMENT_ROOT.$imgPathArr[$i]);
                     }
                 }
+
+                //查找该文章是否有单独上传附件,有则删除
+                $this->postObj->delAttachmentData(I('post.id'));
+
                 $arr['success'] = 'OK';
             }else{
                 $arr['success'] = 'NG';
@@ -249,6 +286,51 @@ class PostController extends CommonController {
         exit;
     }
 
+    /**
+     * 直接上传附件
+     */
+    private function uploadAttachment(){
+
+        //设置删除图片的相关配置项
+        $config = $this->setImgConfig();
+
+        //上传文件
+        $retArr = ToolModel::uploadImg($config);
+        $arr['path'] = $retArr['msg'];
+        $arr['fileName'] = $retArr['fileName'];
+
+        //取得修改后的文件名,并去除后缀
+        $nameArr = explode('.',$retArr['saveName']);
+        $arr['saveName'] = $nameArr[0];
+
+        if($retArr['success']){
+            $arr['success'] = 1;
+            $arr['msg'] = $retArr['msg'];
+        }else{
+            $arr['success'] = 0;
+            $arr['msg'] = $retArr['msg'];
+        }
+
+        echo json_encode($arr);
+        exit;
+    }
+
+    private function setImgConfig(){
+        $day =  date('Ymd',time());
+
+        //图片上传设置
+        $config = array(
+            'maxSize'    =>    3145728,
+            'rootPath'	 =>    'Public',
+            'savePath'   =>    '/Uploads/postAttachment/'.$day.'/',
+            'saveName'   =>    array('uniqid',$_SESSION['uid'].'_'),
+            'exts'       =>    C('POST_UPLOAD_Attachment_TYPE_ARRAY'),
+            'autoSub'    =>    false,
+            'subName'    =>    array('date','Ymd'),
+        );
+        return $config;
+    }
+
 
     /**
      * 只有爆料者可以进行
@@ -288,6 +370,12 @@ class PostController extends CommonController {
         if(isset($_GET['preview']) && intval(I('get.preview')) == 1){
 
             $post = $this->postObj->getThePostAndUser(I('get.id'));
+
+//            $attachmentData = $this->postObj->getAttachmentData(I('get.id'));
+//
+//            if($attachmentData){
+//                $this->assign('attachmentList',$attachmentData['post_attachment']);
+//            }
 
             if($post){
                 $post['post_dept'] = ToolModel::deptCodeToNameArr($post['post_dept']);
@@ -346,6 +434,18 @@ class PostController extends CommonController {
                 }
 
             }
+
+            $attachmentData = $this->postObj->getAttachmentData(I('get.id'));
+
+            if($attachmentData){
+
+                //$attachmentStr = json_decode($attachmentData['post_attachment']);
+
+                $this->assign('attachmentList',$attachmentData['post_attachment']);
+                $this->assign('saveNameList',$attachmentData['post_save_name']);
+                $this->assign('fileNameList',$attachmentData['post_file_name']);
+            }
+
             $lockID = $data['id'];
             $this->assign('postid',$data['id']);
             $this->assign('content',$data['post_content']);

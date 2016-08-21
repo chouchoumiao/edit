@@ -151,6 +151,8 @@ namespace Admin\Model;
                     $retArr['success'] = 1;
                     $retArr['msg'] = $pathName;
                     $retArr['size'] = $file['size'];
+                    $retArr['fileName'] = $file['name'];
+                    $retArr['saveName'] = $file['savename'];
                     return $retArr;
                 }
                 else{

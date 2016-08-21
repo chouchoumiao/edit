@@ -11,6 +11,8 @@ define(DOCUMENT_ROOT,$_SERVER['DOCUMENT_ROOT']);
 define(PROFILE_PATH,$_SERVER['DOCUMENT_ROOT'].'/edit/Public/Uploads/profile');
 //文章图片文件夹路径
 define(POST_PATH,$_SERVER['DOCUMENT_ROOT'].'/edit/Public/Uploads/post');
+//文章附件文件夹路径
+define(POST_ATTACHMENT_PATH,$_SERVER['DOCUMENT_ROOT'].'/edit/Public/Uploads/postAttachment');
 //资源库文件夹路径
 define(MEDIA_PATH,$_SERVER['DOCUMENT_ROOT'].'/edit/Public/Uploads/Media');
 
@@ -110,6 +112,13 @@ return array(
 		'xlsx','docx','pptx','pptx'
 	),
 
+    //定义资源库可上传的文件后缀
+    'POST_UPLOAD_Attachment_TYPE_ARRAY' => array(
+        'zip','7z','rar',
+        'jpg','png','jpeg','gif',
+        'txt','xls','pdf','doc',
+        'xlsx','docx','pptx','pptx'
+    ),
 
 	'MEDIA_TYPE_ARRAY'=> array(
 		'jpg','png','jpeg','gif'

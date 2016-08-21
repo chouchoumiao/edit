@@ -1,5 +1,34 @@
 $(function(){
 
+    //判断是否是编辑文章
+    if($('#postid').length > 0){
+
+        var attachmentStr = $('#attachmentList').val();
+        var saveNameStr = $('#saveNameList').val();
+        var fileNameStr = $('#fileNameList').val();
+
+        var attavthmentArr = JSON.parse(attachmentStr);
+        var saveNameArr = JSON.parse(saveNameStr);
+        var fileNameArr = JSON.parse(fileNameStr);
+
+        for (var i = 0;i<attavthmentArr.length; i++){
+
+            var html = '<div class="gallery-item" id="'+i+'">';
+            html += '<span id="span'+i+'" style="display: none;">'+pu+attavthmentArr[i]+'</span>';
+            html += '<div class="gallery-wrapper">';
+            html += '<a class="gallery-remove" onclick="return removeAttachment(\''+i+'\',\''+pu+attavthmentArr[i]+'\',\''+saveNameArr[i]+'\') "><i class="fa fa-times"></i></a>';
+            html += '<img class = textAttachmenthow src='+PUBLIC+'/img/Admin/media/textAttachment.png>';
+            html += '<div class="gallery-title" id="title'+saveNameArr[i]+'">';
+            html += '<a href = "__ROOT__/Admin/Media/doAction/action/getStatus/status/me">'+fileNameArr[i]+'</a>';
+            html += '</div>';
+            html += '</div>';
+            html += '</div>';
+
+            $("#theImgs").append(html);
+            $("#theAttachmentDiv").fadeIn();
+        }
+    }
+
 
 
     //点击评分时候获得评分的个数
@@ -176,6 +205,34 @@ function addFormSubmit(flag) {
     //将数组转化为json格式
     var deptJson = JSON.stringify(deptArr);
 
+
+    var attachmentArr = [],
+        saveNameArr=[],
+        fileNameArr=[];
+
+    //文章单独上传附件
+
+    var attachmentLength = $('.gallery-item').length;
+    if (attachmentLength > 0) {
+
+        for(var i = 1;i<=attachmentLength;i++){
+            attachmentArr[i-1] = $('#path'+i).text();
+            saveNameArr[i-1] = $('#saveName'+i).text();
+            fileNameArr[i-1] = $('#fileName'+i).text();
+        }
+        //将数组转化为json格式
+        var attachmentJson = JSON.stringify(attachmentArr);
+        var saveNameJson = JSON.stringify(saveNameArr);
+        var fileNameJson = JSON.stringify(fileNameArr);
+    }else {
+        //将数组转化为json格式
+        var attachmentJson = '';
+        var saveNameJson = '';
+        var fileNameJson = '';
+    }
+
+
+
     $.ajax({
         url:ROOT+"/Admin/Post/doAction/action/addNew"//改为你的动态页
         ,type:"POST"
@@ -183,7 +240,11 @@ function addFormSubmit(flag) {
             'dept':deptJson,
             'title':title,
             'data':data,
-            'flag':flag
+            'flag':flag,
+            'attachment':attachmentJson,
+            'saveName':saveNameJson,
+            'fileName':fileNameJson
+
         }
         ,dataType: "json"
         ,success:function(json){

@@ -4543,6 +4543,10 @@ label.parsley-error {
   margin-left: 2px;
 }
 
+.textAttachmenthow{
+    margin-left: 25px;
+}
+
 .gallery-list .gallery-item {
   position: relative;
   display: inline-block;

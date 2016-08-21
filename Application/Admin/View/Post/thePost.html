@@ -12,13 +12,23 @@
 
                             <input type="hidden" value={$postid} id="postid">
                             <input style="display: none" name="oldTitle" value={$title} />
+
+                            <input style="display: none" id="attachmentList" value={$attachmentList} />
+                            <input style="display: none" id="saveNameList" value={$saveNameList} />
+                            <input style="display: none" id="fileNameList" value={$fileNameList} />
+
                             <textarea style="display: none" id="content" >{$content}</textarea>
                             <div class="form-group">
                                 <div class="col-sm-12">
                                     <input type="text" class="form-control" value={$title} name="theTitle" id="theTitle">
                                 </div>
                             </div>
-                            <br/>
+
+                            <div class="form-group" id = "theAttachmentDiv" style="display: none">
+                                <div class="col-md-12">
+                                    <div class="gallery-list js-masonry m-top-md" id="theImgs"></div>
+                                </div>
+                            </div>
 
                             <div class="form-group">
                                 <div class="col-sm-12">
