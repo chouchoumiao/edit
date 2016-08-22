@@ -425,6 +425,22 @@ class PostController extends CommonController {
                                 ToolModel::goBack('拷贝文章时候原文章状态更新失败!');
                             }
 
+                            //拷贝时候需要拷贝单独上传的附件信息(如果存在的情况下)
+                            $oldAttachment = $this->postObj->getAttachmentData(I('get.id'));
+                            if ( false != $oldAttachment){
+                                $newAttachmentData['post_id'] = $newID;
+                                $newAttachmentData['post_attachment'] = $oldAttachment['$oldAttachment'];
+                                $newAttachmentData['post_save_name'] = $oldAttachment['post_save_name'];
+                                $newAttachmentData['post_file_name'] = $oldAttachment['post_file_name'];
+
+                                $newAttachment = $this->postObj->insertAttachment($newAttachmentData);
+                                if(false == $newAttachment){
+                                    ToolModel::goBack('拷贝原文章的附件时出错！');
+                                }
+                            }
+
+
+
                         }
                         $data = $this->postObj->getThePost( $newID );
                         if(!$data){
