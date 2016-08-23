@@ -179,6 +179,24 @@ class PostController extends CommonController {
             S('lockUser'.intval(I('post.postid')),null);
             Log::write('fuction:update() && clearcache && POSTID: '.I('post.postid'),'LOCKIMG');
         }
+
+
+        //获取上传的attachment数值
+        if( '' !=I('post.attachment')){
+
+            //更新附件的内容,如果有删除的话(先取出该文章对于附件的个数，如果现在个数小于原先个数则说明有删除，需要更新，否则不更新)
+            $oldAttachment = $this->postObj->getAttachmentData(intval(I('post.postid')));
+            if($oldAttachment){
+                $newAttachmentData['post_id'] = intval(I('post.postid'));
+                $newAttachmentData['post_attachment'] = htmlspecialchars_decode(I('post.attachment'));
+                $newAttachmentData['post_save_name'] = htmlspecialchars_decode(I('post.saveName'));
+                $newAttachmentData['post_file_name'] = htmlspecialchars_decode(I('post.fileName'));
+
+                $this->postObj->updatetAttachmentData($newAttachmentData);
+            }
+        }
+
+
         echo json_encode($arr);
         exit;
         
@@ -402,6 +420,8 @@ class PostController extends CommonController {
 
         $data = $this->postObj->getThePost(I('get.id'));
 
+        $thePostId = intval(I('get.id'));
+
         if($data){
             //$lockID = I('get.id');
             //如果是小编的情况下点击了审核,需要新增同样的文章
@@ -425,22 +445,21 @@ class PostController extends CommonController {
                                 ToolModel::goBack('拷贝文章时候原文章状态更新失败!');
                             }
 
+                            $thePostId = $newID;    //小编拷贝了文章后，文章ID需要更新
                             //拷贝时候需要拷贝单独上传的附件信息(如果存在的情况下)
                             $oldAttachment = $this->postObj->getAttachmentData(I('get.id'));
                             if ( false != $oldAttachment){
                                 $newAttachmentData['post_id'] = $newID;
-                                $newAttachmentData['post_attachment'] = $oldAttachment['$oldAttachment'];
+                                $newAttachmentData['post_attachment'] = $oldAttachment['post_attachment'];
                                 $newAttachmentData['post_save_name'] = $oldAttachment['post_save_name'];
                                 $newAttachmentData['post_file_name'] = $oldAttachment['post_file_name'];
+                                $newAttachmentData['time'] = date('Y-m-d H:i:s', time());
 
                                 $newAttachment = $this->postObj->insertAttachment($newAttachmentData);
                                 if(false == $newAttachment){
                                     ToolModel::goBack('拷贝原文章的附件时出错！');
                                 }
                             }
-
-
-
                         }
                         $data = $this->postObj->getThePost( $newID );
                         if(!$data){
@@ -451,7 +470,8 @@ class PostController extends CommonController {
 
             }
 
-            $attachmentData = $this->postObj->getAttachmentData(I('get.id'));
+
+            $attachmentData = $this->postObj->getAttachmentData($thePostId);
 
             if($attachmentData){
 

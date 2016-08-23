@@ -11,15 +11,17 @@ $(function(){
         var saveNameArr = JSON.parse(saveNameStr);
         var fileNameArr = JSON.parse(fileNameStr);
 
-        for (var i = 0;i<attavthmentArr.length; i++){
+        for (var i = 1;i<=attavthmentArr.length; i++){
 
             var html = '<div class="gallery-item" id="'+i+'">';
-            html += '<span id="span'+i+'" style="display: none;">'+pu+attavthmentArr[i]+'</span>';
+            html += '<span id="path'+i+'" style="display: none;">'+attavthmentArr[i-1]+'</span>';
+            html += '<span id="saveName'+i+'" style="display: none;">'+saveNameArr[i-1]+'</span>';
+            html += '<span id="fileName'+i+'" style="display: none;">'+fileNameArr[i-1]+'</span>';
             html += '<div class="gallery-wrapper">';
-            html += '<a class="gallery-remove" onclick="return removeAttachment(\''+i+'\',\''+pu+attavthmentArr[i]+'\',\''+saveNameArr[i]+'\') "><i class="fa fa-times"></i></a>';
-            html += '<img class = textAttachmenthow src='+PUBLIC+'/img/Admin/media/textAttachment.png>';
-            html += '<div class="gallery-title" id="title'+saveNameArr[i]+'">';
-            html += '<a href = "__ROOT__/Admin/Media/doAction/action/getStatus/status/me">'+fileNameArr[i]+'</a>';
+            html += '<a class="gallery-remove" onclick="return removeAttachment(\''+i+'\',\''+attavthmentArr[i-1]+'\',\''+saveNameArr[i-1]+'\') "><i class="fa fa-times"></i></a>';
+            html += '<a target="_blank" href='+PUBLIC+attavthmentArr[i-1]+'> <img class = textAttachmenthow src='+PUBLIC+'/img/Admin/media/textAttachment.png></a>';
+            html += '<div class="gallery-title" id="title'+saveNameArr[i-1]+'">';
+            html += '<a href = "__ROOT__/Admin/Media/doAction/action/getStatus/status/me">'+fileNameArr[i-1]+'</a>';
             html += '</div>';
             html += '</div>';
             html += '</div>';
@@ -261,6 +263,40 @@ function addFormSubmit(flag) {
 }
 
 /**
+ * 提交或者修改文章时候提交附件
+ * @returns {string}
+ */
+function setAttachment() {
+    //文章单独上传附件
+
+    var attachmentArr = [],
+        saveNameArr=[],
+        fileNameArr=[];
+
+    var attachmentLength = $('.gallery-item').length;
+    if (attachmentLength > 0) {
+
+        for(var i = 1;i<=attachmentLength;i++){
+            attachmentArr[i-1] = $('#path'+i).text();
+            saveNameArr[i-1] = $('#saveName'+i).text();
+            fileNameArr[i-1] = $('#fileName'+i).text();
+        }
+        //将数组转化为json格式
+        var attachmentJson = JSON.stringify(attachmentArr);
+        var saveNameJson = JSON.stringify(saveNameArr);
+        var fileNameJson = JSON.stringify(fileNameArr);
+    }else {
+        //将数组转化为json格式
+        var attachmentJson = '';
+        var saveNameJson = '';
+        var fileNameJson = '';
+    }
+
+    return attachmentJson+','+saveNameJson+','+fileNameJson;
+
+}
+
+/**
  * 重置内容
  */
 function resetAddForm () {
@@ -385,6 +421,11 @@ function UpdateFormSubmit(flag) {
     }
 
 
+    var attachmetList = setAttachment();
+    var attachmetArr = attachmetList.split(',');
+    var attachmentJson = attachmetArr[0];
+    var saveNameJson = attachmetArr[1];
+    var fileNameJson = attachmetArr[2];
 
     $.ajax({
         url:ROOT+"/Admin/Post/doAction/action/update"//改为你的动态页
@@ -396,7 +437,10 @@ function UpdateFormSubmit(flag) {
             'data':data,
             'flag':flag,
             'dismissMsg':dismissMsg,
-            'score':score
+            'score':score,
+            'attachment':attachmentJson,
+            'saveName':saveNameJson,
+            'fileName':fileNameJson
         }
         ,dataType: "json"
         ,success:function(json){

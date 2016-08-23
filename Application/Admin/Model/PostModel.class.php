@@ -28,6 +28,25 @@ namespace Admin\Model;
         }
 
         /**
+         * 更新附件表
+         * @param $data
+         * @return bool
+         */
+        public function updatetAttachmentData($data){
+            $where['pot_id'] = $data['post_id'];
+
+            $newAttacnment['post_attachment'] = $data['post_attachment'];
+            $newAttacnment['post_save_name'] = $data['post_save_name'];
+            $newAttacnment['post_file_name'] = $data['post_file_name'];
+            $newAttacnment['time'] = date('Y-m-d H:i:s', time());
+
+            if( false === M('post_attachment')->where($where)->save($newAttacnment)){
+                return false;
+            }
+            return true;
+
+        }
+        /**
          * 根据传入的文章ID取得对应的附件
          * @param $postID
          * @return bool
