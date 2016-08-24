@@ -1,33 +1,35 @@
 $(function(){
 
-    //判断是否是编辑文章
+    //编辑文字的时候
     if($('#postid').length > 0){
 
         var attachmentStr = $('#attachmentList').val();
         var saveNameStr = $('#saveNameList').val();
         var fileNameStr = $('#fileNameList').val();
 
-        var attavthmentArr = JSON.parse(attachmentStr);
-        var saveNameArr = JSON.parse(saveNameStr);
-        var fileNameArr = JSON.parse(fileNameStr);
+        if(attachmentStr != 0 && saveNameStr !=0 &&fileNameStr !=0 ){
+            var attavthmentArr = JSON.parse(attachmentStr);
+            var saveNameArr = JSON.parse(saveNameStr);
+            var fileNameArr = JSON.parse(fileNameStr);
 
-        for (var i = 1;i<=attavthmentArr.length; i++){
+            for (var i = 1;i<=attavthmentArr.length; i++){
 
-            var html = '<div class="gallery-item" id="'+i+'">';
-            html += '<span id="path'+i+'" style="display: none;">'+attavthmentArr[i-1]+'</span>';
-            html += '<span id="saveName'+i+'" style="display: none;">'+saveNameArr[i-1]+'</span>';
-            html += '<span id="fileName'+i+'" style="display: none;">'+fileNameArr[i-1]+'</span>';
-            html += '<div class="gallery-wrapper">';
-            html += '<a class="gallery-remove" onclick="return removeAttachment(\''+i+'\',\''+attavthmentArr[i-1]+'\',\''+saveNameArr[i-1]+'\') "><i class="fa fa-times"></i></a>';
-            html += '<a target="_blank" href='+PUBLIC+attavthmentArr[i-1]+'> <img class = textAttachmenthow src='+PUBLIC+'/img/Admin/media/textAttachment.png></a>';
-            html += '<div class="gallery-title" id="title'+saveNameArr[i-1]+'">';
-            html += '<a href = "__ROOT__/Admin/Media/doAction/action/getStatus/status/me">'+fileNameArr[i-1]+'</a>';
-            html += '</div>';
-            html += '</div>';
-            html += '</div>';
+                var html = '<div class="gallery-item" id="'+i+'">';
+                html += '<span id="path'+i+'" style="display: none;">'+attavthmentArr[i-1]+'</span>';
+                html += '<span id="saveName'+i+'" style="display: none;">'+saveNameArr[i-1]+'</span>';
+                html += '<span id="fileName'+i+'" style="display: none;">'+fileNameArr[i-1]+'</span>';
+                html += '<div class="gallery-wrapper">';
+                html += '<a target="_blank" href='+PUBLIC+attavthmentArr[i-1]+'> <img class = textAttachmenthow src='+PUBLIC+'/img/Admin/media/textAttachment.png></a>';
+                html += '<div class="gallery-title" id="title'+saveNameArr[i-1]+'">';
+                html += '<a href = "#">'+fileNameArr[i-1]+'</a>';
+                html += '</div>';
+                html += '</div>';
+                html += '</div>';
 
-            $("#theImgs").append(html);
-            $("#theAttachmentDiv").fadeIn();
+                $("#theImgs").append(html);
+                $("#theAttachmentDiv").fadeIn();
+                $("#theAttachmentTextDiv").fadeIn();
+            }
         }
     }
 
@@ -421,11 +423,11 @@ function UpdateFormSubmit(flag) {
     }
 
 
-    var attachmetList = setAttachment();
-    var attachmetArr = attachmetList.split(',');
-    var attachmentJson = attachmetArr[0];
-    var saveNameJson = attachmetArr[1];
-    var fileNameJson = attachmetArr[2];
+    // var attachmetList = setAttachment();
+    // var attachmetArr = attachmetList.split(',');
+    // var attachmentJson = attachmetArr[0];
+    // var saveNameJson = attachmetArr[1];
+    // var fileNameJson = attachmetArr[2];
 
     $.ajax({
         url:ROOT+"/Admin/Post/doAction/action/update"//改为你的动态页
@@ -437,10 +439,10 @@ function UpdateFormSubmit(flag) {
             'data':data,
             'flag':flag,
             'dismissMsg':dismissMsg,
-            'score':score,
-            'attachment':attachmentJson,
-            'saveName':saveNameJson,
-            'fileName':fileNameJson
+            'score':score
+            //'attachment':attachmentJson,
+            //'saveName':saveNameJson,
+            //'fileName':fileNameJson
         }
         ,dataType: "json"
         ,success:function(json){

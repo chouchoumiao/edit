@@ -473,15 +473,12 @@ class PostController extends CommonController {
 
             $attachmentData = $this->postObj->getAttachmentData($thePostId);
 
+            //如果存在附件则输出附件的对应字段到视图
             if($attachmentData){
-
-                //$attachmentStr = json_decode($attachmentData['post_attachment']);
-
                 $this->assign('attachmentList',$attachmentData['post_attachment']);
                 $this->assign('saveNameList',$attachmentData['post_save_name']);
                 $this->assign('fileNameList',$attachmentData['post_file_name']);
             }
-
             $lockID = $data['id'];
             $this->assign('postid',$data['id']);
             $this->assign('content',$data['post_content']);
