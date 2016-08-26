@@ -33,8 +33,6 @@ $(function(){
         }
     }
 
-
-
     //点击评分时候获得评分的个数
     $(".scoreBtn").on('click',function (e) {
 
@@ -87,24 +85,22 @@ $(function(){
             //初始化
             onInit: function() {
 
-                // var content = $('#content').val();
                 var content = $('#content');
 
                 if( (content.length > 0) && (content.val() != '') ){
-
-                    $('#summernote').summernote('code', content.val());
-
+                    $('#summernote').summernote('code', content.val()+' ');
                 }else {
                     $('#summernote').summernote('code', '');
-                    // $('#summernote').summernote('foreColor', 'black');
                 }
-                // $('#summernote').summernote('backColor', 'red');
             },
 
-            onChange: function() {
+            //小编的情况，并且是编辑文章的时候，输入时默认是红色字显示，其他为黑色字
+            onKeydown: function() {
 
                 if($('#theAuto').length > 0 && $('#theAuto').val() == XIAOBIAN ){
                     $('#summernote').summernote('foreColor', 'red');
+                }else {
+                    $('#summernote').summernote('foreColor', 'black');
                 }
             },
 
@@ -168,7 +164,8 @@ $(function(){
 
     });
 
-
+    //焦点定位到第一个input
+    $('#theTitle').focus();
 
 });
 
