@@ -1,35 +1,49 @@
 $(function(){
 
-    //编辑文字的时候
+    /**
+     * 爆料者新增文章时候上传附件的时候进行以下方法
+     */
+    $('#file_upload').uploadifive({
+        'multi' : false,
+        'uploadScript' : './Admin/Post/doAction/action/uploadAttachment',   //上传的方法
+        'buttonText' : '上传资源',
+        'fileTypeExts'  : FILE_EXT,
+        'fileSizeLimit' : FILE_SIZE * 4,   //附件默认20M
+        'removeCompleted':true,
+        'onUploadComplete' : function(file, data) {
+
+            doUpload(data,0);
+
+        },
+        'onError': function(errorType) {
+            alert('The error was: ' + errorType);
+        }
+    });
+
+    /**
+     * 爆料者编辑文字时候,如果原先有上传附件的情况下们可以删除后再上传,上传的时候进行以下方法
+     */
+    $('#the_file_upload').uploadifive({
+        'multi' : false,
+        'uploadScript' : './Admin/Post/doAction/action/uploadAttachment',   //上传的方法
+        'buttonText' : '上传资源',
+        'fileTypeExts'  : FILE_EXT,
+        'fileSizeLimit' : FILE_SIZE * 4,   //附件默认20M
+        'removeCompleted':true,
+        'onUploadComplete' : function(file, data) {
+
+            doUpload(data,1);
+
+        },
+        'onError': function(errorType) {
+            alert('The error was: ' + errorType);
+        }
+    });
+
+    //编辑文章的时候,如果有附件则显示附件
     if($('#postid').length > 0){
-
-        var attachmentStr = $('#attachmentList').val();
-        var saveNameStr = $('#saveNameList').val();
-        var fileNameStr = $('#fileNameList').val();
-
-        if(attachmentStr != 0 && saveNameStr !=0 &&fileNameStr !=0 ){
-            var attavthmentArr = JSON.parse(attachmentStr);
-            var saveNameArr = JSON.parse(saveNameStr);
-            var fileNameArr = JSON.parse(fileNameStr);
-
-            for (var i = 1;i<=attavthmentArr.length; i++){
-
-                var html = '<div class="gallery-item" id="'+i+'">';
-                html += '<span id="path'+i+'" style="display: none;">'+attavthmentArr[i-1]+'</span>';
-                html += '<span id="saveName'+i+'" style="display: none;">'+saveNameArr[i-1]+'</span>';
-                html += '<span id="fileName'+i+'" style="display: none;">'+fileNameArr[i-1]+'</span>';
-                html += '<div class="gallery-wrapper">';
-                html += '<a target="_blank" href='+PUBLIC+attavthmentArr[i-1]+'> <img class = textAttachmenthow src='+PUBLIC+'/img/Admin/media/textAttachment.png></a>';
-                html += '<div class="gallery-title" id="title'+saveNameArr[i-1]+'">';
-                html += '<a href = "#">'+fileNameArr[i-1]+'</a>';
-                html += '</div>';
-                html += '</div>';
-                html += '</div>';
-
-                $("#theImgs").append(html);
-                $("#theAttachmentDiv").fadeIn();
-                $("#theAttachmentTextDiv").fadeIn();
-            }
+        if( ($('#theAuto').val() == BAOLIAOZHE) || ($('#theAuto').val() == XIAOBIAN) ) {
+            doAttachment();
         }
     }
 
@@ -206,34 +220,6 @@ function addFormSubmit(flag) {
     //将数组转化为json格式
     var deptJson = JSON.stringify(deptArr);
 
-
-    var attachmentArr = [],
-        saveNameArr=[],
-        fileNameArr=[];
-
-    //文章单独上传附件
-
-    var attachmentLength = $('.gallery-item').length;
-    if (attachmentLength > 0) {
-
-        for(var i = 1;i<=attachmentLength;i++){
-            attachmentArr[i-1] = $('#path'+i).text();
-            saveNameArr[i-1] = $('#saveName'+i).text();
-            fileNameArr[i-1] = $('#fileName'+i).text();
-        }
-        //将数组转化为json格式
-        var attachmentJson = JSON.stringify(attachmentArr);
-        var saveNameJson = JSON.stringify(saveNameArr);
-        var fileNameJson = JSON.stringify(fileNameArr);
-    }else {
-        //将数组转化为json格式
-        var attachmentJson = '';
-        var saveNameJson = '';
-        var fileNameJson = '';
-    }
-
-
-
     $.ajax({
         url:ROOT+"/Admin/Post/doAction/action/addNew"//改为你的动态页
         ,type:"POST"
@@ -242,9 +228,9 @@ function addFormSubmit(flag) {
             'title':title,
             'data':data,
             'flag':flag,
-            'attachment':attachmentJson,
-            'saveName':saveNameJson,
-            'fileName':fileNameJson
+            'attachment':$('#path').text(),     //单独附件路径
+            'saveName':$('#saveName').text(),   //单独附件保存文件名
+            'fileName':$('#fileName').text()    //单独附件文件名
 
         }
         ,dataType: "json"
@@ -261,39 +247,6 @@ function addFormSubmit(flag) {
     });
 }
 
-/**
- * 提交或者修改文章时候提交附件
- * @returns {string}
- */
-function setAttachment() {
-    //文章单独上传附件
-
-    var attachmentArr = [],
-        saveNameArr=[],
-        fileNameArr=[];
-
-    var attachmentLength = $('.gallery-item').length;
-    if (attachmentLength > 0) {
-
-        for(var i = 1;i<=attachmentLength;i++){
-            attachmentArr[i-1] = $('#path'+i).text();
-            saveNameArr[i-1] = $('#saveName'+i).text();
-            fileNameArr[i-1] = $('#fileName'+i).text();
-        }
-        //将数组转化为json格式
-        var attachmentJson = JSON.stringify(attachmentArr);
-        var saveNameJson = JSON.stringify(saveNameArr);
-        var fileNameJson = JSON.stringify(fileNameArr);
-    }else {
-        //将数组转化为json格式
-        var attachmentJson = '';
-        var saveNameJson = '';
-        var fileNameJson = '';
-    }
-
-    return attachmentJson+','+saveNameJson+','+fileNameJson;
-
-}
 
 /**
  * 重置内容
@@ -373,7 +326,7 @@ function UpdateFormSubmit(flag) {
 
     //将数组转化为json格式
     var deptJson = JSON.stringify(deptArr);
-    if((flag == 4) && ($("#dismiss_msg").is(":hidden"))){
+    if((flag == 4 || flag == 6 ) && ($("#dismiss_msg").is(":hidden"))){
         if(!$("#scoreBtn").is(":hidden")){
             $('#scoreBtn').hide();
         }
@@ -383,13 +336,13 @@ function UpdateFormSubmit(flag) {
 
     var dismissMsg = $('#dismiss_msg').val();
 
-    if(flag == 4 && (dismissMsg == '')){
+    if((flag == 4 || flag == 6 ) && (dismissMsg == '')){
         alert('必须填写不通过审核的原因');
         return false;
     }
 
 
-    if((flag == 5) && ($("#scoreBtn").is(":hidden"))){
+    if((flag == 3 || flag == 5 ) && ($("#scoreBtn").is(":hidden"))){
         if(!$("#dismiss_msg").is(":hidden")){
             $('#dismiss_msg').hide();
         }
@@ -401,7 +354,7 @@ function UpdateFormSubmit(flag) {
     var score = 0;
 
     //只有在总编最终审核文章的情况下才进行获取数据
-    if(flag == 5){
+    if((flag == 3 || flag == 5 )){
 
         //获取对应class的数值
         score = $('.lastActive').val();
@@ -413,18 +366,11 @@ function UpdateFormSubmit(flag) {
         }
     }
 
-
-    if(flag == 4 && (dismissMsg == '')){
+    //小编审核不通过或者总编打回给小编的情况下都需要写原因
+    if( (flag == 4 || flag == 6 ) && (dismissMsg == '')){
         alert('必须填写不通过审核的原因');
         return false;
     }
-
-
-    // var attachmetList = setAttachment();
-    // var attachmetArr = attachmetList.split(',');
-    // var attachmentJson = attachmetArr[0];
-    // var saveNameJson = attachmetArr[1];
-    // var fileNameJson = attachmetArr[2];
 
     $.ajax({
         url:ROOT+"/Admin/Post/doAction/action/update"//改为你的动态页
@@ -436,10 +382,10 @@ function UpdateFormSubmit(flag) {
             'data':data,
             'flag':flag,
             'dismissMsg':dismissMsg,
-            'score':score
-            //'attachment':attachmentJson,
-            //'saveName':saveNameJson,
-            //'fileName':fileNameJson
+            'score':score,
+            'attachment':$('#path').text(),     //单独附件路径
+            'saveName':$('#saveName').text(),   //单独附件保存文件名
+            'fileName':$('#fileName').text()    //单独附件文件名
         }
         ,dataType: "json"
         ,success:function(json){
@@ -465,10 +411,6 @@ window.addEventListener("beforeunload", function(event) {
     //当前页面是编辑文章页面，不在编辑页面才会触发清空cache
     if($('#thePostForLock').length == 1){
 
-        //console.log($("#postid").val());
-
-        // $.post(ROOT+"/Admin/Post/doAction/action/unlockPost");
-
         $.ajax({
             url:ROOT+"/Admin/Post/doAction/action/unlockPost"//改为你的动态页
             ,type:"POST"
@@ -488,3 +430,158 @@ window.addEventListener("beforeunload", function(event) {
         });
     }
 });
+
+/**
+ *
+ * @param flag  0:表示新增文章时上传附件,1:编辑文章时候修改附件
+ * @returns {boolean}
+ */
+function doUpload(data,flag) {
+
+    var json = jQuery.parseJSON(data);
+    if(json.success == 1){
+
+        if(flag === 0){
+            var html = '<div class="gallery-item" id="attachmentID">';
+        }else if(flag === 1){
+            var html = '<div class="gallery-item" id="attachmentTheID">';
+        }else {
+            alert('参数错误,请重试');return false;
+        }
+
+        html += '<span id="path" style="display: none;">'+json.path+'</span>';
+        html += '<span id="saveName" style="display: none;">'+json.saveName+'</span>';
+        html += '<span id="fileName" style="display: none;">'+json.fileName+'</span>';
+        html += '<div class="gallery-wrapper">';
+        if(flag === 0){
+            html += '<a class="gallery-remove" onclick="return removeAttachment(\''+json.path+'\',\''+json.saveName+'\',0)"><i class="fa fa-times"></i></a>';
+        }else if(flag === 1){
+            if($('#theAuto').length > 0 && $('#theAuto').val() == BAOLIAOZHE ) {    //爆料和可以编辑附件,可以删除
+                html += '<a class="gallery-remove" onclick="return removeAttachment(\''+json.path+'\',\''+json.saveName+'\',1)"><i class="fa fa-times"></i></a>';
+            }
+        }else {
+            alert('参数错误,请重试');return false;
+        }
+        html += '<a target="_blank" href='+PUBLIC+json.path+'> <img class = textAttachmenthow src='+PUBLIC+'/img/Admin/media/textAttachment.png></a>';
+        html += '<div class="gallery-title" id="title'+json.saveName+'">';
+        html += '<a href = "#">'+json.fileName+'</a>';
+        html += '</div>';
+        html += '</div>';
+        html += '</div>';
+
+        if(flag === 0){
+            $("#imgs").append(html);
+            $("#attachmentDiv").fadeIn();
+            $("#upLoadBtn").hide();
+        }else if (flag === 1){
+
+            $("#theImgs").append(html);
+            $("#theAttachmentDiv").fadeIn();
+            $("#theAttachmentTextDiv").fadeIn();
+            $("#theUpLoadBtn").hide();
+
+        }else {
+            alert('参数错误,请重试');return false;
+        }
+    }else{
+        alert(json.msg);
+        return false;
+    }
+}
+
+
+/**
+ * 编辑文章时,取得附件内容,如果存在附件则显示在页面上
+ */
+function doAttachment() {
+
+    var attachmentStr = $('#attachmentList').val();
+    var saveNameStr = $('#saveNameList').val();
+    var fileNameStr = $('#fileNameList').val();
+
+    if(attachmentStr != 0 && saveNameStr !=0 &&fileNameStr !=0 ){
+
+        var html = '<div class="gallery-item" id="attachmentTheID">';
+        html += '<span id="path" style="display: none;">'+attachmentStr+'</span>';
+        html += '<span id="saveName" style="display: none;">'+saveNameStr+'</span>';
+        html += '<span id="fileName" style="display: none;">'+fileNameStr+'</span>';
+        html += '<div class="gallery-wrapper">';
+        if($('#theAuto').length > 0 && $('#theAuto').val() == BAOLIAOZHE ) {    //爆料和可以编辑附件,可以删除
+            html += '<a class="gallery-remove" onclick="return removeAttachment(\'' + attachmentStr + '\',\'' + saveNameStr + '\',1) "><i class="fa fa-times"></i></a>';
+        }
+        html += '<a target="_blank" href='+PUBLIC+attachmentStr+'> <img class = textAttachmenthow src='+PUBLIC+'/img/Admin/media/textAttachment.png></a>';
+        html += '<div class="gallery-title" id="title'+saveNameStr+'">';
+        html += '<a href = "#">'+fileNameStr+'</a>';
+        html += '</div>';
+        html += '</div>';
+        html += '</div>';
+
+        $("#theImgs").append(html);
+        $("#theAttachmentDiv").fadeIn();
+        $("#theAttachmentTextDiv").fadeIn();
+
+    }
+}
+
+/**
+ * 删除附件
+ * @param path      文件路径
+ * @param saveName  物件保存名
+ * @param flag      0:表示与数据库无关,1:表示数据库也需要删除
+ */
+function removeAttachment (path,saveName,flag) {
+
+    var postid = 0,
+        pathNameStr = '',
+        saveNameStr = '',
+        fileNameStr = '';
+
+    if(flag === 1){
+        postid = $('#postid').val();
+        pathNameStr = $('#path').text();
+        saveNameStr = $('#saveName').text();
+        fileNameStr = $('#fileName').text();
+    }
+
+    $.ajax({
+        url:ROOT+"/Admin/Post/doAction/action/delAttachment"//改为你的动态页
+        ,type:"POST"
+        ,data:{
+            'postid':postid,
+            'path':path,
+            'attachment':pathNameStr,     //单独附件路径
+            'saveName':saveNameStr,   //单独附件保存文件名
+            'fileName':fileNameStr    //单独附件文件名
+        }
+        ,dataType: "json"
+        ,beforeSend: function(){
+            $('#title'+saveName).html('正在删除...');
+        }
+        ,success:function(json){
+            if(json.success == 1){
+                if(flag === 1){
+                    $('#attachmentTheID').remove();
+                    $('#theUpLoadBtn').fadeIn();
+                }else
+                {
+                    $('#attachmentID').remove();
+                    $('#upLoadBtn').fadeIn();
+                }
+            }else{
+                alert(json.msg);
+                return false;
+            }
+
+            //判断是否都删除完毕了,则将img的div隐藏起来
+            if($('.gallery-item').length == 0){
+                if(flag === 1){
+                    $("#theAttachmentDiv").hide();
+                }else {
+                    $("#attachmentDiv").hide();
+                }
+            }
+
+        }
+        ,error:function(xhr){alert('PHP页面有错误！'+xhr.responseText);}
+    });
+}

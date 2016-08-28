@@ -5,7 +5,9 @@
  */
 namespace Admin\Model;
 
-	class PostModel {
+	use Think\Log;
+
+    class PostModel {
 
         private $post_id;
         private $post_author;
@@ -33,7 +35,7 @@ namespace Admin\Model;
          * @return bool
          */
         public function updatetAttachmentData($data){
-            $where['pot_id'] = $data['post_id'];
+            $where['post_id'] = $data['post_id'];
 
             $newAttacnment['post_attachment'] = $data['post_attachment'];
             $newAttacnment['post_save_name'] = $data['post_save_name'];
@@ -130,7 +132,7 @@ namespace Admin\Model;
                             $join = "INNER JOIN ccm_m_user 
                                         ON ccm_posts.post_author = ccm_m_user.id 
                                         AND ccm_posts.post_author = $userid 
-                                        AND ccm_posts.post_status in ('pending2','dismiss','pended')
+                                        AND ccm_posts.post_status in ('pending2','dismiss','pended','return')
                                         AND ccm_posts.post_dept LIKE '%$dept%'";
                             break;
                     }
@@ -232,13 +234,13 @@ namespace Admin\Model;
                             if($status == 'all'){
                                 $join = "INNER JOIN ccm_m_user 
                                             ON ccm_posts.post_author = ccm_m_user.id 
-                                            AND ccm_posts.post_status in ('pending2','dismiss','pended') 
+                                            AND ccm_posts.post_status in ('pending2','dismiss','pended','return') 
                                             AND ccm_posts.post_dept LIKE '%$dept%'" ;
 
                             }else{
                                 $join = "INNER JOIN ccm_m_user 
                                             ON ccm_posts.post_author = ccm_m_user.id 
-                                            AND ccm_posts.post_status in ('pending2','dismiss','pended') 
+                                            AND ccm_posts.post_status in ('pending2','dismiss','pended','return') 
                                             AND ccm_posts.post_dept LIKE '%$dept%' 
                                             AND ccm_posts.post_status = '$status'";
                             }
@@ -318,7 +320,7 @@ namespace Admin\Model;
                             $join = "INNER JOIN ccm_m_user 
                                         ON ccm_m_user.id = ccm_posts.post_author 
                                         AND ccm_posts.post_author = $userid 
-                                        AND ccm_posts.post_status in ('pending2','dismiss','pended') 
+                                        AND ccm_posts.post_status in ('pending2','dismiss','pended','return') 
                                         AND ccm_posts.post_dept LIKE '%$dept%'";
                             break;
                         case DEPT_ADMIN:
@@ -426,12 +428,12 @@ namespace Admin\Model;
                             if($status == 'all'){
                                 $join = "INNER JOIN ccm_m_user 
                                             ON ccm_m_user.id = ccm_posts.post_author 
-                                            AND ccm_posts.post_status in ('pending2','dismiss','pended') 
+                                            AND ccm_posts.post_status in ('pending2','dismiss','pended','return') 
                                             AND ccm_posts.post_dept LIKE '%$dept%'";
                             }else{
                                 $join = "INNER JOIN ccm_m_user 
                                             ON ccm_m_user.id = ccm_posts.post_author 
-                                            AND ccm_posts.post_status in ('pending2','dismiss','pended') 
+                                            AND ccm_posts.post_status in ('pending2','dismiss','pended','return') 
                                             AND ccm_posts.post_dept LIKE '%$dept%'
                                             AND ccm_posts.post_status = '$status'";
                             }
@@ -549,13 +551,13 @@ namespace Admin\Model;
                     if($status == 'all'){
                         $join = "INNER JOIN ccm_m_user 
                                     ON ccm_posts.post_author = ccm_m_user.id 
-                                    AND ccm_posts.post_status in ('pending2','dismiss','pended') 
+                                    AND ccm_posts.post_status in ('pending2','dismiss','pended','return') 
                                     AND ccm_posts.post_dept LIKE '%$dept%'" ;
 
                     }else{
                         $join = "INNER JOIN ccm_m_user 
                                     ON ccm_posts.post_author = ccm_m_user.id 
-                                    AND ccm_posts.post_status in ('pending2','dismiss','pended')  
+                                    AND ccm_posts.post_status in ('pending2','dismiss','pended','return')  
                                     AND ccm_posts.post_dept LIKE '%$dept%' 
                                     AND ccm_posts.post_status = '$status'" ;
                     }
@@ -620,6 +622,7 @@ namespace Admin\Model;
             //            3 : 继续提交审核
             //            4 : 审核不通过flag
             //            5 : 审核通过flag
+            //            6 : 打回给小编flag
 
             switch (I('post.flag')){
                 case 1:
@@ -644,6 +647,15 @@ namespace Admin\Model;
                     break;
                 case 5:
                     $this->post_status = 'pended';
+                    break;
+                case 6:
+                    $this->post_status = 'return';
+                    //审核不通过检查是否填写了原因
+                    if(I('post.dismissMsg') == ''){
+                        ToolModel::goBack('必须填写不通过原因');
+                    }
+
+                    $this->dismissMsg = I('post.dismissMsg');
                     break;
             }
         }
@@ -988,6 +1000,10 @@ namespace Admin\Model;
                         case 'close':
                             $spanColor = '<span style="color: #3278b3">';
                             $obj[$i]['post_canEdit'] = 9;
+                            break;
+                        case 'return':  //又可以编辑又可以查看原因
+                            $spanColor = '<span style="color: #3278b3">';
+                            $obj[$i]['post_canEdit'] = 10;
                             break;
 
                     }

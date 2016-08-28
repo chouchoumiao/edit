@@ -321,7 +321,7 @@ class MediaController extends CommonController {
 
         //图片上传设置
         $config = array(
-            'maxSize'    =>    3145728,
+            'maxSize'    =>    C('FILE_SIZE'),
             'rootPath'	 =>    'Public',
             'savePath'   =>    '/Uploads/Media/'.$day.'/',
             'saveName'   =>    array('uniqid',$_SESSION['uid'].'_'),

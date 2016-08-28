@@ -1,3 +1,38 @@
+
+//定义常量
+
+//全局变量角色
+var BAOLIAOZHE = 1;       //爆料者
+var XIAOBIAN   = 2;       //小编
+var ZONGBIAN   = 3;       //总编
+var DEPT_ADMIN = 4;       //部门管理员
+var ADMIN      = 88;      //管理员
+
+//定义可上传的文件类型
+var FILE_EXT = '*.zip;*.7z;*.rar;*.jpg;*.jpge;*.gif;*.txt;*.xls;*.pdf;*.doc;*.xlsx;*.docx;*.pptx;*.png';
+var FILE_SIZE = 5242880;    //5M
+
+
+/**
+ *删除数组指定下标或指定对象
+ */
+Array.prototype.remove=function(obj){
+    for(var i =0;i <this.length;i++){
+        var temp = this[i];
+        if(!isNaN(obj)){
+            temp=i;
+        }
+        if(temp == obj){
+            for(var j = i;j <this.length;j++){
+                this[j]=this[j+1];
+            }
+            this.length = this.length-1;
+        }
+    }
+}
+
+
+
 /*
  用途：检查输入字符串是否为空或者全部都是空格
  输入：str

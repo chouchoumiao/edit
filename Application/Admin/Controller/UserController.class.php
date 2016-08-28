@@ -64,11 +64,11 @@ class UserController extends CommonController {
 
                     //图片上传设置
                     $config = array(
-                        'maxSize'    =>    3145728,
+                        'maxSize'    =>    C('FILE_SIZE'),
                         'rootPath'	 =>    'Public',
                         'savePath'   =>    '/Uploads/profile/',
                         'saveName'   =>    array('uniqid',''),
-                        'exts'       =>    array('jpg','png','jpeg'),
+                        'exts'       =>    C('MEDIA_TYPE_ARRAY'),
                         'autoSub'    =>    false,
                         'subName'    =>    array('date','Ymd'),
                     );
@@ -87,11 +87,11 @@ class UserController extends CommonController {
                 case 'editimg':
                     //图片上传设置
                     $config = array(
-                        'maxSize'    =>    3145728,
+                        'maxSize'    =>    C('FILE_SIZE'),
                         'rootPath'	 =>    'Public',
                         'savePath'   =>    '/Uploads/profile/',
                         'saveName'   =>    array('uniqid',$_SESSION['uid'].'_'),
-                        'exts'       =>    array('jpg','png','jpeg'),
+                        'exts'       =>    C('MEDIA_TYPE_ARRAY'),
                         'autoSub'    =>    false,
                         'subName'    =>    array('date','Ymd'),
                     );

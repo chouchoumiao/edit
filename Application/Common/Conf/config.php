@@ -7,6 +7,8 @@ define(PAGE_SHOW_COUNT,6);
 
 define(DOCUMENT_ROOT,$_SERVER['DOCUMENT_ROOT']);
 
+define(PUBLIC_PATH,$_SERVER['DOCUMENT_ROOT'].'/edit/Public');
+
 //头像文件夹地址
 define(PROFILE_PATH,$_SERVER['DOCUMENT_ROOT'].'/edit/Public/Uploads/profile');
 //文章图片文件夹路径
@@ -30,13 +32,13 @@ define(POST_PENDING,'pending');     //初审
 define(POST_PENDING2,'pending2');   //最终审核
 define(POST_PENDED,'pended');       //审核通过
 define(POST_DISMISS,'dismiss');     //审核不通过
+define(POST_RETURN,'return');       //文章被打回给小编
 
 
 
 return array(
 
     'DB_DEBUG' => true,
-
 
 //	'SHOW_PAGE_TRACE'=>true,        //开启追踪调试
 
@@ -59,10 +61,10 @@ return array(
 	/********************邮件设置(管理员邮箱)**************************/
 
 
-    'DEFAULT_CHARSET'       => 'utf-8', // 默认输出编码
+    'DEFAULT_CHARSET' => 'utf-8', // 默认输出编码
 
 
-	'DEFAULT_MODULE' => 'Admin',		// 追加默认模块设置为Admin
+	'DEFAULT_MODULE' => 'Admin',  // 追加默认模块设置为Admin
 
     //性别数组
     'SEX_ARRAY' => array(
@@ -101,11 +103,17 @@ return array(
         'pending'  => '待审核',
         'pending2' => '待最终审核',
         'dismiss'  => '审核未通过',
+        'return'   => '文章打回',
         'pended'   => '已审核通过',
         'close'    => '所有部门审核完毕'
     ),
 
-	//定义资源库可上传的文件后缀
+    /**********************上传时一般设定**********************/
+
+    //文件上传默认大小:5M
+    'FILE_SIZE' => 5242880,
+    
+    //定义资源库可上传的文件后缀
 	'POST_UPLOAD_TYPE_ARRAY' => array(
 		'jpg','png','jpeg','gif',
 		'txt','xls','pdf','doc',
@@ -120,16 +128,17 @@ return array(
         'xlsx','docx','pptx','pptx'
     ),
 
+    //图片资源后缀
 	'MEDIA_TYPE_ARRAY'=> array(
 		'jpg','png','jpeg','gif'
 	),
 
-
+    //文档资源后缀
 	'FILE_TYPE_ARRAY'=> array(
 		'txt','xls','pdf','doc',
 		'xlsx','docx','pptx','pptx'
 	),
-
+    /**********************上传时一般设定**********************/
 
 
 );

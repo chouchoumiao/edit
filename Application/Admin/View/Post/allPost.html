@@ -25,6 +25,11 @@
                 <a href="__ROOT__/Admin/Post/doAction/action/all/status/dismiss">审核未通过
                     <span class="badge badge-purple bounceIn animation-delay3 active">{$dismissCount}</span>
                 </a> &nbsp; &nbsp; &nbsp;
+                <if condition = "$auto neq BAOLIAOZHE">
+                    <a href="__ROOT__/Admin/Post/doAction/action/all/status/return">文章打回
+                        <span class="badge badge-success bounceIn animation-delay3 active">{$returnCount}</span>
+                    </a> &nbsp; &nbsp; &nbsp;
+                </if>
                 {$showSave}
             <span class="smart-widget-option">
                 <span class="refresh-icon-animated">
@@ -111,6 +116,16 @@
                                             <a href="#" data-toggle="modal" data-target="#normalModal{$k}">
                                                 &nbsp <i class="fa fa-edit"></i> 查看原因
                                             </a>
+                                        <elseif condition="$vo.post_canEdit eq 10"/>
+
+                                            <a href="#" data-toggle="modal" data-target="#normalModal{$k}">
+                                                &nbsp <i class="fa fa-edit"></i> 查看原因
+                                            </a>
+                                            <if condition = "($auto neq ADMIN) AND ($auto neq DEPT_ADMIN) ">
+                                                <a href="__ROOT__/Admin/Post/doAction/action/the/id/{$vo.id}">
+                                                    &nbsp <i class="fa fa-edit"></i> 编辑
+                                                </a>
+                                            </if>
 
                                         <else/>
                                         </if>

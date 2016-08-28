@@ -74,6 +74,7 @@ class PostController extends CommonController {
                     break;
 
                 case 'delAttachment':
+
                     $this->delAttachment();
                     break;
 
@@ -137,13 +138,31 @@ class PostController extends CommonController {
         $count = count($pathArr);
         $newPath = POST_ATTACHMENT_PATH.'/'.$pathArr[$count-2].'/'.$pathArr[$count-1];
 
-        $del = ToolModel::delImg($newPath);
-        if($del == 1){
+
+        $retMsg = ToolModel::delImg($newPath);
+
+        if($retMsg == 1){
+
+            //如果是文章编辑状态也就是存在文章ID的情况(只限于爆料者本身编辑),如果存在删除附件情况者需要更新数据库
+            if( (isset($_POST['postid'])) && (0 != intval($_POST['postid'])) ){
+                //删除了上传文件后相应数据库中的也需要更新
+                //更新附件的内容,如果有删除的话(先取出该文章对于附件的个数，如果现在个数小于原先个数则说明有删除，需要更新，否则不更新)
+                $oldAttachment = $this->postObj->getAttachmentData(intval(I('post.postid')));
+                if($oldAttachment){
+                    $newAttachmentData['post_id'] = intval(I('post.postid'));
+                    $newAttachmentData['post_attachment'] = strval(I('post.attachment'));
+                    $newAttachmentData['post_save_name'] = strval(I('post.saveName'));
+                    $newAttachmentData['post_file_name'] = strval(I('post.fileName'));
+
+                    $this->postObj->updatetAttachmentData($newAttachmentData);
+                }
+            }
+
             $arr['success'] = 1;
             $arr['msg'] = '删除成功';
         }else{
-            $arr['success'] = o;
-            $arr['msg'] = $del;
+            $arr['success'] = 0;
+            $arr['msg'] = $retMsg;
         }
         echo json_encode($arr);
         exit;
@@ -180,22 +199,21 @@ class PostController extends CommonController {
             Log::write('fuction:update() && clearcache && POSTID: '.I('post.postid'),'LOCKIMG');
         }
 
-
         //获取上传的attachment数值
         if( '' !=I('post.attachment')){
 
             //更新附件的内容,如果有删除的话(先取出该文章对于附件的个数，如果现在个数小于原先个数则说明有删除，需要更新，否则不更新)
             $oldAttachment = $this->postObj->getAttachmentData(intval(I('post.postid')));
+
             if($oldAttachment){
                 $newAttachmentData['post_id'] = intval(I('post.postid'));
-                $newAttachmentData['post_attachment'] = htmlspecialchars_decode(I('post.attachment'));
-                $newAttachmentData['post_save_name'] = htmlspecialchars_decode(I('post.saveName'));
-                $newAttachmentData['post_file_name'] = htmlspecialchars_decode(I('post.fileName'));
+                $newAttachmentData['post_attachment'] = strval(I('post.attachment'));
+                $newAttachmentData['post_save_name'] = strval(I('post.saveName'));
+                $newAttachmentData['post_file_name'] = strval(I('post.fileName'));
 
                 $this->postObj->updatetAttachmentData($newAttachmentData);
             }
         }
-
 
         echo json_encode($arr);
         exit;
@@ -281,11 +299,11 @@ class PostController extends CommonController {
 
         //图片上传设置
         $config = array(
-            'maxSize'    =>    3145728,
+            'maxSize'    =>    C('FILE_SIZE'),
             'rootPath'	 =>    'Public',
             'savePath'   =>    '/Uploads/post/'.$day.'/',
             'saveName'   =>    array('uniqid',$_SESSION['uid'].'_'),
-            'exts'       =>    array('jpg','png','jpeg'),
+            'exts'       =>    C('MEDIA_TYPE_ARRAY'),
             'autoSub'    =>    false,
             'subName'    =>    array('date','Ymd'),
         );
@@ -314,15 +332,15 @@ class PostController extends CommonController {
 
         //上传文件
         $retArr = ToolModel::uploadImg($config);
-        $arr['path'] = $retArr['msg'];
-        $arr['fileName'] = $retArr['fileName'];
-
-        //取得修改后的文件名,并去除后缀
-        $nameArr = explode('.',$retArr['saveName']);
-        $arr['saveName'] = $nameArr[0];
 
         if($retArr['success']){
             $arr['success'] = 1;
+            $arr['path'] = $retArr['msg'];
+            $arr['fileName'] = $retArr['fileName'];
+
+            //取得修改后的文件名,并去除后缀
+            $nameArr = explode('.',$retArr['saveName']);
+            $arr['saveName'] = $nameArr[0];
             $arr['msg'] = $retArr['msg'];
         }else{
             $arr['success'] = 0;
@@ -338,7 +356,7 @@ class PostController extends CommonController {
 
         //图片上传设置
         $config = array(
-            'maxSize'    =>    3145728,
+            'maxSize'    =>    C('FILE_SIZE') * 4,  //附件上传为5M * 4 = 20M
             'rootPath'	 =>    'Public',
             'savePath'   =>    '/Uploads/postAttachment/'.$day.'/',
             'saveName'   =>    array('uniqid',$_SESSION['uid'].'_'),
@@ -497,6 +515,7 @@ class PostController extends CommonController {
         $pending2 = 3;        //继续提交审核
         $dismiss  = 4;        //审核不通过flag
         $pended  = 5;        //审核通过flag
+        $return  = 6;        //总编打回给小编不通过,小编可以继续修改
 
         switch (intval($this->auto)){
             case ADMIN:
@@ -510,8 +529,10 @@ class PostController extends CommonController {
                             onclick="return UpdateFormSubmit('.$pended.');" value="审核通过" name="send">';
                 $html .= '</div>';
                 $html .= '<div class="col-sm-2 col-sm-offset-1">';
+//                $html .= '<input type="button" class="btn btn-danger btn-block"
+//                            onclick="return UpdateFormSubmit('.$dismiss.');" value="审核不通过" name="send">';
                 $html .= '<input type="button" class="btn btn-danger btn-block" 
-                            onclick="return UpdateFormSubmit('.$dismiss.');" value="审核不通过" name="send">';
+                            onclick="return UpdateFormSubmit('.$return.');" value="打回" name="send">';
                 $html .= '</div>';
                 $html .= '<div class="col-sm-2 col-sm-offset-1">';
                 $html .= '<input type="button" class="btn  btn-default m-left-xs btn-block" onclick="return resetAddForm();" value="清空内容" id="res">';
@@ -523,7 +544,7 @@ class PostController extends CommonController {
                 $htmlSmall .= '</div>';
                 $htmlSmall .= '<div class="col-xs-2 col-xs-offset-2">';
                 $htmlSmall .= '<input type="button" class="btn btn-danger  btn-xs" 
-                            onclick="return UpdateFormSubmit('.$dismiss.');" value="审核不通过" name="send">';
+                            onclick="return UpdateFormSubmit('.$return.');" value="打回" name="send">';
                 $htmlSmall .= '</div>';
                 $htmlSmall .= '<div class="col-xs-2 col-xs-offset-2">';
                 $htmlSmall .= '<input type="button" class="btn  btn-default btn-xs" onclick="return resetAddForm();" value="清空内容" id="res">';
@@ -757,6 +778,9 @@ class PostController extends CommonController {
         $this->assign('pendedCount',$this->postObj->getStatusCountByFlag($this->auto,'pended',$this->dept));
         //取得审核不通过文章个数
         $this->assign('dismissCount',$this->postObj->getStatusCountByFlag($this->auto,'dismiss',$this->dept));
+
+        //取得打回文章个数
+        $this->assign('returnCount',$this->postObj->getStatusCountByFlag($this->auto,'return',$this->dept));
 
     }
 }

@@ -63,6 +63,9 @@ class IndexController extends CommonController {
         //取得审核不通过文章个数
         $this->assign('dismissCount',$this->postObj->getStatusCountByFlag($this->auto,'dismiss',$this->dept));
 
+        //取得打回文章个数
+        $this->assign('returnCount',$this->postObj->getStatusCountByFlag($this->auto,'return',$this->dept));
+
         if($this->auto == BAOLIAOZHE){
 
             //取得爆料者的评分总数
