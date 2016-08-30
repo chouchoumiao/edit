@@ -217,6 +217,13 @@ function addFormSubmit(flag) {
     });
 
 
+    //判断附件个数，只能是一个
+    if($('.gallery-item').length > 1){
+        alert('附件个数有误请确认');
+        return;
+    }
+
+
     //将数组转化为json格式
     var deptJson = JSON.stringify(deptArr);
 
@@ -371,6 +378,13 @@ function UpdateFormSubmit(flag) {
         alert('必须填写不通过审核的原因');
         return false;
     }
+
+    //判断附件个数，只能是一个
+    if($('.gallery-item').length > 1){
+        alert('附件个数有误请确认');
+        return;
+    }
+
 
     $.ajax({
         url:ROOT+"/Admin/Post/doAction/action/update"//改为你的动态页
