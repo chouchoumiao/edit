@@ -22,6 +22,24 @@ namespace Admin\Model;
             }
         }
 
+
+        /**
+         * 根据传入的打分者的文章ID(不是爆料者最先的文章ID),取得打分信息
+         * @param $scorePostID
+         * @return bool
+         */
+        public function getScoreInfoByPostId($scorePostID){
+            $where['score_post_id'] = $scorePostID;
+            $field = 'score';
+
+            $ret = $this->object->where($where)->field($field)->find();
+            if( false === $ret){
+                return false;
+            }
+            return $ret;
+
+        }
+
         /**
          * 根据传入的uid获得该用户的总积分
          * @param $uid
@@ -29,6 +47,7 @@ namespace Admin\Model;
          */
         public function getSumScoreByUid($uid){
             $where['author'] = $uid;
+            $where['score_flag'] = 1;   //只有flag为一也就是总编打分的才能计算
             $field = 'score';
 
             $data = $this->object->where($where)->sum($field);
@@ -47,6 +66,7 @@ namespace Admin\Model;
          */
         public function getDeptAdminSumScoreByUid($uid,$dept){
             $where['author'] = $uid;
+            $where['score_flag'] = 1;   //只有flag为一也就是总编打分的才能计算
             $deptArr = json_decode($dept);
             $where['dept'] = array('like',"%{$deptArr[0]}%");
             $field = 'score';
@@ -80,12 +100,12 @@ namespace Admin\Model;
 
         /**
          * 追加新记录
-         * @param $score
+         * @param $scoreData
          * @return mixed
          */
-        public function newScoreInsert($score){
+        public function newScoreInsert($scoreData){
 
-            return M('score')->add($score);
+            return M('score')->add($scoreData);
             
         }
 
@@ -97,6 +117,7 @@ namespace Admin\Model;
         public function getDeptAdminAllScoreCount($dept){
             $deptArr = json_decode($dept);
             $where['dept'] = array('like',"%{$deptArr[0]}%");
+            $where['score_flag'] = 1;   //只有flag为一也就是总编打分的才能计算
             return $this->object
                 ->where($where)
                 ->join($this->join)
@@ -108,7 +129,9 @@ namespace Admin\Model;
          * @return mixed
          */
         public function getAllScoreCount(){
+            $where['score_flag'] = 1;   //只有flag为一也就是总编打分的才能计算
             return $this->object
+                ->where($where)
                 ->join($this->join)
                 ->count();
         }
@@ -119,6 +142,7 @@ namespace Admin\Model;
          */
         public function getBaoliaozheScoreCount(){
             $where['author'] = $_SESSION['uid'];
+            $where['score_flag'] = 1;   //只有flag为一也就是总编打分的才能计算
             return $this->object
                 ->where($where)
                 ->join($this->join)
@@ -132,6 +156,7 @@ namespace Admin\Model;
          */
         public function getBaoliaozheScore($limit){
             $where['author'] = $_SESSION['uid'];
+            $where['score_flag'] = 1;   //只有flag为一也就是总编打分的才能计算
             if('' == $limit){
 
                 return $this->object
@@ -157,16 +182,19 @@ namespace Admin\Model;
          * @return mixed
          */
         public function getAllScore($limit){
+            $where['score_flag'] = 1;   //只有flag为一也就是总编打分的才能计算
 
             if('' == $limit){
 
                 return $this->object
+                    ->where($where)
                     ->join($this->join)
                     ->field($this->field)
                     ->order($this->order)
                     ->select();
             }else{
                 return $this->object
+                    ->where($where)
                     ->join($this->join)
                     ->field($this->field)
                     ->limit($limit)
@@ -184,6 +212,7 @@ namespace Admin\Model;
         public function getDeptAdminAllScore($limit,$dept){
             $deptArr = json_decode($dept);
             $where['dept'] = array('like',"%{$deptArr[0]}%");
+            $where['score_flag'] = 1;   //只有flag为一也就是总编打分的才能计算
 
             if('' == $limit){
 

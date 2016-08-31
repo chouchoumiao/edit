@@ -43,15 +43,21 @@ $(function(){
 
     if($('#postid').length > 0){
 
+        var theAutoVal = $('#theAuto').val();
+
         //编辑文章的时候,如果有附件则显示附件
-        if( ($('#theAuto').val() == BAOLIAOZHE) || ($('#theAuto').val() == XIAOBIAN) ) {
+        if( ( theAutoVal== BAOLIAOZHE) || ( theAutoVal == XIAOBIAN) ) {
             doAttachment();
         }
 
         //如果是小编或者是总编的人情况下，先判断该文章是否有过打分，有的话则取出显示
-        if( ($('#theAuto').val() == XIAOBIAN) || ($('#theAuto').val() == ZONGBIAN) ) {
+        if( ( theAutoVal == XIAOBIAN) || ( theAutoVal == ZONGBIAN) ) {
 
-            
+            var theScore = parseInt($('#theScore').val());
+            //大于0说明原先该文章已经被打过分了,所有要把分数取得并且绑定在积分DIV上
+            if( theScore > 0){
+                setScoreActive(theScore);
+            }
 
         }
 
@@ -621,4 +627,22 @@ function removeAttachment (path,saveName,flag) {
         }
         ,error:function(xhr){alert('PHP页面有错误！'+xhr.responseText);}
     });
+}
+
+/**
+ * 根据传入的个数,设置爱心激活状态
+ * @param num
+ */
+function setScoreActive(num) {
+
+    if( typeof num === "number"){
+
+        for (var i=1; i<=num; i++){
+            $('#scoreBtn'+i).addClass('active');
+        }
+        //最后一个追加一个特有class,用于提交时判断
+        $('#scoreBtn'+num).addClass('lastActive');
+
+    }
+
 }

@@ -28,6 +28,22 @@ namespace Admin\Model;
         }
 
         /**
+         * 根据传入的打分者的文章ID(不是爆料者最先的文章ID)
+         * @param $scorePostID
+         * @return bool
+         */
+        public function getTheScore($scorePostID){
+
+            $ret = D('Score')->getScoreInfoByPostId($scorePostID);
+            if($ret){
+                return $ret['score'];
+            }
+            return false;
+
+
+        }
+
+        /**
          * 更新附件表
          * @param $data
          * @return bool

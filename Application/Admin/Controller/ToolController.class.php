@@ -43,6 +43,7 @@ class ToolController extends Controller{
                 break;
             case ZONGBIAN:
                 $this->assign('postMainControl',true);
+                $this->assign('postPending2Control',true);   //总编追加未最终审核一览
                 $this->assign('mediaControl',true);
                 break;
             case XIAOBIAN:

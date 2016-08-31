@@ -408,12 +408,6 @@ class PostController extends CommonController {
 
             $post = $this->postObj->getThePostAndUser(I('get.id'));
 
-//            $attachmentData = $this->postObj->getAttachmentData(I('get.id'));
-//
-//            if($attachmentData){
-//                $this->assign('attachmentList',$attachmentData['post_attachment']);
-//            }
-
             if($post){
                 $post['post_dept'] = ToolModel::deptCodeToNameArr($post['post_dept']);
                 $this->assign('post',$post);
@@ -503,7 +497,16 @@ class PostController extends CommonController {
             $this->assign('content',$data['post_content']);
             $this->assign('title',$data['post_title']);
             $this->assign('theDept',ToolModel::onlyShowTheDept($data['post_dept']));
-//            $this->assign('theDept',ToolModel::showTheDeptForPost($data['post_dept'],$data['post_author']));
+            
+            //追加小编或者总编时候去的积分,并给编辑页面
+            $theScore = $this->postObj->getTheScore($thePostId);
+
+            if($theScore){
+                $this->assign('theScore',$theScore);
+            }else{
+                $this->assign('theScore',0);
+            }
+            
         }else{
             ToolModel::goBack('无该文章,请确认');
         }
