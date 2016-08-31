@@ -40,10 +40,26 @@ $(function(){
         }
     });
 
-    //编辑文章的时候,如果有附件则显示附件
+
     if($('#postid').length > 0){
+
+        //编辑文章的时候,如果有附件则显示附件
         if( ($('#theAuto').val() == BAOLIAOZHE) || ($('#theAuto').val() == XIAOBIAN) ) {
             doAttachment();
+        }
+
+        //如果是小编或者是总编的人情况下，先判断该文章是否有过打分，有的话则取出显示
+        if( ($('#theAuto').val() == XIAOBIAN) || ($('#theAuto').val() == ZONGBIAN) ) {
+
+            
+
+        }
+
+
+    }else{  //新增文章时候讲焦点定于第一行
+        if($('#newTitle').length > 0){
+
+            $('#newTitle').focus();
         }
     }
 
@@ -82,7 +98,7 @@ $(function(){
      */
     $( '#summernote' ).summernote({
         minHeight: 400,
-        focus:true,
+        //focus:true,
         lang:'zh-CN',
         toolbar: [
             ['style', ['bold', 'italic', 'underline', 'clear']],
@@ -178,8 +194,9 @@ $(function(){
 
     });
 
-    //焦点定位到第一个input
-    $('#theTitle').focus();
+    //焦点定位到第一个input（并将光标定位到最后位置，火狐不支持）
+    var titleVar = $('#theTitle').val();
+    $('#theTitle').focus().val(titleVar);
 
 });
 
@@ -299,6 +316,12 @@ function delPost(id) {
 /**
  * 修改文章
  * @param flag
+ *              1:保存
+ *              2:提交审核
+ *              3:继续提交审核
+ *              4:审核不通过
+ *              5:审核通过
+ *              6:总编打回给小编不通过,小编可以继续修改
  * @constructor
  */
 function UpdateFormSubmit(flag) {

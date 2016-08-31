@@ -5,8 +5,6 @@
  */
 namespace Admin\Model;
 
-	use Think\Log;
-
     class PostModel {
 
         private $post_id;
@@ -715,12 +713,13 @@ namespace Admin\Model;
             }
         }
 
-
         /**
-         * 最终审核文章提交成功后,将评分记录计入评分表
+         * 小编或者总编都可以进行打分,将评分记录计入评分表
+         * @param $auto 权限 是小编还是总编
+         * @param $dept 部门
          * @return mixed
          */
-        public function insertScore($dept){
+        public function insertScore($auto,$dept){
             $now = date('Y/m/d H:i:s',time());
 
             $parentid = $this->getParentPostid($this->post_id);
@@ -730,6 +729,16 @@ namespace Admin\Model;
             $author = $this->getAuthorByPostID($parentid);
 
             $scoreData['author'] = $author;
+
+            //因为小编也需要打分所以新增两个字段
+            $scoreData['score_post_id'] = $this->post_id;
+
+            //小编的flag=0，总编=1
+            if($auto == XIAOBIAN){
+                $scoreData['score_flag'] = 0;
+            }else{
+                $scoreData['score_flag'] = 1;
+            }
 
             $scoreData['score_author'] = $_SESSION['uid'];
             $scoreData['score'] = I('post.score');

@@ -181,9 +181,10 @@ class PostController extends CommonController {
         //更新文章
         if( $this->postObj->updatePost() ){
 
-            if(intval(I('post.flag')) == 5){
+            //小编的提交给总编和总编的审核通过都可以设置分数
+            if(intval(I('post.flag')) == 5 || intval(I('post.flag')) == 3 ){
 
-                $this->postObj->insertScore($this->dept);
+                $this->postObj->insertScore($this->auto,$this->dept);
             }
 
             $arr['success'] = 1;
