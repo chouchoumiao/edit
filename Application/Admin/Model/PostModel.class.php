@@ -175,6 +175,12 @@ namespace Admin\Model;
                 case 'noSearch':
                     if( ( isset($_GET['status'] ) ) && ( '' != I('get.status')) ){
                         $status = I('get.status');
+
+                        //如果取得的status不在信息的状态数组中则显示全部
+                        if(!in_array($status,C('POST_ALLOW_STATUS'))){
+                            $status = 'all';
+                        }
+
                     }else{
                         $status = 'all';
                     }
@@ -221,7 +227,6 @@ namespace Admin\Model;
                                 $join = "INNER JOIN ccm_m_user 
                                             ON ccm_posts.post_author = ccm_m_user.id 
                                             AND ccm_posts.post_child = 0 
-                                            AND ccm_posts.post_author = '$theID'
                                             AND ccm_posts.post_dept LIKE '%$dept%'" ;
 
                             }else{
@@ -370,6 +375,10 @@ namespace Admin\Model;
                 case 'noSearch':
                     if( ( isset($_GET['status'] ) ) && ( '' != I('get.status')) ){
                         $status = I('get.status');
+                        //如果取得的status不在信息的状态数组中则显示全部
+                        if(!in_array($status,C('POST_ALLOW_STATUS'))){
+                            $status = 'all';
+                        }
                     }else{
                         $status = 'all';
                     }
@@ -416,7 +425,6 @@ namespace Admin\Model;
                                 $join = "INNER JOIN ccm_m_user 
                                             ON ccm_m_user.id = ccm_posts.post_author 
                                              AND ccm_posts.post_child = 0 
-                                             AND ccm_posts.post_author = '$theID'
                                             AND ccm_posts.post_dept LIKE '%$dept%'";
                             }else{
 
@@ -475,7 +483,8 @@ namespace Admin\Model;
             $field = 'ccm_posts.*,ccm_m_user.id as uid,ccm_m_user.username,ccm_score.score';
 
             $join1 = "LEFT JOIN ccm_score 
-                    ON ccm_score.postid = ccm_posts.id";
+                    ON ccm_score.score_post_id = ccm_posts.id
+                    AND score_flag = 1";
 
             //多表联合查询
             if('' == $limit){
@@ -538,7 +547,6 @@ namespace Admin\Model;
                         $join = "INNER JOIN ccm_m_user 
                                     ON ccm_posts.post_author = ccm_m_user.id 
                                     AND ccm_posts.post_child = 0 
-                                    AND ccm_posts.post_author = '$theID'
                                     AND ccm_posts.post_dept LIKE '%$dept%'" ;
 
                     }else{

@@ -23,8 +23,8 @@ define(BAOLIAOZHE,1);       //爆料者
 define(XIAOBIAN,2);         //小编
 define(ZONGBIAN,3);         //总编
 define(DEPT_ADMIN,4);       //部门管理员
-define(ADMIN,'88');         //管理员
-define(SUPPER_ADMIN,'99');  //超级管理员
+define(ADMIN,88);           //管理员
+define(SUPPER_ADMIN,99);    //超级管理员
 
 //文章状态
 define(POST_SAVE,'save');           //保存
@@ -38,7 +38,13 @@ define(POST_RETURN,'return');       //文章被打回给小编
 
 return array(
 
-    'DB_DEBUG' => true,
+
+
+
+
+	'SHOW_ERROR_MSG'        =>  true,
+
+    //'DB_DEBUG' => true,
 
 //	'SHOW_PAGE_TRACE'=>true,        //开启追踪调试
 
@@ -107,6 +113,18 @@ return array(
         'pended'   => '已审核通过',
         'close'    => '所有部门审核完毕'
     ),
+
+	//文章信息的状态
+	'POST_ALLOW_STATUS'  => array(
+		'save',
+		'pending',
+		'pending2',
+		'dismiss',
+		'return',
+		'pended',
+		'close'
+	),
+
 
     /**********************上传时一般设定**********************/
 
