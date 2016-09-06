@@ -454,7 +454,47 @@ class PostController extends CommonController {
                             ToolModel::goBack('审核时生成拷贝文件失败,请重试');
                         }else{  //被拷贝原文章的的继承字段要更新,从来可以来判断该文章是否被拷贝过
 
-                            if( false === $this->postObj->updatePostChild(I('get.id'),$newID)){
+                            //取得原文章是否已经被继承过
+                            $oldChild = $this->postObj->getPostChild(intval(I('get.id')));
+
+                            //如果没有继承过,则将本次继承的新ID写入原本章的继承字段
+                            if( 0 == intval($oldChild)){
+                                $newChild = $newID;
+                            }else{  //如果已经被继承过,则在原先的继承结果上追加
+                                $newChild = $oldChild.','.strval($newID);
+                            }
+
+                            //取得原文章的post_name,将本次小编的部门才能够该数组中删除,以便后期判断是否继承用
+                            $oldPostName = $this->postObj->getPostName(intval(I('get.id')));
+                            $oldPostNameArr = json_decode($oldPostName);
+
+                            //得到当前小编的部门,转化为数字
+                            $nowDeptArr = json_decode($this->dept);
+                            $nowDept = $nowDeptArr[0];
+
+                            //如果当前部门在未被继承数组中,则将当前部门从数组中去除
+                            if(in_array($nowDept,$oldPostNameArr)){
+                                for ($i=0;$i<count($oldPostNameArr);$i++){
+                                    if($oldPostNameArr[$i] != $nowDept){
+                                        $newPostNameArr[] = $oldPostNameArr[$i];
+                                    }
+                                }
+                            }
+
+                            //如果当前部门从数组中去除以后为空数组了,则将该字段设置为空
+                            if(count($newPostNameArr) <= 0){
+                                $newPostNameJson = '';
+                            }else{  //否则则将去除当前部门后的数组转为为json对象,以便存入数据表中
+                                $newPostNameJson = json_encode($newPostNameArr);
+                            }
+
+                            //更新该字段
+                            if( false === $this->postObj->updatePostName(I('get.id'),$newPostNameJson)){
+                                ToolModel::goBack('更新原文章的被编辑状态出错!');
+                            }
+
+                            //更新继承字段
+                            if( false === $this->postObj->updatePostChild(I('get.id'),$newChild)){
                                 ToolModel::goBack('拷贝文章时候原文章状态更新失败!');
                             }
 

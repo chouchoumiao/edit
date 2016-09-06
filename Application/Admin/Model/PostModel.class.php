@@ -139,7 +139,6 @@ namespace Admin\Model;
                             $join = "INNER JOIN ccm_m_user 
                                         ON ccm_posts.post_author = ccm_m_user.id 
                                         AND ccm_posts.post_author = $userid 
-                                        AND ccm_posts.post_child = 0 
                                         AND ccm_posts.post_dept LIKE '%$dept%'";
                             break;
                         case ZONGBIAN:  //总编只显示提交给自己最终审核的文章
@@ -226,8 +225,8 @@ namespace Admin\Model;
                             if($status == 'all'){
                                 $join = "INNER JOIN ccm_m_user 
                                             ON ccm_posts.post_author = ccm_m_user.id 
-                                            AND ccm_posts.post_child = 0 
-                                            AND ccm_posts.post_dept LIKE '%$dept%'" ;
+                                            AND ccm_posts.post_dept LIKE '%$dept%'
+                                            AND ccm_posts.post_name LIKE '%$dept%'" ;       //追加判断未被编辑部门才显示
 
                             }else{
 
@@ -235,16 +234,15 @@ namespace Admin\Model;
 
                                     $join = "INNER JOIN ccm_m_user 
                                             ON ccm_posts.post_author = ccm_m_user.id 
-                                            AND ccm_posts.post_child = 0 
                                             AND ccm_posts.post_dept LIKE '%$dept%' 
                                             AND ccm_posts.post_author = '$theID'
                                             AND ccm_posts.post_status = '$status'";
                                 }else {
                                     $join = "INNER JOIN ccm_m_user 
                                             ON ccm_posts.post_author = ccm_m_user.id 
-                                            AND ccm_posts.post_child = 0 
                                             AND ccm_posts.post_dept LIKE '%$dept%' 
-                                            AND ccm_posts.post_status = '$status'";
+                                            AND ccm_posts.post_status = '$status'
+                                            AND ccm_posts.post_name LIKE '%$dept%'" ;       //追加判断未被编辑部门才显示
                                 }
                             }
                             break;
@@ -331,7 +329,6 @@ namespace Admin\Model;
                             $join = "INNER JOIN ccm_m_user 
                                         ON ccm_m_user.id = ccm_posts.post_author 
                                         AND ccm_posts.post_author = $userid 
-                                        AND ccm_posts.post_child = 0 
                                         AND ccm_posts.post_dept LIKE '%$dept%'";
                             break;
                         case ZONGBIAN:
@@ -424,24 +421,23 @@ namespace Admin\Model;
                             if($status == 'all'){
                                 $join = "INNER JOIN ccm_m_user 
                                             ON ccm_m_user.id = ccm_posts.post_author 
-                                             AND ccm_posts.post_child = 0 
-                                            AND ccm_posts.post_dept LIKE '%$dept%'";
+                                            AND ccm_posts.post_dept LIKE '%$dept%'
+                                            AND ccm_posts.post_name LIKE '%$dept%'" ;       //追加判断未被编辑部门才显示
                             }else{
 
                                 if($status == POST_SAVE){
 
                                     $join = "INNER JOIN ccm_m_user 
                                             ON ccm_m_user.id = ccm_posts.post_author 
-                                            AND ccm_posts.post_child = 0 
                                             AND ccm_posts.post_dept LIKE '%$dept%'
                                             AND ccm_posts.post_author = '$theID'
                                             AND ccm_posts.post_status = '$status'";
                                 }else {
                                     $join = "INNER JOIN ccm_m_user 
                                             ON ccm_m_user.id = ccm_posts.post_author 
-                                            AND ccm_posts.post_child = 0 
                                             AND ccm_posts.post_dept LIKE '%$dept%'
-                                            AND ccm_posts.post_status = '$status'";
+                                            AND ccm_posts.post_status = '$status'
+                                            AND ccm_posts.post_name LIKE '%$dept%'" ;       //追加判断未被编辑部门才显示
                                 }
                             }
                             break;
@@ -546,24 +542,23 @@ namespace Admin\Model;
                     if($status == 'all'){
                         $join = "INNER JOIN ccm_m_user 
                                     ON ccm_posts.post_author = ccm_m_user.id 
-                                    AND ccm_posts.post_child = 0 
-                                    AND ccm_posts.post_dept LIKE '%$dept%'" ;
+                                    AND ccm_posts.post_dept LIKE '%$dept%'
+                                    AND ccm_posts.post_name LIKE '%$dept%'" ;       //追加判断未被编辑部门才显示
 
                     }else{
                         if($status == POST_SAVE){
 
                             $join = "INNER JOIN ccm_m_user 
                                     ON ccm_posts.post_author = ccm_m_user.id 
-                                    AND ccm_posts.post_child = 0 
                                     AND ccm_posts.post_dept LIKE '%$dept%' 
                                     AND ccm_posts.post_author = '$theID' 
                                     AND ccm_posts.post_status = '$status'" ;
                         }else{
                             $join = "INNER JOIN ccm_m_user 
                                     ON ccm_posts.post_author = ccm_m_user.id 
-                                    AND ccm_posts.post_child = 0 
                                     AND ccm_posts.post_dept LIKE '%$dept%' 
-                                    AND ccm_posts.post_status = '$status'" ;
+                                    AND ccm_posts.post_status = '$status'
+                                    AND ccm_posts.post_name LIKE '%$dept%'" ;       //追加判断未被编辑部门才显示
                         }
 
                     }
@@ -697,6 +692,7 @@ namespace Admin\Model;
                 'post_content'          => $this->post_content,
                 'post_title'            => $this->post_title,
                 'post_dept'             => $this->post_dept,
+                'post_name'             => $this->post_dept,        //为了判定被继承个数,用此字段
                 'post_status'           => $this->post_status,
                 'post_dismiss_msg'      => $this->dismissMsg,
                 'post_modified'         => $now
@@ -855,14 +851,40 @@ namespace Admin\Model;
             return false;
 
         }
+
+        /**
+         * 取得原文章的未被小编编辑的(未被继承的)部门数组
+         * @param $postid       原文章ID
+         * @return bool
+         */
+        public function getPostName($postid){
+            $field = 'ccm_posts.post_name';
+            $where['id'] = $postid;
+
+            $data = $this->object->field($field)->where($where)->find();
+            if($data){
+                return $data['post_name'];
+            }
+            return false;
+
+        }
         
-        public function updatePostChild($postid,$newid){
+        public function updatePostName($postid,$postName){
             
-            $data['post_child'] = $newid;
+            $data['post_name'] = $postName;
             $where['id'] = $postid;
 
             return $this->object->where($where)->save($data);
             
+        }
+
+        public function updatePostChild($postid,$newid){
+
+            $data['post_child'] = $newid;
+            $where['id'] = $postid;
+
+            return $this->object->where($where)->save($data);
+
         }
 
 
@@ -1095,7 +1117,7 @@ namespace Admin\Model;
                 'post_dept'    => $this->post_dept,
                 'post_status'  => $this->post_status,
                 'post_dismiss_msg'  => '',
-                'post_name'    => '',
+                'post_name'    => $this->post_dept,     //为了判定被继承个数,用此字段
                 'post_modified'=> $now,
                 'post_parent'  => 0
             );
