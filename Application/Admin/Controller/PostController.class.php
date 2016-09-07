@@ -437,8 +437,8 @@ class PostController extends CommonController {
 
         if($data){
             //$lockID = I('get.id');
-            //如果是小编的情况下点击了审核,需要新增同样的文章
-            if( intval($this->auto) == XIAOBIAN ){
+            //如果是小编,并且是待审核文章的情况下点击了审核,需要新增同样的文章
+            if( (intval($this->auto) == XIAOBIAN) && ($data['post_status'] == 'pending') ){
 
                 //继续判定点击的文章作者是不是当前小编,如果是则不作拷贝也不作判断
                 if($data['post_author'] != $_SESSION['uid']){
