@@ -143,6 +143,7 @@ class MediaController extends CommonController {
 
     /**
      * 根据传入的状态返回对应的页面
+     * @param $msg
      */
     private function returnUrl($msg){
         //获取传上来的当前页面状态是媒体文件,文档文件,我的,还是收藏的
@@ -269,6 +270,8 @@ class MediaController extends CommonController {
                     $arr['msg'] = '数据库中资源删除失败'.M('media')->getLastSql();
                 }else{
                     $arr['success'] = 1;
+                    //删除图片后，需要更新缓存flag,并重新取得资源
+                    $this->resetCacheStatus();
                 }
             }else{
                 $arr['success'] = 0;
