@@ -3,7 +3,6 @@
 header("Content-type: text/html;charset=utf-8");
 
 define(MY_SITE, $_SERVER['SERVER_NAME']);   //发送邮件附带地址的时候需要  本地环境
-define(PAGE_SHOW_COUNT,6);
 
 define(DOCUMENT_ROOT,$_SERVER['DOCUMENT_ROOT']);
 
@@ -18,6 +17,9 @@ define(POST_ATTACHMENT_PATH,$_SERVER['DOCUMENT_ROOT'].'/edit/Public/Uploads/post
 //资源库文件夹路径
 define(MEDIA_PATH,$_SERVER['DOCUMENT_ROOT'].'/edit/Public/Uploads/Media');
 
+define(PAGE_SHOW_COUNT_6,6);	//每页显示6条记录
+define(PAGE_SHOW_COUNT_10,10);	//每页显示10条记录
+
 //角色设定
 define(BAOLIAOZHE,1);       //爆料者
 define(XIAOBIAN,2);         //小编
@@ -25,6 +27,16 @@ define(ZONGBIAN,3);         //总编
 define(DEPT_ADMIN,4);       //部门管理员
 define(ADMIN,88);           //管理员
 define(SUPPER_ADMIN,99);    //超级管理员
+
+//角色名称设定
+define(TONGXUNYUAN_NAME,'通讯员');       //通讯员名称
+define(BAOLIAOZHE_NAME,'爆料者');       //爆料者名称
+define(TONGXUNYUAN_NAME,'通讯员');       //通讯员名称
+define(TONGXUNYUAN_NAME,'通讯员');       //通讯员名称
+define(TONGXUNYUAN_NAME,'通讯员');       //通讯员名称
+define(TONGXUNYUAN_NAME,'通讯员');       //通讯员名称
+define(TONGXUNYUAN_NAME,'通讯员');       //通讯员名称
+
 
 //文章状态
 define(POST_SAVE,'save');           //保存
@@ -37,10 +49,6 @@ define(POST_RETURN,'return');       //文章被打回给小编
 
 
 return array(
-
-
-
-
 
 	'SHOW_ERROR_MSG'        =>  true,
 

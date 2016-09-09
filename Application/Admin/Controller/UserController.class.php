@@ -256,7 +256,7 @@ class UserController extends CommonController {
         }
 
         //追加左边介绍处使用(文字)
-        $this->assign('thisAuto',ToolModel::autoCodeToName($userInfo['udi_auto_id']));
+        $this->assign('thisAuto',ToolModel::autoCodeToName($userInfo['udi_auto_id'],$userInfo['udi_dep_id']));
         //追加左边介绍处使用(文字)
         $this->assign('thisDept',ToolModel::deptCodeToName($userInfo['udi_dep_id']));
 
@@ -295,7 +295,7 @@ class UserController extends CommonController {
 
         //分页
         import('ORG.Util.Page');// 导入分页类
-        $Page = new \Org\Util\Page($count,PAGE_SHOW_COUNT);                     //实例化分页类 传入总记录数
+        $Page = new \Org\Util\Page($count,PAGE_SHOW_COUNT_10);                //实例化分页类 传入总记录数
         $limit = $Page->firstRow.','.$Page->listRows;
 
         //取得指定条数的信息
@@ -311,8 +311,8 @@ class UserController extends CommonController {
 
             //将只有一个部门的爆料者名称修改为编辑
             $deptArr = explode('，',$user[$i]['udi_dep_id']);
-            if ( ($user[$i]['udi_auto_id'] == '爆料者') && (count($deptArr) == 1) ){
-                $user[$i]['udi_auto_id'] = '编辑';
+            if ( ($user[$i]['udi_auto_id'] == BAOLIAOZHE_NAME) && (count($deptArr) == 1) ){
+                $user[$i]['udi_auto_id'] = TONGXUNYUAN_NAME;
             }
 
             //如果姓名过长则截取

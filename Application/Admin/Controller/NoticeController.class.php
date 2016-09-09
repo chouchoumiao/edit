@@ -230,7 +230,7 @@ class NoticeController extends CommonController {
 
         //分页
         import('ORG.Util.Page');// 导入分页类
-        $Page = new \Org\Util\Page($count,PAGE_SHOW_COUNT);// 实例化分页类 传入总记录数
+        $Page = new \Org\Util\Page($count,PAGE_SHOW_COUNT_6);// 实例化分页类 传入总记录数
         $limit = $Page->firstRow.','.$Page->listRows;
 
         //取得指定条数的信息

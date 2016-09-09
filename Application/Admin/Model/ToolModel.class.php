@@ -307,7 +307,7 @@ namespace Admin\Model;
 
                 if( 1 == $obj[$i]['id']){
 
-                    $html .= '<div class="inline-block vertical-top">爆料者/编辑(一个部门为编辑)';
+                    $html .= '<div class="inline-block vertical-top">'.BAOLIAOZHE_NAME.'/'.TONGXUNYUAN_NAME;
                 }else{
                     $html .= '<div class="inline-block vertical-top">'.$obj[$i]['name'];
                 }
@@ -681,12 +681,17 @@ namespace Admin\Model;
          * @param $autoCodeJson
          * @return mixed
          */
-        static function autoCodeToName($autoCodeJson)
+        static function autoCodeToName($autoCodeJson,$deptCodeJson)
         {
             $autotArr = C('AUTO_ARRAY');   //取得自定义常量部门数组
 
             //处理部门数字转化为文字 start
             $auto = json_decode($autoCodeJson);            //json转化为数字
+            $dept = json_decode($deptCodeJson);            //json转化为数字
+
+            if( ($auto == BAOLIAOZHE) && (count($dept) == 1)){
+                return TONGXUNYUAN_NAME;
+            }
 
             //给obj新增dept数组,给文章列表中显示部门可点击用
 
