@@ -31,11 +31,6 @@ define(SUPPER_ADMIN,99);    //超级管理员
 //角色名称设定
 define(TONGXUNYUAN_NAME,'通讯员');       //通讯员名称
 define(BAOLIAOZHE_NAME,'爆料者');       //爆料者名称
-define(TONGXUNYUAN_NAME,'通讯员');       //通讯员名称
-define(TONGXUNYUAN_NAME,'通讯员');       //通讯员名称
-define(TONGXUNYUAN_NAME,'通讯员');       //通讯员名称
-define(TONGXUNYUAN_NAME,'通讯员');       //通讯员名称
-define(TONGXUNYUAN_NAME,'通讯员');       //通讯员名称
 
 
 //文章状态
@@ -45,8 +40,6 @@ define(POST_PENDING2,'pending2');   //最终审核
 define(POST_PENDED,'pended');       //审核通过
 define(POST_DISMISS,'dismiss');     //审核不通过
 define(POST_RETURN,'return');       //文章被打回给小编
-
-
 
 return array(
 
