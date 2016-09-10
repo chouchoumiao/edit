@@ -70,7 +70,7 @@ class LoginController extends Controller{
             if( $userInfo['status'] == 0){
                 $arr['success'] = 'NG';
                 $arr['emailErr'] = true;
-                $arr['msg'] = '您的邮箱还未激活,请先激活。如果注册邮箱【'.$userInfo['email'].'】错误,请联系管理员邮箱:wu_jy1984@126.com';
+                $arr['msg'] = '您的邮箱还未激活,请先激活。如果注册邮箱【'.$userInfo['email'].'】错误,请联系管理员邮箱:linx2046@163.com';
                 echo json_encode($arr);
                 exit;
             }

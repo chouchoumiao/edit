@@ -162,14 +162,14 @@ namespace Admin\Model;
             }
 
             //取得该用户的个人说明
-            if( intval(I('post.oldDescription')) == intval(I('post.description')) ){
+            if( strval(I('post.oldDescription')) == strval(I('post.description')) ){
                 $this->description = I('post.oldDescription');      //无修改则取原先的值(int型)
             }else{
                 $this->description = I('post.description');      //修改了则取新的个人说明(int型)
             }
 
             //取得该用户的工作单位
-            if( intval(I('post.oldWorkplace')) == intval(I('post.workPlace')) ){
+            if( strval(I('post.oldWorkplace')) == strval(I('post.workPlace')) ){
                 $this->workPlace = I('post.oldWorkplace');      //无修改则取原先的值(int型)
             }else{
                 $this->workPlace = I('post.workPlace');      //修改了则取新的个人说明(int型)
