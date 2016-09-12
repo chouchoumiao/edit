@@ -45,11 +45,12 @@ define(POST_RETURN,'return');       //文章被打回给小编
 
 return array(
 
-	'SHOW_ERROR_MSG'        =>  true,
+	//'SHOW_ERROR_MSG'        =>  true,
+
 
     //'DB_DEBUG' => true,
 
-//	'SHOW_PAGE_TRACE'=>true,        //开启追踪调试
+	//'SHOW_PAGE_TRACE'=>true,        //开启追踪调试
 
 	/********************数据库配置**************************/
 	'DB_TYPE' => 'mysql',
