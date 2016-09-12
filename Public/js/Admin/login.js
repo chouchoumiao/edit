@@ -58,8 +58,15 @@ $(function(){
 
                     return false;
                 }else{
-                    //登录成功跳转到后台首页
-                    location.href = '../Index/index';
+
+                    //登录后假如有session地址，则登录后跳转到改地址，否则则跳入主页
+                    if(json.currentUrl == ""){
+                        location.href = '../Index/index';
+                    }else{
+                        location.href = json.currentUrl;
+                    }
+
+
                 }
             }
             ,error:function(xhr){alert('PHP页面有错误！'+xhr.responseText);}

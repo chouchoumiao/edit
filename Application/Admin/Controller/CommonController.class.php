@@ -9,6 +9,7 @@
 namespace Admin\Controller;
 
 use Think\Controller;
+use Think\Log;
 
 class CommonController extends Controller{
 
@@ -22,6 +23,12 @@ class CommonController extends Controller{
 
         //如果没有session或者session为0，并且方法名不是 login 和 reg 的情况则跳转到登录页面
         if( ( (!isset($_SESSION['username'])) || ('' == $_SESSION['username']) ) && ( 'login') != ACTION_NAME && ( 'reg') != ACTION_NAME){
+
+            //如果是没有登录，在进入登录画面之前先把网址记录下来，以便等候后直接跳转到记录的页面
+            if( '' != CURRENT_URL){
+                $_SESSION['currentUrl'] = CURRENT_URL;
+            }
+
             $this->redirect('Login/login');
         }
     }

@@ -5,8 +5,6 @@
  */
 namespace Admin\Model;
 
-	use Think\Log;
-
     class ToolModel {
 
         /**
@@ -123,11 +121,60 @@ namespace Admin\Model;
         /**
          * 更新session
          */
-        static function setSession(){
+        static function setNowUserBaseSession(){
             $where['id'] = $_SESSION['uid'];
             $obj = M('m_user')->where($where)->find();
+
             $_SESSION['username'] = $obj['username'];
             $_SESSION['img']      = $obj['img'];
+        }
+
+
+        /**
+         * 清除session
+         * 根据传入的name清除指定的额session，不传入则默认清除所有session(退出登录用)
+         * @param string $name
+         */
+        static function clearSession( $name = '' ){
+
+            if( '' == $name){
+                if(isset($_SESSION['username'])){
+                    unset($_SESSION['username']);
+                }
+
+                if(isset($_SESSION['uid'])){
+                    unset($_SESSION['uid']);
+                }
+
+                if(isset($_SESSION['img'])){
+                    unset($_SESSION['img']);
+                }
+
+                if(isset($_SESSION['newImg'])){
+                    unset($_SESSION['newImg']);
+                }
+
+                if(isset($_SESSION['editImg'])){
+                    unset($_SESSION['editImg']);
+                }
+
+                if(isset($_SESSION['currentUrl'])){
+                    unset($_SESSION['currentUrl']);
+                }
+
+                if(isset($_SESSION['activeNotice'])){
+                    unset($_SESSION['activeNotice']);
+                }
+
+                if(isset($_SESSION['activeNoticeCount'])){
+                    unset($_SESSION['activeNoticeCount']);
+                }
+            }else{
+                if(isset($_SESSION[$name])){
+                    unset($_SESSION[$name]);
+                }
+            }
+
         }
 
         /**

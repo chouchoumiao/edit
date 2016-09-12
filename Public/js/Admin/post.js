@@ -104,8 +104,9 @@ $(function(){
      */
     $( '#summernote' ).summernote({
         minHeight: 400,
-        //focus:true,
+        focus:true,
         lang:'zh-CN',
+        height: 600,
         toolbar: [
             ['style', ['bold', 'italic', 'underline', 'clear']],
             ['fontname', ['fontname']],

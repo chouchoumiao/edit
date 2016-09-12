@@ -88,6 +88,13 @@ class LoginController extends Controller{
             $_SESSION['activeNotice'] = $notice;
             $_SESSION['activeNoticeCount'] = count($notice);
 
+            //追加如果有记录当前地址的话则登录后默认跳转到该地址
+            if( (isset($_SESSION['currentUrl'])) && ('' != $_SESSION['currentUrl']) ){
+                $arr['currentUrl'] = $_SESSION['currentUrl'];
+                unset($_SESSION['currentUrl']);     //清空该session
+            }else{
+                $arr['currentUrl'] = '';
+            }
 
             $arr['success'] = 'OK';
             echo json_encode($arr);
@@ -106,9 +113,8 @@ class LoginController extends Controller{
      *
      */
     public function logout(){
-        unset($_SESSION['username']);
-        unset($_SESSION['uid']);
-        unset($_SESSION['img']);
+
+        ToolModel::clearSession();  //清除所有session
         $this->redirect('Login/login');
     }
 

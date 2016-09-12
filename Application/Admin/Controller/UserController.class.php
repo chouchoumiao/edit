@@ -116,7 +116,7 @@ class UserController extends CommonController {
     private function updateUser(){
         if($this->obj->updateUser()){
             //如果修改的是当前用户的信息,则重置session
-            ToolModel::setSession();
+            ToolModel::setNowUserBaseSession();
             if ($this->auto == ADMIN || $this->auto == DEPT_ADMIN || $this->auto == SUPPER_ADMIN){
 
                 //如果是审核爆料者的情况下下，激活成功后需要向改爆料者发送通知邮件（只有超级管理员和管理员可以）
@@ -133,8 +133,6 @@ class UserController extends CommonController {
             }else{
                 ToolModel::goToUrl('修改用户信息成功',U('Index/index'));
             }
-
-
         }
 
         ToolModel::goBack('修改用户信息出错');
@@ -183,7 +181,6 @@ class UserController extends CommonController {
             ToolModel::goBack('非法操作');
         }
 
-        //echo $_SESSION['newImg'];exit;
         $this->obj->addNewUser();
     }
 
@@ -283,14 +280,20 @@ class UserController extends CommonController {
      * 显示所有用户信息
      */
     private function all(){
-        $this->assign('all',true);
+
 
         //取得所有用户信息总条数，用于分页
         if($this->auto == DEPT_ADMIN){                                          //部门管理员
             $count = $this->obj->getDeptAdminAllUserCount($this->dept);
-    }else{                                                                      //管理员，超级管理员
+        }else if($this->auto == ADMIN){                                                                  //管理员，超级管理员
+            $count = $this->obj->getAdminAllUserCount();
+        }else if($this->auto == SUPPER_ADMIN){          //超级管理员未用
             $count = $this->obj->getAllUserCount();
+        }else{
+            ToolModel::goBack('您没有该权限');
         }
+
+        $this->assign('all',true);
 
 
         //分页
@@ -300,11 +303,20 @@ class UserController extends CommonController {
 
         //取得指定条数的信息
 
-        if($this->auto == DEPT_ADMIN) {                                         //部门管理员
+        //取得所有用户信息总条数，用于分页
+        if($this->auto == DEPT_ADMIN){                                          //部门管理员（显示小编和总编）
             $user = $this->obj->showDeptAdminUserList($limit,$this->dept);
-        }else{                                                                  //管理员，超级管理员
+        }else if($this->auto == ADMIN){                                         //管理员，超级管理员（显示除了小编和总编）
+            $user = $this->obj->showAdminUserList($limit);
+        }else if($this->auto == SUPPER_ADMIN){                                  //超级管理员未用(显示所有)
             $user = $this->obj->showUserList($limit);
+        }else{
+            ToolModel::goBack('您没有该权限');
         }
+
+
+
+
         $show = $Page->show();// 分页显示输出
 
         for ($i=0;$i<count($user);$i++){

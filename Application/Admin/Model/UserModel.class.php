@@ -425,7 +425,8 @@ namespace Admin\Model;
         }
 
         /**
-         * 也显示所有用户一览表使用后(部门管理员)
+         * 显示所有用户一览表使用后(部门管理员)
+         * 只显示小编和总编
          * 取得关联表的用户数据，并通过转化生出页面可显示的数据
          * @param $limit
          * @param $dept
@@ -435,7 +436,35 @@ namespace Admin\Model;
 
             $join = "INNER JOIN ccm_user_detail_info 
                         ON ccm_user_detail_info.uid = ccm_m_user.id
-                        AND ccm_user_detail_info.udi_dep_id = '$dept'";
+                        AND ccm_user_detail_info.udi_dep_id = '$dept'
+                        AND ccm_user_detail_info.udi_auto_id IN (2,3)";
+            //多表联合查询
+            if('' == $limit){
+                $obj =  M('m_user')->join($join)->order($this->order)->select();
+            }else{
+                $obj =  M('m_user')->join($join)->order($this->order)->limit($limit)->select();
+            }
+
+            if(!$obj) ToolModel::goBack('未能取到数据');
+            //返回格式化好的数据，用于显示
+
+            //是二维数组则进行数据格式修正并返回
+            if(ToolModel::isTwoArray($obj)){
+                return $this->dataFormart($obj);
+            }
+        }
+
+        /**
+         * 显示所有用户一览表使用后(管理员)
+         * 显示除了小编和总编以外的用户
+         * @param $limit
+         * @return mixed
+         */
+        public function showAdminUserList($limit){
+
+            $join = "INNER JOIN ccm_user_detail_info 
+                        ON ccm_user_detail_info.uid = ccm_m_user.id
+                        AND ccm_user_detail_info.udi_auto_id NOT IN (2,3)";
             //多表联合查询
             if('' == $limit){
                 $obj =  M('m_user')->join($join)->order($this->order)->select();
@@ -527,13 +556,26 @@ namespace Admin\Model;
          * @return mixed
          */
         public function getAllUserCount(){
-            return $this->getCount();
+            return M('m_user')->join($this->join)->count();
+        }
+
+        /**
+         * 取得管理员能查看的用户个数(除小编总编外)
+         * @return mixed
+         */
+        public function getAdminAllUserCount(){
+
+            $join = "INNER JOIN ccm_user_detail_info 
+                        ON ccm_user_detail_info.uid = ccm_m_user.id
+                        AND ccm_user_detail_info.udi_auto_id NOT IN (2,3)";  //管理员只显示显示除了小编和总编以外所有用户
+            return M('m_user')->join($join)->count();
         }
 
         public function getDeptAdminAllUserCount($dept){
             $join = "INNER JOIN ccm_user_detail_info 
                         ON ccm_user_detail_info.uid = ccm_m_user.id
-                        AND udi_dep_id = '$dept'";
+                        AND udi_dep_id = '$dept'
+                        AND ccm_user_detail_info.udi_auto_id IN (2,3)";      //部门管理员只显示自己部门的小编和总编
             return M('m_user')->join($join)->count();
             //return $this->getCount();
         }
@@ -542,16 +584,6 @@ namespace Admin\Model;
             return $this->delTheUser($id);
         }
 
-
-        /**
-         * 取得所有用户信息总数(多表查询)
-         * 私有方法
-         * @return mixed
-         */
-        private function getCount(){
-            //多表联合查询
-            return M('m_user')->join($this->join)->count();
-        }
 
         /**
          * 取得当前用户的详细信息(多表查询)
