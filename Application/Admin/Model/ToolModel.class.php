@@ -270,7 +270,7 @@ namespace Admin\Model;
                 $html .= '</div>';
                 if( 1 == $obj[$i]['id']){
 
-                    $html .= '<div class="inline-block vertical-top">编辑';
+                    $html .= '<div class="inline-block vertical-top">'.TONGXUNYUAN_NAME;    //通讯员
                 }else{
                     $html .= '<div class="inline-block vertical-top">'.$obj[$i]['name'];
                 }
