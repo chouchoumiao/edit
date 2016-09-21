@@ -733,7 +733,7 @@ class PostController extends CommonController {
         $post = $this->postObj->showPostListWithAutoAndSearch($flag,$this->auto,$limit,$this->dept);
 
         $show = $Page->show();// 分页显示输出
-        //文章的标题的长度超过10个则街区10个(默认是10)
+        //文章的标题的长度超过15个则显示15个(默认是15)
         $this->setPostTitleLength($post);
         //用户姓名超过10个则街区10个(默认是10)
         $this->setPostNameLength($post);
@@ -759,9 +759,9 @@ class PostController extends CommonController {
     /**
      * 设定取得的文章中Title的长度
      * @param $post
-     * @param int $len
+     * @param int $len  默认15个
      */
-    private function setPostTitleLength(&$post,$len=6){
+    private function setPostTitleLength(&$post,$len=15){
         for ($i=0;$i<count($post);$i++){
 
             //自适应小屏幕手机时只截取3个
@@ -777,7 +777,7 @@ class PostController extends CommonController {
     /**
      * 设定取得的用户名的长度
      * @param $post
-     * @param int $len
+     * @param int $len  默认10个
      */
     private function setPostNameLength(&$post,$len=10){
         for ($i=0;$i<count($post);$i++){
