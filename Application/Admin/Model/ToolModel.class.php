@@ -837,4 +837,23 @@ namespace Admin\Model;
             }
             return $html;
         }
+
+        /**
+         * 取得当前登录的小编的详细情况(只能是小编)
+         * @return bool
+         */
+        static function getNowXioabianUserInfo(){
+            $field = 'udi_dep_id,username,udi_auto_id';
+            $where['uid'] = $_SESSION['uid'];
+            $join = "INNER JOIN ccm_m_user 
+                        ON ccm_user_detail_info.uid = ccm_m_user.id";
+            $ret = M('user_detail_info')->join($join)->where($where)->field($field)->find();
+
+            if( false === $ret){
+                return false;
+            }
+            return $ret;
+
+
+        }
     }
