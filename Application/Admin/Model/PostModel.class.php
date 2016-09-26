@@ -1070,61 +1070,8 @@ namespace Admin\Model;
 
                     //如果当前用户的权限是小编则要继续进行判断，否则不需要进行多余判断
                     if($nowUserInfo['udi_auto_id'] == XIAOBIAN){
+                        $obj[$i] = $this->doXioabianListShow($obj[$i],$spanColor,$statusArr);
 
-                        //如果是小编的情形下，爆料者的文章分情况显示：如果被本部门小编拷贝过则显示被该小编认领，否则则显示待审核
-                        if( ($obj[$i]['post_status'] == 'pending') && (intval($obj[$i]['post_parent']) == 0) &&(intval($obj[$i]['post_child']) != 0) ){
-
-                            //取得被继承的部门的对应文章列表
-                            $childList = $obj[$i]['post_child'];
-
-                            //被多个部门的小编已经继承
-                            if(strstr($childList,',')){
-                                $childArr = explode(',',$childList);
-
-                                for($j=0;$j<count($childArr);$j++){
-                                    $childPostDeptAndUserName = $this->getChildDeptAndUsernameByChildPostID(intval($childArr[$j]));
-
-                                    if($childPostDeptAndUserName){
-
-                                        $xiaobianInfo = ToolModel::getNowXioabianUserInfo();
-
-
-
-                                        if($childPostDeptAndUserName['post_dept'] == $xiaobianInfo['udi_dep_id']){
-                                            $spanColor = '<span style="color: #ccc">';
-                                            $obj[$i]['post_canEdit'] = 2;
-                                            $obj[$i]['post_status'] = $spanColor.'被'.$childPostDeptAndUserName['username'].'认领'.'</span>';
-                                        }
-                                    }
-                                }
-                                //被一个部门一个小编继承
-                            }else{
-                                $childPostDeptAndUserName = $this->getChildDeptAndUsernameByChildPostID(intval($childList));
-
-                                if($childPostDeptAndUserName){
-
-                                    $xiaobianInfo = ToolModel::getNowXioabianUserInfo();
-
-                                    if( ($childPostDeptAndUserName['post_dept'] == $xiaobianInfo['udi_dep_id'])){
-
-                                        //如果当前用户不是认领该文章的小编则显示被认领状态，否则现正常显示
-                                        if($childPostDeptAndUserName['username'] != $xiaobianInfo['username'] ){
-                                            $spanColor = '<span style="color: #ccc">';
-                                            $obj[$i]['post_canEdit'] = 2;
-                                            $obj[$i]['post_status'] = $spanColor.'被'.$childPostDeptAndUserName['username'].'认领'.'</span>';
-                                        }else{
-                                            $spanColor = '<span style="color: #ccc">';
-                                            $obj[$i]['post_canEdit'] = 2;
-                                            $obj[$i]['post_status'] = $spanColor.'已被本人认领'.'</span>';
-                                        }
-
-                                    }
-                                }else{
-                                    $obj[$i]['post_status'] = $spanColor.$statusArr[$obj[$i]['post_status']].'</span>';
-                                }
-                            }
-
-                        }
                     }else{
 
                         $obj[$i]['post_status'] = $spanColor.$statusArr[$obj[$i]['post_status']].'</span>';
@@ -1137,6 +1084,115 @@ namespace Admin\Model;
             return $obj;
         }
 
+        /**
+         *
+         * 先判断当前的文章是不是爆料者发布的，并且没有父级文章，并且已经被继承(至少被一个小编拷贝)   0：则进行普通的显示
+         *                                                                            1；继续判断(看下记说明)
+         * 判断被继承的字段中是单个还是多个     0：单个直接传入判断
+         *                                1：多个则进行循环在传入判断
+         *
+         * @param $objArr       需要返回出去的文章obj
+         * @param $spanColor    显示的文章颜色
+         * @param $statusArr    文章状态列表数组
+         * @return mixed
+         */
+        private function doXioabianListShow($objArr,$spanColor,$statusArr){
+
+            //如果是本部门的其他小编是可以看到但不能编辑，自己的文章可以编辑
+
+
+
+            //如果是小编的情形下，爆料者的文章分情况显示：如果被本部门小编拷贝过则显示被该小编认领，否则则显示待审核
+            if( ($objArr['post_status'] == 'pending') && (intval($objArr['post_parent']) == 0) &&(intval($objArr['post_child']) != 0) ){
+
+                //取得被继承的部门的对应文章列表
+                $childList = $objArr['post_child'];
+
+                //被多个部门的小编已经继承（含有逗号，根据逗号转化为数组进行一一判断是否为本小编所属部门）
+                if(strstr($childList,',')){
+                    $childArr = explode(',',$childList);
+                    for($j=0;$j<count($childArr);$j++){
+                        $objArr = $this->showPostListByXioabianDept(intval($childArr[$j]),$spanColor,$statusArr,$objArr);
+                    }
+                //被一个部门一个小编继承
+                }else{
+                    $objArr = $this->showPostListByXioabianDept(intval($childList),$spanColor,$statusArr,$objArr);
+                }
+
+            }else{
+                $objArr['post_status'] = $spanColor.$statusArr[$objArr['post_status']].'</span>';
+            }
+
+            return $objArr;
+        }
+
+
+        /**
+         * 根据childId来查询该小编拷贝文章的部门
+         * 拷贝文章部门是否为本部门   0：则显示最普通的，并返回
+         *                        1：继续进行判断(看下判断内容)
+         *
+         * 拷贝文档本部门的是不是当前小编   0：则显示被谁认领（本部门的其他人）
+         *                            1； 显示被本人认领
+         * @param $childId      被继承的postID（小编拷贝文章后的ID）
+         * @param $spanColor    显示的文章颜色
+         * @param $statusArr    文章状态列表数组
+         * @param $objArr       需要返回出去的文章obj
+         * @return mixed
+         */
+        private function showPostListByXioabianDept($childId,$spanColor,$statusArr,$objArr){
+
+            $defaultColor = $spanColor.$statusArr[$objArr['post_status']].'</span>';
+
+            $childPostDeptAndUserName = $this->getChildDeptAndUsernameByChildPostID($childId);
+
+            if($childPostDeptAndUserName){
+
+                $xiaobianInfo = ToolModel::getNowXioabianUserInfo();
+
+                if( ($childPostDeptAndUserName['post_dept'] == $xiaobianInfo['udi_dep_id'])){
+
+                    //文章列表中显示被谁认领，默认为本人
+                    $userName = '本人';
+                    $word = '认领了文章';
+
+                    //如果当前用户不是认领该文章的小编则显示被认领状态，否则现正常显示
+                    if($childPostDeptAndUserName['username'] != $xiaobianInfo['username'] ){
+                        //不是本人则显示对应的人名
+                        $userName = $childPostDeptAndUserName['username'];
+
+                        switch ($childPostDeptAndUserName['post_status']){
+                            case 'pended':
+                                $word = '审核通过';
+                                break;
+                            case 'dismiss':
+                                $word = '审核不通过';
+                                break;
+                            case 'return':
+                                $word = '文章打回';
+                                break;
+                            case 'pending2':
+                                $word = '认领了文章';
+                                break;
+                            default:
+                                $word = '认领了文章11';
+                                break;
+                        }
+
+                    }
+                    $spanColor = '<span style="color: #ccc">';
+                    $objArr['post_canEdit'] = 2;
+                    $objArr['post_status'] = $spanColor.'['.$userName.']'.$word.'</span>';
+
+                }else{
+                    $objArr['post_status'] = $defaultColor;
+                }
+            }else{
+                $objArr['post_status'] = $defaultColor;
+            }
+
+            return $objArr;
+        }
 
         /**
          * 根据被继承的postID查询该文章(被小编拷贝)的属于小编部门和该小编的姓名
@@ -1144,7 +1200,7 @@ namespace Admin\Model;
          * @return bool
          */
         private function getChildDeptAndUsernameByChildPostID($childPostId){
-            $field = 'post_dept,username';
+            $field = 'post_dept,username,post_status';
             $where['ccm_posts.id'] = $childPostId;
             $join = "INNER JOIN ccm_m_user 
                         ON ccm_posts.post_author = ccm_m_user.id";
