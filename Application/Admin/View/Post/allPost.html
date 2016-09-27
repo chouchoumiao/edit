@@ -13,12 +13,16 @@
                 <a href="__ROOT__/Admin/Post/doAction/action/all">所有
                     <span class="badge badge-primary bounceIn animation-delay3 active">{$allCount}</span>
                 </a> &nbsp; &nbsp; &nbsp;
-                <a href="__ROOT__/Admin/Post/doAction/action/all/status/pending">待审核
-                    <span class="badge badge-danger bounceIn animation-delay3 active">{$peningCount}</span>
-                </a> &nbsp; &nbsp; &nbsp;
-                <a href="__ROOT__/Admin/Post/doAction/action/all/status/pending2">待最终审核
-                    <span class="badge badge-warning bounceIn animation-delay3 active">{$pening2Count}</span>
-                </a> &nbsp; &nbsp; &nbsp;
+                <if condition = "$auto neq ZONGBIAN">
+                    <a href="__ROOT__/Admin/Post/doAction/action/all/status/pending">待审核
+                        <span class="badge badge-danger bounceIn animation-delay3 active">{$peningCount}</span>
+                    </a> &nbsp; &nbsp; &nbsp;
+                </if>
+                <if condition = "$auto neq BAOLIAOZHE">
+                    <a href="__ROOT__/Admin/Post/doAction/action/all/status/pending2">待最终审核
+                        <span class="badge badge-warning bounceIn animation-delay3 active">{$pening2Count}</span>
+                    </a> &nbsp; &nbsp; &nbsp;
+                </if>
                 <a href="__ROOT__/Admin/Post/doAction/action/all/status/pended">审核通过
                     <span class="badge badge-info bounceIn animation-delay3 active">{$pendedCount}</span>
                 </a> &nbsp; &nbsp; &nbsp;

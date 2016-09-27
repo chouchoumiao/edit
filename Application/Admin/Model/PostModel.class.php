@@ -11,6 +11,7 @@ namespace Admin\Model;
 
         private $post_id;
         private $post_author;
+        private $post_judge;        //审批者 新加
         private $post_parent_author;
         private $post_content;
         private $post_title ;
@@ -226,9 +227,11 @@ namespace Admin\Model;
                             //$post_status = POST_SAVE;
                             if($status == 'all'){
                                 $join = "INNER JOIN ccm_m_user 
-                                            ON ccm_posts.post_author = ccm_m_user.id 
-                                            AND ccm_posts.post_dept LIKE '%$dept%'
-                                            AND (ccm_posts.post_name LIKE '%$dept%' OR ccm_posts.post_status = 'pending')" ;       //追加判断未被编辑部门才显示
+                                            ON ccm_m_user.id = ccm_posts.post_author 
+                                            AND ccm_posts.post_dept LIKE '%$dept%' 
+                                            AND ( (ccm_posts.post_name LIKE '%$dept%' 
+                                                    AND ccm_posts.post_status <> 'save') 
+                                                OR ccm_posts.post_status = 'pending')" ;       //追加判断未被编辑部门才显示
 
                             }else{
 
@@ -423,8 +426,8 @@ namespace Admin\Model;
                             if($status == 'all'){
                                 $join = "INNER JOIN ccm_m_user 
                                             ON ccm_m_user.id = ccm_posts.post_author 
-                                            AND ccm_posts.post_dept LIKE '%$dept%'
-                                            AND (ccm_posts.post_name LIKE '%$dept%' OR ccm_posts.post_status = 'pending')" ;       //追加判断未被编辑部门才显示
+                                            AND ccm_posts.post_dept LIKE '%$dept%' 
+                                            AND ((ccm_posts.post_name LIKE '%$dept%' AND ccm_posts.post_status <> 'save') OR ccm_posts.post_status = 'pending')" ;       //追加判断未被编辑部门才显示
                             }else{
 
                                 if($status == POST_SAVE){
@@ -545,7 +548,9 @@ namespace Admin\Model;
                         $join = "INNER JOIN ccm_m_user 
                                     ON ccm_posts.post_author = ccm_m_user.id 
                                     AND ccm_posts.post_dept LIKE '%$dept%'
-                                    AND ccm_posts.post_name LIKE '%$dept%'" ;       //追加判断未被编辑部门才显示
+                                    AND ((ccm_posts.post_name LIKE '%$dept%' 
+                                    AND ccm_posts.post_status <> 'save') 
+                                    OR ccm_posts.post_status = 'pending')" ;       //追加判断未被编辑部门才显示
 
                     }else{
                         if($status == POST_SAVE){
@@ -614,7 +619,7 @@ namespace Admin\Model;
 
             if(!isset($_SESSION['uid'])) ToolModel::goBack('警告,session出错,请重新登录!');
 
-            $this->post_author = intval($_SESSION['uid']);
+            $this->post_author = '';
 
 
             if(!isset($_POST['dept'])) ToolModel::goBack('警告,部门传参错误!');
@@ -662,10 +667,12 @@ namespace Admin\Model;
                     }
 
                     $this->dismissMsg = I('post.dismissMsg');
+                    $this->post_judge = intval($_SESSION['uid']);   //追加审批者信息
 
                     break;
                 case 5:
                     $this->post_status = 'pended';
+                    $this->post_judge = intval($_SESSION['uid']);   //追加审批者信息
                     break;
                 case 6:
                     $this->post_status = 'return';
@@ -673,8 +680,8 @@ namespace Admin\Model;
                     if(I('post.dismissMsg') == ''){
                         ToolModel::goBack('必须填写不通过原因');
                     }
-
                     $this->dismissMsg = I('post.dismissMsg');
+                    $this->post_judge = intval($_SESSION['uid']);   //追加审批者信息
                     break;
             }
         }
@@ -690,7 +697,8 @@ namespace Admin\Model;
             $where['id'] = $this->post_id;
 
             $dataArr = array(
-                'post_author'           => $this->post_author,
+//                'post_author'           => $this->post_author,
+                'post_judge'            => $this->post_judge,       //追加审批者信息
                 'post_content'          => $this->post_content,
                 'post_title'            => $this->post_title,
                 'post_dept'             => $this->post_dept,
@@ -965,9 +973,9 @@ namespace Admin\Model;
 
         }
 
-
         /**
-         * 根据传入的文章ID取得文章
+         * 根据传入的文章ID取得文章(与user联合查询)
+         * @param $id
          * @return mixed
          */
         public function getThePostAndUser($id){
@@ -983,9 +991,9 @@ namespace Admin\Model;
             return $this->object->field($field)->where($where)->join($join)->find();
         }
 
-
         /**
          * 根据传入的文章ID取得文章
+         * @param $id
          * @return mixed
          */
         public function getThePost($id){
@@ -1069,9 +1077,13 @@ namespace Admin\Model;
                     $nowUserInfo = ToolModel::getNowXioabianUserInfo();
 
                     //如果当前用户的权限是小编则要继续进行判断，否则不需要进行多余判断
-                    if($nowUserInfo['udi_auto_id'] == XIAOBIAN){
-                        $obj[$i] = $this->doXioabianListShow($obj[$i],$spanColor,$statusArr);
+                    if($nowUserInfo['udi_auto_id'] == XIAOBIAN) {
+                        $obj[$i] = $this->doXioabianListShow($obj[$i], $spanColor, $statusArr);
 
+                    }else if( ($nowUserInfo['udi_auto_id'] == BAOLIAOZHE) && ($obj[$i]['post_status'] == 'pending') ){
+                            //$spanColor = '<span style="color: #23b7e5">';
+                            $obj[$i]['post_canEdit'] = 2;
+                            $obj[$i]['post_status'] = $spanColor.$statusArr[$obj[$i]['post_status']].'[不能修改]</span>';
                     }else{
 
                         $obj[$i]['post_status'] = $spanColor.$statusArr[$obj[$i]['post_status']].'</span>';
@@ -1097,32 +1109,27 @@ namespace Admin\Model;
          * @return mixed
          */
         private function doXioabianListShow($objArr,$spanColor,$statusArr){
-
-            //如果是本部门的其他小编是可以看到但不能编辑，自己的文章可以编辑
-
-
+            $xiaobianInfo = ToolModel::getNowXioabianUserInfo();
+            
 
             //如果是小编的情形下，爆料者的文章分情况显示：如果被本部门小编拷贝过则显示被该小编认领，否则则显示待审核
-            if( ($objArr['post_status'] == 'pending') && (intval($objArr['post_parent']) == 0) &&(intval($objArr['post_child']) != 0) ){
+            if( ($objArr['post_status'] == 'pending') && (intval($objArr['post_parent']) == 0) &&(intval($objArr['post_child']) != 0) ) {
+
+                $objArr['post_status'] = $spanColor . $statusArr[$objArr['post_status']] . '</span>';
 
                 //取得被继承的部门的对应文章列表
                 $childList = $objArr['post_child'];
 
-                //被多个部门的小编已经继承（含有逗号，根据逗号转化为数组进行一一判断是否为本小编所属部门）
-                if(strstr($childList,',')){
-                    $childArr = explode(',',$childList);
-                    for($j=0;$j<count($childArr);$j++){
-                        $objArr = $this->showPostListByXioabianDept(intval($childArr[$j]),$spanColor,$statusArr,$objArr);
-                    }
-                //被一个部门一个小编继承
-                }else{
-                    $objArr = $this->showPostListByXioabianDept(intval($childList),$spanColor,$statusArr,$objArr);
-                }
+                $objArr = $this->showPostListByXioabianDept($childList, $objArr);
 
+            //其他小编提交的问题只能看不能编辑
+            }else if( ($objArr['post_author'] != $xiaobianInfo['uid']) && ($objArr['post_status'] != 'pending') && ($objArr['post_status'] == 'return') ){
+                $objArr['post_canEdit'] = 2;
+                $objArr['post_status'] = $spanColor.$statusArr[$objArr['post_status']].'</span>';
             }else{
+
                 $objArr['post_status'] = $spanColor.$statusArr[$objArr['post_status']].'</span>';
             }
-
             return $objArr;
         }
 
@@ -1140,21 +1147,21 @@ namespace Admin\Model;
          * @param $objArr       需要返回出去的文章obj
          * @return mixed
          */
-        private function showPostListByXioabianDept($childId,$spanColor,$statusArr,$objArr){
+        private function showPostListByXioabianDept($childList,$objArr){
 
-            $defaultColor = $spanColor.$statusArr[$objArr['post_status']].'</span>';
+            $xiaobianInfo = ToolModel::getNowXioabianUserInfo();
 
-            $childPostDeptAndUserName = $this->getChildDeptAndUsernameByChildPostID($childId);
+            $childArr = explode(',', $childList);
 
-            if($childPostDeptAndUserName){
+            for ($j = 0; $j < count($childArr); $j++) {
 
-                $xiaobianInfo = ToolModel::getNowXioabianUserInfo();
+                $childPostDeptAndUserName = $this->getChildDeptAndUsernameByChildPostID($childArr[$j]);
 
-                if( ($childPostDeptAndUserName['post_dept'] == $xiaobianInfo['udi_dep_id'])){
-
+                if ($childPostDeptAndUserName['post_dept'] == $xiaobianInfo['udi_dep_id'] ) {
                     //文章列表中显示被谁认领，默认为本人
                     $userName = '本人';
                     $word = '认领了文章';
+
 
                     //如果当前用户不是认领该文章的小编则显示被认领状态，否则现正常显示
                     if($childPostDeptAndUserName['username'] != $xiaobianInfo['username'] ){
@@ -1175,7 +1182,7 @@ namespace Admin\Model;
                                 $word = '认领了文章';
                                 break;
                             default:
-                                $word = '认领了文章11';
+                                $word = '未知状态';
                                 break;
                         }
 
@@ -1184,13 +1191,9 @@ namespace Admin\Model;
                     $objArr['post_canEdit'] = 2;
                     $objArr['post_status'] = $spanColor.'['.$userName.']'.$word.'</span>';
 
-                }else{
-                    $objArr['post_status'] = $defaultColor;
                 }
-            }else{
-                $objArr['post_status'] = $defaultColor;
-            }
 
+            }
             return $objArr;
         }
 

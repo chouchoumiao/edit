@@ -843,7 +843,7 @@ namespace Admin\Model;
          * @return bool
          */
         static function getNowXioabianUserInfo(){
-            $field = 'udi_dep_id,username,udi_auto_id';
+            $field = 'udi_dep_id,username,udi_auto_id,uid';
             $where['uid'] = $_SESSION['uid'];
             $join = "INNER JOIN ccm_m_user 
                         ON ccm_user_detail_info.uid = ccm_m_user.id";
