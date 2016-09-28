@@ -229,9 +229,9 @@ namespace Admin\Model;
                                 $join = "INNER JOIN ccm_m_user 
                                             ON ccm_m_user.id = ccm_posts.post_author 
                                             AND ccm_posts.post_dept LIKE '%$dept%' 
-                                            AND ( (ccm_posts.post_name LIKE '%$dept%' 
-                                                    AND ccm_posts.post_status <> 'save') 
-                                                OR ccm_posts.post_status = 'pending')" ;       //追加判断未被编辑部门才显示
+                                            AND ( ccm_posts.post_name LIKE '%$dept%' 
+                                            OR (ccm_posts.post_status = 'pending' 
+                                            AND ccm_posts.post_parent = 0))" ;       //追加判断未被编辑部门才显示
 
                             }else{
 
@@ -427,7 +427,9 @@ namespace Admin\Model;
                                 $join = "INNER JOIN ccm_m_user 
                                             ON ccm_m_user.id = ccm_posts.post_author 
                                             AND ccm_posts.post_dept LIKE '%$dept%' 
-                                            AND ((ccm_posts.post_name LIKE '%$dept%' AND ccm_posts.post_status <> 'save') OR ccm_posts.post_status = 'pending')" ;       //追加判断未被编辑部门才显示
+                                            AND ( ccm_posts.post_name LIKE '%$dept%' 
+                                            OR (ccm_posts.post_status = 'pending' 
+                                            AND ccm_posts.post_parent = 0))" ;       //追加判断未被编辑部门才显示
                             }else{
 
                                 if($status == POST_SAVE){
@@ -546,11 +548,11 @@ namespace Admin\Model;
                     $theID = $_SESSION['uid'];
                     if($status == 'all'){
                         $join = "INNER JOIN ccm_m_user 
-                                    ON ccm_posts.post_author = ccm_m_user.id 
-                                    AND ccm_posts.post_dept LIKE '%$dept%'
-                                    AND ((ccm_posts.post_name LIKE '%$dept%' 
-                                    AND ccm_posts.post_status <> 'save') 
-                                    OR ccm_posts.post_status = 'pending')" ;       //追加判断未被编辑部门才显示
+                                ON ccm_m_user.id = ccm_posts.post_author 
+                                AND ccm_posts.post_dept LIKE '%$dept%' 
+                                AND ( ccm_posts.post_name LIKE '%$dept%' 
+                                OR (ccm_posts.post_status = 'pending' 
+                                AND ccm_posts.post_parent = 0))" ;       //追加判断未被编辑部门才显示
 
                     }else{
                         if($status == POST_SAVE){
@@ -1112,7 +1114,7 @@ namespace Admin\Model;
             $xiaobianInfo = ToolModel::getNowXioabianUserInfo();
             
 
-            //如果是小编的情形下，爆料者的文章分情况显示：如果被本部门小编拷贝过则显示被该小编认领，否则则显示待审核
+            //对于爆料者的文章显示 根据是否被小编继承 再做相应判断
             if( ($objArr['post_status'] == 'pending') && (intval($objArr['post_parent']) == 0) &&(intval($objArr['post_child']) != 0) ) {
 
                 $objArr['post_status'] = $spanColor . $statusArr[$objArr['post_status']] . '</span>';
@@ -1122,11 +1124,13 @@ namespace Admin\Model;
 
                 $objArr = $this->showPostListByXioabianDept($childList, $objArr);
 
-            //其他小编提交的问题只能看不能编辑
-            }else if( ($objArr['post_author'] != $xiaobianInfo['uid']) && ($objArr['post_status'] != 'pending') && ($objArr['post_status'] == 'return') ){
-                $objArr['post_canEdit'] = 2;
-                $objArr['post_status'] = $spanColor.$statusArr[$objArr['post_status']].'</span>';
+            //小编的文章 判断
             }else{
+
+                //小编的文章，分当前是本小编和不是本小编
+                if($objArr['post_author'] != $xiaobianInfo['uid']){
+                    $objArr['post_canEdit'] = 2;                        //当前小编不是文章的作者，则显示预览，不能编辑 （默认是可以编辑的状态）
+                }
 
                 $objArr['post_status'] = $spanColor.$statusArr[$objArr['post_status']].'</span>';
             }
@@ -1141,9 +1145,8 @@ namespace Admin\Model;
          *
          * 拷贝文档本部门的是不是当前小编   0：则显示被谁认领（本部门的其他人）
          *                            1； 显示被本人认领
-         * @param $childId      被继承的postID（小编拷贝文章后的ID）
-         * @param $spanColor    显示的文章颜色
-         * @param $statusArr    文章状态列表数组
+         *
+         * @param $childList    被继承的postID（小编拷贝文章后的ID）
          * @param $objArr       需要返回出去的文章obj
          * @return mixed
          */
