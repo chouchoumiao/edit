@@ -12,14 +12,12 @@ namespace Admin\Model;
         private $post_id;
         private $post_author;
         private $post_judge;        //审批者 新加
-        private $post_parent_author;
+
         private $post_content;
         private $post_title ;
         private $post_dept ;
         private $post_status;
         private $dismissMsg = '';
-        private $post_modified;
-        private $post_parent;
         private $object;
         private $order;         //默认排序
 
@@ -119,171 +117,8 @@ namespace Admin\Model;
          */
         public function getCountWithAutoAndSearch($flag,$auto,$dept=''){
 
-            switch ($flag){
-                case 'userSearch':
-                    $userid = I('get.userSearch');
-                    switch ($auto){
-                        case ADMIN:
-                        case SUPPER_ADMIN:
-                            //传入的是部门名称,需要转化为部门id
-                            $join = "INNER JOIN ccm_m_user 
-                            ON ccm_posts.post_author = ccm_m_user.id 
-                            AND ccm_posts.post_author = $userid";
-                            break;
-                        case DEPT_ADMIN:
-                            //传入的是部门名称,需要转化为部门id
-                            $join = "INNER JOIN ccm_m_user 
-                            ON ccm_posts.post_author = ccm_m_user.id 
-                            AND ccm_posts.post_author = $userid  
-                            AND ccm_posts.post_dept LIKE '%$dept%'";
-                            break;
-                        case XIAOBIAN:
-                            //$post_status = POST_SAVE;
-                            $join = "INNER JOIN ccm_m_user 
-                                        ON ccm_posts.post_author = ccm_m_user.id 
-                                        AND ccm_posts.post_author = $userid 
-                                        AND ccm_posts.post_dept LIKE '%$dept%'";
-                            break;
-                        case ZONGBIAN:  //总编只显示提交给自己最终审核的文章
-                            $join = "INNER JOIN ccm_m_user 
-                                        ON ccm_posts.post_author = ccm_m_user.id 
-                                        AND ccm_posts.post_author = $userid 
-                                        AND ccm_posts.post_status in ('pending2','dismiss','pended','return')
-                                        AND ccm_posts.post_dept LIKE '%$dept%'";
-                            break;
-                    }
-                    break;
-                case 'deptSearch':
-                    $deptID = $this->getDeptIDByName(I('get.deptSearch'));
-                    switch ($auto){
-                        case ADMIN:
-                        case SUPPER_ADMIN:
-                            $join = "INNER JOIN ccm_m_user 
-                                        ON ccm_posts.post_author = ccm_m_user.id 
-                                        AND ccm_posts.post_dept LIKE '%$deptID%'";
-                            break;
-                        case BAOLIAOZHE:
-                            $id = $_SESSION['uid'];
 
-                                $join = "INNER JOIN ccm_m_user 
-                                        ON ccm_posts.post_author = ccm_m_user.id 
-                                        AND ccm_posts.post_author = '$id' 
-                                        AND ccm_posts.post_dept LIKE '%$deptID%'";
-                            break;
-
-                    }
-
-                    break;
-                case 'noSearch':
-                    if( ( isset($_GET['status'] ) ) && ( '' != I('get.status')) ){
-                        $status = I('get.status');
-
-                        //如果取得的status不在信息的状态数组中则显示全部
-                        if(!in_array($status,C('POST_ALLOW_STATUS'))){
-                            $status = 'all';
-                        }
-
-                    }else{
-                        $status = 'all';
-                    }
-                    switch ($auto){
-                        case ADMIN:
-                        case SUPPER_ADMIN:
-                            if($status == 'all'){
-                                $join = "INNER JOIN ccm_m_user 
-                                            ON ccm_posts.post_author = ccm_m_user.id" ;
-                            }else{
-                                $join = "INNER JOIN ccm_m_user 
-                                            ON ccm_posts.post_author = ccm_m_user.id 
-                                            AND ccm_posts.post_status = '$status'" ;
-                            }
-                            break;
-                        case BAOLIAOZHE:
-                            if($status == 'all'){
-                                $id = $_SESSION['uid'];
-                                $join = "INNER JOIN ccm_m_user 
-                                            ON ccm_posts.post_author = ccm_m_user.id 
-                                            AND ccm_posts.post_author = '$id'";
-                            }else{
-                                $id = $_SESSION['uid'];
-
-                                if($status == 'dismiss' || $status == 'pended'){
-                                    $join = "INNER JOIN ccm_m_user 
-                                            ON ccm_posts.post_author = ccm_m_user.id 
-                                            AND ccm_posts.post_parent_author = '$id' 
-                                            AND ccm_posts.post_status = '$status'" ;
-                                }else{
-
-                                    $join = "INNER JOIN ccm_m_user 
-                                            ON ccm_posts.post_author = ccm_m_user.id 
-                                            AND ccm_posts.post_author = '$id' 
-                                            AND ccm_posts.post_status = '$status'" ;
-                                }
-
-                            }
-                            break;
-                        case XIAOBIAN:
-                            $theID = $_SESSION['uid'];
-                            //$post_status = POST_SAVE;
-                            if($status == 'all'){
-                                $join = "INNER JOIN ccm_m_user 
-                                            ON ccm_m_user.id = ccm_posts.post_author 
-                                            AND ccm_posts.post_dept LIKE '%$dept%' 
-                                            AND ( ccm_posts.post_name LIKE '%$dept%' 
-                                            OR (ccm_posts.post_status = 'pending' 
-                                            AND ccm_posts.post_parent = 0))" ;       //追加判断未被编辑部门才显示
-
-                            }else{
-
-                                if($status == POST_SAVE){
-
-                                    $join = "INNER JOIN ccm_m_user 
-                                            ON ccm_posts.post_author = ccm_m_user.id 
-                                            AND ccm_posts.post_dept LIKE '%$dept%' 
-                                            AND ccm_posts.post_author = '$theID'
-                                            AND ccm_posts.post_status = '$status'";
-                                }else {
-                                    $join = "INNER JOIN ccm_m_user 
-                                            ON ccm_posts.post_author = ccm_m_user.id 
-                                            AND ccm_posts.post_dept LIKE '%$dept%' 
-                                            AND ccm_posts.post_status = '$status'
-                                            AND ccm_posts.post_name LIKE '%$dept%'" ;       //追加判断未被编辑部门才显示
-                                }
-                            }
-                            break;
-                        case ZONGBIAN:
-
-                            if($status == 'all'){
-                                $join = "INNER JOIN ccm_m_user 
-                                            ON ccm_posts.post_author = ccm_m_user.id 
-                                            AND ccm_posts.post_status in ('pending2','dismiss','pended','return') 
-                                            AND ccm_posts.post_dept LIKE '%$dept%'" ;
-
-                            }else{
-                                $join = "INNER JOIN ccm_m_user 
-                                            ON ccm_posts.post_author = ccm_m_user.id 
-                                            AND ccm_posts.post_status in ('pending2','dismiss','pended','return') 
-                                            AND ccm_posts.post_dept LIKE '%$dept%' 
-                                            AND ccm_posts.post_status = '$status'";
-                            }
-                            break;
-                        case DEPT_ADMIN:
-
-                            if($status == 'all'){
-                                $join = "INNER JOIN ccm_m_user 
-                                            ON ccm_posts.post_author = ccm_m_user.id
-                                            AND ccm_posts.post_dept LIKE '%$dept%'" ;
-
-                            }else{
-                                $join = "INNER JOIN ccm_m_user 
-                                            ON ccm_posts.post_author = ccm_m_user.id
-                                            AND ccm_posts.post_dept LIKE '%$dept%' 
-                                            AND ccm_posts.post_status = '$status'";
-                            }
-                            break;
-                    }
-                    break;
-            }
+            $join = $this->getPostWithAuto($flag,$auto,$dept);
 
 
             return $this->object->join($join)->count();
@@ -319,170 +154,9 @@ namespace Admin\Model;
          * @return mixed
          */
         private function PostListWithAutoAndSearch($flag,$auto,$limit,$dept){
-            switch ($flag){
-                case 'userSearch':
-                    $userid = I('get.userSearch');
-                    switch ($auto){
-                        case ADMIN:
-                        case SUPPER_ADMIN:
-                            $join = "INNER JOIN ccm_m_user 
-                                        ON ccm_m_user.id = ccm_posts.post_author 
-                                        AND ccm_posts.post_author = $userid";
-                            break;
-                        case XIAOBIAN:
-                            //$post_status = POST_SAVE;
-                            $join = "INNER JOIN ccm_m_user 
-                                        ON ccm_m_user.id = ccm_posts.post_author 
-                                        AND ccm_posts.post_author = $userid 
-                                        AND ccm_posts.post_dept LIKE '%$dept%'";
-                            break;
-                        case ZONGBIAN:
 
-                            $join = "INNER JOIN ccm_m_user 
-                                        ON ccm_m_user.id = ccm_posts.post_author 
-                                        AND ccm_posts.post_author = $userid 
-                                        AND ccm_posts.post_status in ('pending2','dismiss','pended','return') 
-                                        AND ccm_posts.post_dept LIKE '%$dept%'";
-                            break;
-                        case DEPT_ADMIN:
+            $join = $this->getPostWithAuto($flag,$auto,$dept);
 
-                            $join = "INNER JOIN ccm_m_user 
-                                        ON ccm_m_user.id = ccm_posts.post_author 
-                                        AND ccm_posts.post_author = $userid 
-                                        AND ccm_posts.post_dept LIKE '%$dept%'";
-                            break;
-                    }
-                    break;
-                case 'deptSearch':
-                    //传入的是部门名称,需要转化为部门id
-                    $deptID =  $this->getDeptIDByName(I('get.deptSearch'));
-
-                    switch ($auto){
-                        case ADMIN:
-                        case SUPPER_ADMIN:
-                            $join = "INNER JOIN ccm_m_user 
-                                        ON ccm_m_user.id = ccm_posts.post_author 
-                                        AND ccm_posts.post_dept LIKE '%$deptID%'";
-                            break;
-                        case BAOLIAOZHE:
-                            $id = $_SESSION['uid'];
-                            $join = "INNER JOIN ccm_m_user 
-                                        ON ccm_m_user.id = ccm_posts.post_author 
-                                        AND ccm_posts.post_author = '$id' 
-                                        AND ccm_posts.post_dept LIKE '%$deptID%'";
-                            break;
-                    }
-
-                    break;
-                case 'noSearch':
-                    if( ( isset($_GET['status'] ) ) && ( '' != I('get.status')) ){
-                        $status = I('get.status');
-                        //如果取得的status不在信息的状态数组中则显示全部
-                        if(!in_array($status,C('POST_ALLOW_STATUS'))){
-                            $status = 'all';
-                        }
-                    }else{
-                        $status = 'all';
-                    }
-                    switch ($auto){
-                        case ADMIN:
-                        case SUPPER_ADMIN:
-                            if($status == 'all'){
-                                $join = 'INNER JOIN ccm_m_user 
-                                            ON ccm_m_user.id = ccm_posts.post_author';
-                            }else{
-                                $join = "INNER JOIN ccm_m_user 
-                                            ON ccm_m_user.id = ccm_posts.post_author
-                                            AND ccm_posts.post_status = '$status'";
-                            }
-                            break;
-
-                        case BAOLIAOZHE:
-                            $id = $_SESSION['uid'];
-
-                            if($status == 'all'){
-                                $join = "INNER JOIN ccm_m_user 
-                                            ON ccm_m_user.id = ccm_posts.post_author 
-                                            AND ccm_posts.post_author = '$id'";
-                            }else{
-
-                                if($status == 'dismiss' || $status == 'pended'){
-                                    $join = "INNER JOIN ccm_m_user 
-                                            ON ccm_m_user.id = ccm_posts.post_author 
-                                            AND ccm_posts.post_parent_author = '$id'
-                                            AND ccm_posts.post_status = '$status'";
-                                }else{
-                                    $join = "INNER JOIN ccm_m_user 
-                                            ON ccm_m_user.id = ccm_posts.post_author 
-                                            AND ccm_posts.post_author = '$id'
-                                            AND ccm_posts.post_status = '$status'";
-                                }
-
-                            }
-                            break;
-                        case XIAOBIAN:
-                            //$post_status = POST_SAVE;
-                            $theID = $_SESSION['uid'];
-                            if($status == 'all'){
-                                $join = "INNER JOIN ccm_m_user 
-                                            ON ccm_m_user.id = ccm_posts.post_author 
-                                            AND ccm_posts.post_dept LIKE '%$dept%' 
-                                            AND ( ccm_posts.post_name LIKE '%$dept%' 
-                                            OR (ccm_posts.post_status = 'pending' 
-                                            AND ccm_posts.post_parent = 0))" ;       //追加判断未被编辑部门才显示
-                            }else{
-
-                                if($status == POST_SAVE){
-
-                                    $join = "INNER JOIN ccm_m_user 
-                                            ON ccm_m_user.id = ccm_posts.post_author 
-                                            AND ccm_posts.post_dept LIKE '%$dept%'
-                                            AND ccm_posts.post_author = '$theID'
-                                            AND ccm_posts.post_status = '$status'";
-                                }else {
-                                    $join = "INNER JOIN ccm_m_user 
-                                            ON ccm_m_user.id = ccm_posts.post_author 
-                                            AND ccm_posts.post_dept LIKE '%$dept%'
-                                            AND ccm_posts.post_status = '$status'
-                                            AND ccm_posts.post_name LIKE '%$dept%'" ;       //追加判断未被编辑部门才显示
-                                }
-                            }
-                            break;
-                        case ZONGBIAN:
-
-                            if($status == 'all'){
-                                $join = "INNER JOIN ccm_m_user 
-                                            ON ccm_m_user.id = ccm_posts.post_author 
-                                            AND ccm_posts.post_status in ('pending2','dismiss','pended','return') 
-                                            AND ccm_posts.post_dept LIKE '%$dept%'";
-                            }else{
-                                $join = "INNER JOIN ccm_m_user 
-                                            ON ccm_m_user.id = ccm_posts.post_author 
-                                            AND ccm_posts.post_status in ('pending2','dismiss','pended','return') 
-                                            AND ccm_posts.post_dept LIKE '%$dept%'
-                                            AND ccm_posts.post_status = '$status'";
-                            }
-                            break;
-                        case DEPT_ADMIN:
-
-                            if($status == 'all'){
-                                $join = "INNER JOIN ccm_m_user 
-                                            ON ccm_m_user.id = ccm_posts.post_author 
-                                            AND ccm_posts.post_dept LIKE '%$dept%'";
-                            }else{
-                                $join = "INNER JOIN ccm_m_user 
-                                            ON ccm_m_user.id = ccm_posts.post_author 
-                                            AND ccm_posts.post_dept LIKE '%$dept%'
-                                            AND ccm_posts.post_status = '$status'";
-                            }
-                            break;
-                    }
-
-                    break;
-            }
-
-
-//            $field = 'ccm_posts.*,ccm_m_user.id as uid,ccm_m_user.username';
             $field = 'ccm_posts.*,ccm_m_user.id as uid,ccm_m_user.username,ccm_score.score';
 
             $join1 = "LEFT JOIN ccm_score 
@@ -508,103 +182,7 @@ namespace Admin\Model;
          */
         public function getStatusCountByFlag($auto='',$status='',$dept=''){
 
-            switch ($auto){
-                case ADMIN:
-                case SUPPER_ADMIN:
-                    if($status == 'all'){
-                        $join = "INNER JOIN ccm_m_user 
-                                    ON ccm_posts.post_author = ccm_m_user.id" ;
-                    }else{
-                        $join = "INNER JOIN ccm_m_user 
-                                ON ccm_posts.post_author = ccm_m_user.id 
-                                AND ccm_posts.post_status = '$status'" ;
-                    }
-                    break;
-                case BAOLIAOZHE:
-                    if($status == 'all'){
-                        $id = $_SESSION['uid'];
-                            $join = "INNER JOIN ccm_m_user 
-                            ON ccm_posts.post_author = ccm_m_user.id 
-                            AND ccm_posts.post_author = '$id'";
-                    }else{
-                        $id = $_SESSION['uid'];
-
-                        if($status == 'dismiss' || $status == 'pended'){
-                            $join = "INNER JOIN ccm_m_user 
-                                ON ccm_posts.post_author = ccm_m_user.id 
-                                AND ccm_posts.post_parent_author = '$id' 
-                                AND ccm_posts.post_status = '$status'" ;
-                        }else{
-                            $join = "INNER JOIN ccm_m_user 
-                                ON ccm_posts.post_author = ccm_m_user.id 
-                                AND ccm_posts.post_author = '$id' 
-                                AND ccm_posts.post_status = '$status'" ;
-
-                        }
-                    }
-                    break;
-                case XIAOBIAN:
-                    //$post_status = POST_SAVE;
-                    $theID = $_SESSION['uid'];
-                    if($status == 'all'){
-                        $join = "INNER JOIN ccm_m_user 
-                                ON ccm_m_user.id = ccm_posts.post_author 
-                                AND ccm_posts.post_dept LIKE '%$dept%' 
-                                AND ( ccm_posts.post_name LIKE '%$dept%' 
-                                OR (ccm_posts.post_status = 'pending' 
-                                AND ccm_posts.post_parent = 0))" ;       //追加判断未被编辑部门才显示
-
-                    }else{
-                        if($status == POST_SAVE){
-
-                            $join = "INNER JOIN ccm_m_user 
-                                    ON ccm_posts.post_author = ccm_m_user.id 
-                                    AND ccm_posts.post_dept LIKE '%$dept%' 
-                                    AND ccm_posts.post_author = '$theID' 
-                                    AND ccm_posts.post_status = '$status'" ;
-                        }else{
-                            $join = "INNER JOIN ccm_m_user 
-                                    ON ccm_posts.post_author = ccm_m_user.id 
-                                    AND ccm_posts.post_dept LIKE '%$dept%' 
-                                    AND ccm_posts.post_status = '$status'
-                                    AND ccm_posts.post_name LIKE '%$dept%'" ;       //追加判断未被编辑部门才显示
-                        }
-
-                    }
-                    break;
-                case ZONGBIAN:
-
-                    if($status == 'all'){
-                        $join = "INNER JOIN ccm_m_user 
-                                    ON ccm_posts.post_author = ccm_m_user.id 
-                                    AND ccm_posts.post_status in ('pending2','dismiss','pended','return') 
-                                    AND ccm_posts.post_dept LIKE '%$dept%'" ;
-
-                    }else{
-                        $join = "INNER JOIN ccm_m_user 
-                                    ON ccm_posts.post_author = ccm_m_user.id 
-                                    AND ccm_posts.post_status in ('pending2','dismiss','pended','return')  
-                                    AND ccm_posts.post_dept LIKE '%$dept%' 
-                                    AND ccm_posts.post_status = '$status'" ;
-                    }
-                    break;
-                case DEPT_ADMIN:
-
-                    if($status == 'all'){
-                        $join = "INNER JOIN ccm_m_user 
-                                    ON ccm_posts.post_author = ccm_m_user.id 
-                                    AND ccm_posts.post_dept LIKE '%$dept%'" ;
-
-                    }else{
-                        $join = "INNER JOIN ccm_m_user 
-                                    ON ccm_posts.post_author = ccm_m_user.id 
-                                    AND ccm_posts.post_dept LIKE '%$dept%' 
-                                    AND ccm_posts.post_status = '$status'" ;
-                    }
-                    break;
-            }
-
-
+            $join = $this->getPostNosearchWithAuto($auto,$status,$dept);
 
             return $this->object->join($join)->count();
         }
@@ -1128,7 +706,7 @@ namespace Admin\Model;
             }else{
 
                 //小编的文章，分当前是本小编和不是本小编
-                if($objArr['post_author'] != $xiaobianInfo['uid']){
+                if($objArr['post_author'] != $xiaobianInfo['uid'] && $objArr['post_status'] != 'pending'){
                     $objArr['post_canEdit'] = 2;                        //当前小编不是文章的作者，则显示预览，不能编辑 （默认是可以编辑的状态）
                 }
 
@@ -1309,6 +887,199 @@ namespace Admin\Model;
                     return $i;
                 }
             }
+        }
+
+
+        /**
+         * 根据传入的参数判断 并拼接出相应的SQl语句并返回
+         * @param $flag     获取 noSearch userSearch deptSearch
+         * @param $auto     角色 ADMIN SUPPER_ADMIN XIAOBIAN ZONGBIAN DEPT_ADMIN BAOLIAOZHE
+         * @param $dept     部门
+         * @return string   拼接后的SQL
+         */
+        private function getPostWithAuto($flag,$auto,$dept){
+
+            $join = '';
+
+            switch ($flag){
+                case 'userSearch':
+                    $userid = I('get.userSearch');
+                    switch ($auto){
+                        case ADMIN:
+                        case SUPPER_ADMIN:
+                            $join = "INNER JOIN ccm_m_user 
+                                        ON ccm_m_user.id = ccm_posts.post_author 
+                                        AND ccm_posts.post_author = $userid";
+                            break;
+                        case XIAOBIAN:
+                            //$post_status = POST_SAVE;
+                            $join = "INNER JOIN ccm_m_user 
+                                        ON ccm_m_user.id = ccm_posts.post_author 
+                                        AND ccm_posts.post_author = $userid 
+                                        AND ccm_posts.post_dept LIKE '%$dept%'";
+                            break;
+                        case ZONGBIAN:
+
+                            $join = "INNER JOIN ccm_m_user 
+                                        ON ccm_m_user.id = ccm_posts.post_author 
+                                        AND ccm_posts.post_author = $userid 
+                                        AND ccm_posts.post_status in ('pending2','dismiss','pended','return') 
+                                        AND ccm_posts.post_dept LIKE '%$dept%'";
+                            break;
+                        case DEPT_ADMIN:
+
+                            $join = "INNER JOIN ccm_m_user 
+                                        ON ccm_m_user.id = ccm_posts.post_author 
+                                        AND ccm_posts.post_author = $userid 
+                                        AND ccm_posts.post_dept LIKE '%$dept%'";
+                            break;
+                    }
+                    break;
+                case 'deptSearch':
+                    //传入的是部门名称,需要转化为部门id
+                    $deptID =  $this->getDeptIDByName(I('get.deptSearch'));
+
+                    switch ($auto){
+                        case ADMIN:
+                        case SUPPER_ADMIN:
+                            $join = "INNER JOIN ccm_m_user 
+                                        ON ccm_m_user.id = ccm_posts.post_author 
+                                        AND ccm_posts.post_dept LIKE '%$deptID%'";
+                            break;
+                        case BAOLIAOZHE:
+                            $id = $_SESSION['uid'];
+                            $join = "INNER JOIN ccm_m_user 
+                                        ON ccm_m_user.id = ccm_posts.post_author 
+                                        AND ccm_posts.post_author = '$id' 
+                                        AND ccm_posts.post_dept LIKE '%$deptID%'";
+                            break;
+                    }
+
+                    break;
+                case 'noSearch':
+                    if( ( isset($_GET['status'] ) ) && ( '' != I('get.status')) ){
+                        $status = I('get.status');
+                        //如果取得的status不在信息的状态数组中则显示全部
+                        if(!in_array($status,C('POST_ALLOW_STATUS'))){
+                            $status = 'all';
+                        }
+                    }else{
+                        $status = 'all';
+                    }
+
+                    $join = $this->getPostNosearchWithAuto($auto,$status,$dept);
+
+                    break;
+            }
+
+            return $join;
+
+        }
+
+        /**
+         * 根据传入的角色来拼接对应的SQL语句
+         * @param $auto     角色  ADMIN SUPPER_ADMIN XIAOBIAN ZONGBIAN DEPT_ADMIN BAOLIAOZHE
+         * @param $status   文章状态
+         * @param $dept     部门
+         * @return string   拼接后的SQL
+         */
+        private function getPostNosearchWithAuto($auto,$status,$dept){
+            $join = '';
+            switch ($auto){
+                case ADMIN:
+                case SUPPER_ADMIN:
+                    if($status == 'all'){
+                        $join = 'INNER JOIN ccm_m_user 
+                                            ON ccm_m_user.id = ccm_posts.post_author';
+                    }else{
+                        $join = "INNER JOIN ccm_m_user 
+                                            ON ccm_m_user.id = ccm_posts.post_author
+                                            AND ccm_posts.post_status = '$status'";
+                    }
+                    break;
+
+                case BAOLIAOZHE:
+                    $id = $_SESSION['uid'];
+
+                    if($status == 'all'){
+                        $join = "INNER JOIN ccm_m_user 
+                                            ON ccm_m_user.id = ccm_posts.post_author 
+                                            AND ccm_posts.post_author = '$id'";
+                    }else{
+
+                        if($status == 'dismiss' || $status == 'pended'){
+                            $join = "INNER JOIN ccm_m_user 
+                                            ON ccm_m_user.id = ccm_posts.post_author 
+                                            AND ccm_posts.post_parent_author = '$id'
+                                            AND ccm_posts.post_status = '$status'";
+                        }else{
+                            $join = "INNER JOIN ccm_m_user 
+                                            ON ccm_m_user.id = ccm_posts.post_author 
+                                            AND ccm_posts.post_author = '$id'
+                                            AND ccm_posts.post_status = '$status'";
+                        }
+
+                    }
+                    break;
+                case XIAOBIAN:
+
+                    //获取当前小编的提交的文章(除了爆料者以外拷贝后都是变成小编是作者)，以及 爆料者提交给本部门并且违背拷贝的文章
+                    $theID = $_SESSION['uid'];
+                    if($status == 'all'){
+                        $join = "INNER JOIN ccm_m_user 
+                                        ON ccm_m_user.id = ccm_posts.post_author 
+                                        AND (ccm_posts.post_author = '$theID'
+                                        OR  ( ccm_posts.post_name LIKE '%$dept%' 
+                                            AND ccm_posts.post_status = 'pending'))" ;
+                    }else{
+
+                        if($status == POST_SAVE){
+
+                            $join = "INNER JOIN ccm_m_user 
+                                            ON ccm_m_user.id = ccm_posts.post_author 
+                                            AND ccm_posts.post_dept LIKE '%$dept%'
+                                            AND ccm_posts.post_author = '$theID'
+                                            AND ccm_posts.post_status = '$status'";
+                        }else {
+                            $join = "INNER JOIN ccm_m_user 
+                                            ON ccm_m_user.id = ccm_posts.post_author 
+                                            AND ccm_posts.post_dept LIKE '%$dept%'
+                                            AND ccm_posts.post_status = '$status'
+                                            AND ccm_posts.post_name LIKE '%$dept%'" ;       //追加判断未被编辑部门才显示
+                        }
+                    }
+                    break;
+                case ZONGBIAN:
+
+                    if($status == 'all'){
+                        $join = "INNER JOIN ccm_m_user 
+                                            ON ccm_m_user.id = ccm_posts.post_author 
+                                            AND ccm_posts.post_status in ('pending2','dismiss','pended','return') 
+                                            AND ccm_posts.post_dept LIKE '%$dept%'";
+                    }else{
+                        $join = "INNER JOIN ccm_m_user 
+                                            ON ccm_m_user.id = ccm_posts.post_author 
+                                            AND ccm_posts.post_status in ('pending2','dismiss','pended','return') 
+                                            AND ccm_posts.post_dept LIKE '%$dept%'
+                                            AND ccm_posts.post_status = '$status'";
+                    }
+                    break;
+                case DEPT_ADMIN:
+
+                    if($status == 'all'){
+                        $join = "INNER JOIN ccm_m_user 
+                                            ON ccm_m_user.id = ccm_posts.post_author 
+                                            AND ccm_posts.post_dept LIKE '%$dept%'";
+                    }else{
+                        $join = "INNER JOIN ccm_m_user 
+                                            ON ccm_m_user.id = ccm_posts.post_author 
+                                            AND ccm_posts.post_dept LIKE '%$dept%'
+                                            AND ccm_posts.post_status = '$status'";
+                    }
+                    break;
+            }
+
+            return $join;
         }
         
     }
