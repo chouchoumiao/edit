@@ -22,6 +22,9 @@ define(CURRENT_URL,'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
 define(PAGE_SHOW_COUNT_6,6);	//每页显示6条记录
 define(PAGE_SHOW_COUNT_10,10);	//每页显示10条记录
 
+
+define(XIAOBIAN_POST_MAX_COUNT,6);	//小编可认领的最大文章数（审核后的文章不算）
+
 //角色设定
 define(BAOLIAOZHE,1);       //爆料者
 define(XIAOBIAN,2);         //小编

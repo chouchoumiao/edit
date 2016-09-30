@@ -430,6 +430,21 @@ namespace Admin\Model;
             
         }
 
+        /**
+         * 根据文章的ID和部门判断是否已经被本部门其他小编认领了文章
+         * @param $id
+         * @param $dept
+         * @return mixed
+         */
+        public function isCopiedBySameDeptOtheXIAOBIAN($id,$dept){
+            $where['post_parent'] = $id;
+            $where['post_dept'] = $dept;
+            $field = 'id';
+
+            return $this->object->field($field)->where($where)->find();
+
+        }
+
         public function getPostChild($postid){
             $field = 'ccm_posts.post_child';
             $where['id'] = $postid;
@@ -618,6 +633,16 @@ namespace Admin\Model;
                 }
                 $obj[$i]['post_dept'] = $arr;
 
+                //取得审批者信息，没有则显示'无'
+                if( intval($obj[$i]['post_judge']) != 0){
+                    $judgeInfo = D('User')->getTheUserInfo(intval($obj[$i]['post_judge']));
+                    $obj[$i]['post_judge'] = $judgeInfo['username'];
+
+                }else{
+                    $obj[$i]['post_judge'] = '无';
+                }
+
+
                 //对文章状态进行过滤
                 if($obj[$i]['post_status']) {
                     $spanColor = '';
@@ -653,147 +678,24 @@ namespace Admin\Model;
 
                     }
 
+                    $temp = '';
+
                     //取得当前用户的详细信息，用于判断当前用户的权限等
                     $nowUserInfo = ToolModel::getNowXioabianUserInfo();
-
-                    //如果当前用户的权限是小编则要继续进行判断，否则不需要进行多余判断
-                    if($nowUserInfo['udi_auto_id'] == XIAOBIAN) {
-                        $obj[$i] = $this->doXioabianListShow($obj[$i], $spanColor, $statusArr);
-
-                    }else if( ($nowUserInfo['udi_auto_id'] == BAOLIAOZHE) && ($obj[$i]['post_status'] == 'pending') ){
-                            //$spanColor = '<span style="color: #23b7e5">';
-                            $obj[$i]['post_canEdit'] = 2;
-                            $obj[$i]['post_status'] = $spanColor.$statusArr[$obj[$i]['post_status']].'[不能修改]</span>';
-                    }else{
-
-                        $obj[$i]['post_status'] = $spanColor.$statusArr[$obj[$i]['post_status']].'</span>';
+                    if( ($nowUserInfo['udi_auto_id'] == BAOLIAOZHE) && ($obj[$i]['post_status'] == 'pending') ){
+                        $obj[$i]['post_canEdit'] = 2;
+                        $temp = '[不能修改]';
                     }
 
+                    $obj[$i]['post_status'] = $spanColor.$statusArr[$obj[$i]['post_status']].$temp.'</span>';
+
+
                 }
+
 
             }
 
             return $obj;
-        }
-
-        /**
-         *
-         * 先判断当前的文章是不是爆料者发布的，并且没有父级文章，并且已经被继承(至少被一个小编拷贝)   0：则进行普通的显示
-         *                                                                            1；继续判断(看下记说明)
-         * 判断被继承的字段中是单个还是多个     0：单个直接传入判断
-         *                                1：多个则进行循环在传入判断
-         *
-         * @param $objArr       需要返回出去的文章obj
-         * @param $spanColor    显示的文章颜色
-         * @param $statusArr    文章状态列表数组
-         * @return mixed
-         */
-        private function doXioabianListShow($objArr,$spanColor,$statusArr){
-            $xiaobianInfo = ToolModel::getNowXioabianUserInfo();
-            
-
-            //对于爆料者的文章显示 根据是否被小编继承 再做相应判断
-            if( ($objArr['post_status'] == 'pending') && (intval($objArr['post_parent']) == 0) &&(intval($objArr['post_child']) != 0) ) {
-
-                $objArr['post_status'] = $spanColor . $statusArr[$objArr['post_status']] . '</span>';
-
-                //取得被继承的部门的对应文章列表
-                $childList = $objArr['post_child'];
-
-                $objArr = $this->showPostListByXioabianDept($childList, $objArr);
-
-            //小编的文章 判断
-            }else{
-
-                //小编的文章，分当前是本小编和不是本小编
-                if($objArr['post_author'] != $xiaobianInfo['uid'] && $objArr['post_status'] != 'pending'){
-                    $objArr['post_canEdit'] = 2;                        //当前小编不是文章的作者，则显示预览，不能编辑 （默认是可以编辑的状态）
-                }
-
-                $objArr['post_status'] = $spanColor.$statusArr[$objArr['post_status']].'</span>';
-            }
-            return $objArr;
-        }
-
-
-        /**
-         * 根据childId来查询该小编拷贝文章的部门
-         * 拷贝文章部门是否为本部门   0：则显示最普通的，并返回
-         *                        1：继续进行判断(看下判断内容)
-         *
-         * 拷贝文档本部门的是不是当前小编   0：则显示被谁认领（本部门的其他人）
-         *                            1； 显示被本人认领
-         *
-         * @param $childList    被继承的postID（小编拷贝文章后的ID）
-         * @param $objArr       需要返回出去的文章obj
-         * @return mixed
-         */
-        private function showPostListByXioabianDept($childList,$objArr){
-
-            $xiaobianInfo = ToolModel::getNowXioabianUserInfo();
-
-            $childArr = explode(',', $childList);
-
-            for ($j = 0; $j < count($childArr); $j++) {
-
-                $childPostDeptAndUserName = $this->getChildDeptAndUsernameByChildPostID($childArr[$j]);
-
-                if ($childPostDeptAndUserName['post_dept'] == $xiaobianInfo['udi_dep_id'] ) {
-                    //文章列表中显示被谁认领，默认为本人
-                    $userName = '本人';
-                    $word = '认领了文章';
-
-
-                    //如果当前用户不是认领该文章的小编则显示被认领状态，否则现正常显示
-                    if($childPostDeptAndUserName['username'] != $xiaobianInfo['username'] ){
-                        //不是本人则显示对应的人名
-                        $userName = $childPostDeptAndUserName['username'];
-
-                        switch ($childPostDeptAndUserName['post_status']){
-                            case 'pended':
-                                $word = '审核通过';
-                                break;
-                            case 'dismiss':
-                                $word = '审核不通过';
-                                break;
-                            case 'return':
-                                $word = '文章打回';
-                                break;
-                            case 'pending2':
-                                $word = '认领了文章';
-                                break;
-                            default:
-                                $word = '未知状态';
-                                break;
-                        }
-
-                    }
-                    $spanColor = '<span style="color: #ccc">';
-                    $objArr['post_canEdit'] = 2;
-                    $objArr['post_status'] = $spanColor.'['.$userName.']'.$word.'</span>';
-
-                }
-
-            }
-            return $objArr;
-        }
-
-        /**
-         * 根据被继承的postID查询该文章(被小编拷贝)的属于小编部门和该小编的姓名
-         * @param $childPostId
-         * @return bool
-         */
-        private function getChildDeptAndUsernameByChildPostID($childPostId){
-            $field = 'post_dept,username,post_status';
-            $where['ccm_posts.id'] = $childPostId;
-            $join = "INNER JOIN ccm_m_user 
-                        ON ccm_posts.post_author = ccm_m_user.id";
-
-            $ret = $this->object->join($join)->field($field)->where($where)->find();
-            if( false === $ret){
-                return false;
-            }
-            return $ret;
         }
 
 
@@ -899,7 +801,7 @@ namespace Admin\Model;
          */
         private function getPostWithAuto($flag,$auto,$dept){
 
-            $join = '';
+            $join = 'INNER JOIN ccm_m_user ON ccm_m_user.id = ccm_posts.post_author ';
 
             switch ($flag){
                 case 'userSearch':
@@ -907,30 +809,18 @@ namespace Admin\Model;
                     switch ($auto){
                         case ADMIN:
                         case SUPPER_ADMIN:
-                            $join = "INNER JOIN ccm_m_user 
-                                        ON ccm_m_user.id = ccm_posts.post_author 
-                                        AND ccm_posts.post_author = $userid";
+                            $join .= "AND ccm_posts.post_author = $userid";
                             break;
                         case XIAOBIAN:
-                            //$post_status = POST_SAVE;
-                            $join = "INNER JOIN ccm_m_user 
-                                        ON ccm_m_user.id = ccm_posts.post_author 
-                                        AND ccm_posts.post_author = $userid 
-                                        AND ccm_posts.post_dept LIKE '%$dept%'";
+                        case DEPT_ADMIN:
+                            $join .= "AND ccm_posts.post_author = $userid 
+                                        AND ccm_posts.post_dept LIKE '%$dept%'
+                                        AND ccm_posts.post_status <> 'save'";
                             break;
                         case ZONGBIAN:
 
-                            $join = "INNER JOIN ccm_m_user 
-                                        ON ccm_m_user.id = ccm_posts.post_author 
-                                        AND ccm_posts.post_author = $userid 
+                            $join .= "AND ccm_posts.post_author = $userid 
                                         AND ccm_posts.post_status in ('pending2','dismiss','pended','return') 
-                                        AND ccm_posts.post_dept LIKE '%$dept%'";
-                            break;
-                        case DEPT_ADMIN:
-
-                            $join = "INNER JOIN ccm_m_user 
-                                        ON ccm_m_user.id = ccm_posts.post_author 
-                                        AND ccm_posts.post_author = $userid 
                                         AND ccm_posts.post_dept LIKE '%$dept%'";
                             break;
                     }
@@ -942,15 +832,11 @@ namespace Admin\Model;
                     switch ($auto){
                         case ADMIN:
                         case SUPPER_ADMIN:
-                            $join = "INNER JOIN ccm_m_user 
-                                        ON ccm_m_user.id = ccm_posts.post_author 
-                                        AND ccm_posts.post_dept LIKE '%$deptID%'";
+                            $join .= "AND ccm_posts.post_dept LIKE '%$deptID%'";
                             break;
                         case BAOLIAOZHE:
                             $id = $_SESSION['uid'];
-                            $join = "INNER JOIN ccm_m_user 
-                                        ON ccm_m_user.id = ccm_posts.post_author 
-                                        AND ccm_posts.post_author = '$id' 
+                            $join .= "AND ccm_posts.post_author = '$id' 
                                         AND ccm_posts.post_dept LIKE '%$deptID%'";
                             break;
                     }
@@ -984,7 +870,8 @@ namespace Admin\Model;
          * @return string   拼接后的SQL
          */
         private function getPostNosearchWithAuto($auto,$status,$dept){
-            $join = '';
+            $join = 'INNER JOIN ccm_m_user ON ccm_m_user.id = ccm_posts.post_author ';
+            $theID = $_SESSION['uid'];
             switch ($auto){
                 case ADMIN:
                 case SUPPER_ADMIN:
@@ -992,30 +879,21 @@ namespace Admin\Model;
                         $join = 'INNER JOIN ccm_m_user 
                                             ON ccm_m_user.id = ccm_posts.post_author';
                     }else{
-                        $join = "INNER JOIN ccm_m_user 
-                                            ON ccm_m_user.id = ccm_posts.post_author
-                                            AND ccm_posts.post_status = '$status'";
+                        $join .= "AND ccm_posts.post_status = '$status'";
                     }
                     break;
 
                 case BAOLIAOZHE:
-                    $id = $_SESSION['uid'];
 
                     if($status == 'all'){
-                        $join = "INNER JOIN ccm_m_user 
-                                            ON ccm_m_user.id = ccm_posts.post_author 
-                                            AND ccm_posts.post_author = '$id'";
+                        $join .= "AND ccm_posts.post_author = '$theID'";
                     }else{
 
                         if($status == 'dismiss' || $status == 'pended'){
-                            $join = "INNER JOIN ccm_m_user 
-                                            ON ccm_m_user.id = ccm_posts.post_author 
-                                            AND ccm_posts.post_parent_author = '$id'
+                            $join .= "AND ccm_posts.post_parent_author = '$theID'
                                             AND ccm_posts.post_status = '$status'";
                         }else{
-                            $join = "INNER JOIN ccm_m_user 
-                                            ON ccm_m_user.id = ccm_posts.post_author 
-                                            AND ccm_posts.post_author = '$id'
+                            $join .= "AND ccm_posts.post_author = '$theID'
                                             AND ccm_posts.post_status = '$status'";
                         }
 
@@ -1024,62 +902,65 @@ namespace Admin\Model;
                 case XIAOBIAN:
 
                     //获取当前小编的提交的文章(除了爆料者以外拷贝后都是变成小编是作者)，以及 爆料者提交给本部门并且违背拷贝的文章
-                    $theID = $_SESSION['uid'];
                     if($status == 'all'){
-                        $join = "INNER JOIN ccm_m_user 
-                                        ON ccm_m_user.id = ccm_posts.post_author 
-                                        AND (ccm_posts.post_author = '$theID'
-                                        OR  ( ccm_posts.post_name LIKE '%$dept%' 
-                                            AND ccm_posts.post_status = 'pending'))" ;
+                        $join .= "AND (ccm_posts.post_author = '$theID'
+                                  OR ( ccm_posts.post_name LIKE '%$dept%' 
+                                  AND ccm_posts.post_status = 'pending'))" ;
                     }else{
 
-                        if($status == POST_SAVE){
+                        //如果是待审核 有可能是爆料者的待审核 或者 是小编拷贝后未做操作的待审核
+                        if($status == 'pending'){
+                            $join .= "AND (ccm_posts.post_name LIKE '%$dept%'
+                                    OR ccm_posts.post_author = '$theID')
+                                    AND ccm_posts.post_status = '$status'";
 
-                            $join = "INNER JOIN ccm_m_user 
-                                            ON ccm_m_user.id = ccm_posts.post_author 
-                                            AND ccm_posts.post_dept LIKE '%$dept%'
-                                            AND ccm_posts.post_author = '$theID'
-                                            AND ccm_posts.post_status = '$status'";
-                        }else {
-                            $join = "INNER JOIN ccm_m_user 
-                                            ON ccm_m_user.id = ccm_posts.post_author 
-                                            AND ccm_posts.post_dept LIKE '%$dept%'
-                                            AND ccm_posts.post_status = '$status'
-                                            AND ccm_posts.post_name LIKE '%$dept%'" ;       //追加判断未被编辑部门才显示
+                        //其他状态都取得当前小编是作者并且对应的状态的文章
+                        }else{
+                            $join .= "AND ccm_posts.post_author = '$theID'
+                                        AND ccm_posts.post_status = '$status'";
                         }
                     }
                     break;
                 case ZONGBIAN:
 
+                    //显示属于本部门的 待最终审核 审核不通过  审核通过 打回的文章
                     if($status == 'all'){
-                        $join = "INNER JOIN ccm_m_user 
-                                            ON ccm_m_user.id = ccm_posts.post_author 
-                                            AND ccm_posts.post_status in ('pending2','dismiss','pended','return') 
-                                            AND ccm_posts.post_dept LIKE '%$dept%'";
+                        $join .= "AND ccm_posts.post_status in ('pending2','dismiss','pended','return') 
+                                    AND ccm_posts.post_dept LIKE '%$dept%'";
+
+                    //根据传入状态来显示
                     }else{
-                        $join = "INNER JOIN ccm_m_user 
-                                            ON ccm_m_user.id = ccm_posts.post_author 
-                                            AND ccm_posts.post_status in ('pending2','dismiss','pended','return') 
-                                            AND ccm_posts.post_dept LIKE '%$dept%'
-                                            AND ccm_posts.post_status = '$status'";
+                        $join .= "AND ccm_posts.post_status in ('pending2','dismiss','pended','return') 
+                                    AND ccm_posts.post_dept LIKE '%$dept%'
+                                    AND ccm_posts.post_status = '$status'";
                     }
+
                     break;
                 case DEPT_ADMIN:
 
                     if($status == 'all'){
-                        $join = "INNER JOIN ccm_m_user 
-                                            ON ccm_m_user.id = ccm_posts.post_author 
-                                            AND ccm_posts.post_dept LIKE '%$dept%'";
+                        $join .= "AND ccm_posts.post_dept LIKE '%$dept%'
+                                    AND ccm_posts.post_status <> 'save'";       //追加不显示保存的文章
                     }else{
-                        $join = "INNER JOIN ccm_m_user 
-                                            ON ccm_m_user.id = ccm_posts.post_author 
-                                            AND ccm_posts.post_dept LIKE '%$dept%'
-                                            AND ccm_posts.post_status = '$status'";
+                        $join .= "AND ccm_posts.post_dept LIKE '%$dept%'
+                                    AND ccm_posts.post_status = '$status'";
                     }
                     break;
             }
 
             return $join;
+        }
+
+
+        /**
+         * 查询该小编拷贝的文章的个数(未被审核的)
+         *
+         */
+        public function getCopiedPostCount(){
+            $theID = $_SESSION['uid'];
+            $where = "post_author = '$theID' AND post_status NOT IN ('pended','dismiss')";
+            return $this->object->where($where)->count();
+
         }
         
     }

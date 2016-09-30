@@ -69,6 +69,7 @@
                         <tr>
                             <th><h5>文章标题</h5></th>
                             <th><h5>{$authorName}</h5></th>
+                            <th><h5>审批者</h5></th>
                             <th><h5>所属部门</h5></th>
                             <th><h5>得分</h5></th>
                             <th><h5>发布日期</h5></th>
@@ -87,6 +88,9 @@
                                     <else />
                                         <td>{$vo.username}</td>
                                     </if>
+
+                                    <td>{$vo.post_judge}</td>
+
                                     <td>
                                         <if condition = "($auto eq ADMIN) OR ($auto eq BAOLIAOZHE) ">
                                             <foreach name="vo.post_dept" item="voo">

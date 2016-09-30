@@ -435,243 +435,143 @@ class PostController extends CommonController {
 
         $thePostId = intval(I('get.id'));
 
-        if($data){
-            //$lockID = I('get.id');
-            //如果是小编,并且是待审核文章的情况下点击了审核,需要新增同样的文章
-            if( (intval($this->auto) == XIAOBIAN) && ($data['post_status'] == 'pending') ){
+        if(!$data){
+            ToolModel::goBack('无该文章,请确认');
+            exit;
+        }
 
-                //继续判定点击的文章作者是不是当前小编,如果是则不作拷贝也不作判断
-                if($data['post_author'] != $_SESSION['uid']){
+        //如果是小编,并且是待审核文章的情况下点击了审核,需要新增同样的文章
+        if( (intval($this->auto) == XIAOBIAN) && ($data['post_status'] == 'pending') ){
 
-                    //先判定是否已经拷贝过了，如果拷贝过了，则取得原先拷贝的文章，没有则新增
-                    $isCopiedObj = $this->postObj->isCopiedByXIAOBIAN(I('get.id'));
-                    if($isCopiedObj){
-                        ToolModel::goBack('您已经有了该文章的拷贝了,请操作备份文件');
-                        exit;
-                    }else{
-                        $newID = $this->postObj->copyPostByXIAOBIAN($data,$this->dept);
-                        if( false ===  $newID){
-                            ToolModel::goBack('审核时生成拷贝文件失败,请重试');
-                        }else{  //被拷贝原文章的的继承字段要更新,从来可以来判断该文章是否被拷贝过
+            //继续判定点击的文章作者是不是当前小编,如果是则不作拷贝也不作判断
+            if($data['post_author'] != $_SESSION['uid']){
 
-                            //取得原文章是否已经被继承过
-                            $oldChild = $this->postObj->getPostChild(intval(I('get.id')));
+                //防止同一部门的不同小编拷贝文章，需要先判断有没有被本部门其他小编拷贝过，有则返回
+                if ($this->postObj->isCopiedBySameDeptOtheXIAOBIAN(I('get.id'),$this->dept) >0 ){
+                    ToolModel::goBack('已经被本部门其他小编认领了,请重新刷新页面');
+                    exit;
+                }
 
-                            //如果没有继承过,则将本次继承的新ID写入原本章的继承字段
-                            if( 0 == intval($oldChild)){
-                                $newChild = $newID;
-                            }else{  //如果已经被继承过,则在原先的继承结果上追加
-                                $newChild = $oldChild.','.strval($newID);
-                            }
+                //先判定是否已经拷贝过了，如果拷贝过了，则取得原先拷贝的文章，没有则新增
+                if($this->postObj->isCopiedByXIAOBIAN(I('get.id'))){
+                    ToolModel::goBack('您已经有了该文章的拷贝了,请操作备份文件，并重新刷新页面');
+                    exit;
+                }
 
-                            //取得原文章的post_name,将本次小编的部门才能够该数组中删除,以便后期判断是否继承用
-                            $oldPostName = $this->postObj->getPostName(intval(I('get.id')));
-                            $oldPostNameArr = json_decode($oldPostName);
+                //判断当前小编拷贝的文章是不是超过限制，超过则不能再认领
+                $postCount = $this->postObj->getCopiedPostCount();
+                if( $postCount >= XIAOBIAN_POST_MAX_COUNT){
 
-                            //得到当前小编的部门,转化为数字
-                            $nowDeptArr = json_decode($this->dept);
-                            $nowDept = $nowDeptArr[0];
+                    Log::write(M('posts')->getLastSql(),'LOGOG');
 
-                            //如果当前部门在未被继承数组中,则将当前部门从数组中去除
-                            if(in_array($nowDept,$oldPostNameArr)){
-                                for ($i=0;$i<count($oldPostNameArr);$i++){
-                                    if($oldPostNameArr[$i] != $nowDept){
-                                        $newPostNameArr[] = $oldPostNameArr[$i];
-                                    }
-                                }
-                            }
+                    ToolModel::goBack($postCount.'最多同时认领'.XIAOBIAN_POST_MAX_COUNT.'篇文章，请等待总编审核');
+                    exit;
+                }
 
-                            //如果当前部门从数组中去除以后为空数组了,则将该字段设置为空
-                            if(count($newPostNameArr) <= 0){
-                                $newPostNameJson = '';
-                            }else{  //否则则将去除当前部门后的数组转为为json对象,以便存入数据表中
-                                $newPostNameJson = json_encode($newPostNameArr);
-                            }
 
-                            //更新该字段
-                            if( false === $this->postObj->updatePostName(I('get.id'),$newPostNameJson)){
-                                ToolModel::goBack('更新原文章的被编辑状态出错!');
-                            }
+                //拷贝文章，失败则返回
+                $newID = $this->postObj->copyPostByXIAOBIAN($data,$this->dept);
+                if( false ===  $newID){
+                    ToolModel::goBack('审核时生成拷贝文件失败,请重试');
+                    exit;
+                }
 
-                            //更新继承字段
-                            if( false === $this->postObj->updatePostChild(I('get.id'),$newChild)){
-                                ToolModel::goBack('拷贝文章时候原文章状态更新失败!');
-                            }
+                //被拷贝原文章的的继承字段要更新,从来可以来判断该文章是否被拷贝过
 
-                            $thePostId = $newID;    //小编拷贝了文章后，文章ID需要更新
-                            //拷贝时候需要拷贝单独上传的附件信息(如果存在的情况下)
-                            $oldAttachment = $this->postObj->getAttachmentData(I('get.id'));
-                            if ( false != $oldAttachment){
-                                $newAttachmentData['post_id'] = $newID;
-                                $newAttachmentData['post_attachment'] = $oldAttachment['post_attachment'];
-                                $newAttachmentData['post_save_name'] = $oldAttachment['post_save_name'];
-                                $newAttachmentData['post_file_name'] = $oldAttachment['post_file_name'];
-                                $newAttachmentData['time'] = date('Y-m-d H:i:s', time());
+                //取得原文章是否已经被继承过
+                $oldChild = $this->postObj->getPostChild(intval(I('get.id')));
 
-                                $newAttachment = $this->postObj->insertAttachment($newAttachmentData);
-                                if(false == $newAttachment){
-                                    ToolModel::goBack('拷贝原文章的附件时出错！');
-                                }
-                            }
-                        }
-                        $data = $this->postObj->getThePost( $newID );
-                        if(!$data){
-                            ToolModel::goBack('取得文章失败');
+                //如果没有继承过,则将本次继承的新ID写入原本章的继承字段
+                if( 0 == intval($oldChild)){
+                    $newChild = $newID;
+                }else{  //如果已经被继承过,则在原先的继承结果上追加
+                    $newChild = $oldChild.','.strval($newID);
+                }
+
+                //取得原文章的post_name,将本次小编的部门才能够该数组中删除,以便后期判断是否继承用
+                $oldPostName = $this->postObj->getPostName(intval(I('get.id')));
+                $oldPostNameArr = json_decode($oldPostName);
+
+                //得到当前小编的部门,转化为数字
+                $nowDeptArr = json_decode($this->dept);
+                $nowDept = $nowDeptArr[0];
+
+                //如果当前部门在未被继承数组中,则将当前部门从数组中去除
+                if(in_array($nowDept,$oldPostNameArr)){
+                    for ($i=0;$i<count($oldPostNameArr);$i++){
+                        if($oldPostNameArr[$i] != $nowDept){
+                            $newPostNameArr[] = $oldPostNameArr[$i];
                         }
                     }
                 }
 
+                //如果当前部门从数组中去除以后为空数组了,则将该字段设置为空
+                if(count($newPostNameArr) <= 0){
+                    $newPostNameJson = '';
+                }else{  //否则则将去除当前部门后的数组转为为json对象,以便存入数据表中
+                    $newPostNameJson = json_encode($newPostNameArr);
+                }
+
+                //更新该字段
+                if( false === $this->postObj->updatePostName(I('get.id'),$newPostNameJson)){
+                    ToolModel::goBack('更新原文章的被编辑状态出错!');
+                }
+
+                //更新继承字段
+                if( false === $this->postObj->updatePostChild(I('get.id'),$newChild)){
+                    ToolModel::goBack('拷贝文章时候原文章状态更新失败!');
+                }
+
+                $thePostId = $newID;    //小编拷贝了文章后，文章ID需要更新
+                //拷贝时候需要拷贝单独上传的附件信息(如果存在的情况下)
+                $oldAttachment = $this->postObj->getAttachmentData(I('get.id'));
+                if ( false != $oldAttachment){
+                    $newAttachmentData['post_id'] = $newID;
+                    $newAttachmentData['post_attachment'] = $oldAttachment['post_attachment'];
+                    $newAttachmentData['post_save_name'] = $oldAttachment['post_save_name'];
+                    $newAttachmentData['post_file_name'] = $oldAttachment['post_file_name'];
+                    $newAttachmentData['time'] = date('Y-m-d H:i:s', time());
+
+                    $newAttachment = $this->postObj->insertAttachment($newAttachmentData);
+                    if(false == $newAttachment){
+                        ToolModel::goBack('拷贝原文章的附件时出错！');
+                    }
+                }
+
+                $data = $this->postObj->getThePost( $newID );
+                if(!$data){
+                    ToolModel::goBack('取得文章失败');
+                }
             }
+        }
 
+        $attachmentData = $this->postObj->getAttachmentData($thePostId);
 
-            $attachmentData = $this->postObj->getAttachmentData($thePostId);
+        //如果存在附件则输出附件的对应字段到视图
+        if($attachmentData){
+            $this->assign('attachmentList',$attachmentData['post_attachment']);
+            $this->assign('saveNameList',$attachmentData['post_save_name']);
+            $this->assign('fileNameList',$attachmentData['post_file_name']);
+        }
 
-            //如果存在附件则输出附件的对应字段到视图
-            if($attachmentData){
-                $this->assign('attachmentList',$attachmentData['post_attachment']);
-                $this->assign('saveNameList',$attachmentData['post_save_name']);
-                $this->assign('fileNameList',$attachmentData['post_file_name']);
-            }
-            $lockID = $data['id'];
-            $this->assign('postid',$data['id']);
-            $this->assign('content',$data['post_content']);
-            $this->assign('title',$data['post_title']);
-            $this->assign('theDept',ToolModel::onlyShowTheDept($data['post_dept']));
-            
-            //追加小编或者总编时候去的积分,并给编辑页面
-            $theScore = $this->postObj->getTheScore($thePostId);
+        $lockID = $data['id'];
+        $this->assign('postid',$data['id']);
+        $this->assign('content',$data['post_content']);
+        $this->assign('title',$data['post_title']);
+        $this->assign('theDept',ToolModel::onlyShowTheDept($data['post_dept']));
 
-            if($theScore){
-                $this->assign('theScore',$theScore);
-            }else{
-                $this->assign('theScore',0);
-            }
-            
+        //追加小编或者总编时候去的积分,并给编辑页面
+        $theScore = $this->postObj->getTheScore($thePostId);
+
+        if($theScore){
+            $this->assign('theScore',intval($theScore));
         }else{
-            ToolModel::goBack('无该文章,请确认');
+            $this->assign('theScore',0);
         }
 
         //根据角色来显示不同的按钮
-        $html = '';
-        $htmlSmall = '';
-        $save     = 1;        //保存flag
-        $pending  = 2;        //提交审核
-        $pending2 = 3;        //继续提交审核
-        $dismiss  = 4;        //审核不通过flag
-        $pended  = 5;        //审核通过flag
-        $return  = 6;        //总编打回给小编不通过,小编可以继续修改
+        $this->showBtnWithAuto();
 
-        switch (intval($this->auto)){
-            case ADMIN:
-            case DEPT_ADMIN:
-            case SUPPER_ADMIN:
-                break;
-            case ZONGBIAN:
-
-                $html .= '<div class="col-sm-2 col-sm-offset-2">';
-                $html .= '<input type="button" class="btn btn-info btn-block" 
-                            onclick="return UpdateFormSubmit('.$pended.');" value="审核通过" name="send">';
-                $html .= '</div>';
-                $html .= '<div class="col-sm-2 col-sm-offset-1">';
-//                $html .= '<input type="button" class="btn btn-danger btn-block"
-//                            onclick="return UpdateFormSubmit('.$dismiss.');" value="审核不通过" name="send">';
-                $html .= '<input type="button" class="btn btn-danger btn-block" 
-                            onclick="return UpdateFormSubmit('.$return.');" value="打回" name="send">';
-                $html .= '</div>';
-                $html .= '<div class="col-sm-2 col-sm-offset-1">';
-                $html .= '<input type="button" class="btn  btn-default m-left-xs btn-block" onclick="return resetAddForm();" value="清空内容" id="res">';
-                $html .= '</div>';
-
-                $htmlSmall .= '<div class="col-xs-2">';
-                $htmlSmall .= '<input type="button" class="btn btn-info  btn-xs" 
-                            onclick="return UpdateFormSubmit('.$pended.');" value="审核通过" name="send">';
-                $htmlSmall .= '</div>';
-                $htmlSmall .= '<div class="col-xs-2 col-xs-offset-2">';
-                $htmlSmall .= '<input type="button" class="btn btn-danger  btn-xs" 
-                            onclick="return UpdateFormSubmit('.$return.');" value="打回" name="send">';
-                $htmlSmall .= '</div>';
-                $htmlSmall .= '<div class="col-xs-2 col-xs-offset-2">';
-                $htmlSmall .= '<input type="button" class="btn  btn-default btn-xs" onclick="return resetAddForm();" value="清空内容" id="res">';
-                $htmlSmall .= '</div>';
-
-                $showDeptCheckBox = false;
-
-                break;
-            case XIAOBIAN:
-                $html .= '<div class="col-sm-2 col-sm-offset-2">';
-                $html .= '<input type="button" class="btn btn-info btn-block" 
-                            onclick="return UpdateFormSubmit('.$pending2.');" value="提交审核" name="send">';
-                $html .= '</div>';
-                $html .= '<div class="col-sm-2 col-sm-offset-1">';
-                $html .= '<input type="button" class="btn btn-danger btn-block" 
-                            onclick="return UpdateFormSubmit('.$dismiss.');" value="审核不通过" name="send">';
-                $html .= '</div>';
-                $html .= '<div class="col-sm-2 col-sm-offset-1">';
-                $html .= '<input type="button" class="btn btn-warning btn-block" 
-                            onclick="return UpdateFormSubmit('.$save.');" value="保存" name="send">';
-                $html .= '</div>';
-//                $html .= '<div class="col-sm-2 col-sm-offset-1">';
-//                $html .= '<input type="button" class="btn  btn-default m-left-xs btn-block" onclick="return resetAddForm();" value="清空内容" id="res">';
-//                $html .= '</div>';
-
-
-                $htmlSmall .= '<div class="col-xs-2">';
-                $htmlSmall .= '<input type="button" class="btn btn-xs btn-info" 
-                            onclick="return UpdateFormSubmit('.$pending2.');" value="继续审核" name="send">';
-                $htmlSmall .= '</div>';
-                $htmlSmall .= '<div class="col-xs-2 col-xs-offset-2">';
-                $htmlSmall .= '<input type="button" class="btn btn-danger btn-xs" 
-                            onclick="return UpdateFormSubmit('.$dismiss.');" value="审核不通过" name="send">';
-                $htmlSmall .= '</div>';
-                $htmlSmall .= '<div class="col-xs-2 col-xs-offset-2">';
-                $htmlSmall .= '<input type="button" class="btn btn-xs btn-warning" 
-                            onclick="return UpdateFormSubmit('.$save.');" value="修改并保存" name="send">';
-                $htmlSmall .= '</div>';
-//                $htmlSmall .= '<div class="col-xs-2 col-xs-offset-2">';
-//                $htmlSmall .= '<input type="button" class="btn  btn-default btn-xs" onclick="return resetAddForm();" value="清空内容" id="res">';
-//                $htmlSmall .= '</div>';
-
-                $showDeptCheckBox = false;
-
-                break;
-            case BAOLIAOZHE:
-                $html .= '<div class="col-sm-2 col-sm-offset-2">';
-                $html .= '<input type="button" class="btn btn-info btn-block" 
-                            onclick="return UpdateFormSubmit('.$pending.');" value="提交审核" name="send">';
-                $html .= '</div>';
-                $html .= '<div class="col-sm-2 col-sm-offset-1">';
-                $html .= '<input type="button" class="btn btn-warning btn-block" 
-                            onclick="return UpdateFormSubmit('.$save.');" value="修改并保存" name="send">';
-                $html .= '</div>';
-                $html .= '<div class="col-sm-2 col-sm-offset-1">';
-                $html .= '<input type="button" class="btn  btn-default m-left-xs btn-block" onclick="return resetAddForm();" value="清空内容" id="res">';
-                $html .= '</div>';
-
-
-                $htmlSmall .= '<div class="col-xs-2">';
-                $htmlSmall .= '<input type="button" class="btn btn-xs btn-info " 
-                            onclick="return UpdateFormSubmit('.$pending.');" value="提交审核" name="send">';
-                $htmlSmall .= '</div>';
-                $htmlSmall .= '<div class="col-xs-2 col-xs-offset-2">';
-                $htmlSmall .= '<input type="button" class="btn btn-xs btn-warning" 
-                            onclick="return UpdateFormSubmit('.$save.');" value="修改并保存" name="send">';
-                $htmlSmall .= '</div>';
-                $htmlSmall .= '<div class="col-xs-2 col-xs-offset-2">';
-                $htmlSmall .= '<input type="button" class="btn btn-xs btn-default" onclick="return resetAddForm();" value="清空内容" id="res">';
-                $htmlSmall .= '</div>';
-
-                $showDeptCheckBox = true;
-
-                break;
-
-        }
-        $this->assign('btnSmall',$htmlSmall);    //响应式手机用小按钮组
-        $this->assign('showDeptCheckBox',$showDeptCheckBox);    //如果是小编或者总编部门固定,所以不显示部门可选
-        $this->assign('btn',$html);
-        $this->assign('the',true);
-        $this->assign('theAuto',$this->auto);
-
-        //echo $lockID;exit;
         //设置缓存，时间为100分钟
         if(!S('lockPostId'.intval($lockID))){
 
@@ -741,9 +641,14 @@ class PostController extends CommonController {
         //追加注入斑模板的不同文章状态的文章个数
         $this->getShowPostCountWithStatus();
 
-        //总编的情况下,文章一览显示是审核者,而不是作者
-        if($this->auto == ZONGBIAN){
-            $this->assign('authorName','审批者');
+        //爆料者的情况  如果是审核通过和不通过显示的标题不一样
+        if($this->auto == BAOLIAOZHE){
+            if ( ($_GET['status'] == 'dismiss') || ($_GET['status'] == 'pended') ){
+                $this->assign('authorName','初审者');
+            }else{
+                $this->assign('authorName','作者');
+            }
+
         }else{
             $this->assign('authorName','作者');
         }
@@ -798,8 +703,8 @@ class PostController extends CommonController {
      */
     private function getShowPostCountWithStatus(){
 
-//        if( ($this->auto != XIAOBIAN) && ($this->auto != ZONGBIAN) ){
-        if( $this->auto != ZONGBIAN ){
+        //保存的状态 小编和部门管理员不可以看到
+        if( ($this->auto != ZONGBIAN) && ($this->auto != DEPT_ADMIN) ){
             //取得保存文章个数
             $saveCount = $this->postObj->getStatusCountByFlag($this->auto,'save');
             //取得待审核文章个数
@@ -826,5 +731,122 @@ class PostController extends CommonController {
         //取得打回文章个数
         $this->assign('returnCount',$this->postObj->getStatusCountByFlag($this->auto,'return',$this->dept));
 
+    }
+
+    /**
+     * 根据不同的角色来显示按钮
+     */
+    private function showBtnWithAuto(){
+        //根据角色来显示不同的按钮
+        $html = '';
+        $htmlSmall = '';
+        $save     = 1;        //保存flag
+        $pending  = 2;        //提交审核
+        $pending2 = 3;        //继续提交审核
+        $dismiss  = 4;        //审核不通过flag
+        $pended  = 5;        //审核通过flag
+        $return  = 6;        //总编打回给小编不通过,小编可以继续修改
+
+        switch (intval($this->auto)){
+            case ADMIN:
+            case DEPT_ADMIN:
+            case SUPPER_ADMIN:
+                break;
+            case ZONGBIAN:
+
+                $html .= '<div class="col-sm-2 col-sm-offset-2">';
+                $html .= '<input type="button" class="btn btn-info btn-block" 
+                            onclick="return UpdateFormSubmit('.$pended.');" value="审核通过" name="send">';
+                $html .= '</div>';
+                $html .= '<div class="col-sm-2 col-sm-offset-1">';
+                $html .= '<input type="button" class="btn btn-danger btn-block" 
+                            onclick="return UpdateFormSubmit('.$return.');" value="打回" name="send">';
+                $html .= '</div>';
+                $html .= '<div class="col-sm-2 col-sm-offset-1">';
+                $html .= '<input type="button" class="btn  btn-default m-left-xs btn-block" onclick="return resetAddForm();" value="清空内容" id="res">';
+                $html .= '</div>';
+
+                $htmlSmall .= '<div class="col-xs-2">';
+                $htmlSmall .= '<input type="button" class="btn btn-info  btn-xs" 
+                            onclick="return UpdateFormSubmit('.$pended.');" value="审核通过" name="send">';
+                $htmlSmall .= '</div>';
+                $htmlSmall .= '<div class="col-xs-2 col-xs-offset-2">';
+                $htmlSmall .= '<input type="button" class="btn btn-danger  btn-xs" 
+                            onclick="return UpdateFormSubmit('.$return.');" value="打回" name="send">';
+                $htmlSmall .= '</div>';
+                $htmlSmall .= '<div class="col-xs-2 col-xs-offset-2">';
+                $htmlSmall .= '<input type="button" class="btn  btn-default btn-xs" onclick="return resetAddForm();" value="清空内容" id="res">';
+                $htmlSmall .= '</div>';
+
+                $showDeptCheckBox = false;
+
+                break;
+            case XIAOBIAN:
+                $html .= '<div class="col-sm-2 col-sm-offset-2">';
+                $html .= '<input type="button" class="btn btn-info btn-block" 
+                            onclick="return UpdateFormSubmit('.$pending2.');" value="提交审核" name="send">';
+                $html .= '</div>';
+                $html .= '<div class="col-sm-2 col-sm-offset-1">';
+                $html .= '<input type="button" class="btn btn-danger btn-block" 
+                            onclick="return UpdateFormSubmit('.$dismiss.');" value="审核不通过" name="send">';
+                $html .= '</div>';
+                $html .= '<div class="col-sm-2 col-sm-offset-1">';
+                $html .= '<input type="button" class="btn btn-warning btn-block" 
+                            onclick="return UpdateFormSubmit('.$save.');" value="保存" name="send">';
+                $html .= '</div>';
+
+
+                $htmlSmall .= '<div class="col-xs-2">';
+                $htmlSmall .= '<input type="button" class="btn btn-xs btn-info" 
+                            onclick="return UpdateFormSubmit('.$pending2.');" value="继续审核" name="send">';
+                $htmlSmall .= '</div>';
+                $htmlSmall .= '<div class="col-xs-2 col-xs-offset-2">';
+                $htmlSmall .= '<input type="button" class="btn btn-danger btn-xs" 
+                            onclick="return UpdateFormSubmit('.$dismiss.');" value="审核不通过" name="send">';
+                $htmlSmall .= '</div>';
+                $htmlSmall .= '<div class="col-xs-2 col-xs-offset-2">';
+                $htmlSmall .= '<input type="button" class="btn btn-xs btn-warning" 
+                            onclick="return UpdateFormSubmit('.$save.');" value="修改并保存" name="send">';
+                $htmlSmall .= '</div>';
+
+                $showDeptCheckBox = false;
+
+                break;
+            case BAOLIAOZHE:
+                $html .= '<div class="col-sm-2 col-sm-offset-2">';
+                $html .= '<input type="button" class="btn btn-info btn-block" 
+                            onclick="return UpdateFormSubmit('.$pending.');" value="提交审核" name="send">';
+                $html .= '</div>';
+                $html .= '<div class="col-sm-2 col-sm-offset-1">';
+                $html .= '<input type="button" class="btn btn-warning btn-block" 
+                            onclick="return UpdateFormSubmit('.$save.');" value="修改并保存" name="send">';
+                $html .= '</div>';
+                $html .= '<div class="col-sm-2 col-sm-offset-1">';
+                $html .= '<input type="button" class="btn  btn-default m-left-xs btn-block" onclick="return resetAddForm();" value="清空内容" id="res">';
+                $html .= '</div>';
+
+
+                $htmlSmall .= '<div class="col-xs-2">';
+                $htmlSmall .= '<input type="button" class="btn btn-xs btn-info " 
+                            onclick="return UpdateFormSubmit('.$pending.');" value="提交审核" name="send">';
+                $htmlSmall .= '</div>';
+                $htmlSmall .= '<div class="col-xs-2 col-xs-offset-2">';
+                $htmlSmall .= '<input type="button" class="btn btn-xs btn-warning" 
+                            onclick="return UpdateFormSubmit('.$save.');" value="修改并保存" name="send">';
+                $htmlSmall .= '</div>';
+                $htmlSmall .= '<div class="col-xs-2 col-xs-offset-2">';
+                $htmlSmall .= '<input type="button" class="btn btn-xs btn-default" onclick="return resetAddForm();" value="清空内容" id="res">';
+                $htmlSmall .= '</div>';
+
+                $showDeptCheckBox = true;
+
+                break;
+
+        }
+        $this->assign('btnSmall',$htmlSmall);    //响应式手机用小按钮组
+        $this->assign('showDeptCheckBox',$showDeptCheckBox);    //如果是小编或者总编部门固定,所以不显示部门可选
+        $this->assign('btn',$html);
+        $this->assign('the',true);
+        $this->assign('theAuto',$this->auto);
     }
 }
