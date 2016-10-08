@@ -201,6 +201,8 @@ namespace Admin\Model;
 
             $this->post_author = '';
 
+            $this->post_judge = 0;  //默认为0（因为是int类型）
+
 
             if(!isset($_POST['dept'])) ToolModel::goBack('警告,部门传参错误!');
             if( '' == $_POST['dept']) ToolModel::goBack('警告,部门参数不能为空!');
