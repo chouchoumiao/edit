@@ -509,6 +509,7 @@ namespace Admin\Model;
             //$id = intval(I('get.id'));
             $dataArr = array(
                 'post_author'  => $_SESSION['uid'],
+                'post_judge'  => 0,     //追加审核者，默认为0
                 'post_date'    => $now,
                 'post_content' => $data['post_content'],
                 'post_title'   => $data['post_title'],
@@ -738,6 +739,7 @@ namespace Admin\Model;
 
             $dataArr = array(
                 'post_author'  => $this->post_author,
+                'post_judge'   => 0,     //追加审核者，默认为0
                 'post_date'    => $now,
                 'post_content' => $this->post_content,
                 'post_title'   => $this->post_title,

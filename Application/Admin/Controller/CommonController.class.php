@@ -9,7 +9,6 @@
 namespace Admin\Controller;
 
 use Think\Controller;
-use Think\Log;
 
 class CommonController extends Controller{
 
@@ -20,8 +19,6 @@ class CommonController extends Controller{
 
         //使用__construct方法时，需先调用父类的__construct方法先
         parent::__construct();
-
-        Log::write(CURRENT_URL,'ActionName');
 
         //如果没有session或者session为0，并且方法名不是 login 和 reg 的情况则跳转到登录页面
         if( ( (!isset($_SESSION['username'])) || ('' == $_SESSION['username']) ) && ( 'login') != ACTION_NAME && ( 'reg') != ACTION_NAME){
