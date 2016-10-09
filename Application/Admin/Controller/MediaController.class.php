@@ -384,8 +384,6 @@ class MediaController extends CommonController {
      * 显示新增媒体页面
      */
     private function add(){
-//        $this->assign('add',true);
-//        $this->display('media');
         $this->display('addMedia');
     }
 
