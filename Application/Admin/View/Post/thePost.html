@@ -1,117 +1,120 @@
-<div class="col-md-12" id="thePostForLock">
-    <div class="smart-widget">
-        <div class="smart-widget-inner">
+<extend name="post_layout" />
+<block name="post_content">
+    <div class="col-md-12" id="thePostForLock">
+        <div class="smart-widget">
+            <div class="smart-widget-inner">
 
-            <div class="smart-widget-body">
-                <div class="tab-content">
-                    <div class="tab-pane fade in active">
-                        <h4 class="header-text m-top-md">修 改 文 章</h4>
-                        <form action="__ROOT__/Admin/Post/doAction/action/update" class="form-horizontal m-top-md" enctype="multipart/form-data" method="post">
+                <div class="smart-widget-body">
+                    <div class="tab-content">
+                        <div class="tab-pane fade in active">
+                            <h4 class="header-text m-top-md">修 改 文 章</h4>
+                            <form action="__ROOT__/Admin/Post/doAction/action/update" class="form-horizontal m-top-md" enctype="multipart/form-data" method="post">
 
-                            <input type="hidden" value={$theAuto} id="theAuto">
+                                <input type="hidden" value={$theAuto} id="theAuto">
 
-                            <input type="hidden" value={$postid} id="postid">
+                                <input type="hidden" value={$postid} id="postid">
 
-                            <input type="hidden" value={$theScore} id="theScore">
+                                <input type="hidden" value={$theScore} id="theScore">
 
-                            <input style="display: none" name="oldTitle" value={$title} />
+                                <input style="display: none" name="oldTitle" value={$title} />
 
-                            <input style="display: none" id="attachmentList" value={$attachmentList|default=0} />
-                            <input style="display: none" id="saveNameList" value={$saveNameList|default=0} />
-                            <input style="display: none" id="fileNameList" value={$fileNameList|default=0} />
+                                <input style="display: none" id="attachmentList" value={$attachmentList|default=0} />
+                                <input style="display: none" id="saveNameList" value={$saveNameList|default=0} />
+                                <input style="display: none" id="fileNameList" value={$fileNameList|default=0} />
 
-                            <textarea style="display: none" id="content" >{$content}</textarea>
-                            <div class="form-group">
-                                <div class="col-sm-12">
-                                    <input type="text" class="form-control" value={$title} name="theTitle" id="theTitle">
-                                </div>
-                            </div>
-
-                            <div class="form-group" id="theUpLoadBtn" style="display: none">
-                                <div class="col-sm-12 col-md-12 col-xs-12">
-                                    <input type="file" id="the_file_upload" name="the_file_upload" />
-                                </div>
-                            </div>
-
-                            <div class="form-group" id = "theAttachmentDiv" style="display: none">
-                                <div class="col-md-12">
-                                    <div class="gallery-list js-masonry m-top-md" id="theImgs"></div>
-                                </div>
-                            </div>
-                            <div class="form-group" id = "theAttachmentTextDiv" style="display: none">
-                                <div class="col-sm-12">
-                                    <label>附件(可点击下载查看)</label>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="col-sm-12">
-                                    <div id="summernote" name = "summernote">
-
-                                    </div>
-                                </div>
-                            </div>
-
-                            <empty name="showDeptCheckBox">
-                                <div class="form-group" id="dept" style="display: none">
-                                    <label class="col-sm-1 control-label">提交部门</label>
-                                    <div class="col-sm-11">
-                                        {$theDept}
-                                    </div>
-                                </div>
-                            <else/>
-                                <div class="form-group" id="dept">
-                                    <label class="col-sm-1 control-label">提交部门</label>
-                                    <div class="col-sm-11">
-                                        {$theDept}
-                                    </div>
-                                </div>
-                            </empty>
-
-                            <!--不通过需要写原因-->
-                            <div class="form-group">
-                                <div class="col-sm-12">
-                                    <textarea style="display: none" rows="4" class="form-control" id="dismiss_msg" placeholder="请输入不通过的原因"></textarea>
-                                </div>
-                            </div>
-                            <!--通过需要填写评分-->
-                            <div class="form-group" id="scoreBtn" style="display: none">
+                                <textarea style="display: none" id="content" >{$content}</textarea>
                                 <div class="form-group">
-                                <label class="col-sm-4 control-label col-sm-offset-1">请为文章打分（默认为1个徽章）：</label>
-                                <div class="btn-group marginTB-xs col-sm-5">
-                                    <button type="button" class="btn btn-default scoreBtn active"  id="scoreBtn1"  value="1">
-                                        <i class="text-danger fa fa-heart"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-default scoreBtn" id="scoreBtn2" value="2">
-                                        <i class="text-danger fa fa-heart"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-default scoreBtn" id="scoreBtn3" value="3">
-                                        <i class="text-danger fa fa-heart"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-default scoreBtn" id="scoreBtn4" value="4">
-                                        <i class="text-danger fa fa-heart"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-default scoreBtn" id="scoreBtn5" value="5">
-                                        <i class="text-danger fa fa-heart"></i>
-                                    </button>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" value={$title} name="theTitle" id="theTitle">
+                                    </div>
                                 </div>
+
+                                <div class="form-group" id="theUpLoadBtn" style="display: none">
+                                    <div class="col-sm-12 col-md-12 col-xs-12">
+                                        <input type="file" id="the_file_upload" name="the_file_upload" />
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="form-group m-top-lg hidden-xs">
-                                {$btn}
-                            </div>
-
-                            <div class="form-group m-top-lg visible-xs">
-                                <div class="col-xs-12">
-                                {$btnSmall}
+                                <div class="form-group" id = "theAttachmentDiv" style="display: none">
+                                    <div class="col-md-12">
+                                        <div class="gallery-list js-masonry m-top-md" id="theImgs"></div>
+                                    </div>
                                 </div>
-                            </div>
+                                <div class="form-group" id = "theAttachmentTextDiv" style="display: none">
+                                    <div class="col-sm-12">
+                                        <label>附件(可点击下载查看)</label>
+                                    </div>
+                                </div>
 
-                        </form>
-                    </div><!-- ./tab-pane -->
-                </div><!-- ./tab-content -->
-            </div><!-- ./smart-widget-body -->
-        </div><!-- ./smart-widget-inner -->
-    </div><!-- ./smart-widget -->
-</div>
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <div id="summernote" name = "summernote">
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <empty name="showDeptCheckBox">
+                                    <div class="form-group" id="dept" style="display: none">
+                                        <label class="col-sm-1 control-label">提交部门</label>
+                                        <div class="col-sm-11">
+                                            {$theDept}
+                                        </div>
+                                    </div>
+                                <else/>
+                                    <div class="form-group" id="dept">
+                                        <label class="col-sm-1 control-label">提交部门</label>
+                                        <div class="col-sm-11">
+                                            {$theDept}
+                                        </div>
+                                    </div>
+                                </empty>
+
+                                <!--不通过需要写原因-->
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <textarea style="display: none" rows="4" class="form-control" id="dismiss_msg" placeholder="请输入不通过的原因"></textarea>
+                                    </div>
+                                </div>
+                                <!--通过需要填写评分-->
+                                <div class="form-group" id="scoreBtn" style="display: none">
+                                    <div class="form-group">
+                                    <label class="col-sm-4 control-label col-sm-offset-1">请为文章打分（默认为1个徽章）：</label>
+                                    <div class="btn-group marginTB-xs col-sm-5">
+                                        <button type="button" class="btn btn-default scoreBtn active"  id="scoreBtn1"  value="1">
+                                            <i class="text-danger fa fa-heart"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-default scoreBtn" id="scoreBtn2" value="2">
+                                            <i class="text-danger fa fa-heart"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-default scoreBtn" id="scoreBtn3" value="3">
+                                            <i class="text-danger fa fa-heart"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-default scoreBtn" id="scoreBtn4" value="4">
+                                            <i class="text-danger fa fa-heart"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-default scoreBtn" id="scoreBtn5" value="5">
+                                            <i class="text-danger fa fa-heart"></i>
+                                        </button>
+                                    </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group m-top-lg hidden-xs">
+                                    {$btn}
+                                </div>
+
+                                <div class="form-group m-top-lg visible-xs">
+                                    <div class="col-xs-12">
+                                    {$btnSmall}
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div><!-- ./tab-pane -->
+                    </div><!-- ./tab-content -->
+                </div><!-- ./smart-widget-body -->
+            </div><!-- ./smart-widget-inner -->
+        </div><!-- ./smart-widget -->
+    </div>
+</block>

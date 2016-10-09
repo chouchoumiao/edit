@@ -174,9 +174,7 @@ class NoticeController extends CommonController {
         }
 
 
-
-        $this->assign('add',true);
-        $this->display('notice');
+        $this->display('addNotice');
     }
 
     /**
@@ -213,9 +211,7 @@ class NoticeController extends CommonController {
 
         $this->assign('theData',$data);
 
-        
-        $this->assign('the',true);
-        $this->display('notice');
+        $this->display('theNotice');
 
     }
 
@@ -249,8 +245,7 @@ class NoticeController extends CommonController {
         $this->assign('data',$data);
         $this->assign('page',$show);    //赋值分页输出
 
-        $this->assign('all',true);
-        $this->display('notice');
+        $this->display('allNotice');
 
     }
 

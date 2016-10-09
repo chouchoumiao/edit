@@ -1,90 +1,93 @@
-<div class="col-md-12">
-    <div class="smart-widget">
-        <div class="smart-widget-inner">
+<extend name="notice_layout" />
+<block name="notice_content">
+    <div class="col-md-12">
+        <div class="smart-widget">
+            <div class="smart-widget-inner">
 
-            <div class="smart-widget-body">
-                <div class="tab-content">
-                    <div class="tab-pane fade in active">
-                        <h4 class="header-text m-top-md">撰 写 新 通 知</h4>
-                        <form class="form-horizontal m-top-md" action="__ROOT__/Admin/Notice/doAction/action/addNew" method="post">
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label" for="title">标题</label>
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control" placeholder="在此输入标题,不超过200个字符" name="title" id="title">
-                                </div>
-                            </div>
-                            <br/>
-
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label" for="link">链接</label>
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control" placeholder="如有需要请填写链接地址,,必须是http://开头(没有可不填)" name="link" id="link">
-                                </div>
-                            </div>
-                            <br/>
-
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label" for="content">内容</label>
-                                <div class="col-sm-9">
-                                    <textarea class="form-control" rows="15" name="content" id="content" placeholder="填写通知具体内容"></textarea>
-                                </div>
-                            </div>
-                            <br/>
-
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label" for="from_date">开始日期</label>
-                                <div class="col-sm-9">
-                                    <input type="date" class="form-control" placeholder="开始日期" name="from_date" id="from_date">
-                                </div>
-                            </div>
-                            <br/>
-
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label" for="to_date">结束日期</label>
-                                <div class="col-sm-9">
-                                    <input type="date" class="form-control" placeholder="结束日期" name="to_date" id="to_date">
-                                </div>
-                            </div>
-                            <br/>
-                            <notempty name="showDept">
-                                <div class="form-group" id="dept">
-                                    <label class="col-sm-2 control-label" style="margin-top: 5px;">开放部门</label>
+                <div class="smart-widget-body">
+                    <div class="tab-content">
+                        <div class="tab-pane fade in active">
+                            <h4 class="header-text m-top-md">撰 写 新 通 知</h4>
+                            <form class="form-horizontal m-top-md" action="__ROOT__/Admin/Notice/doAction/action/addNew" method="post">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" for="title">标题</label>
                                     <div class="col-sm-9">
-                                        {$dept}
+                                        <input type="text" class="form-control" placeholder="在此输入标题,不超过200个字符" name="title" id="title">
                                     </div>
                                 </div>
                                 <br/>
-                            <else />
-                                <div class="form-group" id="dept" style="display: none;">
-                                    <label class="col-sm-2 control-label" style="margin-top: 5px;">开放部门</label>
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" for="link">链接</label>
                                     <div class="col-sm-9">
-                                        {$dept}
+                                        <input type="text" class="form-control" placeholder="如有需要请填写链接地址,,必须是http://开头(没有可不填)" name="link" id="link">
                                     </div>
                                 </div>
-                            </notempty>
+                                <br/>
 
-                            <notempty name="auto">
-                                <div class="form-group" id="auto">
-                                    <label class="col-sm-2 control-label">开放角色</label>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" for="content">内容</label>
                                     <div class="col-sm-9">
-                                        {$auto}
+                                        <textarea class="form-control" rows="15" name="content" id="content" placeholder="填写通知具体内容"></textarea>
                                     </div>
                                 </div>
-                            </notempty>
+                                <br/>
 
-                            <div class="form-group m-top-lg">
-                                <div class="col-sm-3 col-sm-offset-3 col-xs-4 col-xs-offset-2 " >
-                                    <input type="submit" class="btn btn-sm btn-info btn-block" value="提交" name="send">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" for="from_date">开始日期</label>
+                                    <div class="col-sm-9">
+                                        <input type="date" class="form-control" placeholder="开始日期" name="from_date" id="from_date">
+                                    </div>
                                 </div>
-                                <div class="col-sm-3 col-xs-4 ">
-                                    <input type="reset" class="btn btn-sm btn-default m-left-xs btn-block" value="取消">
-                                </div>
-                            </div>
+                                <br/>
 
-                        </form>
-                    </div><!-- ./tab-pane -->
-                </div><!-- ./tab-content -->
-            </div><!-- ./smart-widget-body -->
-        </div><!-- ./smart-widget-inner -->
-    </div><!-- ./smart-widget -->
-</div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" for="to_date">结束日期</label>
+                                    <div class="col-sm-9">
+                                        <input type="date" class="form-control" placeholder="结束日期" name="to_date" id="to_date">
+                                    </div>
+                                </div>
+                                <br/>
+                                <notempty name="showDept">
+                                    <div class="form-group" id="dept">
+                                        <label class="col-sm-2 control-label" style="margin-top: 5px;">开放部门</label>
+                                        <div class="col-sm-9">
+                                            {$dept}
+                                        </div>
+                                    </div>
+                                    <br/>
+                                <else />
+                                    <div class="form-group" id="dept" style="display: none;">
+                                        <label class="col-sm-2 control-label" style="margin-top: 5px;">开放部门</label>
+                                        <div class="col-sm-9">
+                                            {$dept}
+                                        </div>
+                                    </div>
+                                </notempty>
+
+                                <notempty name="auto">
+                                    <div class="form-group" id="auto">
+                                        <label class="col-sm-2 control-label">开放角色</label>
+                                        <div class="col-sm-9">
+                                            {$auto}
+                                        </div>
+                                    </div>
+                                </notempty>
+
+                                <div class="form-group m-top-lg">
+                                    <div class="col-sm-3 col-sm-offset-3 col-xs-4 col-xs-offset-2 " >
+                                        <input type="submit" class="btn btn-sm btn-info btn-block" value="提交" name="send">
+                                    </div>
+                                    <div class="col-sm-3 col-xs-4 ">
+                                        <input type="reset" class="btn btn-sm btn-default m-left-xs btn-block" value="取消">
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div><!-- ./tab-pane -->
+                    </div><!-- ./tab-content -->
+                </div><!-- ./smart-widget-body -->
+            </div><!-- ./smart-widget-inner -->
+        </div><!-- ./smart-widget -->
+    </div>
+</block>

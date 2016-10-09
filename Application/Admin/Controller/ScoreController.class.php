@@ -65,11 +65,9 @@ class ScoreController extends CommonController {
     }
 
     /**
-     * 显示文章列表信息
+     * 显示积分列表信息
      */
     private function all(){
-
-        $this->assign('all',true);
 
         if($this->auto == DEPT_ADMIN){
             //取得所有用户信息总条数，用于分页
@@ -119,7 +117,7 @@ class ScoreController extends CommonController {
         $this->assign('data',$data);
 
 
-        $this->display('score');
+        $this->display('allScore');
 
     }
 

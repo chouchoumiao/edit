@@ -214,7 +214,7 @@ class UserController extends CommonController {
         }
 
 
-        $this->display('user');
+        $this->display('addUser');
 
     }
 
@@ -272,7 +272,7 @@ class UserController extends CommonController {
 
         $this->assign('the',true);
         $this->assign('theUserInfo',$userInfo);
-        $this->display('user');
+        $this->display('theUser');
     }
 
 
@@ -292,8 +292,6 @@ class UserController extends CommonController {
         }else{
             ToolModel::goBack('您没有该权限');
         }
-
-        $this->assign('all',true);
 
 
         //分页
@@ -340,7 +338,7 @@ class UserController extends CommonController {
         $this->assign('allUser',$user); //用户信息注入模板
         $this->assign('page',$show);    //赋值分页输出
 
-        $this->display('user');
+        $this->display('allUser');
     }
 
     /**

@@ -39,7 +39,6 @@ class MediaController extends CommonController {
                         S('resetAllData',0);
 
                     }
-                    $this->assign('all',true);
                     $this->assign('allStatus','active');
 
                     if($data !== ''){
@@ -47,7 +46,7 @@ class MediaController extends CommonController {
                     }
                     $this->assign('data',$data);
                     $this->assign('auto',$this->auto);
-                    $this->display('media');
+                    $this->display('allMedia');
 
                     break;
                 case 'collect':
@@ -57,15 +56,13 @@ class MediaController extends CommonController {
 
                     $data = $this->getStatus();
 
-                    $this->assign('all',true);
-
                     if($data !== ''){
                         $this->setLiked($data);
                     }
 
                     $this->assign('data',$data);
                     $this->assign('auto',$this->auto);
-                    $this->display('media');
+                    $this->display('allMedia');
 
                     break;
                 //新增媒体
@@ -387,8 +384,9 @@ class MediaController extends CommonController {
      * 显示新增媒体页面
      */
     private function add(){
-        $this->assign('add',true);
-        $this->display('media');
+//        $this->assign('add',true);
+//        $this->display('media');
+        $this->display('addMedia');
     }
 
     /**

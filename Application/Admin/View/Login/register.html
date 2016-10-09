@@ -1,21 +1,8 @@
-<html lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml"><!--<![endif]-->
-<head>
-    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="noindex,follow" name="robots">
+<extend name="login_layout" />
 
-    <title>稿库系统 ‹ 注册表单</title>
+<block name="login_title"><title>注册表单</title></block>
 
-    <link href="__PUBLIC__/css/Admin/load-style.css" type="text/css" rel="stylesheet">
-    <link href="__PUBLIC__/css/Admin/admin.css" type="text/css" rel="stylesheet">
-
-    <meta content="noindex,follow" name="robots">
-</head>
-<body class="login login-action-register wp-core-ui  locale-zh-cn">
-<div id="login">
-    <h1>
-        <a tabindex="-1" title="ZanBlog" href="http://localhost/NewWordpress">稿库系统</a>
-    </h1>
+<block name="login_content">
     <p class="message register">在这个站点注册</p>
     <form novalidate="novalidate" method="post" action="__APP__/Admin/Login/index" id="registerform" name="registerform">
         <p>
@@ -40,13 +27,8 @@
         <a href="login.html">登录</a> |
         <a href="lostpassword.html">忘记密码？</a>
     </p>
-</div>
+</block>
 
-<script type="text/javascript" src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
-<script type="text/javascript" src="__PUBLIC__/js/common.js?v=20160102"></script>
-<script type="text/javascript" src="__PUBLIC__/js/Admin/reg.js?v=20160102"></script>
-
-<div class="clear"></div>
-
-</body>
-</html>
+<block name="login_js">
+    <script type="text/javascript" src="__PUBLIC__/js/Admin/reg.js?v=20160102"></script>
+</block>

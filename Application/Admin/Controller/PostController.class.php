@@ -394,8 +394,7 @@ class PostController extends CommonController {
 
         $this->assign('btn',$html);
 
-        $this->assign('add',true);
-        $this->display('post');
+        $this->display('addPost');
     }
 
     /**
@@ -461,8 +460,6 @@ class PostController extends CommonController {
                 //判断当前小编拷贝的文章是不是超过限制，超过则不能再认领
                 $postCount = $this->postObj->getCopiedPostCount();
                 if( $postCount >= XIAOBIAN_POST_MAX_COUNT){
-
-                    Log::write(M('posts')->getLastSql(),'LOGOG');
 
                     ToolModel::goBack($postCount.'最多同时认领'.XIAOBIAN_POST_MAX_COUNT.'篇文章，请等待总编审核');
                     exit;
@@ -580,7 +577,7 @@ class PostController extends CommonController {
             Log::write('fuction:the() && Add Cache && POSTID: '.$lockID,'LOCKIMG');
         }
 
-        $this->display('post');
+        $this->display('thePost');
     }
 
     /**
@@ -588,7 +585,6 @@ class PostController extends CommonController {
      */
     private function all(){
 
-        $this->assign('all',true);
         $this->assign('auto',$this->auto);
 
         if( (isset($_GET['userSearch'])) && ( '' != I('get.userSearch')) ){
@@ -656,7 +652,7 @@ class PostController extends CommonController {
         $this->assign('allPost',$post); //用户信息注入模板
         $this->assign('page',$show);    //赋值分页输出
 
-        $this->display('post');
+        $this->display('allPost');
         exit;
 
     }
@@ -846,7 +842,6 @@ class PostController extends CommonController {
         $this->assign('btnSmall',$htmlSmall);    //响应式手机用小按钮组
         $this->assign('showDeptCheckBox',$showDeptCheckBox);    //如果是小编或者总编部门固定,所以不显示部门可选
         $this->assign('btn',$html);
-        $this->assign('the',true);
         $this->assign('theAuto',$this->auto);
     }
 }

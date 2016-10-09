@@ -1,22 +1,7 @@
-<html lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml"><!--<![endif]-->
-<head>
-	<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="noindex,follow" name="robots">
-    
-	<title>稿库系统 ‹ 登录</title>
+<extend name="login_layout" />
+<block name="login_title"><title>登录</title></block>
+<block name="login_content">
 
-    <link href="__PUBLIC__/css/Admin/load-style.css" type="text/css" rel="stylesheet">
-    <link href="__PUBLIC__/css/Admin/admin.css" type="text/css" rel="stylesheet">
-
-
-</head>
-<body class="login login-action-login wp-core-ui  locale-zh-cn">
-<div id="login">
-    <h1>
-        <a tabindex="-1" title="edit" href="#">稿库系统</a>
-    </h1>
-	
     <form method="post" action="__APP__/Admin/Login/login" id="loginform" name="loginform">
         <p>
             <label for="user_login">用户名或电子邮件地址<br>
@@ -43,24 +28,21 @@
         <a href="lostpassword.html">忘记密码？</a>
     </p>
 
-<script type="text/javascript">
-    function wp_attempt_focus(){
-        setTimeout( function(){ try{
-            d = document.getElementById('user_login');
-            d.focus();
-            d.select();
+</block>
+
+<block name="login_js">
+    <script type="text/javascript">
+        function wp_attempt_focus(){
+            setTimeout( function(){ try{
+                d = document.getElementById('user_login');
+                d.focus();
+                d.select();
             } catch(e){}
-        }, 200);
-    }
+            }, 200);
+        }
 
-    wp_attempt_focus();
-    if(typeof wpOnload=='function')wpOnload();
-</script>
-
-<script type="text/javascript" src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
-<script type="text/javascript" src="__PUBLIC__/js/common.js?v=20160101"></script>
-<script type="text/javascript" src="__PUBLIC__/js/Admin/login.js?v=20160104"></script>
-</div>
-<div class="clear"></div>
-</body>
-</html>
+        wp_attempt_focus();
+        if(typeof wpOnload=='function')wpOnload();
+    </script>
+    <script type="text/javascript" src="__PUBLIC__/js/Admin/login.js?v=20160104"></script>
+</block>

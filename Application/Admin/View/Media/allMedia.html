@@ -1,30 +1,64 @@
-<div class="padding-md">
-    <h2 class="header-text no-margin">
-        媒体库一览
-    </h2>
+<extend name="media_layout" />
+<block name="media_title"><title>稿库系统后台管理</title></block>
 
-    <div class="gallery-filter m-top-md">
-        <ul class="clearfix">
-            <li class={$allStatus}><a href="__ROOT__/Admin/Media/doAction/action/all">所有</a></li>
-            <li class={$mediaStatus}><a href="__ROOT__/Admin/Media/doAction/action/getStatus/status/media">媒体</a></li>
-            <li class={$fileStatus} ><a href="__ROOT__/Admin/Media/doAction/action/getStatus/status/file">文档</a></li>
-            <li class="{$meStatus}" ><a href="__ROOT__/Admin/Media/doAction/action/getStatus/status/me">我的</a></li>
-            <li class="{$likeStatus}" ><a href="__ROOT__/Admin/Media/doAction/action/getStatus/status/like">收藏</a></li>
-        </ul>
-    </div>
+<block name="media_content">
+    <div class="padding-md">
+        <h2 class="header-text no-margin">
+            媒体库一览
+        </h2>
 
-    <div class="gallery-list js-masonry m-top-md">
-        <foreach name="data" item="vo" key="k">
-            <switch name="vo.type">
-                <case value="gif|png|jpg">
+        <div class="gallery-filter m-top-md">
+            <ul class="clearfix">
+                <li class={$allStatus}><a href="__ROOT__/Admin/Media/doAction/action/all">所有</a></li>
+                <li class={$mediaStatus}><a href="__ROOT__/Admin/Media/doAction/action/getStatus/status/media">媒体</a></li>
+                <li class={$fileStatus} ><a href="__ROOT__/Admin/Media/doAction/action/getStatus/status/file">文档</a></li>
+                <li class="{$meStatus}" ><a href="__ROOT__/Admin/Media/doAction/action/getStatus/status/me">我的</a></li>
+                <li class="{$likeStatus}" ><a href="__ROOT__/Admin/Media/doAction/action/getStatus/status/like">收藏</a></li>
+            </ul>
+        </div>
+
+        <div class="gallery-list js-masonry m-top-md">
+            <foreach name="data" item="vo" key="k">
+                <switch name="vo.type">
+                    <case value="gif|png|jpg">
+                        <div class="gallery-item" id= '{$vo.name}'>
+                            <div class="gallery-wrapper">
+                                <a class="gallery-remove" onclick="return removeImg({$vo.id},'{$vo.day}','{$vo.name}','{$vo.type}')"><i class="fa fa-times"></i></a>
+                                <img src="__PUBLIC__/{$vo.path}" alt="">
+                                <div class="gallery-title" id="title{$vo.name}">
+                                    <if condition = "$vo.title eq ''">
+                                        未命名,请编辑
+                                        <else />
+                                        {$vo.title}
+                                    </if>
+                                </div>
+                                <div class="gallery-overlay">
+                                    <a target="_blank" href="__PUBLIC__/{$vo.path}" class="gallery-action enlarged-photo">
+                                        <i class="fa fa-search-plus fa-lg"></i>
+                                    </a>
+                                    <if condition=" $vo.author eq $_SESSION['uid']">
+                                        <a href="#" data-toggle="modal" data-target="#normalModal{$k}" class="gallery-action animation-dalay">
+                                            <i class="fa fa-edit fa-lg"></i>
+                                        </a>
+                                        <else/>
+                                        <a href="#" data-toggle="modal" data-target="#normalModal{$k}" class="gallery-action animation-dalay">
+                                            <i class="fa fa-link fa-lg"></i>
+                                        </a>
+                                    </if>
+
+                                </div>
+                            </div>
+                        </div>
+                    </case>
+                    <default />
                     <div class="gallery-item" id= '{$vo.name}'>
                         <div class="gallery-wrapper">
                             <a class="gallery-remove" onclick="return removeImg({$vo.id},'{$vo.day}','{$vo.name}','{$vo.type}')"><i class="fa fa-times"></i></a>
-                            <img src="__PUBLIC__/{$vo.path}" alt="">
+                            <img class = textshow src="__PUBLIC__/img/Admin/media/text.png" alt="">
                             <div class="gallery-title" id="title{$vo.name}">
                                 <if condition = "$vo.title eq ''">
                                     未命名,请编辑
-                                <else />
+                                    <else />
                                     {$vo.title}
                                 </if>
                             </div>
@@ -32,142 +66,117 @@
                                 <a target="_blank" href="__PUBLIC__/{$vo.path}" class="gallery-action enlarged-photo">
                                     <i class="fa fa-search-plus fa-lg"></i>
                                 </a>
+
                                 <if condition=" $vo.author eq $_SESSION['uid']">
                                     <a href="#" data-toggle="modal" data-target="#normalModal{$k}" class="gallery-action animation-dalay">
                                         <i class="fa fa-edit fa-lg"></i>
                                     </a>
-                                <else/>
+                                    <else/>
                                     <a href="#" data-toggle="modal" data-target="#normalModal{$k}" class="gallery-action animation-dalay">
                                         <i class="fa fa-link fa-lg"></i>
                                     </a>
                                 </if>
-
                             </div>
                         </div>
                     </div>
-                </case>
-                <default />
-                <div class="gallery-item" id= '{$vo.name}'>
-                    <div class="gallery-wrapper">
-                        <a class="gallery-remove" onclick="return removeImg({$vo.id},'{$vo.day}','{$vo.name}','{$vo.type}')"><i class="fa fa-times"></i></a>
-                        <img class = textshow src="__PUBLIC__/img/Admin/media/text.png" alt="">
-                        <div class="gallery-title" id="title{$vo.name}">
-                            <if condition = "$vo.title eq ''">
-                                未命名,请编辑
-                                <else />
-                                {$vo.title}
-                            </if>
-                        </div>
-                        <div class="gallery-overlay">
-                            <a target="_blank" href="__PUBLIC__/{$vo.path}" class="gallery-action enlarged-photo">
-                                <i class="fa fa-search-plus fa-lg"></i>
-                            </a>
-
-                            <if condition=" $vo.author eq $_SESSION['uid']">
-                                <a href="#" data-toggle="modal" data-target="#normalModal{$k}" class="gallery-action animation-dalay">
-                                    <i class="fa fa-edit fa-lg"></i>
-                                </a>
-                                <else/>
-                                <a href="#" data-toggle="modal" data-target="#normalModal{$k}" class="gallery-action animation-dalay">
-                                    <i class="fa fa-link fa-lg"></i>
-                                </a>
-                            </if>
-                        </div>
-                    </div>
-                </div>
-            </switch>
-            <div class="modal fade" id="normalModal{$k}" aria-hidden="true" style="display: none;" data-backdrop="static">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <form action="__ROOT__/Admin/Media/doAction/action/update/status/{$status}" method="post">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal">
-                                    <span aria-hidden="true">×</span>
-                                    <span class="sr-only">Close</span>
-                                </button>
-                                <h4 class="modal-title">编辑资源信息:</h4>
-                            </div>
-                            <div class="modal-body">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <switch name="vo.type">
-                                            <case value="gif|png|jpg">
-                                                <img src="__PUBLIC__/{$vo.path}" style="max-height: 160px">
-                                            </case>
-                                            <default />
+                </switch>
+                <div class="modal fade" id="normalModal{$k}" aria-hidden="true" style="display: none;" data-backdrop="static">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form action="__ROOT__/Admin/Media/doAction/action/update/status/{$status}" method="post">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">
+                                        <span aria-hidden="true">×</span>
+                                        <span class="sr-only">Close</span>
+                                    </button>
+                                    <h4 class="modal-title">编辑资源信息:</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <switch name="vo.type">
+                                                <case value="gif|png|jpg">
+                                                    <img src="__PUBLIC__/{$vo.path}" style="max-height: 160px">
+                                                </case>
+                                                <default />
                                             <span style="margin-left: 23px">
                                                 <img src="__PUBLIC__/img/Admin/media/text.png">
                                             </span>
 
-                                        </switch>
-                                        <br/>
-                                        <if condition="$vo.liked eq 1">
-                                            <a href="#">
+                                            </switch>
+                                            <br/>
+                                            <if condition="$vo.liked eq 1">
+                                                <a href="#">
                                                 <span class="label label-default center-block" style="padding: 8px;margin: 15px">
                                                         <i class="text-danger fa fa-heart"></i>
                                                         已收藏
                                                 </span>
-                                            </a>
-                                        <else/>
-                                            <a href="__ROOT__/Admin/Media/doAction/action/collect/id/{$vo.id}/status/{$status}">
+                                                </a>
+                                                <else/>
+                                                <a href="__ROOT__/Admin/Media/doAction/action/collect/id/{$vo.id}/status/{$status}">
                                                 <span class="label label-warning center-block" style="padding: 8px;margin: 15px">
                                                         <i class="text-danger fa fa-heart"></i>
                                                         加入收藏
                                                 </span>
-                                            </a>
+                                                </a>
+                                            </if>
+                                        </div>
+                                        <if condition=" $vo.author eq $_SESSION['uid']">
+                                            <div class="col-md-8">
+                                                <div class="form-group">
+                                                    <label class="control-label" for="title">标题:</label>
+                                                    <input class="form-control" type="text" id="title" name="title"  placeholder="请输入资源标题" value={$vo.title}>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="">描述:</label>
+                                                    <textarea class="form-control" rows="5" name="content" type="text" placeholder="请输入资源描述">{$vo.content}</textarea>
+                                                </div>
+                                            </div>
+                                            <else/>
+                                            <div class="col-md-8">
+                                                <div class="form-group">
+                                                    <label class="control-label" for="title">标题:</label>
+                                                    <input disabled class="form-control" id="title" name="title" type="text" placeholder="请输入资源标题"  value={$vo.title}>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="">描述:</label>
+                                                    <textarea class="form-control" rows="5" name="content" type="text" placeholder="请输入资源描述" disabled>{$vo.content}</textarea>
+                                                </div>
+                                            </div>
                                         </if>
                                     </div>
-                                    <if condition=" $vo.author eq $_SESSION['uid']">
-                                        <div class="col-md-8">
-                                            <div class="form-group">
-                                                <label class="control-label" for="title">标题:</label>
-                                                <input class="form-control" type="text" id="title" name="title"  placeholder="请输入资源标题" value={$vo.title}>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="">描述:</label>
-                                                <textarea class="form-control" rows="5" name="content" type="text" placeholder="请输入资源描述">{$vo.content}</textarea>
-                                            </div>
-                                        </div>
-                                    <else/>
-                                        <div class="col-md-8">
-                                            <div class="form-group">
-                                                <label class="control-label" for="title">标题:</label>
-                                                <input disabled class="form-control" id="title" name="title" type="text" placeholder="请输入资源标题"  value={$vo.title}>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="">描述:</label>
-                                                <textarea class="form-control" rows="5" name="content" type="text" placeholder="请输入资源描述" disabled>{$vo.content}</textarea>
-                                            </div>
-                                        </div>
-                                    </if>
                                 </div>
-                            </div>
-                            <!--  不是当前用户不能修改标题和详细,所以不显示提交按钮  -->
-                            <if condition=" $vo.author eq $_SESSION['uid']">
-                                <div class="modal-footer">
-                                    <input name="id" value={$vo.id} type="hidden">
-                                    <div class="row">
-                                        <div class="col-md-4 col-xs-4" style="margin-top: 8px;">
-                                            <span class="label label-success">文件大小: &nbsp; {$vo.size} &nbsp;KB</span>
+                                <!--  不是当前用户不能修改标题和详细,所以不显示提交按钮  -->
+                                <if condition=" $vo.author eq $_SESSION['uid']">
+                                    <div class="modal-footer">
+                                        <input name="id" value={$vo.id} type="hidden">
+                                        <div class="row">
+                                            <div class="col-md-4 col-xs-4" style="margin-top: 8px;">
+                                                <span class="label label-success">文件大小: &nbsp; {$vo.size} &nbsp;KB</span>
+                                            </div>
+                                            <div class="col-md-5" style="margin-right: 10px">
+                                                <input type="submit" class="btn btn-info" name="send" value="提交" style="margin-right: 8px">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                            </div>
                                         </div>
-                                        <div class="col-md-5" style="margin-right: 10px">
-                                            <input type="submit" class="btn btn-info" name="send" value="提交" style="margin-right: 8px">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                                        </div>
+
+
                                     </div>
+                                </if>
 
-
-                                </div>
-                            </if>
-
-                        </form>
+                            </form>
 
 
 
+                        </div>
                     </div>
                 </div>
-            </div>
-        </foreach>
+            </foreach>
 
-    </div><!-- ./gallery-list -->
-</div><!-- ./padding-md -->
+        </div><!-- ./gallery-list -->
+    </div><!-- ./padding-md -->
+</block>
+
+
+
+

@@ -482,7 +482,13 @@ window.addEventListener("beforeunload", function(event) {
  */
 function doUpload(data,flag) {
 
-    var json = jQuery.parseJSON(data);
+    try {
+        var json = jQuery.parseJSON(data);
+    }catch(e) {
+        alert('未知错误，请重试！');
+        return false;
+    }
+
     if(json.success == 1){
 
         if(flag === 0){

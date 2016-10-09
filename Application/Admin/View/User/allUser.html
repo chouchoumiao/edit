@@ -1,117 +1,120 @@
-<div class="col-md-12 col-xs-12">
-    <ul class="breadcrumb">
-        <li>用户</li>
-        <li>用户一览表</li>
-    </ul>
-    <div class="smart-widget">
-        <div class="smart-widget-header smart-widget-header-user">
-            用户 信息
-            <span class="smart-widget-option">
-                <span class="refresh-icon-animated">
-                    <i class="fa fa-circle-o-notch fa-spin"></i>
+<extend name="user_layout" />
+<block name="user_content">
+    <div class="col-md-12 col-xs-12">
+        <ul class="breadcrumb">
+            <li>用户</li>
+            <li>用户一览表</li>
+        </ul>
+        <div class="smart-widget">
+            <div class="smart-widget-header smart-widget-header-user">
+                用户 信息
+                <span class="smart-widget-option">
+                    <span class="refresh-icon-animated">
+                        <i class="fa fa-circle-o-notch fa-spin"></i>
+                    </span>
+                    <a href="#" class="widget-toggle-hidden-option">
+                        <i class="fa fa-cog"></i>
+                    </a>
+                    <a href="#" class="widget-collapse-option" data-toggle="collapse">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
                 </span>
-                <a href="#" class="widget-toggle-hidden-option">
-                    <i class="fa fa-cog"></i>
-                </a>
-                <a href="#" class="widget-collapse-option" data-toggle="collapse">
-                    <i class="fa fa-chevron-up"></i>
-                </a>
-            </span>
-        </div>
-        <div class="smart-widget-inner">
-            <div class="smart-widget-hidden-section">
-                <ul class="widget-color-list clearfix">
-                    <li style="background-color:#20232b;" data-color="widget-dark"></li>
-                    <li style="background-color:#4c5f70;" data-color="widget-dark-blue"></li>
-                    <li style="background-color:#23b7e5;" data-color="widget-blue"></li>
-                    <li style="background-color:#2baab1;" data-color="widget-green"></li>
-                    <li style="background-color:#edbc6c;" data-color="widget-yellow"></li>
-                    <li style="background-color:#fbc852;" data-color="widget-orange"></li>
-                    <li style="background-color:#e36159;" data-color="widget-red"></li>
-                    <li style="background-color:#7266ba;" data-color="widget-purple"></li>
-                    <li style="background-color:#f5f5f5;" data-color="widget-light-grey"></li>
-                    <li style="background-color:#fff;" data-color="reset"></li>
-                </ul>
             </div>
-            <div class="smart-widget-body hidden-xs">
-                <table class="table table-hover center table-responsive">
-                    <thead style="text-align: center">
-                    <tr>
-                        <th>姓名</th>
-                        <th>邮箱地址</th>
-                        <th>所属部门</th>
-                        <th>角色权限</th>
-                        <th>状态</th>
-                        <th>创建时间</th>
-                        <th>操作</th>
-                    </tr>
-                    </thead>
-                    <tbody style="text-align: center">
-                    <if condition = "$allUser neq '' ">
-                        <foreach name="allUser" item="vo" key ="k">
-                            <tr>
-                                <td>{$vo.username}</td>
-                                <td>{$vo.email}</td>
-                                <td>{$vo.udi_dep_id}</td>
-                                <td>{$vo.udi_auto_id}</td>
-                                <td>{$vo.status}</td>
-                                <td>{$vo.regtime}</td>
-                                <td>
-                                    <if condition=" $vo.statusId eq -1">
-                                        <a href="__ROOT__/Admin/User/doAction/action/the/id/{$vo.uid}/audit/1">
-                                            <span style="color: red"><i class="fa fa-edit"></i>审核</span>
-                                        </a>
-                                    <else/>
-                                        <a href="__ROOT__/Admin/User/doAction/action/the/id/{$vo.uid}">
-                                            <i class="fa fa-edit"></i>编辑
-                                        </a>
-                                    </if>
-                                    <if condition="$vo['uid'] eq $_SESSION['uid']">
-                                        不能删除
-                                        <else />
-                                        <a href="javascript:delUser({$vo['uid']});">
-                                            &nbsp <i class="fa fa-trash">删除</i>
-                                        </a>
-                                    </if>
-                                </td>
-                            </tr>
-                        </foreach>
-                    <else />
+            <div class="smart-widget-inner">
+                <div class="smart-widget-hidden-section">
+                    <ul class="widget-color-list clearfix">
+                        <li style="background-color:#20232b;" data-color="widget-dark"></li>
+                        <li style="background-color:#4c5f70;" data-color="widget-dark-blue"></li>
+                        <li style="background-color:#23b7e5;" data-color="widget-blue"></li>
+                        <li style="background-color:#2baab1;" data-color="widget-green"></li>
+                        <li style="background-color:#edbc6c;" data-color="widget-yellow"></li>
+                        <li style="background-color:#fbc852;" data-color="widget-orange"></li>
+                        <li style="background-color:#e36159;" data-color="widget-red"></li>
+                        <li style="background-color:#7266ba;" data-color="widget-purple"></li>
+                        <li style="background-color:#f5f5f5;" data-color="widget-light-grey"></li>
+                        <li style="background-color:#fff;" data-color="reset"></li>
+                    </ul>
+                </div>
+                <div class="smart-widget-body hidden-xs">
+                    <table class="table table-hover center table-responsive">
+                        <thead style="text-align: center">
                         <tr>
-                            <td colspan=7>没有数据</td>
+                            <th>姓名</th>
+                            <th>邮箱地址</th>
+                            <th>所属部门</th>
+                            <th>角色权限</th>
+                            <th>状态</th>
+                            <th>创建时间</th>
+                            <th>操作</th>
                         </tr>
-                    </if>
-                    </tbody>
-                </table>
-                <div>{$page}</div>
-            </div>
-            <div class="smart-widget-body visible-xs">
-                <table class="table  table-hover center">
-                    <thead style="text-align: center">
-                    <tr>
-                        <th>姓名</th>
-                        <th>所属</th>
-                        <th>角色</th>
-                    </tr>
-                    </thead>
-                    <tbody style="text-align: center">
-                    <if condition = "$allUser neq '' ">
-                        <foreach name="allUser" item="vo" key ="k">
-                            <tr>
-                                <td>{$vo.username}</td>
-                                <td>{$vo.udi_dep_id}</td>
-                                <td>{$vo.udi_auto_id}</td>
-                            </tr>
-                        </foreach>
+                        </thead>
+                        <tbody style="text-align: center">
+                        <if condition = "$allUser neq '' ">
+                            <foreach name="allUser" item="vo" key ="k">
+                                <tr>
+                                    <td>{$vo.username}</td>
+                                    <td>{$vo.email}</td>
+                                    <td>{$vo.udi_dep_id}</td>
+                                    <td>{$vo.udi_auto_id}</td>
+                                    <td>{$vo.status}</td>
+                                    <td>{$vo.regtime}</td>
+                                    <td>
+                                        <if condition=" $vo.statusId eq -1">
+                                            <a href="__ROOT__/Admin/User/doAction/action/the/id/{$vo.uid}/audit/1">
+                                                <span style="color: red"><i class="fa fa-edit"></i>审核</span>
+                                            </a>
+                                        <else/>
+                                            <a href="__ROOT__/Admin/User/doAction/action/the/id/{$vo.uid}">
+                                                <i class="fa fa-edit"></i>编辑
+                                            </a>
+                                        </if>
+                                        <if condition="$vo['uid'] eq $_SESSION['uid']">
+                                            不能删除
+                                            <else />
+                                            <a href="javascript:delUser({$vo['uid']});">
+                                                &nbsp <i class="fa fa-trash">删除</i>
+                                            </a>
+                                        </if>
+                                    </td>
+                                </tr>
+                            </foreach>
                         <else />
+                            <tr>
+                                <td colspan=7>没有数据</td>
+                            </tr>
+                        </if>
+                        </tbody>
+                    </table>
+                    <div>{$page}</div>
+                </div>
+                <div class="smart-widget-body visible-xs">
+                    <table class="table  table-hover center">
+                        <thead style="text-align: center">
                         <tr>
-                            <td colspan=4>没有数据</td>
+                            <th>姓名</th>
+                            <th>所属</th>
+                            <th>角色</th>
                         </tr>
-                    </if>
-                    </tbody>
-                </table>
-                <div>{$page}</div>
-            </div>
-        </div><!-- ./smart-widget-inner -->
-    </div><!-- ./smart-widget -->
-</div>
+                        </thead>
+                        <tbody style="text-align: center">
+                        <if condition = "$allUser neq '' ">
+                            <foreach name="allUser" item="vo" key ="k">
+                                <tr>
+                                    <td>{$vo.username}</td>
+                                    <td>{$vo.udi_dep_id}</td>
+                                    <td>{$vo.udi_auto_id}</td>
+                                </tr>
+                            </foreach>
+                            <else />
+                            <tr>
+                                <td colspan=4>没有数据</td>
+                            </tr>
+                        </if>
+                        </tbody>
+                    </table>
+                    <div>{$page}</div>
+                </div>
+            </div><!-- ./smart-widget-inner -->
+        </div><!-- ./smart-widget -->
+    </div>
+</block>

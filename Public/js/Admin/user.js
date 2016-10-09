@@ -1,5 +1,31 @@
 $(function(){
 
+    var ALL_DEPT_COUNT = 4    //部门的总个数
+    
+    $('#file_upload').uploadifive({
+        'uploadScript' : './Admin/User/doAction/action/upload',   //上传的方法
+        'buttonText' : '头像上传',
+        'fileTypeExts'  : '*.jpg;*.jpge;*.png',
+        'fileSizeLimit' : 5242880,
+        'removeCompleted':true,
+        'onUploadComplete' : function(file, data) {
+
+            doUpload(data);
+        }
+    });
+
+    $('#edit_file_upload').uploadifive({
+        'multi' : false,
+        'uploadScript' : './Admin/User/doAction/action/editimg',   //上传的方法
+        'buttonText' : '头像上传',
+        'fileTypeExts'  : '*.jpg;*.jpge;*.png',
+        'fileSizeLimit' : 5242880,
+        'onUploadComplete' : function(file, data) {
+
+            doUpload(data);
+        }
+    });
+
     $('#upload').change(function(){
         $("#upload-img").attr("src",$('#upload').val());
     });
@@ -279,7 +305,7 @@ $(function(){
 
 });
 
-//判断用户输入信≥
+//判断用户输入信息
 
 /**
  * 显示验证失败时候应该要显示的样式
@@ -353,4 +379,26 @@ function delUser(id){
     }
     ,error:function(xhr){alert('PHP页面有错误！'+xhr.responseText);}
     });
+}
+
+
+function doUpload(data) {
+    var isOk = false;
+    if(data.indexOf("jpg") > -1){
+        isOk = true;
+    }
+
+    if(data.indexOf("png") > -1){
+        isOk = true;
+    }
+
+    if(data.indexOf("jpeg") > -1){
+        isOk = true;
+    }
+    if(isOk){
+        $("#upload-img").attr("src",PUBLIC+'/Uploads/profile/'+data);
+    }else{
+        alert(data);
+        return false;
+    }
 }

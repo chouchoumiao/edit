@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <include file='./head_layout' />
+
+    <link rel="stylesheet" href="__PUBLIC__/css/Admin/uploadifive.css">
+
+</head>
+
+<body class="overflow-hidden">
+
+    <div class="wrapper preload">
+        <!-- 导入 nav-->
+        <include file='./header' />
+
+        <!-- 导入左边栏-->
+        <include file='./aside'/>
+
+        <div class="main-container">
+
+            <!--加入通知模态框-->
+            <include file='./noticeModel'/>
+
+            <block name="media_content">
+                内容
+            </block>
+
+        </div><!-- /main-container -->
+        <!-- 导入footer -->
+        <include file = './footer'/>
+    </div><!-- /wrapper -->
+
+    //回滚到页头
+    <a href="#" class="scroll-to-top hidden-print"><i class="fa fa-chevron-up fa-lg"></i></a>
+
+    <include file = './js_layout'/>
+
+    <script src='__PUBLIC__/js/Admin/jquery.uploadifive.min.js'></script>
+    <script src='__PUBLIC__/js/Admin/media.js'></script>
+
+</body>
+</html>

@@ -1,136 +1,154 @@
-<include file='./User/userLeftAside' />
-<div class="col-md-9">
-    <div class="smart-widget">
-        <div class="smart-widget-inner">
-            <ul class="nav nav-tabs tab-style2 tab-right bg-grey">
-                <li>
-                    <a href="#" data-toggle="tab">
-                        <span class="icon-wrapper"><i class="fa fa-book"></i></span>
-                        <span class="text-wrapper">个人信息</span>
-                    </a>
-                </li>
-            </ul>
-            <div class="smart-widget-body">
-                <div class="tab-content">
-                    <div class="tab-pane fade in active">
-                        <h4 class="header-text m-top-md">个人 资料</h4>
-                        <form action="__ROOT__/Admin/User/doAction/action/update" id="updateForm" class="form-horizontal m-top-md" enctype="multipart/form-data" method="post">
+<extend name="user_layout" />
+<block name="user_content">
+    <include file='./User/userLeftAside' />
+    <div class="col-md-9">
+        <div class="smart-widget">
+            <div class="smart-widget-inner">
+                <ul class="nav nav-tabs tab-style2 tab-right bg-grey">
+                    <li>
+                        <a href="#" data-toggle="tab">
+                            <span class="icon-wrapper"><i class="fa fa-book"></i></span>
+                            <span class="text-wrapper">个人信息</span>
+                        </a>
+                    </li>
+                </ul>
+                <div class="smart-widget-body">
+                    <div class="tab-content">
+                        <div class="tab-pane fade in active">
+                            <h4 class="header-text m-top-md">个人 资料</h4>
+                            <form action="__ROOT__/Admin/User/doAction/action/update" id="updateForm" class="form-horizontal m-top-md" enctype="multipart/form-data" method="post">
 
-                            <!--<input type="hidden" value="{$theUserInfo.email}" name="oldEmail"/>-->
-                            <input type="hidden" value="{$theUserInfo.password}" name="oldMd5Pass"/>
-                            <input type="hidden" value="{$theUserInfo.username}" name="oldUsername"/>
-                            <input type="hidden" value="{$theUserInfo.img}" name="oldImg"/>
-                            <input type="hidden" value="{$noShowDeptAndAuto}" id="isShow"/>
+                                <!--<input type="hidden" value="{$theUserInfo.email}" name="oldEmail"/>-->
+                                <input type="hidden" value="{$theUserInfo.password}" name="oldMd5Pass"/>
+                                <input type="hidden" value="{$theUserInfo.username}" name="oldUsername"/>
+                                <input type="hidden" value="{$theUserInfo.img}" name="oldImg"/>
+                                <input type="hidden" value="{$noShowDeptAndAuto}" id="isShow"/>
 
-                            <input type="hidden" value="{$theUserInfo.uid}" name="uid"/>
-                            <input type="hidden" value="{$theUserInfo.udi_sex}" name="oldSex"/>
-                            <input type="hidden" value="{$theUserInfo.udi_tel}" name="oldTel"/>
-                            <input type="hidden" value="{$theUserInfo.udi_area}" name="oldArea"/>
-                            <input type="hidden" value="{$theUserInfo.udi_address}" name="oldAddress"/>
-                            <input type="hidden" value="{$theUserInfo.udi_dep_id}" name="olddepID"/>
-                            <input type="hidden" value="{$theUserInfo.udi_workplace}" name="oldWorkplace"/>
-                            <input type="hidden" value="{$theUserInfo.udi_description}" name="oldDescription"/>
-                            <input type="hidden" value="{$theUserInfo.udi_auto_id}" name="auto_id" id="auto_id"/>
+                                <input type="hidden" value="{$theUserInfo.uid}" name="uid"/>
+                                <input type="hidden" value="{$theUserInfo.udi_sex}" name="oldSex"/>
+                                <input type="hidden" value="{$theUserInfo.udi_tel}" name="oldTel"/>
+                                <input type="hidden" value="{$theUserInfo.udi_area}" name="oldArea"/>
+                                <input type="hidden" value="{$theUserInfo.udi_address}" name="oldAddress"/>
+                                <input type="hidden" value="{$theUserInfo.udi_dep_id}" name="olddepID"/>
+                                <input type="hidden" value="{$theUserInfo.udi_workplace}" name="oldWorkplace"/>
+                                <input type="hidden" value="{$theUserInfo.udi_description}" name="oldDescription"/>
+                                <input type="hidden" value="{$theUserInfo.udi_auto_id}" name="auto_id" id="auto_id"/>
 
 
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">登录ID</label>
-                                <div class="col-sm-9">
-                                    <input type="text" readonly class="form-control" value="{$theUserInfo.login_name}" name="user_login">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">姓名</label>
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control" value="{$theUserInfo.username}" name="user_name" id="user_name">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">邮箱</label>
-                                <div class="col-sm-9">
-                                    <input type="text" readonly class="form-control" value="{$theUserInfo.email}" name="oldEmail" id="oldEmail">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">修改密码(空为不修改)</label>
-                                <div class="col-sm-9">
-                                    <input type="password" class="form-control" value="" name="user_pass" id="user_pass">
-                                </div>
-                            </div>
-                            <div class="form-group" id="comfirm" style="display: none">
-                                <label class="col-sm-3 control-label">确认密码</label>
-                                <div class="col-sm-9">
-                                    <input type="password" class="form-control" value="" id="comfirm_pass">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">性别</label>
-                                <div class="col-sm-9">
-                                    <div class="radio inline-block">
-                                        <div class="custom-radio m-right-xs">
-                                            <if condition = "$theUserInfo.udi_sex eq 1">
-                                                <input type="radio" id="inlineRadio1" value="1" checked name="sex">
-                                                <else />
-                                                <input type="radio" id="inlineRadio1"  value="1" name="sex">
-                                            </if>
-
-                                            <label for="inlineRadio1"></label>
-                                        </div>
-                                        <div class="inline-block vertical-top">男</div>
-                                    </div>
-                                    <div class="radio inline-block m-left-sm">
-                                        <div class="custom-radio m-right-xs">
-                                            <if condition = "$theUserInfo.udi_sex eq 0">
-                                                <input type="radio" id="inlineRadio2" value="0" checked name="sex">
-                                                <else />
-                                                <input type="radio" id="inlineRadio2" value="0" name="sex">
-                                            </if>
-                                            <label for="inlineRadio2"></label>
-
-                                        </div>
-                                        <div class="inline-block vertical-top">女</div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">登录ID</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" readonly class="form-control" value="{$theUserInfo.login_name}" name="user_login">
                                     </div>
                                 </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">头像</label>
-                                <div class="col-sm-9">
-                                    <input type="file" accept="image/*" id="edit_file_upload" name="file_upload"  multiple="true" value="">
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">姓名</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" value="{$theUserInfo.username}" name="user_name" id="user_name">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label"></label>
-                                <div class="col-sm-9">
-                                    <div id="imgs">
-                                        <img src="__PUBLIC__/Uploads/profile/{$theUserInfo.img}" width="120" id="upload-img" name="upload-img"/></div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">邮箱</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" readonly class="form-control" value="{$theUserInfo.email}" name="oldEmail" id="oldEmail">
+                                    </div>
                                 </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">现在地区</label>
-                                <div class="col-sm-9">
-
-                                    <input type="text" class="form-control" value="{$theUserInfo.udi_area}" disabled>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">修改密码(空为不修改)</label>
+                                    <div class="col-sm-9">
+                                        <input type="password" class="form-control" value="" name="user_pass" id="user_pass">
+                                    </div>
                                 </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">地区(不选表示不修改)</label>
-                                <div class="col-sm-9 form-inline" id="sel" name = "sel">
-                                    <select id="sel1" name = "sel1" onChange="getCity(this)" class="form-control col-sm-2" style="margin-right: 10px"></select>
-                                    <select id="sel2" name = "sel2" onChange="getCity(this)" class="form-control col-sm-2" style="margin-right: 10px"></select>
-                                    <select id="sel3" name = "sel3" onChange="getCity(this)" class="form-control col-sm-2" style="margin-right: 10px"></select>
-                                    <select id="sel4" name = "sel4" class="form-control col-sm-2 hidden"></select>
-
+                                <div class="form-group" id="comfirm" style="display: none">
+                                    <label class="col-sm-3 control-label">确认密码</label>
+                                    <div class="col-sm-9">
+                                        <input type="password" class="form-control" value="" id="comfirm_pass">
+                                    </div>
                                 </div>
-                            </div>
-                            <if condition = "$admin eq 1" >
-                                <notempty name="showTheDept">
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label">部门</label>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">性别</label>
+                                    <div class="col-sm-9">
+                                        <div class="radio inline-block">
+                                            <div class="custom-radio m-right-xs">
+                                                <if condition = "$theUserInfo.udi_sex eq 1">
+                                                    <input type="radio" id="inlineRadio1" value="1" checked name="sex">
+                                                    <else />
+                                                    <input type="radio" id="inlineRadio1"  value="1" name="sex">
+                                                </if>
+
+                                                <label for="inlineRadio1"></label>
+                                            </div>
+                                            <div class="inline-block vertical-top">男</div>
+                                        </div>
+                                        <div class="radio inline-block m-left-sm">
+                                            <div class="custom-radio m-right-xs">
+                                                <if condition = "$theUserInfo.udi_sex eq 0">
+                                                    <input type="radio" id="inlineRadio2" value="0" checked name="sex">
+                                                    <else />
+                                                    <input type="radio" id="inlineRadio2" value="0" name="sex">
+                                                </if>
+                                                <label for="inlineRadio2"></label>
+
+                                            </div>
+                                            <div class="inline-block vertical-top">女</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">头像</label>
+                                    <div class="col-sm-9">
+                                        <input type="file" accept="image/*" id="edit_file_upload" name="file_upload"  multiple="true" value="">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label"></label>
+                                    <div class="col-sm-9">
+                                        <div id="imgs">
+                                            <img src="__PUBLIC__/Uploads/profile/{$theUserInfo.img}" width="120" id="upload-img" name="upload-img"/></div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">现在地区</label>
+                                    <div class="col-sm-9">
+
+                                        <input type="text" class="form-control" value="{$theUserInfo.udi_area}" disabled>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">地区(不选表示不修改)</label>
+                                    <div class="col-sm-9 form-inline" id="sel" name = "sel">
+                                        <select id="sel1" name = "sel1" onChange="getCity(this)" class="form-control col-sm-2" style="margin-right: 10px"></select>
+                                        <select id="sel2" name = "sel2" onChange="getCity(this)" class="form-control col-sm-2" style="margin-right: 10px"></select>
+                                        <select id="sel3" name = "sel3" onChange="getCity(this)" class="form-control col-sm-2" style="margin-right: 10px"></select>
+                                        <select id="sel4" name = "sel4" class="form-control col-sm-2 hidden"></select>
+
+                                    </div>
+                                </div>
+                                <if condition = "$admin eq 1" >
+                                    <notempty name="showTheDept">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">部门</label>
+                                            <div class="col-sm-8">
+                                                {$theDept}
+                                            </div>
+                                        </div>
+                                    <else/>
+                                        <div class="form-group" style="display: none">
+                                            <label class="col-sm-3 control-label">部门</label>
+                                            <div class="col-sm-8">
+                                                {$theDept}
+                                            </div>
+                                        </div>
+                                    </notempty>
+
+
+                                    <div class="form-group" >
+                                        <label class="col-sm-3 control-label">角色</label>
                                         <div class="col-sm-8">
-                                            {$theDept}
+                                            {$theAuto}
                                         </div>
                                     </div>
                                 <else/>
@@ -140,76 +158,61 @@
                                             {$theDept}
                                         </div>
                                     </div>
-                                </notempty>
 
-
-                                <div class="form-group" >
-                                    <label class="col-sm-3 control-label">角色</label>
-                                    <div class="col-sm-8">
-                                        {$theAuto}
-                                    </div>
-                                </div>
-                            <else/>
-                                <div class="form-group" style="display: none">
-                                    <label class="col-sm-3 control-label">部门</label>
-                                    <div class="col-sm-8">
-                                        {$theDept}
-                                    </div>
-                                </div>
-
-                                <div class="form-group" style="display: none">
-                                    <label class="col-sm-3 control-label">角色</label>
-                                    <div class="col-sm-8">
-                                        {$theAuto}
-                                    </div>
-                                </div>
-                            </if>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">详细地址(选填)</label>
-                                <div class="col-sm-9">
-                                    <textarea rows="2" class="form-control" id="address" name="address">{$theUserInfo.udi_address}</textarea>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">工作单位(选填)</label>
-                                <div class="col-sm-9">
-                                    <textarea rows="2" class="form-control" id="workPlace" name="workPlace">{$theUserInfo.udi_workplace}</textarea>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">手机</label>
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control" value="{$theUserInfo.udi_tel}" id="tel" name="tel">
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">个人说明(选填)</label>
-                                <div class="col-sm-9">
-                                    <textarea rows="4" id="description" name="description" class="form-control">{$theUserInfo.udi_description}</textarea>
-                                </div>
-                            </div>
-                            <div class="form-group m-top-lg">
-                                <label class="col-sm-3 control-label"></label>
-                                <div class="col-sm-9">
-                                    <notempty name="audit">
-                                        <div class="col-sm-4">
-                                            <input type="submit" class="btn btn-info " name="auditSend" id="auditSend" value="审核通过">
+                                    <div class="form-group" style="display: none">
+                                        <label class="col-sm-3 control-label">角色</label>
+                                        <div class="col-sm-8">
+                                            {$theAuto}
                                         </div>
-                                        <div class="col-sm-4">
-                                            <input type="submit" class="btn btn-danger" id="auditNoSend" value="审核不通过">
-                                        </div>
-                                    <else/>
-                                        <input type="submit" class="btn btn-info" id="updateSend" value="提交">
-                                        <input type="reset" id="updateRes" class="btn btn-default m-left-xs" value="取消">
-                                    </notempty>
+                                    </div>
+                                </if>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">详细地址(选填)</label>
+                                    <div class="col-sm-9">
+                                        <textarea rows="2" class="form-control" id="address" name="address">{$theUserInfo.udi_address}</textarea>
+                                    </div>
                                 </div>
-                            </div>
-                        </form>
-                    </div><!-- ./tab-pane -->
-                </div><!-- ./tab-content -->
-            </div><!-- ./smart-widget-body -->
-        </div><!-- ./smart-widget-inner -->
-    </div><!-- ./smart-widget -->
-</div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">工作单位(选填)</label>
+                                    <div class="col-sm-9">
+                                        <textarea rows="2" class="form-control" id="workPlace" name="workPlace">{$theUserInfo.udi_workplace}</textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">手机</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" value="{$theUserInfo.udi_tel}" id="tel" name="tel">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">个人说明(选填)</label>
+                                    <div class="col-sm-9">
+                                        <textarea rows="4" id="description" name="description" class="form-control">{$theUserInfo.udi_description}</textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group m-top-lg">
+                                    <label class="col-sm-3 control-label"></label>
+                                    <div class="col-sm-9">
+                                        <notempty name="audit">
+                                            <div class="col-sm-4">
+                                                <input type="submit" class="btn btn-info " name="auditSend" id="auditSend" value="审核通过">
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <input type="submit" class="btn btn-danger" id="auditNoSend" value="审核不通过">
+                                            </div>
+                                        <else/>
+                                            <input type="submit" class="btn btn-info" id="updateSend" value="提交">
+                                            <input type="reset" id="updateRes" class="btn btn-default m-left-xs" value="取消">
+                                        </notempty>
+                                    </div>
+                                </div>
+                            </form>
+                        </div><!-- ./tab-pane -->
+                    </div><!-- ./tab-content -->
+                </div><!-- ./smart-widget-body -->
+            </div><!-- ./smart-widget-inner -->
+        </div><!-- ./smart-widget -->
+    </div>
+</block>

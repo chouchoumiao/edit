@@ -1,28 +1,34 @@
-<div class="padding-md">
-    <div class="col-md-12">
-        <div class="smart-widget">
-            <div class="smart-widget-inner">
-                <div class="smart-widget-body">
-                    <div class="tab-content">
-                        <div class="tab-pane fade in active ">
-                            <h4 class="header-text m-top-md">新增 资源</h4>
+<extend name="media_layout" />
+<block name="media_title"><title>稿库系统后台管理</title></block>
 
-                            <form action="__ROOT__/Admin/User/doAction/action/addNew" id="addForm" name="addForm" class="form-horizontal m-top-md" enctype="multipart/form-data" method="post">
-                                <div class="form-group">
-                                    <div class="col-md-3 col-md-offset-5">
-                                        <input type="file" id="file_upload" name="file_upload" />
+<block name="media_content">
+    <div class="padding-md">
+        <div class="col-md-12">
+            <div class="smart-widget">
+                <div class="smart-widget-inner">
+                    <div class="smart-widget-body">
+                        <div class="tab-content">
+                            <div class="tab-pane fade in active ">
+                                <h4 class="header-text m-top-md">新增 资源</h4>
+
+                                <form action="__ROOT__/Admin/User/doAction/action/addNew" id="addForm" name="addForm" class="form-horizontal m-top-md" enctype="multipart/form-data" method="post">
+                                    <div class="form-group">
+                                        <div class="col-md-3 col-md-offset-5">
+                                            <input type="file" id="media_file_upload" name="media_file_upload" />
+                                        </div>
                                     </div>
-                                </div>
-                            </form>
-                        </div><!-- ./tab-pane -->
-                    </div><!-- ./tab-content -->
-                </div><!-- ./smart-widget-body -->
-            </div><!-- ./smart-widget-inner -->
-        </div><!-- ./smart-widget -->
-    </div>
+                                </form>
+                            </div><!-- ./tab-pane -->
+                        </div><!-- ./tab-content -->
+                    </div><!-- ./smart-widget-body -->
+                </div><!-- ./smart-widget-inner -->
+            </div><!-- ./smart-widget -->
+        </div>
 
-    <div class="col-md-12">
-        <div class="gallery-list js-masonry m-top-md" id="imgs">
+        <div class="col-md-12">
+            <div class="gallery-list js-masonry m-top-md" id="imgs">
+            </div>
         </div>
     </div>
-</div>
+</block>
+

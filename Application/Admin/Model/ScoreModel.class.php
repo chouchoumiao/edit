@@ -9,7 +9,6 @@ namespace Admin\Model;
 
         private $object;
         private $order;         //默认排序
-        private $data;          //数据
         private $join;
         private $field;         //字段
 
