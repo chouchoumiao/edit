@@ -106,7 +106,7 @@ $(function(){
         minHeight: 400,
         focus:true,
         lang:'zh-CN',
-        height: 600,
+        height: 500,
         toolbar: [
             ['style', ['bold', 'italic', 'underline', 'clear']],
             ['fontname', ['fontname']],
@@ -114,7 +114,8 @@ $(function(){
             ['fontsize', ['fontsize']],
             ['para', ['ul', 'paragraph']],
             ['table', ['table']],
-            ['insert', ['link', 'picture']]
+            ['insert', ['link', 'picture']],
+            ['Misc', ['undo', 'redo']]
         ],
 
         //回调函数
