@@ -248,7 +248,6 @@ function addFormSubmit(flag) {
         return;
     }
 
-
     //将数组转化为json格式
     var deptJson = JSON.stringify(deptArr);
 
@@ -265,6 +264,11 @@ function addFormSubmit(flag) {
             'fileName':$('#fileName').text()    //单独附件文件名
 
         }
+        //防止多次提交
+        ,beforeSend: function(){
+
+            $(".submit-btn").attr("disabled","disabled");
+        }
         ,dataType: "json"
         ,success:function(json){
            if(json.success){
@@ -274,6 +278,9 @@ function addFormSubmit(flag) {
                alert(json.msg);
                return false;
            }
+
+           //防止多次提交
+           $("#submit-btn").removeAttr("disabled");
         }
         ,error:function(xhr){alert('PHP页面有错误！'+xhr.responseText);}
     });
@@ -305,16 +312,26 @@ function delPost(id) {
         ,data:{
             'id':id
         }
+        //防止多次提交
+        ,beforeSend: function(){
+
+            $(".delPost").attr("disabled","disabled");
+        }
         ,dataType: "json"
         ,success:function(json){
             if(json.success == "OK"){
                 alert('删除成功');
+                //防止多次提交
+                $("#delPost").removeAttr("disabled");
                 location = ROOT+"/Admin/Post/doAction/action/all";
 
             }else{
                 alert('删除失败');
+                //防止多次提交
+                $("#delPost").removeAttr("disabled");
                 return false;
             }
+
         }
         ,error:function(xhr){alert('PHP页面有错误！'+xhr.responseText);}
     });
@@ -432,6 +449,11 @@ function UpdateFormSubmit(flag) {
             'saveName':$('#saveName').text(),   //单独附件保存文件名
             'fileName':$('#fileName').text()    //单独附件文件名
         }
+        //防止多次提交
+        ,beforeSend: function(){
+
+            $(".submit-btn").attr("disabled","disabled");
+        }
         ,dataType: "json"
         ,success:function(json){
             if(json.success){
@@ -441,6 +463,8 @@ function UpdateFormSubmit(flag) {
                 alert(json.msg);
                 return false;
             }
+            //防止多次提交
+           $("#submit-btn").removeAttr("disabled");
         }
         ,error:function(xhr){alert('PHP页面有错误！'+xhr.responseText);}
     });

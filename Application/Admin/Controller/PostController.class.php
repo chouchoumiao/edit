@@ -385,11 +385,11 @@ class PostController extends CommonController {
         $html= '';
         $isSave = 'save';
         $html .= '<div class="col-sm-2  col-sm-offset-3">';
-        $html .= '<input type="button" class="btn btn-info btn-block" 
+        $html .= '<input type="button" class="btn btn-info btn-block submit-btn" 
                     onclick="return addFormSubmit('.$isSave.');" value="保存不审核">';
         $html .='</div>';
         $html .= '<div class="col-sm-2">';
-        $html .= '<input type="button" class="btn btn-info btn-block" onclick="return addFormSubmit();" value="提交审核">';
+        $html .= '<input type="button" class="btn btn-info btn-block submit-btn" onclick="return addFormSubmit();" value="提交审核">';
         $html .='</div>';
 
         $this->assign('btn',$html);
@@ -751,27 +751,27 @@ class PostController extends CommonController {
             case ZONGBIAN:
 
                 $html .= '<div class="col-sm-2 col-sm-offset-2">';
-                $html .= '<input type="button" class="btn btn-info btn-block" 
+                $html .= '<input type="button" class="btn btn-info btn-block submit-btn" 
                             onclick="return UpdateFormSubmit('.$pended.');" value="审核通过" name="send">';
                 $html .= '</div>';
                 $html .= '<div class="col-sm-2 col-sm-offset-1">';
-                $html .= '<input type="button" class="btn btn-danger btn-block" 
+                $html .= '<input type="button" class="btn btn-danger btn-block submit-btn" 
                             onclick="return UpdateFormSubmit('.$return.');" value="打回" name="send">';
                 $html .= '</div>';
                 $html .= '<div class="col-sm-2 col-sm-offset-1">';
-                $html .= '<input type="button" class="btn  btn-default m-left-xs btn-block" onclick="return resetAddForm();" value="清空内容" id="res">';
+                $html .= '<input type="button" class="btn  btn-default m-left-xs btn-block submit-btn" onclick="return resetAddForm();" value="清空内容" id="res">';
                 $html .= '</div>';
 
                 $htmlSmall .= '<div class="col-xs-2">';
-                $htmlSmall .= '<input type="button" class="btn btn-info  btn-xs" 
+                $htmlSmall .= '<input type="button" class="btn btn-info  btn-xs submit-btn" 
                             onclick="return UpdateFormSubmit('.$pended.');" value="审核通过" name="send">';
                 $htmlSmall .= '</div>';
                 $htmlSmall .= '<div class="col-xs-2 col-xs-offset-2">';
-                $htmlSmall .= '<input type="button" class="btn btn-danger  btn-xs" 
+                $htmlSmall .= '<input type="button" class="btn btn-danger  btn-xs submit-btn" 
                             onclick="return UpdateFormSubmit('.$return.');" value="打回" name="send">';
                 $htmlSmall .= '</div>';
                 $htmlSmall .= '<div class="col-xs-2 col-xs-offset-2">';
-                $htmlSmall .= '<input type="button" class="btn  btn-default btn-xs" onclick="return resetAddForm();" value="清空内容" id="res">';
+                $htmlSmall .= '<input type="button" class="btn  btn-default btn-xs submit-btn" onclick="return resetAddForm();" value="清空内容" id="res">';
                 $htmlSmall .= '</div>';
 
                 $showDeptCheckBox = false;
@@ -779,29 +779,29 @@ class PostController extends CommonController {
                 break;
             case XIAOBIAN:
                 $html .= '<div class="col-sm-2 col-sm-offset-2">';
-                $html .= '<input type="button" class="btn btn-info btn-block" 
+                $html .= '<input type="button" class="btn btn-info btn-block submit-btn" 
                             onclick="return UpdateFormSubmit('.$pending2.');" value="提交审核" name="send">';
                 $html .= '</div>';
                 $html .= '<div class="col-sm-2 col-sm-offset-1">';
-                $html .= '<input type="button" class="btn btn-danger btn-block" 
+                $html .= '<input type="button" class="btn btn-danger btn-block submit-btn" 
                             onclick="return UpdateFormSubmit('.$dismiss.');" value="审核不通过" name="send">';
                 $html .= '</div>';
                 $html .= '<div class="col-sm-2 col-sm-offset-1">';
-                $html .= '<input type="button" class="btn btn-warning btn-block" 
+                $html .= '<input type="button" class="btn btn-warning btn-block submit-btn" 
                             onclick="return UpdateFormSubmit('.$save.');" value="保存" name="send">';
                 $html .= '</div>';
 
 
                 $htmlSmall .= '<div class="col-xs-2">';
-                $htmlSmall .= '<input type="button" class="btn btn-xs btn-info" 
+                $htmlSmall .= '<input type="button" class="btn btn-xs btn-info submit-btn" 
                             onclick="return UpdateFormSubmit('.$pending2.');" value="继续审核" name="send">';
                 $htmlSmall .= '</div>';
                 $htmlSmall .= '<div class="col-xs-2 col-xs-offset-2">';
-                $htmlSmall .= '<input type="button" class="btn btn-danger btn-xs" 
+                $htmlSmall .= '<input type="button" class="btn btn-danger btn-xs submit-btn" 
                             onclick="return UpdateFormSubmit('.$dismiss.');" value="审核不通过" name="send">';
                 $htmlSmall .= '</div>';
                 $htmlSmall .= '<div class="col-xs-2 col-xs-offset-2">';
-                $htmlSmall .= '<input type="button" class="btn btn-xs btn-warning" 
+                $htmlSmall .= '<input type="button" class="btn btn-xs btn-warning submit-btn" 
                             onclick="return UpdateFormSubmit('.$save.');" value="修改并保存" name="send">';
                 $htmlSmall .= '</div>';
 
@@ -810,28 +810,28 @@ class PostController extends CommonController {
                 break;
             case BAOLIAOZHE:
                 $html .= '<div class="col-sm-2 col-sm-offset-2">';
-                $html .= '<input type="button" class="btn btn-info btn-block" 
+                $html .= '<input type="button" class="btn btn-info btn-block submit-btn" 
                             onclick="return UpdateFormSubmit('.$pending.');" value="提交审核" name="send">';
                 $html .= '</div>';
                 $html .= '<div class="col-sm-2 col-sm-offset-1">';
-                $html .= '<input type="button" class="btn btn-warning btn-block" 
+                $html .= '<input type="button" class="btn btn-warning btn-block submit-btn" 
                             onclick="return UpdateFormSubmit('.$save.');" value="修改并保存" name="send">';
                 $html .= '</div>';
                 $html .= '<div class="col-sm-2 col-sm-offset-1">';
-                $html .= '<input type="button" class="btn  btn-default m-left-xs btn-block" onclick="return resetAddForm();" value="清空内容" id="res">';
+                $html .= '<input type="button" class="btn  btn-default m-left-xs btn-block submit-btn" onclick="return resetAddForm();" value="清空内容" id="res">';
                 $html .= '</div>';
 
 
                 $htmlSmall .= '<div class="col-xs-2">';
-                $htmlSmall .= '<input type="button" class="btn btn-xs btn-info " 
+                $htmlSmall .= '<input type="button" class="btn btn-xs btn-info submit-btn" 
                             onclick="return UpdateFormSubmit('.$pending.');" value="提交审核" name="send">';
                 $htmlSmall .= '</div>';
                 $htmlSmall .= '<div class="col-xs-2 col-xs-offset-2">';
-                $htmlSmall .= '<input type="button" class="btn btn-xs btn-warning" 
+                $htmlSmall .= '<input type="button" class="btn btn-xs btn-warning submit-btn" 
                             onclick="return UpdateFormSubmit('.$save.');" value="修改并保存" name="send">';
                 $htmlSmall .= '</div>';
                 $htmlSmall .= '<div class="col-xs-2 col-xs-offset-2">';
-                $htmlSmall .= '<input type="button" class="btn btn-xs btn-default" onclick="return resetAddForm();" value="清空内容" id="res">';
+                $htmlSmall .= '<input type="button" class="btn btn-xs btn-default submit-btn" onclick="return resetAddForm();" value="清空内容" id="res">';
                 $htmlSmall .= '</div>';
 
                 $showDeptCheckBox = true;
