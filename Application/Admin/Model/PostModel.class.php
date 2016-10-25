@@ -5,8 +5,6 @@
  */
 namespace Admin\Model;
 
-    use Think\Log;
-
     class PostModel {
 
         private $post_id;
@@ -516,9 +514,9 @@ namespace Admin\Model;
                 'post_content' => $data['post_content'],
                 'post_title'   => $data['post_title'],
                 'post_dept'    => $dept,
-                'post_status'  => 'pending',    //待审核
+                'post_name'    => $dept,        //post_name也需要追加 20161025
+                'post_status'  => POST_SAVE,    //待审核 改为 保存 20161025
                 'post_dismiss_msg'  => '',    //待审核
-                'post_name'    => '',
                 'post_modified'=> $now,
                 'post_parent'  => $data['id'],   //父节点是提交过来的文章ID
                 'post_parent_author'  => $data['post_author']   //父节点是提交过来的文章作者
@@ -659,7 +657,7 @@ namespace Admin\Model;
                             $obj[$i]['post_canEdit'] = 1;
                             break;
                         case 'save':
-                            $spanColor = '<span style="color: #edbc6c">';
+                            $spanColor = '<span style="color: #7F8C8D">';
                             $obj[$i]['post_canEdit'] = 1;
                             break;
                         case 'dismiss':
@@ -681,18 +679,23 @@ namespace Admin\Model;
 
                     }
 
-                    $temp = '';
-
                     //取得当前用户的详细信息，用于判断当前用户的权限等
                     $nowUserInfo = ToolModel::getNowXioabianUserInfo();
+
+                    //小编的情况下，取得的文章，如果不是小编本人是作者的话默认只显示预览按钮 20161025
+                    if($nowUserInfo['udi_auto_id'] == XIAOBIAN){
+                        if( ($obj[$i]['post_status'] != 'pending') && $obj[$i]['post_author'] != $nowUserInfo['uid'] ){
+                            $obj[$i]['post_canEdit'] = 2;
+                        }
+                    }
+
+                    $temp = '';
                     if( ($nowUserInfo['udi_auto_id'] == BAOLIAOZHE) && ($obj[$i]['post_status'] == 'pending') ){
                         $obj[$i]['post_canEdit'] = 2;
                         $temp = '[不能修改]';
                     }
 
                     $obj[$i]['post_status'] = $spanColor.$statusArr[$obj[$i]['post_status']].$temp.'</span>';
-
-
                 }
 
 
@@ -905,24 +908,14 @@ namespace Admin\Model;
                     break;
                 case XIAOBIAN:
 
-                    //获取当前小编的提交的文章(除了爆料者以外拷贝后都是变成小编是作者)，以及 爆料者提交给本部门并且违背拷贝的文章
+                    //小编的情形下，获取本部门的所有文章(已修正，小编拷贝文章后默认改为保存),得到的文章再进行分类
+                    //如果是当前小编的则可以编辑删除，不然则只显示预览按钮(要求不同小编可以查看自己部门的文章，不能编辑)
                     if($status == 'all'){
-                        $join .= "AND (ccm_posts.post_author = '$theID'
-                                  OR ( ccm_posts.post_name LIKE '%$dept%' 
-                                  AND ccm_posts.post_status = 'pending'))" ;
+                        $join .= "AND (ccm_posts.post_name LIKE '%$dept%')" ;
                     }else{
-
                         //如果是待审核 有可能是爆料者的待审核 或者 是小编拷贝后未做操作的待审核
-                        if($status == 'pending'){
-                            $join .= "AND (ccm_posts.post_name LIKE '%$dept%'
-                                    OR ccm_posts.post_author = '$theID')
+                            $join .= "AND ccm_posts.post_name LIKE '%$dept%'
                                     AND ccm_posts.post_status = '$status'";
-
-                        //其他状态都取得当前小编是作者并且对应的状态的文章
-                        }else{
-                            $join .= "AND ccm_posts.post_author = '$theID'
-                                        AND ccm_posts.post_status = '$status'";
-                        }
                     }
                     break;
                 case ZONGBIAN:
