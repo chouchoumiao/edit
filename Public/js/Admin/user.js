@@ -1,6 +1,6 @@
 $(function(){
 
-    var ALL_DEPT_COUNT = 4    //部门的总个数
+    var ALL_DEPT_COUNT = 4;   //部门的总个数
     
     $('#file_upload').uploadifive({
         'uploadScript' : './Admin/User/doAction/action/upload',   //上传的方法

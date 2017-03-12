@@ -1,6 +1,42 @@
 $(function(){
 
     /**
+     * //Ueditor富文本编辑器操作
+     */
+
+    //初始化富文本编辑器
+    UE.getEditor('container',{toolbars:[["undo","redo",'|',"bold","italic","underline",'|',
+        'insertorderedlist', 'insertunorderedlist', '|',
+        "superscript","subscript",'|',
+        "justifyleft","justifycenter","justifyright","justifyjustify",
+        '|',"indent","rowspacingbottom","fontfamily","fontsize",
+        '|',"forecolor","backcolor",'|',"insertimage",'|'
+        ,"link","unlink",'|',"inserttable","deletetable",'|',
+        'searchreplace']],
+        initialFrameHeight:500});
+
+
+    var ue = UE.getEditor("container");
+    ue.ready(function() {
+
+        var content = $('#content');
+        if( (content.length > 0) && (content.val() != '') ){
+            ue.setContent(content.val() + ' ');
+        }else {
+            ue.setContent(' ');
+        }
+        ue.focus(true);
+
+        //如果是小编而且是编辑的请情况下则变成红色
+        if($('#theAuto').length > 0 && $('#theAuto').val() == XIAOBIAN ){
+            ue.execCommand('forecolor', '#FF0000');
+        }
+    });
+
+
+
+
+    /**
      * 爆料者新增文章时候上传附件的时候进行以下方法
      */
     $('#file_upload').uploadifive({
@@ -92,114 +128,6 @@ $(function(){
         //最后一个追加一个特有class,用于提交时判断
         $('#scoreBtn'+val).addClass('lastActive');
 
-    }),
-
-    /**
-     * 富文本编辑器初始化
-     * 最小长度400
-     * 不聚焦
-     * 设置为中文提示
-     * 如果是显示特定文章的情况，则初始化显示code内容
-     * 图片上传至服务器 路径：upload/post/日期/
-     */
-    $( '#summernote' ).summernote({
-        minHeight: 400,
-        focus:true,
-        lang:'zh-CN',
-        height: 500,
-        toolbar: [
-            ['style', ['bold', 'italic', 'underline', 'clear']],
-            ['fontname', ['fontname']],
-            ['color', ['color']],
-            ['fontsize', ['fontsize']],
-            ['para', ['ul', 'paragraph']],
-            ['table', ['table']],
-            ['insert', ['link', 'picture']],
-            ['Misc', ['undo', 'redo']]
-        ],
-
-        //回调函数
-        callbacks : {
-            //初始化
-            onInit: function() {
-
-                var content = $('#content');
-
-                if( (content.length > 0) && (content.val() != '') ){
-                    $('#summernote').summernote('code', content.val()+' ');
-                }else {
-                    $('#summernote').summernote('code', '');
-                }
-            },
-
-            //小编的情况，并且是编辑文章的时候，输入时默认是红色字显示，其他为黑色字
-            onKeydown: function() {
-
-                if($('#theAuto').length > 0 && $('#theAuto').val() == XIAOBIAN ){
-                    $('#summernote').summernote('foreColor', 'red');
-                }else {
-                    $('#summernote').summernote('foreColor', 'black');
-                }
-            },
-
-            //删除图片时候同时删除已经上传的图片
-            onMediaDelete : function($target, editor, $editable) {
-
-                var imgPath = $target[0].src;
-                $.ajax({
-                    url:ROOT+"/Admin/Post/doAction/action/deleteImg"//改为你的动态页
-                    ,type:"POST"
-                    ,data:{
-                        'imgPath':imgPath
-                    }
-                    ,dataType: "json"
-                    ,success:function(json){
-                        $target.remove();
-                    }
-                    ,error:function(xhr){alert('PHP页面有错误！'+xhr.responseText);}
-                });
-
-            },
-
-            // onImageUpload的参数为files，summernote支持选择多张图片
-            onImageUpload : function(files) {
-
-                var $files = $(files);
-
-                // 通过each方法遍历每一个file
-                $files.each(function() {
-                    var file = this;
-
-                    var data = new FormData();
-
-                    // 将文件加入到file中，后端可获得到参数名为“file”
-                    data.append("file", file);
-
-                    // ajax上传
-                    $.ajax({
-                        data : data,
-                        type : "POST",
-                        url : ROOT+"/Admin/Post/doAction/action/upload",
-                        cache : false,
-                        contentType : false,
-                        processData : false,
-                        dataType : "json",
-
-                        // 成功时调用方法，后端返回json数据
-                        success : function(json) {
-                            if(json.success){
-                                var imgNode = $('<img>').attr('src',PUBLIC+json.msg);
-                                $( '#summernote' ).summernote('insertNode', imgNode[0]);
-                            }else{
-                                alert(json.msg);
-                                return false;
-                            }
-                        }
-                    });
-                });
-            }
-        }
-
     });
 
     //焦点定位到第一个input（并将光标定位到最后位置，火狐不支持）
@@ -223,12 +151,16 @@ function addFormSubmit(flag) {
     }
 
     //判断文章内容是否为空
-    if($("#summernote").summernote('isEmpty')){
+    var ue = UE.getEditor("container");
+
+    //判断提交的时候是否有内容输入
+    if(!ue.hasContents()){
         alert('文章内容不能空');
         return;
     }
 
-    var data = $("#summernote").summernote('code');
+    //取得富文本编辑器的html内容
+    var data = ue.getContent();
 
     //判断部门复选框是否都没有选中
     if( 0 == ($("input[class='checkbox-purple']:checked").length)){
@@ -292,8 +224,9 @@ function addFormSubmit(flag) {
  */
 function resetAddForm () {
     $('#title').val('');
-    $('#summernote').summernote('code', '');
 
+    var ue = UE.getEditor("container");
+    ue.setContent('');
 }
 
 /**
@@ -360,12 +293,16 @@ function UpdateFormSubmit(flag) {
     }
 
     //判断文章内容是否为空
-    if($("#summernote").summernote('isEmpty')){
+    var ue = UE.getEditor("container");
+
+    if(!ue.hasContents()){
         alert('文章内容不能空');
         return;
     }
 
-    var data = $("#summernote").summernote('code');
+    //取得富文本编辑器的html内容
+    var data = ue.getContent();
+
 
     //判断部门复选框是否都没有选中
     if( 0 == ($("input[class='checkbox-purple']:checked").length)){
