@@ -79,7 +79,7 @@ class PostController extends CommonController {
                     break;
 
                 default:
-//                    ToolModel::goBack('警告,非法操作');
+                    ToolModel::goBack('警告,非法操作');
                     break;
             }
         }
