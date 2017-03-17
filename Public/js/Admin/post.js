@@ -13,6 +13,7 @@ $(function(){
         '|',"indent","rowspacingbottom","fontfamily","fontsize",
         '|',"forecolor","backcolor",'|',"insertimage",'|'
         ,"link","unlink",'|',"inserttable","deletetable",'|',
+        "source",'|',
         'searchreplace']],
         initialFrameHeight:500});
 
