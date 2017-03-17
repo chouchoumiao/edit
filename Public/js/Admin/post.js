@@ -5,9 +5,10 @@ $(function(){
      */
 
     //初始化富文本编辑器
-    UE.getEditor('container',{toolbars:[["undo","redo",'|',"bold","italic","underline",'|',
+    UE.getEditor('container',{toolbars:[[
+        'fullscreen',"undo","redo",'|',"bold","italic","underline",'|',
         'insertorderedlist', 'insertunorderedlist', '|',
-        "superscript","subscript",'|',
+        "superscript","subscript",'removeformat','|',
         "justifyleft","justifycenter","justifyright","justifyjustify",
         '|',"indent","rowspacingbottom","fontfamily","fontsize",
         '|',"forecolor","backcolor",'|',"insertimage",'|'
