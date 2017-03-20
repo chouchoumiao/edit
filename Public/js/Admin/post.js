@@ -6,11 +6,16 @@ $(function(){
 
     //初始化富文本编辑器
     UE.getEditor('container',{toolbars:[[
-        'fullscreen', 'source', '|', 'undo', 'redo', '|','bold', 'italic', 'underline',
-        'removeformat', 'formatmatch', 'autotypeset', '|', 'forecolor', 'backcolor', '|',
-        'rowspacingtop', 'rowspacingbottom', 'lineheight', '|','fontfamily', 'fontsize', '|',
-        'indent', '|', 'link', 'unlink', '|', 'imagenone', 'imageleft', 'imageright', 'imagecenter', '|',
-        'simpleupload', 'insertimage', 'spechars','|', 'searchreplace','|'
+        'fullscreen', 'source', '|',
+        'undo', 'redo', '|',
+        'bold', 'italic', 'underline',
+        'removeformat', 'formatmatch', 'autotypeset', '|',
+        'fontfamily', 'fontsize', 'forecolor', 'backcolor', '|',
+        'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|',
+        'indent', '|',
+        'link', 'unlink', '|',
+        'simpleupload', 'insertimage', 'spechars','|',
+        'searchreplace','|'
         ]],
         initialFrameHeight:400});
 
