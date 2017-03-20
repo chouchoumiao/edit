@@ -5,17 +5,35 @@ $(function(){
      */
 
     //初始化富文本编辑器
+    // UE.getEditor('container',{toolbars:[[
+    //     'fullscreen',"undo","redo",'|',"bold","italic","underline",'|',
+    //     'insertorderedlist', 'insertunorderedlist', '|',
+    //     "superscript","subscript",'removeformat','|',
+    //     "justifyleft","justifycenter","justifyright","justifyjustify",
+    //     '|',"indent","rowspacingbottom","fontfamily","fontsize",
+    //     '|',"forecolor","backcolor",'|',"insertimage",'|'
+    //     ,"link","unlink",'|',"inserttable","deletetable",'|',
+    //     "source",'|',
+    //     'searchreplace',
+    //     '135editor']],
+    //     initialFrameHeight:400});
     UE.getEditor('container',{toolbars:[[
-        'fullscreen',"undo","redo",'|',"bold","italic","underline",'|',
-        'insertorderedlist', 'insertunorderedlist', '|',
-        "superscript","subscript",'removeformat','|',
-        "justifyleft","justifycenter","justifyright","justifyjustify",
-        '|',"indent","rowspacingbottom","fontfamily","fontsize",
-        '|',"forecolor","backcolor",'|',"insertimage",'|'
-        ,"link","unlink",'|',"inserttable","deletetable",'|',
-        "source",'|',
-        'searchreplace']],
-        initialFrameHeight:500});
+        'fullscreen', 'source', '|', 'undo', 'redo', '|',
+        'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript',
+        'removeformat', 'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor',
+        'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|',
+        'rowspacingtop', 'rowspacingbottom', 'lineheight', '|',
+        'customstyle', 'paragraph', 'fontfamily', 'fontsize', '|',
+        'directionalityltr', 'directionalityrtl', 'indent', '|',
+        'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'touppercase', 'tolowercase', '|',
+        'link', 'unlink', 'anchor', '|', 'imagenone', 'imageleft', 'imageright', 'imagecenter', '|',
+        'simpleupload', 'insertimage', 'emotion', 'scrawl', 'insertcode', 'pagebreak', 'template', 'background', '|',
+        'horizontal', 'date', 'time', 'spechars', 'snapscreen', 'wordimage', '|',
+        'inserttable', 'deletetable', 'insertparagraphbeforetable', 'insertrow', 'deleterow', 'insertcol', 'deletecol',
+        'mergecells', 'mergeright', 'mergedown', 'splittocells', 'splittorows', 'splittocols', 'charts', '|',
+        'print', 'preview', 'searchreplace', 'drafts', 'help'
+        ]],
+        initialFrameHeight:400});
 
 
     var ue = UE.getEditor("container");
@@ -34,9 +52,6 @@ $(function(){
             ue.execCommand('forecolor', '#FF0000');
         }
     });
-
-
-
 
     /**
      * 爆料者新增文章时候上传附件的时候进行以下方法
