@@ -226,7 +226,7 @@ namespace Admin\Model;
             //            3 : 继续提交审核
             //            4 : 审核不通过flag
             //            5 : 审核通过flag
-            //            6 : 打回给小编flag
+            //            6 : 打回给编辑flag
 
             switch (I('post.flag')){
                 case 1:
@@ -324,8 +324,8 @@ namespace Admin\Model;
         }
 
         /**
-         * 小编或者总编都可以进行打分,将评分记录计入评分表
-         * @param $auto 权限 是小编还是总编
+         * 编辑或者总编都可以进行打分,将评分记录计入评分表
+         * @param $auto 权限 是编辑还是总编
          * @param $dept 部门
          * @return mixed
          */
@@ -340,10 +340,10 @@ namespace Admin\Model;
 
             $scoreData['author'] = $author;
 
-            //因为小编也需要打分所以新增两个字段
+            //因为编辑也需要打分所以新增两个字段
             $scoreData['score_post_id'] = $this->post_id;
 
-            //小编的flag=0，总编=1
+            //编辑的flag=0，总编=1
             if($auto == XIAOBIAN){
                 $scoreData['score_flag'] = 0;
             }else{
@@ -417,7 +417,7 @@ namespace Admin\Model;
         }
 
         /**
-         * 判断是否小编已经点击过改文章生成备份文件了
+         * 判断是否编辑已经点击过改文章生成备份文件了
          * @param $id
          * @return mixed
          */
@@ -431,7 +431,7 @@ namespace Admin\Model;
         }
 
         /**
-         * 根据文章的ID和部门判断是否已经被本部门其他小编认领了文章
+         * 根据文章的ID和部门判断是否已经被本部门其他编辑认领了文章
          * @param $id
          * @param $dept
          * @return mixed
@@ -458,7 +458,7 @@ namespace Admin\Model;
         }
 
         /**
-         * 取得原文章的未被小编编辑的(未被继承的)部门数组
+         * 取得原文章的未被编辑编辑的(未被继承的)部门数组
          * @param $postid       原文章ID
          * @return bool
          */
@@ -499,7 +499,7 @@ namespace Admin\Model;
         }
 
         /**
-         * 小编点击审核后默认生成一份备份文件
+         * 编辑点击审核后默认生成一份备份文件
          * @param $data
          * @param $dept
          * @return mixed
@@ -522,7 +522,7 @@ namespace Admin\Model;
                 'post_parent_author'  => $data['post_author']   //父节点是提交过来的文章作者
             );
 
-            //新增小编拷贝文件
+            //新增编辑拷贝文件
             return $this->object->add($dataArr);
         }
 
@@ -682,7 +682,7 @@ namespace Admin\Model;
                     //取得当前用户的详细信息，用于判断当前用户的权限等
                     $nowUserInfo = ToolModel::getNowXioabianUserInfo();
 
-                    //小编的情况下，取得的文章，如果不是小编本人是作者的话默认只显示预览按钮 20161025
+                    //编辑的情况下，取得的文章，如果不是编辑本人是作者的话默认只显示预览按钮 20161025
                     if($nowUserInfo['udi_auto_id'] == XIAOBIAN){
                         if( ($obj[$i]['post_status'] != 'pending') && $obj[$i]['post_author'] != $nowUserInfo['uid'] ){
                             $obj[$i]['post_canEdit'] = 2;
@@ -908,12 +908,12 @@ namespace Admin\Model;
                     break;
                 case XIAOBIAN:
 
-                    //小编的情形下，获取本部门的所有文章(已修正，小编拷贝文章后默认改为保存),得到的文章再进行分类
-                    //如果是当前小编的则可以编辑删除，不然则只显示预览按钮(要求不同小编可以查看自己部门的文章，不能编辑)
+                    //编辑的情形下，获取本部门的所有文章(已修正，编辑拷贝文章后默认改为保存),得到的文章再进行分类
+                    //如果是当前编辑的则可以编辑删除，不然则只显示预览按钮(要求不同编辑可以查看自己部门的文章，不能编辑)
                     if($status == 'all'){
                         $join .= "AND (ccm_posts.post_name LIKE '%$dept%')" ;
                     }else{
-                        //如果是待审核 有可能是爆料者的待审核 或者 是小编拷贝后未做操作的待审核
+                        //如果是待审核 有可能是爆料者的待审核 或者 是编辑拷贝后未做操作的待审核
                             $join .= "AND ccm_posts.post_name LIKE '%$dept%'
                                     AND ccm_posts.post_status = '$status'";
                     }
@@ -950,7 +950,7 @@ namespace Admin\Model;
 
 
         /**
-         * 查询该小编拷贝的文章的个数(未被审核的)
+         * 查询该编辑拷贝的文章的个数(未被审核的)
          *
          */
         public function getCopiedPostCount(){

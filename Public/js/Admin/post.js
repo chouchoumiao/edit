@@ -31,7 +31,7 @@ $(function(){
         }
         ue.focus(true);
 
-        //如果是小编而且是编辑的请情况下则变成红色
+        //如果是编辑而且是编辑的请情况下则变成红色
         if($('#theAuto').length > 0 && $('#theAuto').val() == XIAOBIAN ){
             ue.execCommand('forecolor', '#FF0000');
         }
@@ -87,7 +87,7 @@ $(function(){
             doAttachment();
         }
 
-        //如果是小编或者是总编的人情况下，先判断该文章是否有过打分，有的话则取出显示
+        //如果是编辑或者是总编的人情况下，先判断该文章是否有过打分，有的话则取出显示
         if( ( theAutoVal == XIAOBIAN) || ( theAutoVal == ZONGBIAN) ) {
 
             var theScore = parseInt($('#theScore').val());
@@ -280,7 +280,7 @@ function delPost(id) {
  *              3:继续提交审核
  *              4:审核不通过
  *              5:审核通过
- *              6:总编打回给小编不通过,小编可以继续修改
+ *              6:总编打回给编辑不通过,编辑可以继续修改
  * @constructor
  */
 function UpdateFormSubmit(flag) {
@@ -359,7 +359,7 @@ function UpdateFormSubmit(flag) {
         }
     }
 
-    //小编审核不通过或者总编打回给小编的情况下都需要写原因
+    //编辑审核不通过或者总编打回给编辑的情况下都需要写原因
     if( (flag == 4 || flag == 6 ) && (dismissMsg == '')){
         alert('必须填写不通过审核的原因');
         return false;

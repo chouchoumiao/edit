@@ -484,7 +484,7 @@ namespace Admin\Model;
         /**
          * 部门管理员情况,从数据库中取得json格式的角色信息
          * 取得对应用户的角色信息并组成html进行判断输出,用于页面显示
-         * 只显示自己部门的小编和总编
+         * 只显示自己部门的编辑和总编
          * @param $auto
          * @return string
          */
@@ -839,7 +839,7 @@ namespace Admin\Model;
         }
 
         /**
-         * 取得当前登录的小编的详细情况(只能是小编)
+         * 取得当前登录的编辑的详细情况(只能是编辑)
          * @return bool
          */
         static function getNowXioabianUserInfo(){

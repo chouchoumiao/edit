@@ -426,7 +426,7 @@ namespace Admin\Model;
 
         /**
          * 显示所有用户一览表使用后(部门管理员)
-         * 只显示小编和总编
+         * 只显示编辑和总编
          * 取得关联表的用户数据，并通过转化生出页面可显示的数据
          * @param $limit
          * @param $dept
@@ -437,7 +437,7 @@ namespace Admin\Model;
             $join = "INNER JOIN ccm_user_detail_info 
                         ON ccm_user_detail_info.uid = ccm_m_user.id
                         AND ccm_user_detail_info.udi_dep_id = '$dept'
-                        AND ccm_user_detail_info.udi_auto_id IN (2,3)";
+                        AND ccm_user_detail_info.udi_auto_id IN (1,2,3)";       //追加显示爆料者 20170416
             //多表联合查询
             if('' == $limit){
                 $obj =  M('m_user')->join($join)->order($this->order)->select();
@@ -456,7 +456,7 @@ namespace Admin\Model;
 
         /**
          * 显示所有用户一览表使用后(管理员)
-         * 显示除了小编和总编以外的用户
+         * 显示除了编辑和总编以外的用户
          * @param $limit
          * @return mixed
          */
@@ -560,14 +560,14 @@ namespace Admin\Model;
         }
 
         /**
-         * 取得管理员能查看的用户个数(除小编总编外)
+         * 取得管理员能查看的用户个数(除编辑总编外)
          * @return mixed
          */
         public function getAdminAllUserCount(){
 
             $join = "INNER JOIN ccm_user_detail_info 
                         ON ccm_user_detail_info.uid = ccm_m_user.id
-                        AND ccm_user_detail_info.udi_auto_id NOT IN (2,3)";  //管理员只显示显示除了小编和总编以外所有用户
+                        AND ccm_user_detail_info.udi_auto_id NOT IN (2,3)";  //管理员只显示显示除了编辑和总编以外所有用户
             return M('m_user')->join($join)->count();
         }
 
@@ -575,7 +575,7 @@ namespace Admin\Model;
             $join = "INNER JOIN ccm_user_detail_info 
                         ON ccm_user_detail_info.uid = ccm_m_user.id
                         AND udi_dep_id = '$dept'
-                        AND ccm_user_detail_info.udi_auto_id IN (2,3)";      //部门管理员只显示自己部门的小编和总编
+                        AND ccm_user_detail_info.udi_auto_id IN (1,2,3)";      //部门管理员只显示自己部门的编辑和总编 //追加显示爆料者 20170416
             return M('m_user')->join($join)->count();
             //return $this->getCount();
         }
@@ -988,7 +988,7 @@ namespace Admin\Model;
                 ToolModel::goBack('警告，至少选择一个部门！');
             }
 
-            //如果是小编或者总编,或者部门管理员,则只能选择一个部门
+            //如果是编辑或者总编,或者部门管理员,则只能选择一个部门
             if( ($this->auto == XIAOBIAN) || ($this->auto == ZONGBIAN) || ($this->auto == DEPT_ADMIN)){
                 if(count($dept) > 1){
                     ToolModel::goBack('该角色只能选择一个部门');

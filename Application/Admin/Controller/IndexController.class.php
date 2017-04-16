@@ -6,7 +6,7 @@ class IndexController extends CommonController {
 
     private $auto;
     private $postObj;
-    private $dept;   //仅适用于小编总编一个部门的情况
+    private $dept;   //仅适用于编辑总编一个部门的情况
 
     /**
      * 显示主页面
@@ -44,7 +44,7 @@ class IndexController extends CommonController {
     private function getData(){
 
         if($this->auto == XIAOBIAN || $this->auto == ZONGBIAN || $this->auto == DEPT_ADMIN){
-            //取得属于小编或者总编部门文章总条数，用于分页
+            //取得属于编辑或者总编部门文章总条数，用于分页
             $arr = json_decode($this->dept);
             $this->dept = $arr[0];
         }else{

@@ -181,7 +181,7 @@ class PostController extends CommonController {
         //更新文章
         if( $this->postObj->updatePost() ){
 
-            //小编的提交给总编和总编的审核通过都可以设置分数
+            //编辑的提交给总编和总编的审核通过都可以设置分数
             if(intval(I('post.flag')) == 5 || intval(I('post.flag')) == 3 ){
 
                 $this->postObj->insertScore($this->auto,$this->dept);
@@ -218,7 +218,7 @@ class PostController extends CommonController {
 
         echo json_encode($arr);
         exit;
-        
+
     }
 
     /**
@@ -439,15 +439,15 @@ class PostController extends CommonController {
             exit;
         }
 
-        //如果是小编,并且是待审核文章的情况下点击了审核,需要新增同样的文章
+        //如果是编辑,并且是待审核文章的情况下点击了审核,需要新增同样的文章
         if( (intval($this->auto) == XIAOBIAN) && ($data['post_status'] == 'pending') ){
 
-            //继续判定点击的文章作者是不是当前小编,如果是则不作拷贝也不作判断
+            //继续判定点击的文章作者是不是当前编辑,如果是则不作拷贝也不作判断
             if($data['post_author'] != $_SESSION['uid']){
 
-                //防止同一部门的不同小编拷贝文章，需要先判断有没有被本部门其他小编拷贝过，有则返回
+                //防止同一部门的不同编辑拷贝文章，需要先判断有没有被本部门其他编辑拷贝过，有则返回
                 if ($this->postObj->isCopiedBySameDeptOtheXIAOBIAN(I('get.id'),$this->dept) >0 ){
-                    ToolModel::goBack('已经被本部门其他小编认领了,请重新刷新页面');
+                    ToolModel::goBack('已经被本部门其他编辑认领了,请重新刷新页面');
                     exit;
                 }
 
@@ -457,7 +457,7 @@ class PostController extends CommonController {
                     exit;
                 }
 
-                //判断当前小编拷贝的文章是不是超过限制，超过则不能再认领
+                //判断当前编辑拷贝的文章是不是超过限制，超过则不能再认领
                 $postCount = $this->postObj->getCopiedPostCount();
                 if( $postCount >= XIAOBIAN_POST_MAX_COUNT){
 
@@ -485,11 +485,11 @@ class PostController extends CommonController {
                     $newChild = $oldChild.','.strval($newID);
                 }
 
-                //取得原文章的post_name,将本次小编的部门才能够该数组中删除,以便后期判断是否继承用
+                //取得原文章的post_name,将本次编辑的部门才能够该数组中删除,以便后期判断是否继承用
                 $oldPostName = $this->postObj->getPostName(intval(I('get.id')));
                 $oldPostNameArr = json_decode($oldPostName);
 
-                //得到当前小编的部门,转化为数字
+                //得到当前编辑的部门,转化为数字
                 $nowDeptArr = json_decode($this->dept);
                 $nowDept = $nowDeptArr[0];
 
@@ -519,7 +519,7 @@ class PostController extends CommonController {
                     ToolModel::goBack('拷贝文章时候原文章状态更新失败!');
                 }
 
-                $thePostId = $newID;    //小编拷贝了文章后，文章ID需要更新
+                $thePostId = $newID;    //编辑拷贝了文章后，文章ID需要更新
                 //拷贝时候需要拷贝单独上传的附件信息(如果存在的情况下)
                 $oldAttachment = $this->postObj->getAttachmentData(I('get.id'));
                 if ( false != $oldAttachment){
@@ -557,7 +557,7 @@ class PostController extends CommonController {
         $this->assign('title',$data['post_title']);
         $this->assign('theDept',ToolModel::onlyShowTheDept($data['post_dept']));
 
-        //追加小编或者总编时候去的积分,并给编辑页面
+        //追加编辑或者总编时候去的积分,并给编辑页面
         $theScore = $this->postObj->getTheScore($thePostId);
 
         if($theScore){
@@ -611,7 +611,7 @@ class PostController extends CommonController {
     private function getPostWithAutosAndSearch($flag){
 
         if($this->auto == XIAOBIAN || $this->auto == ZONGBIAN || $this->auto == DEPT_ADMIN){
-            //取得属于小编或者总编部门文章总条数，用于分页
+            //取得属于编辑或者总编部门文章总条数，用于分页
             $arr = json_decode($this->dept);
             $this->dept = $arr[0];
         }else{
@@ -622,7 +622,7 @@ class PostController extends CommonController {
 
         //分页
         import('ORG.Util.Page');// 导入分页类
-        $Page = new \Org\Util\Page($count,PAGE_SHOW_COUNT_6);// 实例化分页类 传入总记录数
+        $Page = new \Org\Util\Page($count,PAGE_SHOW_COUNT_10);// 实例化分页类 传入总记录数
         $limit = $Page->firstRow.','.$Page->listRows;
 
         //取得指定条数的信息
@@ -699,13 +699,13 @@ class PostController extends CommonController {
      */
     private function getShowPostCountWithStatus(){
 
-        //保存的状态 小编和部门管理员不可以看到
+        //保存的状态 编辑和部门管理员不可以看到
         if( ($this->auto != ZONGBIAN) && ($this->auto != DEPT_ADMIN) ){
             //取得保存文章个数
             $saveCount = $this->postObj->getStatusCountByFlag($this->auto,'save');
             //取得待审核文章个数
 
-            //因为小编和总编的情况下不显示保存的个数,所有该html文需要判定
+            //因为编辑和总编的情况下不显示保存的个数,所有该html文需要判定
             $html = '';
             $html .= '<a href='.__ROOT__.'/Admin/Post/doAction/action/all/status/save>
                             保存  <span class="badge badge-warning bounceIn 
@@ -741,7 +741,7 @@ class PostController extends CommonController {
         $pending2 = 3;        //继续提交审核
         $dismiss  = 4;        //审核不通过flag
         $pended  = 5;        //审核通过flag
-        $return  = 6;        //总编打回给小编不通过,小编可以继续修改
+        $return  = 6;        //总编打回给编辑不通过,编辑可以继续修改
 
         switch (intval($this->auto)){
             case ADMIN:
@@ -840,7 +840,7 @@ class PostController extends CommonController {
 
         }
         $this->assign('btnSmall',$htmlSmall);    //响应式手机用小按钮组
-        $this->assign('showDeptCheckBox',$showDeptCheckBox);    //如果是小编或者总编部门固定,所以不显示部门可选
+        $this->assign('showDeptCheckBox',$showDeptCheckBox);    //如果是编辑或者总编部门固定,所以不显示部门可选
         $this->assign('btn',$html);
         $this->assign('theAuto',$this->auto);
     }

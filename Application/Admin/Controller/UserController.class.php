@@ -302,9 +302,9 @@ class UserController extends CommonController {
         //取得指定条数的信息
 
         //取得所有用户信息总条数，用于分页
-        if($this->auto == DEPT_ADMIN){                                          //部门管理员（显示小编和总编）
+        if($this->auto == DEPT_ADMIN){                                          //部门管理员（显示编辑和总编）
             $user = $this->obj->showDeptAdminUserList($limit,$this->dept);
-        }else if($this->auto == ADMIN){                                         //管理员，超级管理员（显示除了小编和总编）
+        }else if($this->auto == ADMIN){                                         //管理员，超级管理员（显示除了编辑和总编）
             $user = $this->obj->showAdminUserList($limit);
         }else if($this->auto == SUPPER_ADMIN){                                  //超级管理员未用(显示所有)
             $user = $this->obj->showUserList($limit);
@@ -319,9 +319,9 @@ class UserController extends CommonController {
 
         for ($i=0;$i<count($user);$i++){
 
-            //将只有一个部门的爆料者名称修改为编辑
+            //将只有一个部门的爆料者名称修改为通讯员
             $deptArr = explode('，',$user[$i]['udi_dep_id']);
-            if ( ($user[$i]['udi_auto_id'] == BAOLIAOZHE_NAME) && (count($deptArr) == 1) ){
+            if ( ($user[$i]['udi_auto_id'] == BAOLIAOZHE_NAME) && (count($deptArr) == 1) ){         //需要修改来正确显示通讯员 20170416 wujiayu
                 $user[$i]['udi_auto_id'] = TONGXUNYUAN_NAME;
             }
 

@@ -19,15 +19,14 @@ define(MEDIA_PATH,$_SERVER['DOCUMENT_ROOT'].'/edit/Public/Uploads/Media');
 
 define(CURRENT_URL,'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
 
-define(PAGE_SHOW_COUNT_6,6);	//每页显示6条记录
 define(PAGE_SHOW_COUNT_10,10);	//每页显示10条记录
 
 
-define(XIAOBIAN_POST_MAX_COUNT,6);	//小编可认领的最大文章数（审核后的文章不算）
+define(XIAOBIAN_POST_MAX_COUNT,6);	//编辑可认领的最大文章数（审核后的文章不算）
 
 //角色设定
 define(BAOLIAOZHE,1);       //爆料者
-define(XIAOBIAN,2);         //小编
+define(XIAOBIAN,2);         //编辑
 define(ZONGBIAN,3);         //总编
 define(DEPT_ADMIN,4);       //部门管理员
 define(ADMIN,88);           //管理员
@@ -44,7 +43,7 @@ define(POST_PENDING,'pending');     //初审
 define(POST_PENDING2,'pending2');   //最终审核
 define(POST_PENDED,'pended');       //审核通过
 define(POST_DISMISS,'dismiss');     //审核不通过
-define(POST_RETURN,'return');       //文章被打回给小编
+define(POST_RETURN,'return');       //文章被打回给编辑
 
 return array(
 
@@ -96,7 +95,7 @@ return array(
     //角色数组
     'AUTO_ARRAY' => array(
         1	=>'爆料者',
-        2	=>'小编',
+        2	=>'编辑',
         3	=>'总编',
         4	=>'部门管理员',
         88	=>'管理员',
