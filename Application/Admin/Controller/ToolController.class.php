@@ -47,6 +47,9 @@ class ToolController extends Controller{
                 $this->assign('mediaControl',true);
                 break;
             case XIAOBIAN:
+
+                $this->assign('postControl',true); //小编追加发布文章功能 wujiayu 20170425
+
                 $this->assign('postMainControl',true);
                 $this->assign('postPendingControl',true);   //编辑追加未审核一览
                 $this->assign('mediaControl',true);

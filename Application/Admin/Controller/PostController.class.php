@@ -375,7 +375,8 @@ class PostController extends CommonController {
      */
     private function add(){
 
-        if($this->auto != BAOLIAOZHE){
+        //if($this->auto != BAOLIAOZHE){                //小编追加发布文章功能 wujiayu 20170425
+        if( ($this->auto != BAOLIAOZHE) && ($this->auto != XIAOBIAN)){
             ToolModel::goBack('您没有发表文章的功能');
         }
 
